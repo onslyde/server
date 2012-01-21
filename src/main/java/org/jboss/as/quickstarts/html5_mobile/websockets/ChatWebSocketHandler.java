@@ -44,10 +44,9 @@ import java.util.concurrent.CopyOnWriteArraySet;
 /**
  * @author <a href="mailto:whales@redhat.com">Wesley Hales</a>
  */
-//@Notify
 public class ChatWebSocketHandler extends WebSocketHandler {
 
-    Set<ChatWebSocket> websockets = ChatServerServletContextListener.getWebSockets();
+    private static Set<ChatWebSocket> websockets = new ConcurrentHashSet<ChatWebSocket>();
 
     public WebSocket doWebSocketConnect(HttpServletRequest request,
             String protocol) {
@@ -56,7 +55,7 @@ public class ChatWebSocketHandler extends WebSocketHandler {
 
     public void observeItemEvent(@Observes Member member) {
         try {
-            for (ChatWebSocket webSocket : websockets) {
+            for (ChatWebSocket webSocket : getWebsockets()) {
                 webSocket.connection.sendMessage("{\"cdievent\":{\"fire\":function(){" +
                                                         "eventObj.initEvent(\'memberEvent\', true, true);" +
                                                         "eventObj.name = '" +  member.getName() + "';\n" +
@@ -64,7 +63,7 @@ public class ChatWebSocketHandler extends WebSocketHandler {
                                                         "}}}");
             }
         } catch (IOException x) {
-            //todo - do something?
+            //todo - do something
         }
     }
 
@@ -80,14 +79,14 @@ public class ChatWebSocketHandler extends WebSocketHandler {
             // 2) Add ChatWebSocket in the global list of ChatWebSocket
             // instances
             // instance.
-            websockets.add(this);
+            getWebsockets().add(this);
         }
 
         public void onMessage(String data) {
             // Loop for each instance of ChatWebSocket to send message server to
             // each client WebSockets.
             try {
-                for (ChatWebSocket webSocket : websockets) {
+                for (ChatWebSocket webSocket : getWebsockets()) {
                     // send a message to the current client WebSocket.
                     webSocket.connection.sendMessage(data);
                 }
@@ -101,11 +100,13 @@ public class ChatWebSocketHandler extends WebSocketHandler {
         public void onClose(int closeCode, String message) {
             // Remove ChatWebSocket in the global list of ChatWebSocket
             // instance.
-            websockets.remove(this);
+            getWebsockets().remove(this);
         }
     }
 
-
+    public static synchronized Set<ChatWebSocket> getWebsockets() {
+        return websockets;
+    }
 
 
 }

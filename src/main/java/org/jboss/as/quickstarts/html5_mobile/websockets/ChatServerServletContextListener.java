@@ -38,11 +38,7 @@ import java.util.Set;
  */
 public class ChatServerServletContextListener implements ServletContextListener {
 
-    //maybe use infinispan
-    //https://code.google.com/p/infinispan-http-session-manager/wiki/Home
-
-	private Server server = null;
-    private static Set<ChatWebSocketHandler.ChatWebSocket> webSockets = new ConcurrentHashSet<ChatWebSocketHandler.ChatWebSocket>();
+    private Server server = null;
     /**
      * Start Embedding Jetty server when WEB Application is started.
      *
@@ -85,11 +81,4 @@ public class ChatServerServletContextListener implements ServletContextListener 
         }
     }
 
-    public static synchronized Set<ChatWebSocketHandler.ChatWebSocket> getWebSockets() {
-        return webSockets;
-    }
-
-    public static synchronized void setWebSockets(Set<ChatWebSocketHandler.ChatWebSocket> webSockets) {
-        ChatServerServletContextListener.webSockets = webSockets;
-    }
 }
