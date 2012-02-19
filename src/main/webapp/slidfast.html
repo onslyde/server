@@ -1,0 +1,64 @@
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+<title>HTML5 Architecture</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+<meta name="viewport" content="width=device-width, minimum-scale=1.0, maximum-scale=1.0"/>
+<!-- enable full-screen mode -->
+<meta name="apple-mobile-web-app-capable" content="yes"/>
+<!-- controls the appearance of the status bar in full-screen mode -->
+<meta name="apple-mobile-web-app-status-bar-style" content="black"/>
+<link rel="stylesheet" media="all" href="demo.css" />
+<link rel="stylesheet" media="all" href="slidfast.css" />
+<script type="text/javascript" src="slidfast.js" ></script>
+<script type="text/javascript">
+
+slidfast({
+   defaultPageID:'home-page',
+   touchEnabled: true,
+   singlePageModel: true,
+   optimizeNetwork: true
+});
+
+
+</script>
+
+</head>
+<body>
+<div id="browser">
+    <nav class="primary">
+        <ul>
+            <li><a href="#left-slide" onclick="slidfast.ui.slideTo('home-page')">Left</a></li>
+            <li><a href="#default-slide" onclick="slidfast.ui.slideTo('products-page')">Default</a></li>
+            <li><a href="#right-slide" onclick="slidfast.ui.slideTo('about-page')">Right</a></li>
+        </ul>
+    </nav>
+
+    <div id="slide-container">
+
+        <div id="front" class="normal">
+
+            <div class="page">
+                <h1>Home Page</h1>
+                <a href="../demo2/home-detail.html" class="fetch">Find out more about the home page!</a>
+            </div>
+
+            <div class="page stage-right">
+                <h1>Products Page</h1>
+                <a href="../demo2/product-listing.html" class="fetch">We got some product listings fer ya!</a>
+            </div>
+
+            <div class="page stage-left">
+                <h1>About Page</h1>
+                <a href="../demo2/about-cto.html">You know you want to know more about us!</a>
+            </div>
+
+        </div>
+
+    </div>
+</div>
+
+</body>
+</html>

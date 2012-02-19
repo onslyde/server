@@ -1,0 +1,25 @@
+<html>
+<head>
+<title>Slide Deck Remote</title>
+
+<style type='text/css'>
+
+</style>
+</head>
+<body>
+<input id="previousSlide" class="button" type="submit" value="previous" />
+<input id="nextSlide" class="button" type="submit" value="next" />
+</body>
+<script src='js/websocket.js'></script>
+<script>
+$('nextSlide').onclick = function(event) {
+    room._ws.send('nextSlide');
+    return false;
+};
+
+$('previousSlide').onclick = function(event) {
+    room._ws.send('previousSlide');
+    return false;
+};
+</script>
+</html>

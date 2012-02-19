@@ -1,0 +1,42 @@
+<html>
+<head>
+<title>Slide Deck Remote</title>
+
+<style type='text/css'>
+
+</style>
+</head>
+<body>
+<input id="previousSlide" class="button" type="submit" value="previous" />
+<input id="nextSlide" class="button" type="submit" value="next" />
+</body>
+<script src='js/websocket.js'></script>
+<script>
+/*
+
+we want:
+
+embedded slide viewer
+--------------------
+- to have the slides mirrored from current presenter slide deck
+-- this means state sharing through window.location or similar
+- the 2 option buttons need to be dynamic based on slideGroup
+-- we must deliver which group we're currently viewing to this page
+--- #slidegroup:slidenumber
+-- then populate buttons for user to pick from
+--- then send vote to server
+
+ */
+
+
+$('nextSlide').onclick = function(event) {
+    room._ws.send('nextSlide');
+    return false;
+};
+
+$('previousSlide').onclick = function(event) {
+    room._ws.send('previousSlide');
+    return false;
+};
+</script>
+</html>

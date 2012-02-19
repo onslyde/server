@@ -85,6 +85,27 @@ public class ChatWebSocketHandler extends WebSocketHandler {
         public void onMessage(String data) {
             // Loop for each instance of ChatWebSocket to send message server to
             // each client WebSockets.
+
+            if(data.equals("nextSlide")) {
+                data = ("{\"cdievent\":{\"fire\":function(){" +
+                                        "eventObj.initEvent(\'slideEvent\', true, true);" +
+                                        "eventObj.action = 'next';\n" +
+                                        "document.dispatchEvent(eventObj);" +
+                                        "}}}");
+            }else if (data.equals("previousSlide")){
+                data = ("{\"cdievent\":{\"fire\":function(){" +
+                                        "eventObj.initEvent(\'slideEvent\', true, true);" +
+                                        "eventObj.action = 'previous';\n" +
+                                        "document.dispatchEvent(eventObj);" +
+                                        "}}}");
+            }else if (data.equals("user:anonymous")){
+                data = ("{\"cdievent\":{\"fire\":function(){" +
+                                        "eventObj.initEvent(\'slideGroup\', true, true);" +
+                                        "eventObj.group = 'default';\n" +
+                                        "document.dispatchEvent(eventObj);" +
+                                        "}}}");
+            }
+            System.out.println("-----------" + data);
             try {
                 for (ChatWebSocket webSocket : getWebsockets()) {
                     // send a message to the current client WebSocket.

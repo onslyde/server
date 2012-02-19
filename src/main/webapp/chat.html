@@ -1,117 +1,6 @@
 <html>
 <head>
 <title>WebSocket Chat</title>
-<script type="text/javascript">
-
-    function getParameterByName(name) {
-
-    var match = RegExp('[?&]' + name + '=([^&]*)')
-                    .exec(window.location.search);
-
-    return match && decodeURIComponent(match[1].replace(/\+/g, ' '));
-
-    }
-
-    if (!window.WebSocket)
-        alert("WebSocket not supported by this browser");
-
-    function $() {
-        return document.getElementById(arguments[0]);
-    }
-    function $F() {
-        return document.getElementById(arguments[0]).value;
-    }
-
-    function getKeyCode(ev) {
-        if (window.event)
-            return window.event.keyCode;
-        return ev.keyCode;
-    }
-
-    var eventObj = document.createEvent('Event');
-
-    var room = {
-        join : function(name) {
-            this._username = name;
-            //var location = document.location.toString().replace('http://',
-            //		'ws://').replace('https://', 'wss://');
-            var location = "ws://192.168.1.101:8081/"
-            this._ws = new WebSocket(location);
-            this._ws.onopen = this._onopen;
-            this._ws.onmessage = this._onmessage;
-            this._ws.onclose = this._onclose;
-            this._ws.onerror = this._onerror;
-        },
-
-        chat : function(text) {
-            if (text != null && text.length > 0)
-                room._send(room._username, text);
-        },
-
-        _onopen : function() {
-            $('join').className = 'hidden';
-            $('joined').className = '';
-            $('phrase').focus();
-            room._send(room._username, 'has joined!');
-        },
-
-        _onmessage : function(m) {
-            if (m.data) {
-
-                //check to see if this message is a CDI event
-                if(m.data.indexOf('cdievent') > 0){
-                    try{
-                        //$('log').innerHTML = m.data;
-
-                        //avoid use of eval...
-                        var event = (m.data);
-                        event = (new Function("return " + event))();
-                        event.cdievent.fire();
-                    }catch(e){
-                        alert(e);
-                    }
-                }else{
-                    var c = m.data.indexOf(':');
-                    var from = m.data.substring(0, c).replace('<', '&lt;').replace(
-                            '>', '&gt;');
-                    var text = m.data.substring(c + 1).replace('<', '&lt;')
-                            .replace('>', '&gt;');
-
-                    var chat = $('chat');
-                    var spanFrom = document.createElement('span');
-                    spanFrom.className = 'from';
-                    spanFrom.innerHTML = from + ':&nbsp;';
-                    var spanText = document.createElement('span');
-                    spanText.className = 'text';
-                    spanText.innerHTML = text;
-                    var lineBreak = document.createElement('br');
-                    chat.appendChild(spanFrom);
-                    chat.appendChild(spanText);
-                    chat.appendChild(lineBreak);
-                    chat.scrollTop = chat.scrollHeight - chat.clientHeight;
-                }
-            }
-        },
-
-        _onclose : function(m) {
-            this._ws = null;
-            $('join').className = '';
-            $('joined').className = 'hidden';
-            $('username').focus();
-            $('chat').innerHTML = '';
-        },
-
-        _onerror : function(e) {
-            alert(e);
-        },
-
-        _send : function(user, message) {
-            user = user.replace(':', '_');
-            if (this._ws)
-                this._ws.send(user + ':' + message);
-        }
-    };
-</script>
 <style type='text/css'>
 div {
     border: 0px solid black;
@@ -168,56 +57,15 @@ span.from {
         <div id="joined" class="hidden">
             Chat:&nbsp;<input id="phrase" type="text" /> <input id="sendB"
                 class="button" type="submit" name="join" value="Send" />
+            <input id="nextSlide"
+                class="button" type="submit" value="nextSlide" />
         </div>
     </div>
 
     <script type="text/javascript">
 
-        window.addEventListener('load', function(e) {
-            if(getParameterByName('username')){
-                room.join(getParameterByName('username'));
-            }
-        }, false);
 
-        window.addEventListener('memberEvent', function(e) {
-            alert(e.name + ' just registered!');
-        }, false);
 
-        // 1) When user is NOT connected, 'join' div is displayed with Username input + Join button
-        $('username').setAttribute('autocomplete', 'OFF');
-        // Enter in the username field, opens Chat WebSockets
-        $('username').onkeyup = function(ev) {
-            var keyc = getKeyCode(ev);
-            if (keyc == 13 || keyc == 10) {
-                room.join($F('username'));
-                return false;
-            }
-            return true;
-        };
-        // "Join" button click opens Chat WebSockets
-        $('joinB').onclick = function(event) {
-            room.join($F('username'));
-            return false;
-        };
-
-        // 2) When user is connected, 'phrase' div is displayed with Chat input + Send button
-        $('phrase').setAttribute('autocomplete', 'OFF');
-        // Enter in the 'phrase' field send the message
-        $('phrase').onkeyup = function(ev) {
-            var keyc = getKeyCode(ev);
-            if (keyc == 13 || keyc == 10) {
-                room.chat($F('phrase'));
-                $('phrase').value = '';
-                return false;
-            }
-            return true;
-        };
-        // "Send" button click send the message
-        $('sendB').onclick = function(event) {
-            room.chat($F('phrase'));
-            $('phrase').value = '';
-            return false;
-        };
     </script>
 
 
