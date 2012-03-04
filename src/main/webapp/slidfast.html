@@ -27,31 +27,40 @@ slidfast({
 </head>
 <body>
 <div id="browser">
-    <nav class="primary">
-        <ul>
-            <li><a href="#sf-home-page" onclick="slidfast.ui.slideTo('home-page')">Home</a></li>
-            <li><a href="#sf-products-page" onclick="slidfast.ui.slideTo('products-page')">Products</a></li>
-            <li><a href="#sf-about-page" onclick="slidfast.ui.slideTo('about-page')">About</a></li>
-        </ul>
-    </nav>
 
     <div id="slide-group-container">
 
-        <div class="slide-group">
+        <section class="slide-group">
 
-            <div id="home-page" class="page">
-                <h1>Home Page</h1>
-            </div>
+            <article class="slide">
+                <h1>Default Slide</h1>
+            </article>
 
-            <div id="products-page" class="page stage-right">
-                <h1>Products Page</h1>
-            </div>
+            <article class="slide stage-right" data-option="optionA">
+                <h1>OptionA</h1>
+            </article>
 
-            <div id="about-page" class="page stage-left">
-                <h1>About Page</h1>
-            </div>
+            <article class="slide stage-left" data-option="optionB">
+                <h1>OptionB</h1>
+            </article>
 
-        </div>
+        </section>
+
+        <section class="slide-group">
+
+            <article class="slide">
+                <h1>Default Slide2</h1>
+            </article>
+
+            <article class="slide stage-right" data-option="optionA2">
+                <h1>OptionA 2</h1>
+            </article>
+
+            <article class="slide stage-left" data-option="optionB2">
+                <h1>OptionB 2</h1>
+            </article>
+
+        </section>
     </div>
 </div>
 

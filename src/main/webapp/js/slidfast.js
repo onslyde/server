@@ -562,22 +562,37 @@
 
             groups : function() {
                //return all groups in the DOM
+               return document.querySelectorAll(".slide-group");
             },
 
             groupSlides : function(group) {
               //return all slides for a group
+              return group.querySelectorAll(".slide");
             },
 
-            groupOptions : function(group) {
+            groupOptions : function(groupSlides) {
               //there are 2 options per group, based on default slide... return them
+              for (i = 0; i < groupSlides.length; i++) {
+                    //add to unique list i.getAttribute("data-option");
+                    //or .dataset['option']
+              }
+              //return array with 2 options, which will populate client UI
             },
 
-            groupDefaultSlide : function(group) {
+            groupDefaultSlide : function(activeGroup) {
               //return the default slide for the group
             },
 
             optionVote : function(group, option) {
                //given vote for a default slide
+            },
+
+            next : function(group) {
+              //return the default slide for the group
+            },
+
+            previous : function(group) {
+              //return the default slide for the group
             }
 
         }
