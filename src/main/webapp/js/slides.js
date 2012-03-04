@@ -19,7 +19,7 @@ window.cancelRequestAnimationFrame = window.cancelAnimationFrame || window.webki
 
 window.AudioContext = window.AudioContext || window.webkitAudioContext;
 
-const PERMANENT_URL_PREFIX = '/';
+const PERMANENT_URL_PREFIX = 'http://html5slides.googlecode.com/svn/trunk/';
 
 const SLIDE_CLASSES = ['far-past', 'past', 'current', 'next', 'far-next'];
 
@@ -534,7 +534,7 @@ function fetchBugStatus(bug) {
 }
 
 function handleDomLoaded() {
-  slideEls = document.querySelectorAll('section.slides > article');
+  slideEls = document.querySelectorAll('section.slide-group > article');
 
   addGeneralStyle();
   addPrettify();

@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="en">
 
@@ -10,9 +9,9 @@
 <meta name="apple-mobile-web-app-capable" content="yes"/>
 <!-- controls the appearance of the status bar in full-screen mode -->
 <meta name="apple-mobile-web-app-status-bar-style" content="black"/>
-<link rel="stylesheet" media="all" href="demo.css" />
-<link rel="stylesheet" media="all" href="slidfast.css" />
-<script type="text/javascript" src="slidfast.js" ></script>
+
+<link rel="stylesheet" media="all" href="css/slidfast.css" />
+<script type="text/javascript" src="js/slidfast.js" ></script>
 <script type="text/javascript">
 
 slidfast({
@@ -30,29 +29,37 @@ slidfast({
 <div id="browser">
     <nav class="primary">
         <ul>
-            <li><a href="#left-slide" onclick="slidfast.ui.slideTo('home-page')">Left</a></li>
-            <li><a href="#default-slide" onclick="slidfast.ui.slideTo('products-page')">Default</a></li>
-            <li><a href="#right-slide" onclick="slidfast.ui.slideTo('about-page')">Right</a></li>
+            <li><a href="#sf-home-page" onclick="slidfast.ui.slideTo('home-page')">Home</a></li>
+            <li><a href="#sf-products-page" onclick="slidfast.ui.slideTo('products-page')">Products</a></li>
+            <li><a href="#sf-about-page" onclick="slidfast.ui.slideTo('about-page')">About</a></li>
+            <li><a href="#sf-contact-page" onclick="slidfast.ui.flip('contact-page')">Contact</a></li>
         </ul>
     </nav>
 
-    <div id="slide-container">
+    <div id="page-container">
 
         <div id="front" class="normal">
 
-            <div class="page">
+            <div id="home-page" class="page">
                 <h1>Home Page</h1>
                 <a href="../demo2/home-detail.html" class="fetch">Find out more about the home page!</a>
             </div>
 
-            <div class="page stage-right">
+            <div id="products-page" class="page stage-right">
                 <h1>Products Page</h1>
                 <a href="../demo2/product-listing.html" class="fetch">We got some product listings fer ya!</a>
             </div>
 
-            <div class="page stage-left">
+            <div id="about-page" class="page stage-left">
                 <h1>About Page</h1>
                 <a href="../demo2/about-cto.html">You know you want to know more about us!</a>
+            </div>
+        </div>
+        <div id="back" class="flipped">
+
+            <div id="contact-page" class="page">
+                <h1>Contact Page</h1>
+                <a href="../demo2/contact-map.html" class="fetch">Check out our map!</a>
             </div>
 
         </div>

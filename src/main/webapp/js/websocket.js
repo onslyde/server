@@ -30,7 +30,7 @@ var room = {
         this._username = name;
         //var location = document.location.toString().replace('http://',
         //		'ws://').replace('https://', 'wss://');
-        var location = "ws://192.168.1.101:8081/"
+        var location = "ws://192.168.1.101:8081"
         this._ws = new WebSocket(location);
         this._ws.onopen = this._onopen;
         this._ws.onmessage = this._onmessage;

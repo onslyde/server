@@ -19,7 +19,7 @@
 
     <meta charset='utf-8'>
     <script
-      src='http://html5slides.googlecode.com/svn/trunk/slides.js'></script>
+      src='js/slides.js'></script>
        <script src='js/websocket.js'></script>
       <script src='js/slidedeck.js'></script>
   </head>
@@ -39,11 +39,11 @@
            slides below. -->
         
         
-      
-      <article class='biglogo'>
+     <section class='slide-group'>
+      <article class='biglogo main'>
       </article>
 
-      <article>
+      <article class='topica'>
         <h1>
           Title Goes Here Up
           <br>
@@ -56,7 +56,7 @@
         </p>
       </article>
       
-      <article>
+      <article class="topicb">
         <p>
           This is a slide with just text. This is a slide with just text.
           This is a slide with just text. This is a slide with just text.
@@ -66,6 +66,7 @@
           There is more text just underneath.
         </p>
       </article>
+      </section>
 
       <article>
         <h3>
@@ -371,19 +372,19 @@
 
   </body>
 <script>
-//    list = document.querySelector(".slideGroup");
-//    len = list.length;
-//    alert(len);
-//    for (i = 0; i < len; i++) {
-//        result = list[i];
-//    }
-//
-//    window.addEventListener('slideGroup', function(e) {
-//    if(e.group === 'default'){
-//        //setup
-//    }
-//
-//    }, false);
+    sglist = document.querySelectorAll(".slide-group");
+    //alert(sglist.length);
+    var resultList = new Array();
+    for (i = 0; i < sglist.length; i++) {
+        //resultList.add(sglist[i]);
+    }
+
+    window.addEventListener('slideGroup', function(e) {
+    if(e.group === 'default'){
+        //setup
+    }
+
+    }, false);
 
 </script>
 </html>
