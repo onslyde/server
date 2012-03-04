@@ -21,27 +21,34 @@ a {
 Mobile Device Page Setup
 *************************************************/
 
-#browser {
-    position: relative;
+#browser,
+#slide-group-container,
+.slide-group,
+.slide {
     width: 100%;
     height: 100%;
+}
+
+#browser {
+    position: relative;
 }
 
 #slide-group-container {
     position:absolute;
-    width:100%;
-    height: 100%;
     overflow: hidden;
 }
 
-.page {
+.slide-group {
     position: absolute;
-    width: 100%;
-    height: 100%;
     /*top: 0;*/
     background-color: #fff;
     /*activate the GPU for compositing each page */
     /*-webkit-transform: translate3d(0, 0, 0);*/
+}
+
+.slide {
+    position: absolute;
+    background-color: #ececec;
 }
 
 /*************************************************
@@ -87,3 +94,7 @@ Device Specific Styles
 .stage-right {
     left: 100%;
 }
+
+/*************************************************
+formatting
+*************************************************/

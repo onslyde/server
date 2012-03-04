@@ -55,14 +55,16 @@
                 }
 
                 if(optimizeNetwork){
+                    //network optimized calls fetchAndCache based on connection type
                     slidfast.network.init();
                 }else{
-                    //if network optimization isn't turned on, still allow use of AJAX fetch and cache
+                    //otherwise, if network optimization isn't turned on, still allow use of AJAX fetch and cache
                     if(singlePageModel){
                         slidfast.core.fetchAndCache(true);
                     }
                 }    
-                
+
+                slidfast.slides.init();
                 
             },
 
@@ -88,13 +90,13 @@
 
             locationChange: function() {
                 if (location.hash === "#" + defaultPageID || location.hash == '') {
-                    slidfast.ui.slideTo(defaultPageID);
+                    //slidfast.ui.slideTo(defaultPageID);
                 } else {
 
                     try{
                         //todo - give the hash a safe namespace
                         targetId = location.hash;
-                        slidfast.ui.slideTo(targetId.replace('#sf-', ''));
+                        //slidfast.ui.slideTo(targetId.replace('#sf-', ''));
                     }catch(e){
                         console.log(e)
                         //alert(e)
@@ -273,8 +275,9 @@
         slidfast.core.init.prototype = slidfast.core;
 
         slidfast.ui = slidfast.prototype = {
-
+            //method takes string 'id' or actual element
             slideTo : function(id) {
+
                 if(!focusPage) {
                     focusPage = getElement(defaultPageID);
                 }
@@ -282,7 +285,16 @@
                 //1.)the page we are bringing into focus dictates how
                 // the current page will exit. So let's see what classes
                 // our incoming page is using. We know it will have stage[right|left|etc...]
-                var classes = getElement(id).className.split(' ');
+
+                if(typeof id === 'string'){
+                    try {
+                        id = getElement(id);
+                    } catch(e) {
+                        console.log('uh oh')
+                    }
+                }
+
+                var classes = id.className.split(' ');
 
                 //2.)decide if the incoming page is assigned to right or left
                 // (-1 if no match)
@@ -290,17 +302,19 @@
 
 
                 //3.) decide how this focused page should exit.
-                if (stageType > 0) {
-                    focusPage.className = 'page transition stage-right';
-                } else {
-                    focusPage.className = 'page transition stage-left';
+                if(focusPage){
+                    if (stageType > 0) {
+                        focusPage.className = 'slide transition stage-right';
+                    } else {
+                        focusPage.className = 'slide transition stage-left';
+                    }
                 }
 
                 //4. refresh/set the variable
-                focusPage = document.getElementById(id);
+                focusPage = id;
 
                 //5. Bring in the new page.
-                focusPage.className = 'page transition stage-center';
+                focusPage.className = 'slide transition stage-center';
 
                 //6. make this transition bookmarkable
                 location.hash = '#sf-' + focusPage.id;
@@ -421,9 +435,9 @@
                 track.ontouchend = function(event) {
                     pageMove(event);
                     if(slideDirection == 'left'){
-                       slidfast.ui.slideTo('products-page');
+                       //slidfast.ui.slideTo('products-page');
                     }else if (slideDirection == 'right'){
-                       slidfast.ui.slideTo('home-page');
+                       //slidfast.ui.slideTo('home-page');
                     }
                 };
 
@@ -558,7 +572,44 @@
 
         };
 
+        var activeGroup, activeSlide, activeOption;
+        var groups, slides;
+        var futureSlides = [], pastSlides = [];
+
         slidfast.slides = slidfast.prototype = {
+
+            init : function() {
+              groups = toArray(this.groups());
+              activeGroup = groups.shift();
+              futureSlides = toArray(this.groupSlides(activeGroup));
+
+              //hide other groups
+              for (i = 0; i < groups.length; i++) {
+                 groups[i].style.display = 'none';
+              }
+              activeSlide = futureSlides.shift();
+              slidfast.ui.slideTo(activeSlide);
+            },
+
+            nextSlide : function() {
+              pastSlides.push(activeSlide);
+              activeSlide = futureSlides.shift();
+              slidfast.ui.slideTo(activeSlide);
+            },
+
+            prevSlide : function() {
+              futureSlides.push(activeSlide);
+              activeSlide = pastSlides.shift();
+              slidfast.ui.slideTo(activeSlide);
+            },
+
+            nextGroup : function() {
+              //return the default slide for the group
+            },
+
+            prevGroup : function() {
+              //return the default slide for the group
+            },
 
             groups : function() {
                //return all groups in the DOM
@@ -585,14 +636,6 @@
 
             optionVote : function(group, option) {
                //given vote for a default slide
-            },
-
-            next : function(group) {
-              //return the default slide for the group
-            },
-
-            previous : function(group) {
-              //return the default slide for the group
             }
 
         }
@@ -635,6 +678,15 @@
             }
             // load a page
             return frame.contentDocument;
+        };
+
+        var toArray = function(obj) {
+          var array = [];
+          // iterate backwards ensuring that length is an UInt32
+          for (var i = obj.length >>> 0; i--;) {
+            array[i] = obj[i];
+          }
+          return array;
         };
 
 
