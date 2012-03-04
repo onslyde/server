@@ -24,7 +24,7 @@
         singlePageModel = false,
 
         focusPage =  null,
-
+        
         optimizeNetwork = false,
 
         isReady = false,
@@ -61,9 +61,9 @@
                     if(singlePageModel){
                         slidfast.core.fetchAndCache(true);
                     }
-                }
-
-
+                }    
+                
+                
             },
 
             hideURLBar: function() {
@@ -93,9 +93,11 @@
 
                     try{
                         //todo - give the hash a safe namespace
-                        slidfast.ui.slideTo(location.hash.replace('#', ''));
+                        targetId = location.hash;
+                        slidfast.ui.slideTo(targetId.replace('#sf-', ''));
                     }catch(e){
-                        alert('you must define an a4j:jsFunction component with name=\"handleHashChange\"')
+                        console.log(e)
+                        //alert(e)
                     }
 
                 }
@@ -312,7 +314,7 @@
                 focusPage.className = 'page transition stage-center';
 
                 //6. make this transition bookmarkable
-                location.hash = focusPage.id;
+                location.hash = '#sf-' + focusPage.id;
 
                 if(touchEnabled){
                     new slidfast.ui.Touch(focusPage);
@@ -346,7 +348,7 @@
             Touch : function(e) {
                 var page = e;
                 //todo - tie to markup for now
-                var track = document.getElementById("slide-container");
+                var track = document.getElementById("page-container");
                 var currentPos = page.style.left;
 
                 var originalTouch = 0;
@@ -466,7 +468,7 @@
         };
 
         slidfast.network = slidfast.prototype = {
-
+            
             init : function(){
                 window.addEventListener('load', function(e) {
                    if (navigator.onLine) {
@@ -477,12 +479,12 @@
                       slidfast.network.processOffline();
                    }
                 }, false);
-
+                
                 window.addEventListener("offline", function(e) {
                    //we just lost our connection and entered offline mode, disable eternal link
                    slidfast.network.processOffline(e.type);
                 }, false);
-
+                
                 window.addEventListener("online", function(e) {
                   //just came back online, enable links
                   slidfast.network.processOnline(e.type);
@@ -490,7 +492,7 @@
 
                 slidfast.network.setup();
             },
-
+            
             setup : function(event){
                 // create a custom object if navigator.connection isn't available
                 var connection = navigator.connection || {'type':'0'};
@@ -518,19 +520,19 @@
                     slidfast.core.fetchAndCache(true);
                 }
             },
-
+            
             processOnline : function(event){
 
                 slidfast.network.setup();
                 checkAppCache();
-
+            
                 //reset our once disabled offline links
                 if(event){
                     for (i = 0; i < disabledLinks.length; i += 1) {
                         disabledLinks[i].onclick = null;
                     }
                 }
-
+            
                 function checkAppCache(){
                     //check for a new appCache
                     window.applicationCache.addEventListener('updateready', function(e) {
@@ -546,7 +548,7 @@
                     }, false);
                 }
             },
-
+            
             processOffline : function(event){
                 slidfast.network.setup();
                 //disable external links until we come back - setting the bounds of app
@@ -562,12 +564,12 @@
                     if(disabledLinks[i].onclick == null){
                     //alert user we're not online
                     disabledLinks[i].onclick = onclickHelper(disabledLinks[i].href);
-
+            
                     }
                 }
             }
-
-
+            
+            
         };
 
         slidfast.html5e = slidfast.prototype = {
@@ -579,7 +581,7 @@
                 return false;
               }
             },
-
+            
             supports_app_cache : function() {
               try {
                 return 'applicationCache' in window && window['applicationCache'] !== null;
