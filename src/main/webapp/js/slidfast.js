@@ -179,13 +179,13 @@
                     //(todo check for predefined stage class)
                     newPage.className = 'page stage-left';
 
-                    //find out where to insert
-                    var location = newPage.parentNode.id == 'back' ? 'back' : 'front';
+
 
                     try{
                         //mobile safari will not allow nodes to be transferred from one DOM to another so
                         //we must use adoptNode()
-                        document.getElementById(location).appendChild(document.adoptNode(newPage));
+                        //todo - if you want to use this function, then you need an active slide-group to use below
+                        //get an active -->('slide-group').appendChild(document.adoptNode(newPage));
                     }catch(e){
                         //todo graceful degradation?
                     }
@@ -288,19 +288,8 @@
                 // (-1 if no match)
                 var stageType = classes.indexOf('stage-left');
 
-                //3a.)Flip if needed
-                var front = getElement('front');
-                if(front){
-                    var frontNodes = front.getElementsByTagName('*');
-                    var i;
-                    for (i = 0; i < frontNodes.length; i += 1) {
-                        if(id == frontNodes[i].id && flipped){
-                           slidfast.ui.flip();
-                        }
-                    }
-                }
 
-                //3b.) decide how this focused page should exit.
+                //3.) decide how this focused page should exit.
                 if (stageType > 0) {
                     focusPage.className = 'page transition stage-right';
                 } else {
@@ -322,33 +311,10 @@
 
             },
 
-
-            flip : function() {
-                //get a handle on the flippable region
-                var front = document.getElementById('front');
-                var back = document.getElementById('back');
-
-                //just a simple way to see what the state is
-                var classes = front.className.split(' ');
-                var flippedClass = classes.indexOf('flipped');
-
-                if (flippedClass >= 0) {
-                    //already flipped, so return to original
-                    front.className = 'normal';
-                    back.className = 'flipped';
-                    flipped = false;
-                } else {
-                    //do the flip
-                    front.className = 'flipped';
-                    back.className = 'normal';
-                    flipped = true;
-                }
-            },
-
             Touch : function(e) {
                 var page = e;
                 //todo - tie to markup for now
-                var track = document.getElementById("page-container");
+                var track = getElement("slide-group-container");
                 var currentPos = page.style.left;
 
                 var originalTouch = 0;
@@ -590,11 +556,39 @@
               }
             }
 
+        };
+
+        slidfast.slides = slidfast.prototype = {
+
+            groups : function() {
+               //return all groups in the DOM
+            },
+
+            groupSlides : function(group) {
+              //return all slides for a group
+            },
+
+            groupOptions : function(group) {
+              //there are 2 options per group, based on default slide... return them
+            },
+
+            groupDefaultSlide : function(group) {
+              //return the default slide for the group
+            },
+
+            optionVote : function(group, option) {
+               //given vote for a default slide
+            }
+
         }
 
 
         var getElement = function(id) {
-            return document.getElementById(id)
+            if (document.querySelector){
+                return document.querySelector('#' + id);
+            }else{
+                return document.getElementById(id);
+            }
         };
 
         var timerStart = function() {
