@@ -575,40 +575,69 @@
         var activeGroup, activeSlide, activeOption;
         var groups, slides;
         var futureSlides = [], pastSlides = [];
+        var futureGroups = [], pastGroups = [];
 
         slidfast.slides = slidfast.prototype = {
 
             init : function() {
-              groups = toArray(this.groups());
-              activeGroup = groups.shift();
-              futureSlides = toArray(this.groupSlides(activeGroup));
-
+              futureGroups = toArray(this.groups());
+              activeGroup = futureGroups.shift();
               //hide other groups
-              for (i = 0; i < groups.length; i++) {
-                 groups[i].style.display = 'none';
+              for (i = 0; i < futureGroups.length; i++) {
+                 futureGroups[i].style.display = 'none';
               }
+
+              futureSlides = toArray(this.groupSlides(activeGroup));
               activeSlide = futureSlides.shift();
               slidfast.ui.slideTo(activeSlide);
             },
 
             nextSlide : function() {
               pastSlides.push(activeSlide);
-              activeSlide = futureSlides.shift();
-              slidfast.ui.slideTo(activeSlide);
+              if(futureSlides.length > 0){
+                  activeSlide = futureSlides.shift();
+                  slidfast.ui.slideTo(activeSlide);
+              }else{
+                  //move to next group
+                  this.nextGroup();
+              }
             },
 
             prevSlide : function() {
               futureSlides.push(activeSlide);
-              activeSlide = pastSlides.shift();
-              slidfast.ui.slideTo(activeSlide);
+              if(futureSlides.length > 0){
+                  activeSlide = pastSlides.shift();
+                  slidfast.ui.slideTo(activeSlide);
+              }else{
+                  //move to previous group
+                  this.prevGroup();
+              }
             },
 
             nextGroup : function() {
-              //return the default slide for the group
+              pastGroups.push(activeGroup);
+              if(futureGroups.length > 0){
+                  activeGroup = futureGroups.shift();
+                  activeGroup.style.display = '';
+                  futureSlides = toArray(this.groupSlides(activeGroup));
+                  activeSlide = futureSlides.shift();
+                  slidfast.ui.slideTo(activeSlide);
+              }else{
+                  //eop
+              }
             },
 
             prevGroup : function() {
-              //return the default slide for the group
+              futureGroups.push(activeGroup);
+              if(pastGroups.length > 0){
+                  activeGroup = pastGroups.shift();
+                  activeGroup.style.display = '';
+                  futureSlides = toArray(this.groupSlides(activeGroup));
+                  activeSlide = futureSlides.shift();
+                  slidfast.ui.slideTo(activeSlide);
+              }else{
+                  //eop
+              }
             },
 
             groups : function() {
