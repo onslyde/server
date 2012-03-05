@@ -582,19 +582,38 @@
 
          init : function() {
             futureGroups = toArray(this.groups());
-            activeGroup = futureGroups.shift();
-            //hide other groups
             for (i = 0; i < futureGroups.length; i++) {
                futureGroups[i].style.display = 'none';
+               var thisGroupSlides = this.groupSlides(futureGroups[i]);
+               for (j = 0; j < thisGroupSlides.length; j++) {
+                  //todo use classlist
+                  thisGroupSlides[j].className = 'slide stage-right';
+               }
             }
 
+
+
+            activeGroup = futureGroups.shift();
+            activeGroup.style.display = '';
+
+
+
             futureSlides = toArray(this.groupSlides(activeGroup));
+
             activeSlide = futureSlides.shift();
+            var groupOptions = this.groupOptions(activeGroup);
+            if(groupSlideIndex == 0){
+               ////for (i = 0; i < this.groupOptions(activeGroup).length; i++) {
+               //hardcode for now
+               activeGroup.querySelector(".option-handler-1").innerHTML = groupOptions[0];
+               activeGroup.querySelector(".option-handler-2").innerHTML = groupOptions[1];
+               //}
+            }
+
             slidfast.ui.slideTo(activeSlide);
          },
 
          nextSlide : function() {
-            console.log('futureSlides' + futureSlides.length);
             if (futureSlides.length > 0) {
                pastSlides.push(activeSlide);
                activeSlide = futureSlides.shift();
@@ -612,9 +631,7 @@
                activeSlide = pastSlides.pop();
                slidfast.ui.slideTo(activeSlide);
                groupSlideIndex--;
-               console.log(groupSlideIndex);
             } else {
-               console.log('prevgroup');
                this.prevGroup();
             }
          },
@@ -668,13 +685,25 @@
             return group.querySelectorAll(".slide");
          },
 
-         groupOptions : function(groupSlides) {
+         groupOptions : function(group) {
             //there are 2 options per group, based on default slide... return them
-            for (i = 0; i < groupSlides.length; i++) {
+            var u = {}, options = [], option;
+            var slides = toArray(this.groupSlides(group));
+            console.log(slides.length);
+            for (i = 0; i < slides.length; i++) {
                //add to unique list i.getAttribute("data-option");
                //or .dataset['option']
+               //console.log(slides[i].getAttribute("data-option"));
+               option = slides[i].getAttribute("data-option");
+               if(option){
+                  if(option in u)
+                     continue;
+                  options.push(option);
+                  u[option] = 1;
+               }
             }
-            //return array with 2 options, which will populate client UI
+            console.log(options);
+            return options;
          },
 
          groupDefaultSlide : function(activeGroup) {
