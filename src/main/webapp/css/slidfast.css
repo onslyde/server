@@ -98,3 +98,12 @@ Device Specific Styles
 /*************************************************
 formatting
 *************************************************/
+
+#controller {
+    width: 100%;
+    position: absolute;
+    bottom: 0;
+    text-align: center;
+    background-color: #777;
+    z-index: 10;
+}

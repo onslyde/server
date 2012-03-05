@@ -574,6 +574,7 @@
       };
 
       var activeGroup, activeSlide, activeOption;
+      var pastOptions = [];
       var futureSlides = [], pastSlides = [];
       var futureGroups = [], pastGroups = [];
       var groupSlideIndex = 0;
@@ -591,26 +592,35 @@
                }
             }
 
-
-
             activeGroup = futureGroups.shift();
             activeGroup.style.display = '';
-
-
 
             futureSlides = toArray(this.groupSlides(activeGroup));
 
             activeSlide = futureSlides.shift();
-            var groupOptions = this.groupOptions(activeGroup);
-            if(groupSlideIndex == 0){
-               ////for (i = 0; i < this.groupOptions(activeGroup).length; i++) {
-               //hardcode for now
-               activeGroup.querySelector(".option-handler-1").innerHTML = groupOptions[0];
-               activeGroup.querySelector(".option-handler-2").innerHTML = groupOptions[1];
-               //}
-            }
+
+            this.checkOptions();
 
             slidfast.ui.slideTo(activeSlide);
+         },
+
+         checkOptions : function() {
+             if(groupSlideIndex == 0){
+               var groupOptions = this.groupOptions(activeGroup);
+               ////for (i = 0; i < this.groupOptions(activeGroup).length; i++) {
+               //hardcode for now
+               var option1 = document.createElement("a");
+               option1.href = 'javascript:slidfast.slides.setOption(\'' + groupOptions[0] + '\');void(0)';
+               option1.appendChild(document.createTextNode('choose option ' + groupOptions[0]));
+
+               var option2 = document.createElement("a");
+               option2.href = 'javascript:slidfast.slides.setOption(\'' + groupOptions[1] + '\');void(0)';
+               option2.appendChild(document.createTextNode('choose option ' + groupOptions[1]));
+
+               activeGroup.querySelector(".option-handler-1").appendChild(option1);
+               activeGroup.querySelector(".option-handler-2").appendChild(option2);
+               //}
+            }
          },
 
          nextSlide : function() {
@@ -637,17 +647,21 @@
          },
 
          nextGroup : function() {
-            console.log(futureGroups.length);
+
+            console.log(futureGroups.length + ' ' + groupSlideIndex);
             if (futureGroups.length > 0) {
+               groupSlideIndex = 0;
                pastGroups.push(activeGroup);
                activeGroup.style.display = 'none';
                activeGroup = futureGroups.shift();
                activeGroup.style.display = '';
+               this.checkOptions();
+
                futureSlides = toArray(this.groupSlides(activeGroup));
                activeSlide = futureSlides.shift();
                slidfast.ui.slideTo(activeSlide);
 
-               groupSlideIndex = 0;
+
             } else {
                //eop
             }
@@ -661,8 +675,10 @@
                activeGroup = pastGroups.pop();
                activeGroup.style.display = '';
                futureSlides = [];
-               pastSlides = toArray(this.groupSlides(activeGroup));
+               //pastSlides = toArray(this.groupSlides(activeGroup));
                //pastSlides.reverse();
+               this.setOption(pastOptions.pop());
+               pastSlides = futureSlides;
                groupSlideIndex = pastSlides.length;
                activeSlide = pastSlides.pop();
                //console.log('pastSlides' + pastSlides.length);
@@ -706,8 +722,25 @@
             return options;
          },
 
-         groupDefaultSlide : function(activeGroup) {
-            //return the default slide for the group
+         setOption : function(option) {
+            futureSlides = [];
+            //try to keep a history of options chosen
+            if(pastOptions.length > 0){
+               if(pastOptions.indexOf(option) != 1){
+                  pastOptions.push(option);
+               }
+            }else{
+               //push first option on stack
+               pastOptions.push(option);
+            }
+
+            var slides = toArray(this.groupSlides(activeGroup));
+            for (i = 0; i < slides.length; i++) {
+               if(slides[i].getAttribute("data-option") == option) {
+                  //console.log(slides[i]);
+                  futureSlides.push(slides[i]);
+               }
+            }
          },
 
          optionVote : function(group, option) {
