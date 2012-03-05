@@ -608,7 +608,9 @@
 
          checkOptions : function() {
             console.log('checkOptions' + groupSlideIndex + ' ' + activeSlide.getAttribute("data-option"));
-            if (groupSlideIndex == 0 && activeSlide.getAttribute("data-option") === 'master') {
+            if (groupSlideIndex == 0 &&
+                  activeSlide.getAttribute("data-option") == 'master' &&
+                  !activeSlide.querySelector('.option-handler-1')) {
                var groupOptions = this.groupOptions(activeGroup);
                console.log('checkOptions groupOptions' + groupOptions);
                var option1 = document.createElement("a");
@@ -761,15 +763,20 @@
                //push first option on stack
                pastOptions.push(option);
             }
-            activeOption = option;
+
             //only show slides for selected option
             var slides = toArray(this.groupSlides(activeGroup));
             for (i = 0; i < slides.length; i++) {
-               if (slides[i].getAttribute("data-option") == option) {
+               //include only chose option slides and master  ('master' + activeOption) is the only case we want to include master
+               //todo - fix double arrow tap when going backwards on master
+               if (slides[i].getAttribute("data-option") == option || (slides[i].getAttribute("data-option") == 'master' && activeOption != null)) {
                   //console.log(slides[i]);
                   futureSlides.push(slides[i]);
                }
             }
+
+            //safe to set now
+            activeOption = option;
          },
 
          optionVote : function(group, option) {
