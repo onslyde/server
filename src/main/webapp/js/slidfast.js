@@ -84,6 +84,8 @@
                slidfast.core.locationChange();
             }, false);
 
+            document.addEventListener('keydown', handleBodyKeyDown, false);
+
             return slidfast.core;
 
          },
@@ -605,10 +607,10 @@
          },
 
          checkOptions : function() {
-             if(groupSlideIndex == 0){
+            console.log('checkOptions' + groupSlideIndex + ' ' + activeSlide.getAttribute("data-option"));
+            if (groupSlideIndex == 0 && activeSlide.getAttribute("data-option") === 'master') {
                var groupOptions = this.groupOptions(activeGroup);
-               ////for (i = 0; i < this.groupOptions(activeGroup).length; i++) {
-               //hardcode for now
+               console.log('checkOptions groupOptions' + groupOptions);
                var option1 = document.createElement("a");
                option1.href = 'javascript:slidfast.slides.setOption(\'' + groupOptions[0] + '\');void(0)';
                option1.appendChild(document.createTextNode('choose option ' + groupOptions[0]));
@@ -617,13 +619,22 @@
                option2.href = 'javascript:slidfast.slides.setOption(\'' + groupOptions[1] + '\');void(0)';
                option2.appendChild(document.createTextNode('choose option ' + groupOptions[1]));
 
-               activeGroup.querySelector(".option-handler-1").appendChild(option1);
-               activeGroup.querySelector(".option-handler-2").appendChild(option2);
+               var optionHandler1 = document.createElement("div");
+               optionHandler1.className = 'option-handler-1';
+               optionHandler1.appendChild(option1);
+               activeSlide.appendChild(optionHandler1);
+
+               var optionHandler2 = document.createElement("div");
+               optionHandler2.className = 'option-handler-2';
+               optionHandler2.appendChild(option2);
+               activeSlide.appendChild(optionHandler2);
+
                //}
             }
          },
 
          nextSlide : function() {
+            console.log('nextSlide' + futureSlides.length + ' ' + groupSlideIndex);
             if (futureSlides.length > 0) {
                pastSlides.push(activeSlide);
                activeSlide = futureSlides.shift();
@@ -636,6 +647,7 @@
          },
 
          prevSlide : function() {
+            console.log('prevSlide' + pastSlides.length + ' ' + groupSlideIndex);
             if (pastSlides.length > 0 && groupSlideIndex > 0) {
                futureSlides.unshift(activeSlide);
                activeSlide = pastSlides.pop();
@@ -648,17 +660,19 @@
 
          nextGroup : function() {
 
-            console.log(futureGroups.length + ' ' + groupSlideIndex);
+            console.log('nextGroup' + groupSlideIndex);
             if (futureGroups.length > 0) {
+               activeOption = null;
+
                groupSlideIndex = 0;
                pastGroups.push(activeGroup);
                activeGroup.style.display = 'none';
                activeGroup = futureGroups.shift();
                activeGroup.style.display = '';
-               this.checkOptions();
-
                futureSlides = toArray(this.groupSlides(activeGroup));
                activeSlide = futureSlides.shift();
+
+               this.checkOptions();
                slidfast.ui.slideTo(activeSlide);
 
 
@@ -668,26 +682,42 @@
          },
 
          prevGroup : function() {
-            console.log('prevGroup' + pastGroups.length);
+            console.log('prevGroup ' + pastGroups.length);
             if (pastGroups.length > 0) {
                futureGroups.unshift(activeGroup);
                activeGroup.style.display = 'none';
                activeGroup = pastGroups.pop();
                activeGroup.style.display = '';
-               futureSlides = [];
+               //
                //pastSlides = toArray(this.groupSlides(activeGroup));
                //pastSlides.reverse();
-               this.setOption(pastOptions.pop());
-               pastSlides = futureSlides;
+               console.log('pastOptions ' + pastOptions.length);
+               if(pastOptions.length > 0){
+                  //option has been selected for the current group
+                  if(activeOption){
+                     activeOption = pastOptions[pastOptions.length - 2];
+                  }else{
+                     //option has not been chose yet in active group, so pop from history
+                     activeOption = pastOptions.pop();
+                  }
+
+                  this.setOption(activeOption);
+                  pastSlides = futureSlides;
+               }else{
+                  pastSlides = toArray(this.groupSlides(activeGroup));
+                  //pastSlides.reverse();
+               }
+               futureSlides = [];
                groupSlideIndex = pastSlides.length;
                activeSlide = pastSlides.pop();
-               //console.log('pastSlides' + pastSlides.length);
+               console.log('pastSlides ' + pastSlides.length);
+               console.log('activeSlide ' + activeSlide);
 
                slidfast.ui.slideTo(activeSlide);
 
 
             } else {
-               //eop
+               //beginning of presentation
             }
          },
 
@@ -707,12 +737,10 @@
             var slides = toArray(this.groupSlides(group));
             console.log(slides.length);
             for (i = 0; i < slides.length; i++) {
-               //add to unique list i.getAttribute("data-option");
                //or .dataset['option']
-               //console.log(slides[i].getAttribute("data-option"));
                option = slides[i].getAttribute("data-option");
-               if(option){
-                  if(option in u)
+               if (option && option != 'master') {
+                  if (option in u)
                      continue;
                   options.push(option);
                   u[option] = 1;
@@ -725,18 +753,19 @@
          setOption : function(option) {
             futureSlides = [];
             //try to keep a history of options chosen
-            if(pastOptions.length > 0){
-               if(pastOptions.indexOf(option) != 1){
+            if (pastOptions.length > 0) {
+               if (pastOptions.indexOf(option) != 1) {
                   pastOptions.push(option);
                }
-            }else{
+            } else {
                //push first option on stack
                pastOptions.push(option);
             }
-
+            activeOption = option;
+            //only show slides for selected option
             var slides = toArray(this.groupSlides(activeGroup));
             for (i = 0; i < slides.length; i++) {
-               if(slides[i].getAttribute("data-option") == option) {
+               if (slides[i].getAttribute("data-option") == option) {
                   //console.log(slides[i]);
                   futureSlides.push(slides[i]);
                }
@@ -797,6 +826,43 @@
          }
          return array;
       };
+
+      function handleBodyKeyDown(event) {
+        switch (event.keyCode) {
+          case 39: // right arrow
+          case 13: // Enter
+          case 32: // space
+          case 34: // PgDn
+            slidfast.slides.nextSlide();
+            event.preventDefault();
+            break;
+
+          case 37: // left arrow
+          case 8: // Backspace
+          case 33: // PgUp
+            slidfast.slides.prevSlide();
+            event.preventDefault();
+            break;
+
+          case 40: // down arrow
+
+            event.preventDefault();
+            break;
+
+          case 38: // up arrow
+
+            event.preventDefault();
+            break;
+
+          case 78: // N
+            //document.body.classList.toggle('with-notes');
+            break;
+
+          case 27: // ESC
+            //document.body.classList.remove('with-notes');
+            break;
+        }
+      }
 
 
       return slidfast;
