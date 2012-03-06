@@ -63,9 +63,7 @@
                   slidfast.core.fetchAndCache(true);
                }
             }
-
             slidfast.slides.init();
-
          },
 
          hideURLBar: function() {
@@ -575,8 +573,74 @@
 
       };
 
+      var ws;
+      var username;
+      //var _onopen,_onmessage,_onclose,_onerror;
+      slidfast.ws = slidfast.prototype = {
+          join : function(name) {
+              username = name;
+              //var location = document.location.toString().replace('http://',
+              //		'ws://').replace('https://', 'wss://');
+              var location = "ws://192.168.1.101:8081"
+              ws = new WebSocket(location);
+              ws.onopen = this._onopen;
+              ws.onmessage = this._onmessage;
+              ws.onclose = this._onclose;
+              ws.onerror = this._onerror;
+          },
+
+          chat : function(text) {
+              if (text != null && text.length > 0)
+                  this._send(text);
+          },
+
+          _onopen : function() {
+              //basic auth until we get something better
+              ws.send('user:'+username);
+          },
+
+          _onmessage : function(m) {
+              if (m.data) {
+
+                  //check to see if this message is a CDI event
+                  if(m.data.indexOf('cdievent') > 0){
+                      try{
+                          //$('log').innerHTML = m.data;
+
+                          //avoid use of eval...
+                          var event = (m.data);
+                          event = (new Function("return " + event))();
+                          event.cdievent.fire();
+                      }catch(e){
+                          alert(e);
+                      }
+                  }else{
+
+                  }
+              }
+          },
+
+          _onclose : function(m) {
+              ws = null;
+      //        $('join').className = '';
+      //        $('joined').className = 'hidden';
+      //        $('username').focus();
+      //        $('chat').innerHTML = '';
+          },
+
+          _onerror : function(e) {
+              alert(e);
+          },
+
+          _send : function(message) {
+              //user = user.replace(':', '_');
+              //if (ws)
+                  ws.send(message);
+          }
+      };
+
       var activeGroup, activeSlide, activeOption;
-      var pastOptions = [];
+      var pastOptions = [], activeOptions = [];
       var futureSlides = [], pastSlides = [];
       var futureGroups = [], pastGroups = [];
       var groupSlideIndex = 0;
@@ -602,34 +666,37 @@
             activeSlide = futureSlides.shift();
 
             this.checkOptions();
-
+            this.updateRemotes();
             slidfast.ui.slideTo(activeSlide);
          },
 
          checkOptions : function() {
             console.log('checkOptions' + groupSlideIndex + ' ' + activeSlide.getAttribute("data-option"));
             if (groupSlideIndex == 0 &&
-                  activeSlide.getAttribute("data-option") == 'master' &&
-                  !activeSlide.querySelector('.option-handler-1')) {
+                  activeSlide.getAttribute("data-option") == 'master') {
+               //init activeOptions
                var groupOptions = this.groupOptions(activeGroup);
-               console.log('checkOptions groupOptions' + groupOptions);
-               var option1 = document.createElement("a");
-               option1.href = 'javascript:slidfast.slides.setOption(\'' + groupOptions[0] + '\');void(0)';
-               option1.appendChild(document.createTextNode('choose option ' + groupOptions[0]));
 
-               var option2 = document.createElement("a");
-               option2.href = 'javascript:slidfast.slides.setOption(\'' + groupOptions[1] + '\');void(0)';
-               option2.appendChild(document.createTextNode('choose option ' + groupOptions[1]));
+               if(!activeSlide.querySelector('.option-handler-1')){
+                  console.log('checkOptions groupOptions' + groupOptions);
+                  var option1 = document.createElement("a");
+                  option1.href = 'javascript:slidfast.slides.setOption(\'' + groupOptions[0] + '\');void(0)';
+                  option1.appendChild(document.createTextNode('choose option ' + groupOptions[0]));
 
-               var optionHandler1 = document.createElement("div");
-               optionHandler1.className = 'option-handler-1';
-               optionHandler1.appendChild(option1);
-               activeSlide.appendChild(optionHandler1);
+                  var option2 = document.createElement("a");
+                  option2.href = 'javascript:slidfast.slides.setOption(\'' + groupOptions[1] + '\');void(0)';
+                  option2.appendChild(document.createTextNode('choose option ' + groupOptions[1]));
 
-               var optionHandler2 = document.createElement("div");
-               optionHandler2.className = 'option-handler-2';
-               optionHandler2.appendChild(option2);
-               activeSlide.appendChild(optionHandler2);
+                  var optionHandler1 = document.createElement("div");
+                  optionHandler1.className = 'option-handler-1';
+                  optionHandler1.appendChild(option1);
+                  activeSlide.appendChild(optionHandler1);
+
+                  var optionHandler2 = document.createElement("div");
+                  optionHandler2.className = 'option-handler-2';
+                  optionHandler2.appendChild(option2);
+                  activeSlide.appendChild(optionHandler2);
+               }
 
                //}
             }
@@ -675,6 +742,7 @@
                activeSlide = futureSlides.shift();
 
                this.checkOptions();
+               this.updateRemotes();
                slidfast.ui.slideTo(activeSlide);
 
 
@@ -735,7 +803,8 @@
 
          groupOptions : function(group) {
             //there are 2 options per group, based on default slide... return them
-            var u = {}, options = [], option;
+            activeOptions = [];
+            var u = {}, option;
             var slides = toArray(this.groupSlides(group));
             console.log(slides.length);
             for (i = 0; i < slides.length; i++) {
@@ -744,12 +813,13 @@
                if (option && option != 'master') {
                   if (option in u)
                      continue;
-                  options.push(option);
+                  activeOptions.push(option);
                   u[option] = 1;
                }
             }
-            console.log(options);
-            return options;
+            console.log('activeOptions ' + activeOptions);
+
+            return activeOptions;
          },
 
          setOption : function(option) {
@@ -777,9 +847,22 @@
 
             //safe to set now
             activeOption = option;
+            activeOptions = [];
          },
 
-         optionVote : function(group, option) {
+         updateRemotes : function() {
+            //window.addEventListener('load', function(e) {
+               console.log('update remotes');
+
+            slidfast.ws.join('anonymous2');
+              ws.onopen = function (e){
+               slidfast.ws.chat('activeOptions:' + activeOptions);
+              }
+            //}, false);
+
+         },
+
+         optionVote : function(option) {
             //given vote for a default slide
          }
 
@@ -870,7 +953,6 @@
             break;
         }
       }
-
 
       return slidfast;
 

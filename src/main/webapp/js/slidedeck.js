@@ -1,9 +1,9 @@
 
 window.addEventListener('slideEvent', function(e) {
     if(e.action === 'next'){
-        nextSlide();
+        slidfast.slides.nextSlide();
     }else if (e.action === 'previous'){
-        prevSlide();
+        slidfast.slides.prevSlide();
     }
 }, false);
 

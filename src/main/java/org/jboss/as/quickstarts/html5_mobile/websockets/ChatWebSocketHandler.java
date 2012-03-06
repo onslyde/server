@@ -85,7 +85,7 @@ public class ChatWebSocketHandler extends WebSocketHandler {
         public void onMessage(String data) {
             // Loop for each instance of ChatWebSocket to send message server to
             // each client WebSockets.
-
+            //btw, switch on string coming in JDK 7
             if(data.equals("nextSlide")) {
                 data = ("{\"cdievent\":{\"fire\":function(){" +
                                         "eventObj.initEvent(\'slideEvent\', true, true);" +
