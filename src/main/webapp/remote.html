@@ -5,11 +5,19 @@
 <style type='text/css'>
 
 </style>
+<script src='js/slidfast.js'></script>
+<script type="text/javascript">
+
+slidfast({
+   touchEnabled: false
+});
+
+</script>
 </head>
 <body>
-<input id="previousSlide" class="button" type="submit" value="topic A" />
-<input id="nextSlide" class="button" type="submit" value="topic B" />
-<script src='js/websocket.js'></script>
+<input id="option1" class="button" type="submit" value="topic A" />
+<input id="option2" class="button" type="submit" value="topic B" />
+
 <script>
 /*
 
@@ -27,15 +35,31 @@ embedded slide viewer
 
  */
 
+var option1 = document.querySelector('#option1');
+var option2 = document.querySelector('#option2');
 
-$('nextSlide').onclick = function(event) {
-    room._ws.send('vote');
+//todo make this unique user for session management/voter registration
+var ws = slidfast.ws.join('client:anonymous2');
+
+option1.onclick = function(event) {
+    ws.send('vote:' + option1.value);
+    option1.disabled = true;
+    option2.disabled = true;
     return false;
 };
 
-$('previousSlide').onclick = function(event) {
-    room._ws.send('vote');
+option2.onclick = function(event) {
+    ws.send('vote:' + option2.value);
+    option1.disabled = true;
+    option2.disabled = true;
     return false;
 };
+
+
+window.addEventListener('updateOptions', function(e) {
+    option1.value = e.option1;
+    option2.value = e.option2;
+}, false);
+
 </script>
 </html>

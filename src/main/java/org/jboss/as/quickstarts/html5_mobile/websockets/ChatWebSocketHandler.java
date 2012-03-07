@@ -36,8 +36,10 @@ import javax.inject.Singleton;
 import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 import java.util.concurrent.CopyOnWriteArraySet;
 
@@ -71,6 +73,8 @@ public class ChatWebSocketHandler extends WebSocketHandler {
     public class ChatWebSocket implements WebSocket.OnTextMessage {
 
         private Connection connection;
+        private String ACTIVE_OPTIONS = "activeOptions:";
+        private String SEPARATOR = ":";
 
         public void onOpen(Connection connection) {
             // Client (Browser) WebSockets has opened a connection.
@@ -85,7 +89,8 @@ public class ChatWebSocketHandler extends WebSocketHandler {
         public void onMessage(String data) {
             // Loop for each instance of ChatWebSocket to send message server to
             // each client WebSockets.
-            //btw, switch on string coming in JDK 7
+
+            //btw, switch on string coming in JDK 7...quicker to use if/else if for now
             if(data.equals("nextSlide")) {
                 data = ("{\"cdievent\":{\"fire\":function(){" +
                                         "eventObj.initEvent(\'slideEvent\', true, true);" +
@@ -104,7 +109,28 @@ public class ChatWebSocketHandler extends WebSocketHandler {
                                         "eventObj.group = 'default';\n" +
                                         "document.dispatchEvent(eventObj);" +
                                         "}}}");
+            }else if (data.contains(ACTIVE_OPTIONS)){
+                String options = data.substring(ACTIVE_OPTIONS.length(), data.length());
+                List optionList = Arrays.asList(options.split("\\s*,\\s*"));
+                data = ("{\"cdievent\":{\"fire\":function(){" +
+                                        "window.eventObj = document.createEvent('Event');" +
+                                        "eventObj.initEvent(\'updateOptions\', true, true);" +
+                                        "eventObj.option1 = '" + optionList.get(0) + "';\n" +
+                                        "eventObj.option2 = '" + optionList.get(1) + "';\n" +
+                                        "document.dispatchEvent(eventObj);" +
+                                        "}}}");
+
+            }else if (data.contains("vote:")){
+
+                String vote = data.substring("vote:".length(), data.length());
+                data = ("{\"cdievent\":{\"fire\":function(){" +
+                                        "window.eventObj = document.createEvent('Event');" +
+                                        "eventObj.initEvent(\'clientVote\', true, true);" +
+                                        "eventObj.vote = '" + vote + "';\n" +
+                                        "document.dispatchEvent(eventObj);" +
+                                        "}}}");
             }
+
             System.out.println("-----------" + data);
             try {
                 for (ChatWebSocket webSocket : getWebsockets()) {

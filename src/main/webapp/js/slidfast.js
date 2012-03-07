@@ -25,6 +25,8 @@
 
             focusPage = null,
 
+            slides = false,
+
             optimizeNetwork = false,
 
             isReady = false,
@@ -42,6 +44,7 @@
                   touchEnabled = options.touchEnabled;
                   singlePageModel = options.singlePageModel;
                   optimizeNetwork = options.optimizeNetwork;
+                  slides = options.slides;
                }
             } catch(e) {
                alert('Problem with startup options. You must define the page ID at a min. \n Error:' + e)
@@ -63,7 +66,11 @@
                   slidfast.core.fetchAndCache(true);
                }
             }
-            slidfast.slides.init();
+
+            if(slides){
+               slidfast.slides.init();
+            }
+
          },
 
          hideURLBar: function() {
@@ -82,7 +89,12 @@
                slidfast.core.locationChange();
             }, false);
 
+            //slide specific todo fix later
             document.addEventListener('keydown', handleBodyKeyDown, false);
+
+            //setup a generic event for WebSocket messages
+            //let the server do it for now
+            //window.eventObj = document.createEvent('Event');
 
             return slidfast.core;
 
@@ -587,11 +599,7 @@
               ws.onmessage = this._onmessage;
               ws.onclose = this._onclose;
               ws.onerror = this._onerror;
-          },
-
-          chat : function(text) {
-              if (text != null && text.length > 0)
-                  this._send(text);
+              return ws;
           },
 
           _onopen : function() {
@@ -606,7 +614,7 @@
                   if(m.data.indexOf('cdievent') > 0){
                       try{
                           //$('log').innerHTML = m.data;
-
+                           //console.log(m.data);
                           //avoid use of eval...
                           var event = (m.data);
                           event = (new Function("return " + event))();
@@ -622,10 +630,6 @@
 
           _onclose : function(m) {
               ws = null;
-      //        $('join').className = '';
-      //        $('joined').className = 'hidden';
-      //        $('username').focus();
-      //        $('chat').innerHTML = '';
           },
 
           _onerror : function(e) {
@@ -644,10 +648,14 @@
       var futureSlides = [], pastSlides = [];
       var futureGroups = [], pastGroups = [];
       var groupSlideIndex = 0;
-
+      var currentVotes = {};
       slidfast.slides = slidfast.prototype = {
 
          init : function() {
+
+
+
+
             futureGroups = toArray(this.groups());
             for (i = 0; i < futureGroups.length; i++) {
                futureGroups[i].style.display = 'none';
@@ -664,6 +672,10 @@
             futureSlides = toArray(this.groupSlides(activeGroup));
 
             activeSlide = futureSlides.shift();
+
+            window.addEventListener('clientVote', function(e) {
+               slidfast.slides.optionVote(e.vote,activeSlide);
+            }, false);
 
             this.checkOptions();
             this.updateRemotes();
@@ -851,22 +863,63 @@
          },
 
          updateRemotes : function() {
-            //window.addEventListener('load', function(e) {
-               console.log('update remotes');
 
             slidfast.ws.join('anonymous2');
               ws.onopen = function (e){
-               slidfast.ws.chat('activeOptions:' + activeOptions);
-              }
-            //}, false);
+               ws.send('activeOptions:' + activeOptions);
+              };
+
 
          },
 
-         optionVote : function(option) {
+         optionVote : function(vote, activeSlide) {
             //given vote for a default slide
+            var index;
+            //if(vote in activeOptions){
+               index = activeOptions.indexOf(vote);
+               if(vote in currentVotes){
+                  currentVotes[vote] += 1;
+                  //console.log(currentVotes);
+               }else{
+                  currentVotes[vote] = 1;
+
+               }
+            //}
+            //console.log(vote + ' ' + currentVotes[vote]);
+            var totalVotes = 0;
+            for (i = 0; i < activeOptions.length; i++) {
+                if(currentVotes.hasOwnProperty(activeOptions[i]))
+                totalVotes += currentVotes[activeOptions[i]];
+            }
+
+            //update the makeshift bar chart
+            for (i = 0; i < activeOptions.length; i++) {
+               console.log(currentVotes[activeOptions[i]]);
+               var optionHandler = activeSlide.querySelector('.option-handler-' + (i + 1));
+               if(currentVotes[activeOptions[i]]){
+                  optionHandler.style.width = (currentVotes[activeOptions[i]]/totalVotes * 100) + '%';
+               }else{
+                  optionHandler.style.width = '50%';
+               }
+               optionHandler.style.backgroundColor = '#ffffff';
+               optionHandler.style.border = '1px solid #777';
+            }
+
+            //now we need a decision
+            for(var opt in currentVotes){
+               if (currentVotes.hasOwnProperty(opt)) {
+                  //we're only dealing with 2 possible votes for the prototype so this is easy
+                  if(opt == vote){
+
+                  }else{
+
+                  }
+               }
+            }
+
          }
 
-      }
+      };
 
 
       var getElement = function(id) {
@@ -960,5 +1013,7 @@
 
    window.slidfast = slidfast;
 })(window, document);
+
+
 
 
