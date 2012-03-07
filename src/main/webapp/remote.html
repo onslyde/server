@@ -43,15 +43,15 @@ var ws = slidfast.ws.join('client:anonymous2');
 
 option1.onclick = function(event) {
     ws.send('vote:' + option1.value);
-    option1.disabled = true;
-    option2.disabled = true;
+    //option1.disabled = true;
+    //option2.disabled = true;
     return false;
 };
 
 option2.onclick = function(event) {
     ws.send('vote:' + option2.value);
-    option1.disabled = true;
-    option2.disabled = true;
+    //option1.disabled = true;
+    //option2.disabled = true;
     return false;
 };
 

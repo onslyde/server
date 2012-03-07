@@ -593,7 +593,7 @@
               username = name;
               //var location = document.location.toString().replace('http://',
               //		'ws://').replace('https://', 'wss://');
-              var location = "ws://192.168.1.101:8081"
+              var location = "ws://localhost:8081"
               ws = new WebSocket(location);
               ws.onopen = this._onopen;
               ws.onmessage = this._onmessage;
@@ -649,6 +649,7 @@
       var futureGroups = [], pastGroups = [];
       var groupSlideIndex = 0;
       var currentVotes = {};
+      var totalVotes = 0;
       slidfast.slides = slidfast.prototype = {
 
          init : function() {
@@ -717,10 +718,13 @@
          nextSlide : function() {
             console.log('nextSlide' + futureSlides.length + ' ' + groupSlideIndex);
             if (futureSlides.length > 0) {
-               if(activeSlide.getAttribute("data-option") == 'master') {
-                  //todo - set the decided route somewhere so we can come back to master is needed
+
+               if(activeSlide.getAttribute("data-option") == 'master' &&
+                  activeSlide.getAttribute("data-route") == null && totalVotes > 0) {
+                  console.log('decideroute');
                   this.decideRoute();
                }
+
                pastSlides.push(activeSlide);
                activeSlide = futureSlides.shift();
                slidfast.ui.slideTo(activeSlide);
@@ -890,7 +894,7 @@
                }
             //}
             //console.log(vote + ' ' + currentVotes[vote]);
-            var totalVotes = 0;
+
             for (i = 0; i < activeOptions.length; i++) {
                 if(currentVotes.hasOwnProperty(activeOptions[i]))
                 totalVotes += currentVotes[activeOptions[i]];
@@ -902,11 +906,12 @@
                var optionHandler = activeSlide.querySelector('.option-handler-' + (i + 1));
                if(currentVotes[activeOptions[i]]){
                   optionHandler.style.width = (currentVotes[activeOptions[i]]/totalVotes * 100) + '%';
+                  optionHandler.style.backgroundColor = '#ffffff';
+                  optionHandler.style.border = '1px solid #777';
                }else{
                   optionHandler.style.width = '50%';
                }
-               optionHandler.style.backgroundColor = '#ffffff';
-               optionHandler.style.border = '1px solid #777';
+
             }
 
          },
@@ -914,8 +919,6 @@
          decideRoute : function(){
             //now we need a decision
 
-            //todo - may want to set decision in the DOM on master slide... will need it elsewhere
-            //when going back in history then going forward again
             var values = [];
             var sortedObj = [];
             console.log(currentVotes);
@@ -927,16 +930,22 @@
             values.sort(function(a,b){return b-a});
             console.log(values);
 
+            //todo - check for tie condition
+
             var winner;
             for(var optb in currentVotes){
                if (currentVotes.hasOwnProperty(optb)) {
+                  //based on the sorted values, we'll choose the first one
+                  //javascript hashes can't be sorted, so this is a rebuild
                    if(values[0] == currentVotes[optb]){
                       winner = optb;
                    }
                }
             }
-
-            console.log(winner);
+            activeSlide.setAttribute('data-route',winner);
+            //clear votes for next slideGroup
+            totalVotes = 0;
+            console.log('winner' + winner);
             this.setOption(winner);
          }
 
