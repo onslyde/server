@@ -717,6 +717,10 @@
          nextSlide : function() {
             console.log('nextSlide' + futureSlides.length + ' ' + groupSlideIndex);
             if (futureSlides.length > 0) {
+               if(activeSlide.getAttribute("data-option") == 'master') {
+                  //todo - set the decided route somewhere so we can come back to master is needed
+                  this.decideRoute();
+               }
                pastSlides.push(activeSlide);
                activeSlide = futureSlides.shift();
                slidfast.ui.slideTo(activeSlide);
@@ -905,18 +909,35 @@
                optionHandler.style.border = '1px solid #777';
             }
 
+         },
+
+         decideRoute : function(){
             //now we need a decision
+
+            //todo - may want to set decision in the DOM on master slide... will need it elsewhere
+            //when going back in history then going forward again
+            var values = [];
+            var sortedObj = [];
+            console.log(currentVotes);
             for(var opt in currentVotes){
                if (currentVotes.hasOwnProperty(opt)) {
-                  //we're only dealing with 2 possible votes for the prototype so this is easy
-                  if(opt == vote){
+                  values.push(currentVotes[opt])
+               }
+            }
+            values.sort(function(a,b){return b-a});
+            console.log(values);
 
-                  }else{
-
-                  }
+            var winner;
+            for(var optb in currentVotes){
+               if (currentVotes.hasOwnProperty(optb)) {
+                   if(values[0] == currentVotes[optb]){
+                      winner = optb;
+                   }
                }
             }
 
+            console.log(winner);
+            this.setOption(winner);
          }
 
       };
