@@ -587,24 +587,42 @@
 
       var ws;
       var username;
+      var isopen = false;
       //var _onopen,_onmessage,_onclose,_onerror;
       slidfast.ws = slidfast.prototype = {
-          join : function(name) {
-              username = name;
+          connect : function(websocket,initString) {
+              username = 'yomama';
               //var location = document.location.toString().replace('http://',
               //		'ws://').replace('https://', 'wss://');
-              var location = "ws://localhost:8081"
-              ws = new WebSocket(location);
-              ws.onopen = this._onopen;
-              ws.onmessage = this._onmessage;
-              ws.onclose = this._onclose;
-              ws.onerror = this._onerror;
+              if(!websocket){
+                 var location = "ws://192.168.1.101:8081"
+                 ws = new WebSocket(location);
+              }else{
+                 ws = websocket;
+              }
+              //ws = websocket;
+              //this.ws = ws;
+              ws.onopen = function() {
+                 isopen = true;
+                 //basic auth until we get something better
+                 console.log('sent onopen' + username);
+                 slidfast.ws._send('user:'+username);
+                 if(initString){
+                    slidfast.ws._send(initString);
+                 }
+              };
+//              ws.onmessage = this._onmessage;
+              ws.onclose = function(){console.log('closed')};
+//              ws.onerror = this._onerror;
+
               return ws;
           },
 
           _onopen : function() {
+              isopen = true;
               //basic auth until we get something better
-              ws.send('user:'+username);
+              console.log('sent onopen' + username);
+              slidfast.ws._send('user:'+username);
           },
 
           _onmessage : function(m) {
@@ -637,9 +655,9 @@
           },
 
           _send : function(message) {
-              //user = user.replace(':', '_');
-              //if (ws)
-                  ws.send(message);
+              console.log('sent ');
+              ws.send(message);
+
           }
       };
 
@@ -653,10 +671,6 @@
       slidfast.slides = slidfast.prototype = {
 
          init : function() {
-
-
-
-
             futureGroups = toArray(this.groups());
             for (i = 0; i < futureGroups.length; i++) {
                futureGroups[i].style.display = 'none';
@@ -694,11 +708,11 @@
                   console.log('checkOptions groupOptions' + groupOptions);
                   var option1 = document.createElement("a");
                   option1.href = 'javascript:slidfast.slides.setOption(\'' + groupOptions[0] + '\');void(0)';
-                  option1.appendChild(document.createTextNode('choose option ' + groupOptions[0]));
+                  option1.appendChild(document.createTextNode('' + groupOptions[0]));
 
                   var option2 = document.createElement("a");
                   option2.href = 'javascript:slidfast.slides.setOption(\'' + groupOptions[1] + '\');void(0)';
-                  option2.appendChild(document.createTextNode('choose option ' + groupOptions[1]));
+                  option2.appendChild(document.createTextNode('' + groupOptions[1]));
 
                   var optionHandler1 = document.createElement("div");
                   optionHandler1.className = 'option-handler-1';
@@ -800,7 +814,9 @@
                futureSlides = [];
                groupSlideIndex = pastSlides.length;
                activeSlide = pastSlides.pop();
-               console.log('pastSlides ' + pastSlides.length);
+               var groupOptions = this.groupOptions(activeGroup);
+               this.updateRemotes();
+               console.log('---groupOptions ' + groupOptions);
                console.log('activeSlide ' + activeSlide);
 
                slidfast.ui.slideTo(activeSlide);
@@ -871,11 +887,14 @@
          },
 
          updateRemotes : function() {
-
-            slidfast.ws.join('anonymous2');
-              ws.onopen = function (e){
-               ws.send('activeOptions:' + activeOptions);
-              };
+            var activeOptionsString = 'activeOptions:' + activeOptions;
+            if(!ws){
+               console.log('no conn');
+               slidfast.ws.connect(null,activeOptionsString);
+            }else{
+               console.log('conn');
+               slidfast.ws._send(activeOptionsString);
+            }
 
 
          },

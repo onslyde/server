@@ -50,7 +50,7 @@ public class ChatServerServletContextListener implements ServletContextListener 
             this.server = new Server();
             Connector connector = new SelectChannelConnector();
             connector.setPort(8081);
-            connector.setHost("127.0.0.1");
+            connector.setHost(addr.getHostAddress());
 
             server.addConnector(connector);
 

@@ -65,10 +65,10 @@ public class MemberService implements Serializable {
    @Path("/json")
    @Produces(MediaType.APPLICATION_JSON)
    public List<Member> listAllMembersJSON() {
-      @SuppressWarnings("unchecked")
-
-      final List<Member> results = em.createQuery("select m from Member m order by m.name").getResultList();
-      return results;
+      //@SuppressWarnings("unchecked")
+      System.out.println("!!!!!!!!!!!!!!!!poll");
+      //final List<Member> results = em.createQuery("select m from Member m order by m.name").getResultList();
+      return null;
    }
 
    @GET
@@ -88,37 +88,11 @@ public class MemberService implements Serializable {
    @POST
    @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
    @Produces(MediaType.APPLICATION_JSON)
-   public Response createMember(@FormParam("name") String name, @FormParam("email") String email, @FormParam("phoneNumber") String phone) {
+   public Response createMember(@FormParam("simple") String test) {
       Response.ResponseBuilder builder = null;
 
-      //Create a new member class from fields
-      Member member = new Member();
-      member.setName(name);
-      member.setEmail(email);
-      member.setPhoneNumber(phone);
-
-      try {
-         //Validates member using bean validation
-         validateMember(member);
-
-         //Register the member
-         log.info("Registering " + member.getName());
-         em.persist(member);
-
-         //Trigger the creation event
-         memberEventSrc.fire(member);
-
-         //Create an "ok" response
-         builder = Response.ok();
-      } catch (ConstraintViolationException ce) {
-         //Handle bean validation issues
-         builder = createViolationResponse(ce.getConstraintViolations());
-      } catch (ValidationException e) {
-         //Handle the unique constrain violation
-         Map<String, String> responseObj = new HashMap<String, String>();
-         responseObj.put("email","Email taken");
-         builder = Response.status(Response.Status.CONFLICT).entity(responseObj);
-      }
+      System.out.println("***************" + test);
+      builder = Response.ok();
 
       return builder.build();
    }

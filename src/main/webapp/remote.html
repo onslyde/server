@@ -1,45 +1,93 @@
-<html>
+<!DOCTYPE html>
+<html lang="en">
+
 <head>
-<title>Slide Deck Remote</title>
+<title>HTML5 Architecture</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+<meta name="viewport" content="width=device-width, minimum-scale=1.0, maximum-scale=1.0"/>
+<!-- enable full-screen mode -->
+<meta name="apple-mobile-web-app-capable" content="yes"/>
+<!-- controls the appearance of the status bar in full-screen mode -->
+<meta name="apple-mobile-web-app-status-bar-style" content="black"/>
 
-<style type='text/css'>
-
-</style>
+<link rel="stylesheet" media="all" href="css/slidfast.css" />
+<link rel="stylesheet" media="all" href="css/remote.css" />
+    <script type="text/javascript" src="js/jquery-1.6.4.js"></script>
+<script type="text/javascript" src="js/gracefulWebSocket.js"></script>
 <script src='js/slidfast.js'></script>
 <script type="text/javascript">
 
 slidfast({
-   touchEnabled: false
+   defaultPageID:'home-page',
+   touchEnabled: true,
+   singlePageModel: true,
+   optimizeNetwork: true
 });
 
 </script>
+
 </head>
 <body>
-<input id="option1" class="button" type="submit" value="topic A" />
-<input id="option2" class="button" type="submit" value="topic B" />
+<div id="browser">
+    <nav class="primary">
+        <ul>
+            <li><a href="#sf-home-page" onclick="slidfast.ui.slideTo('home-page')">Home</a></li>
+            <li><a href="#sf-contact-page" onclick="slidfast.ui.slideTo('contact-page')">Contact</a></li>
+            <li><input id="option1" class="button" type="submit" value="" />
+    <input id="option2" class="button" type="submit" value="" /></li>
+        </ul>
+    </nav>
+
+    <div id="slide-group-container">
+
+        <div id="front" class="normal">
+
+            <div id="home-page" class="page">
+                <h1 style="font-size: 8vw">Home Page</h1>
+            </div>
+
+            <div id="contact-page" class="page stage-left">
+                <h1 >Contact Page</h1>
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+</body>
 
 <script>
-/*
+    var ws;
+    (function ($) {
+        var pluginOptions = {
+                fallbackPollParams:  {
+                        "test": function () {  }
+                }
+        };
 
-we want:
-
-embedded slide viewer
---------------------
-- to have the slides mirrored from current presenter slide deck
--- this means state sharing through window.location or similar
-- the 2 option buttons need to be dynamic based on slideGroup
--- we must deliver which group we're currently viewing to this page
---- #slidegroup:slidenumber
--- then populate buttons for user to pick from
---- then send vote to server
-
- */
+        //alert(slidfast);
+        // in fallback mode: connect returns a dummy object implementing the WebSocket interface
+        ws = $.gracefulWebSocket("ws://192.168.1.101:8081",pluginOptions); // the ws-protocol will automatically be changed to http
+        // in fallback mode: sends message to server using HTTP POST
+        ws = slidfast.ws.connect(ws);
+        ws.onopen = function (e){
+           //ws.send('activeOptions:' + activeOptions);
+            //alert();
+        };
+        //ws.send("same message to server, this time send using a POST request");
+        // in fallback mode: listens for messages by polling the server using HTTP GET
+        //ws.onmessage = function (event) {
+          // var sameMessageFromServer = event.data;
+        //};
+    })(jQuery);
 
 var option1 = document.querySelector('#option1');
 var option2 = document.querySelector('#option2');
 
 //todo make this unique user for session management/voter registration
-var ws = slidfast.ws.join('client:anonymous2');
+//var ws = slidfast.ws.join('client:anonymous2');
 
 option1.onclick = function(event) {
     ws.send('vote:' + option1.value);

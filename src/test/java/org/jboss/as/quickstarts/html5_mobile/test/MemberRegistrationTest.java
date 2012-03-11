@@ -43,37 +43,5 @@ public class MemberRegistrationTest {
    @Inject
    Logger log;
 
-   @Test
-   public void testRegister() throws Exception {
-      Response response = memberRegistration.createMember("Jane Doe", "jane@mailinator.com", "2125551234");
 
-      assertEquals("Unexpected response status", 200, response.getStatus());
-      log.info(" New member was persisted and returned status " + response.getStatus());
-   }
-
-   @Test
-   public void testInvalidRegister() throws Exception {
-      Response response = memberRegistration.createMember("", "", "");
-
-      assertEquals("Unexpected response status", 400, response.getStatus());
-      assertNotNull("response.getEntity() should not null",response.getEntity());
-      assertEquals("Unexpected response.getEntity(). It contains " + response.getEntity(), 
-                    3, ((Map<String, String>)response.getEntity()).size());
-      log.info("Invalid member register attempt failed with return code " + response.getStatus());
-   }
-
-   @Test
-   public void testDuplicateEmail() throws Exception {
-      //Register an initial user
-      memberRegistration.createMember("Jane Doe", "jane@mailinator.com", "2125551234");
-
-      //Register a different user with the same email
-      Response response = memberRegistration.createMember("John Doe", "jane@mailinator.com", "2133551234");
-
-      assertEquals("Unexpected response status", 409, response.getStatus());
-      assertNotNull("response.getEntity() should not null",response.getEntity());
-      assertEquals("Unexpected response.getEntity(). It contains" + response.getEntity(), 
-                   1, ((Map<String, String>)response.getEntity()).size());
-      log.info("Duplicate member register attempt failed with return code " + response.getStatus());
-   }
 }
