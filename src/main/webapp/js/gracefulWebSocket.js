@@ -70,7 +70,8 @@
 
             var pollInterval;
             var openTimout;
-            alert(opts.fallbackSendURL);
+            var posturl = opts.fallbackSendURL + '/jboss-as-html5-mobile/rest/members?' + $.param( opts.fallbackPollParams );
+
             // create WebSocket object
             var fws = {
                // ready state
@@ -78,10 +79,13 @@
                bufferedAmount: 0,
                send: function (data) {
                   var success = true;
+                  //replace colon from namespaced websocket data
+                  data = data.replace(data[data.indexOf(':')],'=');
+
                   $.ajax({
                      async: false, // send synchronously
                      type: opts.fallbackSendMethod,
-                     url: opts.fallbackSendURL + '/jboss-as-html5-mobile/rest/members/?' + $.param( getFallbackParams() ),
+                     url: posturl,
                      data: data,
                      dataType: 'text',
                      contentType : "application/x-www-form-urlencoded; charset=utf-8",
@@ -91,6 +95,7 @@
                         $(fws).triggerHandler('error');
                      }
                   });
+                  //alert(posturl);
                   return success;
                },
                close: function () {
@@ -114,7 +119,7 @@
                fws.currentRequest = new Date().getTime();
 
                // extend default params with plugin options
-               return $.extend({"previousRequest": fws.previousRequest, "currentRequest": fws.currentRequest}, opts.fallbackPollParams);
+               return $.extend(opts.fallbackPollParams, {"previousRequest": fws.previousRequest, "currentRequest": fws.currentRequest});
             }
 
             /**
@@ -124,6 +129,7 @@
 
                // trigger onmessage
                var messageEvent = {"data" : data};
+               //alert(messageEvent);
                fws.onmessage(messageEvent);
             }
 
@@ -132,7 +138,7 @@
                $.ajax({
                   type: opts.fallbackPollMethod,
                   url: opts.fallbackPollURL + '/jboss-as-html5-mobile/rest/members/json',
-                  dataType: 'json',
+                  dataType: 'text',
                   data: getFallbackParams(),
                   success: pollSuccess,
                   error: function (xhr) {

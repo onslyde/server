@@ -4,6 +4,7 @@ import java.io.Serializable;
 import java.util.*;
 import java.util.logging.Logger;
 
+import javax.annotation.PostConstruct;
 import javax.ejb.Stateful;
 import javax.enterprise.context.ApplicationScoped;
 import javax.enterprise.context.RequestScoped;
@@ -20,8 +21,10 @@ import javax.ws.rs.core.Response;
 
 import org.eclipse.jetty.util.ConcurrentHashSet;
 import org.jboss.as.quickstarts.html5_mobile.model.Member;
+import org.jboss.as.quickstarts.html5_mobile.model.SlidFast;
 import org.jboss.as.quickstarts.html5_mobile.websockets.ChatWebSocketHandler;
 import org.jboss.as.quickstarts.html5_mobile.websockets.Notify;
+import sun.tools.jstat.OptionLister;
 
 /**
  * JAX-RS Example
@@ -39,12 +42,13 @@ public class MemberService implements Serializable {
    private EntityManager em;
 
    @Inject
-   private Event<Member> memberEventSrc;
+   private Event<SlidFast> slidFastEventSrc;
 
    @Inject
    private Validator validator;
 
-
+   @Inject
+   private SlidFast slidFast;
 
    @GET
    @Produces("text/xml")
@@ -64,11 +68,24 @@ public class MemberService implements Serializable {
    @GET
    @Path("/json")
    @Produces(MediaType.APPLICATION_JSON)
-   public List<Member> listAllMembersJSON() {
+   public String listAllMembersJSON() {
       //@SuppressWarnings("unchecked")
-      System.out.println("!!!!!!!!!!!!!!!!poll");
+
+       String data = "";
+       slidFastEventSrc.fire(slidFast);
+      List optionList = slidFast.getActiveOptions();
+       System.out.println("!!!!!!!!!!!!!!!!poll " + optionList.size());
+      if(optionList.size() == 2){
+          data = ("{\"cdievent\":{\"fire\":function(){" +
+                  "window.eventObj = document.createEvent('Event');" +
+                  "eventObj.initEvent(\'updateOptions\', true, true);" +
+                  "eventObj.option1 = '" + optionList.get(0) + "';\n" +
+                  "eventObj.option2 = '" + optionList.get(1) + "';\n" +
+                  "document.dispatchEvent(eventObj);" +
+                  "}}}");
+      }
       //final List<Member> results = em.createQuery("select m from Member m order by m.name").getResultList();
-      return null;
+      return data;
    }
 
    @GET
@@ -88,10 +105,13 @@ public class MemberService implements Serializable {
    @POST
    @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
    @Produces(MediaType.APPLICATION_JSON)
-   public Response createMember(@FormParam("simple") String test) {
+   public Response createMember(@FormParam("user") String user, @FormParam("vote") String vote) {
       Response.ResponseBuilder builder = null;
 
-      System.out.println("***************" + test);
+      System.out.println("***************" + user + " " + vote);
+      slidFast.getCurrentVotes().add(vote);
+
+      System.out.println("**************slidFast.getCurrentVotes()*" + slidFast.getCurrentVotes().size());
       builder = Response.ok();
 
       return builder.build();
@@ -169,4 +189,5 @@ public class MemberService implements Serializable {
 //    public synchronized void setWebSockets(Set<ChatWebSocketHandler.ChatWebSocket> webSockets) {
 //        this.webSockets = webSockets;
 //    }
+
 }

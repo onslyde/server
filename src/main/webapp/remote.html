@@ -61,25 +61,22 @@ slidfast({
 <script>
     var ws;
     (function ($) {
-        var pluginOptions = {
-                fallbackPollParams:  {
-                        "test": function () {  }
-                }
-        };
+//        var pluginOptions = {
+//                fallbackPollParams:  {
+//                        "simple": "sadasdasdas"
+//                }
+//        };
 
         //alert(slidfast);
         // in fallback mode: connect returns a dummy object implementing the WebSocket interface
-        ws = $.gracefulWebSocket("ws://192.168.1.101:8081",pluginOptions); // the ws-protocol will automatically be changed to http
+        ws = $.gracefulWebSocket("ws://192.168.1.101:8081"); // the ws-protocol will automatically be changed to http
         // in fallback mode: sends message to server using HTTP POST
         ws = slidfast.ws.connect(ws);
-        ws.onopen = function (e){
-           //ws.send('activeOptions:' + activeOptions);
-            //alert();
-        };
+
         //ws.send("same message to server, this time send using a POST request");
         // in fallback mode: listens for messages by polling the server using HTTP GET
         //ws.onmessage = function (event) {
-          // var sameMessageFromServer = event.data;
+          //alert(event.data);
         //};
     })(jQuery);
 

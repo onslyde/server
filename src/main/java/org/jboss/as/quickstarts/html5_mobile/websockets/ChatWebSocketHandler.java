@@ -26,9 +26,12 @@ import org.eclipse.jetty.websocket.WebSocket;
 import org.eclipse.jetty.websocket.WebSocketHandler;
 import org.eclipse.jetty.websocket.WebSocketServlet;
 import org.jboss.as.quickstarts.html5_mobile.model.Member;
+import org.jboss.as.quickstarts.html5_mobile.model.SlidFast;
 import org.jboss.as.quickstarts.html5_mobile.rest.MemberService;
 
+import javax.annotation.ManagedBean;
 import javax.annotation.PostConstruct;
+import javax.ejb.Stateless;
 import javax.enterprise.context.ApplicationScoped;
 import javax.enterprise.event.Observes;
 import javax.inject.Inject;
@@ -46,25 +49,31 @@ import java.util.concurrent.CopyOnWriteArraySet;
 /**
  * @author <a href="mailto:whales@redhat.com">Wesley Hales</a>
  */
+
 public class ChatWebSocketHandler extends WebSocketHandler {
 
     private static Set<ChatWebSocket> websockets = new ConcurrentHashSet<ChatWebSocket>();
+
+    @Inject
+    private MemberService ms;
+
+    private static SlidFast slidFast;
 
     public WebSocket doWebSocketConnect(HttpServletRequest request,
             String protocol) {
         return new ChatWebSocket();
     }
 
-    public void observeItemEvent(@Observes Member member) {
+    public void observeItemEvent(@Observes SlidFast slidFast) {
+
+        syncSlidFast(slidFast);
+        System.out.println("-slidFast.getCurrentVotes()--------" + getSlidFast().getCurrentVotes());
         try {
             for (ChatWebSocket webSocket : getWebsockets()) {
-                webSocket.connection.sendMessage("{\"cdievent\":{\"fire\":function(){" +
-                                                        "eventObj.initEvent(\'memberEvent\', true, true);" +
-                                                        "eventObj.name = '" +  member.getName() + "';\n" +
-                                                        "document.dispatchEvent(eventObj);" +
-                                                        "}}}");
+                //send out to all connected websockets
+                //webSocket.connection.sendMessage("");
             }
-        } catch (IOException x) {
+        } catch (Exception x) {
             //todo - do something
         }
     }
@@ -111,7 +120,14 @@ public class ChatWebSocketHandler extends WebSocketHandler {
                                         "}}}");
             }else if (data.contains(ACTIVE_OPTIONS)){
                 String options = data.substring(ACTIVE_OPTIONS.length(), data.length());
-                List optionList = Arrays.asList(options.split("\\s*,\\s*"));
+                List<String> optionList = Arrays.asList(options.split("\\s*,\\s*"));
+                try {
+                    System.out.println("-slidFast.getCurrentVotes()-22-------" + getSlidFast().getCurrentVotes());
+                    getSlidFast().setActiveOptions(optionList);
+                } catch (Exception e) {
+                    e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
+                }
+
                 data = ("{\"cdievent\":{\"fire\":function(){" +
                                         "window.eventObj = document.createEvent('Event');" +
                                         "eventObj.initEvent(\'updateOptions\', true, true);" +
@@ -123,6 +139,11 @@ public class ChatWebSocketHandler extends WebSocketHandler {
             }else if (data.contains("vote:")){
 
                 String vote = data.substring("vote:".length(), data.length());
+                try {
+                    getSlidFast().getCurrentVotes().add(vote);
+                } catch (Exception e) {
+                    e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
+                }
                 data = ("{\"cdievent\":{\"fire\":function(){" +
                                         "window.eventObj = document.createEvent('Event');" +
                                         "eventObj.initEvent(\'clientVote\', true, true);" +
@@ -155,5 +176,11 @@ public class ChatWebSocketHandler extends WebSocketHandler {
         return websockets;
     }
 
+    public static synchronized void syncSlidFast(SlidFast slidFast2) {
+        slidFast = slidFast2;
+    }
 
+    public static synchronized SlidFast getSlidFast() {
+        return slidFast;
+    }
 }

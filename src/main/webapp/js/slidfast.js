@@ -12,7 +12,7 @@
 
       var slidfast = function(startupOptions) {
          options = startupOptions;
-         return new slidfast.core.init();
+         return new slidfast.core.init(options);
       },
 
             options,
@@ -78,7 +78,7 @@
             setTimeout(scrollTo, 0, 0, 1)
          },
 
-         init: function() {
+         init: function(options) {
 
             window.addEventListener('load', function(e) {
                isReady = true;
@@ -89,9 +89,12 @@
                slidfast.core.locationChange();
             }, false);
 
-            //slide specific todo fix later
-            document.addEventListener('keydown', handleBodyKeyDown, false);
-
+            if(options.slides){
+               //slide specific todo fix later
+               document.addEventListener('keydown', function(e) {
+                  slidfast.slides.handleKeys(e);
+               }, false);
+            }
             //setup a generic event for WebSocket messages
             //let the server do it for now
             //window.eventObj = document.createEvent('Event');
@@ -611,7 +614,7 @@
                     slidfast.ws._send(initString);
                  }
               };
-//              ws.onmessage = this._onmessage;
+              ws.onmessage = this._onmessage;
               ws.onclose = function(){console.log('closed')};
 //              ws.onerror = this._onerror;
 
@@ -627,13 +630,15 @@
 
           _onmessage : function(m) {
               if (m.data) {
-
+                  //console.log(m.data);
                   //check to see if this message is a CDI event
+                 //alert('onmessage' + m.data);
                   if(m.data.indexOf('cdievent') > 0){
                       try{
                           //$('log').innerHTML = m.data;
                            //console.log(m.data);
                           //avoid use of eval...
+
                           var event = (m.data);
                           event = (new Function("return " + event))();
                           event.cdievent.fire();
@@ -966,6 +971,43 @@
             totalVotes = 0;
             console.log('winner' + winner);
             this.setOption(winner);
+         },
+
+         handleKeys : function(event) {
+            switch (event.keyCode) {
+                case 39: // right arrow
+                case 13: // Enter
+                case 32: // space
+                case 34: // PgDn
+                  slidfast.slides.nextSlide();
+                  event.preventDefault();
+                  break;
+
+                case 37: // left arrow
+                case 8: // Backspace
+                case 33: // PgUp
+                  slidfast.slides.prevSlide();
+                  event.preventDefault();
+                  break;
+
+                case 40: // down arrow
+
+                  event.preventDefault();
+                  break;
+
+                case 38: // up arrow
+
+                  event.preventDefault();
+                  break;
+
+                case 78: // N
+                  //document.body.classList.toggle('with-notes');
+                  break;
+
+                case 27: // ESC
+                  //document.body.classList.remove('with-notes');
+                  break;
+              }
          }
 
       };
@@ -1020,40 +1062,7 @@
       };
 
       function handleBodyKeyDown(event) {
-        switch (event.keyCode) {
-          case 39: // right arrow
-          case 13: // Enter
-          case 32: // space
-          case 34: // PgDn
-            slidfast.slides.nextSlide();
-            event.preventDefault();
-            break;
 
-          case 37: // left arrow
-          case 8: // Backspace
-          case 33: // PgUp
-            slidfast.slides.prevSlide();
-            event.preventDefault();
-            break;
-
-          case 40: // down arrow
-
-            event.preventDefault();
-            break;
-
-          case 38: // up arrow
-
-            event.preventDefault();
-            break;
-
-          case 78: // N
-            //document.body.classList.toggle('with-notes');
-            break;
-
-          case 27: // ESC
-            //document.body.classList.remove('with-notes');
-            break;
-        }
       }
 
       return slidfast;
