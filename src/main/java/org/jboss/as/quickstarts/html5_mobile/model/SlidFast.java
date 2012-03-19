@@ -21,6 +21,8 @@
  */
 package org.jboss.as.quickstarts.html5_mobile.model;
 
+import com.sun.istack.internal.Nullable;
+
 import javax.annotation.ManagedBean;
 import javax.annotation.PostConstruct;
 import javax.inject.Singleton;
@@ -40,6 +42,7 @@ public class SlidFast {
     private List<String> activeOptions;
     private String activeOption;
     private List<String> currentVotes;
+    private String jsEvent;
 
     @PostConstruct
     public void initialize() {
@@ -71,5 +74,13 @@ public class SlidFast {
 
     public void setCurrentVotes(List<String> currentVotes) {
         this.currentVotes = currentVotes;
+    }
+
+    public String getJsEvent() {
+        return jsEvent;
+    }
+
+    public void setJsEvent(String jsEvent) {
+        this.jsEvent = jsEvent;
     }
 }

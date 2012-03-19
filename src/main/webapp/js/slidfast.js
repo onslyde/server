@@ -598,7 +598,7 @@
               //var location = document.location.toString().replace('http://',
               //		'ws://').replace('https://', 'wss://');
               if(!websocket){
-                 var location = "ws://192.168.1.101:8081"
+                 var location = "ws://192.168.1.127:8081"
                  ws = new WebSocket(location);
               }else{
                  ws = websocket;
@@ -615,7 +615,7 @@
                  }
               };
               ws.onmessage = this._onmessage;
-              ws.onclose = function(){console.log('closed')};
+              ws.onclose = this._onclose;
 //              ws.onerror = this._onerror;
 
               return ws;

@@ -28,6 +28,7 @@ import org.eclipse.jetty.websocket.WebSocketServlet;
 import org.jboss.as.quickstarts.html5_mobile.model.Member;
 import org.jboss.as.quickstarts.html5_mobile.model.SlidFast;
 import org.jboss.as.quickstarts.html5_mobile.rest.MemberService;
+import org.jboss.as.quickstarts.html5_mobile.util.ClientEvent;
 
 import javax.annotation.ManagedBean;
 import javax.annotation.PostConstruct;
@@ -67,14 +68,17 @@ public class ChatWebSocketHandler extends WebSocketHandler {
     public void observeItemEvent(@Observes SlidFast slidFast) {
 
         syncSlidFast(slidFast);
-        System.out.println("-slidFast.getCurrentVotes()--------" + getSlidFast().getCurrentVotes());
-        try {
-            for (ChatWebSocket webSocket : getWebsockets()) {
-                //send out to all connected websockets
-                //webSocket.connection.sendMessage("");
+        System.out.println("-observer event... votes#--------" + getSlidFast().getCurrentVotes());
+        if(slidFast.getJsEvent() != null){
+            try {
+                for (ChatWebSocket webSocket : getWebsockets()) {
+                    //send out to all connected websockets
+                    webSocket.connection.sendMessage(slidFast.getJsEvent());
+                    slidFast.setJsEvent(null);
+                }
+            } catch (Exception x) {
+                //todo - do something
             }
-        } catch (Exception x) {
-            //todo - do something
         }
     }
 
@@ -83,6 +87,7 @@ public class ChatWebSocketHandler extends WebSocketHandler {
 
         private Connection connection;
         private String ACTIVE_OPTIONS = "activeOptions:";
+        private String VOTE = "vote:";
         private String SEPARATOR = ":";
 
         public void onOpen(Connection connection) {
@@ -128,28 +133,25 @@ public class ChatWebSocketHandler extends WebSocketHandler {
                     e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
                 }
 
-                data = ("{\"cdievent\":{\"fire\":function(){" +
-                                        "window.eventObj = document.createEvent('Event');" +
-                                        "eventObj.initEvent(\'updateOptions\', true, true);" +
-                                        "eventObj.option1 = '" + optionList.get(0) + "';\n" +
-                                        "eventObj.option2 = '" + optionList.get(1) + "';\n" +
-                                        "document.dispatchEvent(eventObj);" +
-                                        "}}}");
+                data = ClientEvent.createEvent("updateOptions",optionList);
 
-            }else if (data.contains("vote:")){
+//                        ("{\"cdievent\":{\"fire\":function(){" +
+//                                        "window.eventObj = document.createEvent('Event');" +
+//                                        "eventObj.initEvent(\'updateOptions\', true, true);" +
+//                                        "eventObj.option1 = '" + optionList.get(0) + "';\n" +
+//                                        "eventObj.option2 = '" + optionList.get(1) + "';\n" +
+//                                        "document.dispatchEvent(eventObj);" +
+//                                        "}}}");
 
-                String vote = data.substring("vote:".length(), data.length());
+            }else if (data.contains(VOTE)){
+
+                String vote = data.substring(VOTE.length(), data.length());
                 try {
                     getSlidFast().getCurrentVotes().add(vote);
                 } catch (Exception e) {
                     e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
                 }
-                data = ("{\"cdievent\":{\"fire\":function(){" +
-                                        "window.eventObj = document.createEvent('Event');" +
-                                        "eventObj.initEvent(\'clientVote\', true, true);" +
-                                        "eventObj.vote = '" + vote + "';\n" +
-                                        "document.dispatchEvent(eventObj);" +
-                                        "}}}");
+                data = ClientEvent.clientVote(vote);
             }
 
             System.out.println("-----------" + data);
