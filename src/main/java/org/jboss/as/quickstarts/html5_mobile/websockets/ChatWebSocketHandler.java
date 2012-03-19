@@ -98,6 +98,15 @@ public class ChatWebSocketHandler extends WebSocketHandler {
             // instances
             // instance.
             getWebsockets().add(this);
+
+            //send current state to remotes
+            if(slidFast.getActiveOptions().size() == 2) {
+                try {
+                    this.connection.sendMessage(ClientEvent.createEvent("updateOptions",slidFast.getActiveOptions()));
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
         }
 
         public void onMessage(String data) {
