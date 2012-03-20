@@ -18,7 +18,7 @@
 <script type="text/javascript">
 
 slidfast({
-   defaultPageID:'home-page',
+   defaultPageID:'about-page',
    touchEnabled: true,
    singlePageModel: true,
    optimizeNetwork: true
@@ -29,12 +29,14 @@ slidfast({
 </head>
 <body>
 <div id="browser">
+    <h2 id="vote-label">Vote!</h2>
     <nav class="primary">
         <ul>
-            <li><a href="#sf-home-page" onclick="slidfast.ui.slideTo('home-page')">Home</a></li>
-            <li><a href="#sf-contact-page" onclick="slidfast.ui.slideTo('contact-page')">Contact</a></li>
             <li><input id="option1" class="button" type="submit" value="" />
-    <input id="option2" class="button" type="submit" value="" /></li>
+            <input id="option2" class="button" type="submit" value="" /></li>
+            <li><a href="#sf-home-page" onclick="slidfast.ui.slideTo('about-page')">About this talk | </a>
+                <a href="#sf-contact-page" onclick="slidfast.ui.slideTo('wesley-page')">About Wesley</a></li>
+
         </ul>
     </nav>
 
@@ -42,12 +44,12 @@ slidfast({
 
         <div id="front" class="normal">
 
-            <div id="home-page" class="page">
-                <h1 style="font-size: 8vw">Home Page</h1>
+            <div id="about-page" class="slide">
+                <p>Developers are facing a new era of development with HTML5 for both mobile and desktop environments. It was once laughable to put mobile focused development ahead of the desktop, but those days are over. Whether you’re focused only on mobile, desktop, or both, there are a few critical questions which must be answered</p>
             </div>
 
-            <div id="contact-page" class="page stage-left">
-                <h1 >Contact Page</h1>
+            <div id="wesley-page" class="slide stage-right">
+                <p>I'm writing a book! Go buy it! Then you can come hang out at my mansion.</p>
             </div>
 
         </div>
@@ -82,28 +84,45 @@ slidfast({
 
 var option1 = document.querySelector('#option1');
 var option2 = document.querySelector('#option2');
-
+var voteLabel = document.querySelector('#vote-label');
 //todo make this unique user for session management/voter registration
 //var ws = slidfast.ws.join('client:anonymous2');
 
 option1.onclick = function(event) {
     ws.send('vote:' + option1.value);
-    //option1.disabled = true;
-    //option2.disabled = true;
+    disablePoll();
     return false;
 };
 
 option2.onclick = function(event) {
     ws.send('vote:' + option2.value);
-    //option1.disabled = true;
-    //option2.disabled = true;
+    disablePoll();
     return false;
 };
 
+function disablePoll(){
+    option1.disabled = true;
+    option2.disabled = true;
+    option1.style.opacity = .4;
+    option2.style.opacity = .4;
+    voteLabel.style.opacity = .4;
+    voteLabel.innerHTML = 'You Voted!'
+}
+
 
 window.addEventListener('updateOptions', function(e) {
-    option1.value = e.option1;
-    option2.value = e.option2;
+    //quick check to make sure we don't re-enable on polling clients
+    if(option1.value != e.option1){
+        option1.disabled = false;
+        option2.disabled = false;
+        option1.value = e.option1;
+        option2.value = e.option2;
+        voteLabel.style.opacity = 1;
+        option1.style.opacity = 1;
+        option2.style.opacity = 1;
+    }
+
+
 }, false);
 
 </script>

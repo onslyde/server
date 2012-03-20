@@ -328,7 +328,7 @@
             focusPage = id;
 
             //5. Bring in the new page.
-            focusPage.className = 'slide transition stage-center';
+            focusPage.className = 'slide transition';
 
             //6. make this transition bookmarkable
             location.hash = '#sf-' + focusPage.id;
@@ -449,9 +449,9 @@
             track.ontouchend = function(event) {
                pageMove(event);
                if (slideDirection == 'left') {
-                  //slidfast.ui.slideTo('products-page');
+                  slidfast.ui.slideTo('wesley-page');
                } else if (slideDirection == 'right') {
-                  //slidfast.ui.slideTo('home-page');
+                  slidfast.ui.slideTo('about-page');
                }
             };
 

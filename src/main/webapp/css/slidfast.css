@@ -23,8 +23,7 @@ Mobile Device Page Setup
 
 #browser,
 #slide-group-container,
-.slide-group,
-.slide {
+.slide-group {
     width: 100%;
     height: 100%;
 }
@@ -44,11 +43,33 @@ Mobile Device Page Setup
     background-color: #fff;
     /*activate the GPU for compositing each page */
     /*-webkit-transform: translate3d(0, 0, 0);*/
+    /*height:auto;*/
+    /*bottom:0;*/
+    /*top:0;*/
+    /*left:0;*/
+    /*right:0;*/
+    /*width: auto;*/
 }
 
 .slide {
     position: absolute;
     background-color: #ececec;
+    border-radius: 15px;
+    border: 3px solid white;
+    margin: 35px;
+    padding:  15px;
+    bottom:0;
+    top:0;
+    left:0;
+    right:0;
+    width: auto;
+    -moz-box-shadow: 0 0 27px -3px #777;
+    -webkit-box-shadow: 0 0 27px -3px #777;
+    box-shadow: 0 0 27px -3px #777;
+    background: -moz-linear-gradient(top,  rgba(255,255,255,1) 0%, rgba(246,246,246,1) 47%, rgba(237,237,237,1) 100%); /* FF3.6+ */
+	background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,rgba(255,255,255,1)), color-stop(47%,rgba(246,246,246,1)), color-stop(100%,rgba(237,237,237,1))); /* Chrome,Safari4+ */
+	background: -webkit-linear-gradient(top,  rgba(255,255,255,1) 0%,rgba(246,246,246,1) 47%,rgba(237,237,237,1) 100%); /* Chrome10+,Safari5.1+ */
+	background: linear-gradient(top,  rgba(255,255,255,1) 0%,rgba(246,246,246,1) 47%,rgba(237,237,237,1) 100%); /* W3C */
 }
 
 /*************************************************
@@ -76,23 +97,28 @@ UX Utils
 /*************************************************
 Device Specific Styles
 *************************************************/
-.stage-center {
-    left: 0;
-    top:0;
-}
-
 .stage-left,
-.stage-right{
-    height:100%;
-    overflow: hidden;
+.stage-right,
+.stage-center {
+    /*height:auto;*/
+    /*bottom:0;*/
+    /*top:0;*/
+    /*left:0;*/
+    /*right:0;*/
+    /*width: auto;*/
 }
 
 .stage-left {
     left: -100%;
+    right: 100%;
+    width: auto;
+    /*opacity: 0;*/
 }
 
 .stage-right {
     left: 100%;
+    right: -100%;
+    width: auto;
 }
 
 /*************************************************

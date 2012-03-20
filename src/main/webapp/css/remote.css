@@ -1,18 +1,23 @@
 body {
     background-color: #000;
+    height: 100%;
 }
 
 
 /*----------------------------nav bar*/
 nav.primary > ul {
     text-align: center;
+    margin: 0;
+    padding:  0;
+    /*position: absolute;*/
+    /*top: 0;*/
 }
 
 nav.primary > ul li {
     list-style: none;
-    display: inline;
+    /*display: inline;*/
     padding: 5px;
-    border: 1px solid #fff;
+    /*border: 1px solid #fff;*/
 }
 
 nav.primary > ul li a {
@@ -21,31 +26,46 @@ nav.primary > ul li a {
 
 /*----------------------------pages*/
 
-#home-page {
-    background-color: #6495ed;
+.slide {
+    margin: 15px;
+    bottom:auto;
+    top:0;
+    left:0;
+    right:0;
+    width: auto;
 }
 
-#products-page {
-    background-color: #a52a2a;
+.stage-left {
+    left: -100%;
+    width: auto;
+    right: 100%;
+    opacity: 0;
 }
 
-#about-page {
-    background-color: #006400;
+.stage-right {
+    left: 100%;
+    width: auto;
+    right: -100%;
+    opacity: 0;
 }
 
-#contact-page {
-    background-color: #ff1493;
-    width: 100%;
-    height: 100%;
+#option1,
+#option2 {
+    border-radius: 5px;
+    background: -moz-linear-gradient(top, #ffff88 0%, #ffffc9 100%); /* FF3.6+ */
+	background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#ffff88), color-stop(100%,#ffffc9)); /* Chrome,Safari4+ */
+	background: -webkit-linear-gradient(top, #ffff88 0%,#ffffc9 100%); /* Chrome10+,Safari5.1+ */
+	background: -o-linear-gradient(top, #ffff88 0%,#ffffc9 100%); /* Opera 11.10+ */
+	background: -ms-linear-gradient(top, #ffff88 0%,#ffffc9 100%); /* IE10+ */
+	background: linear-gradient(top, #ffff88 0%,#ffffc9 100%); /* W3C */
+    padding: 15px 0;
+    width: 48%;
+    font-size: 1.2em;
+    border:  1px solid black;
+    -webkit-appearance: none;
 }
 
-
-.page {
-    position: absolute;
-    width: 100%;
-    height: 100%;
-    /*top: 0;*/
-    background-color: #fff;
-    /*activate the GPU for compositing each page */
-    /*-webkit-transform: translate3d(0, 0, 0);*/
+#browser > h2 {
+    color: #fff;
+    padding:  0 0 0 18px;
 }
