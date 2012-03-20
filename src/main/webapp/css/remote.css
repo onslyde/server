@@ -50,7 +50,9 @@ nav.primary > ul li a {
 }
 
 #option1,
-#option2 {
+#option2,
+#previousSlide,
+#nextSlide{
     border-radius: 5px;
     background: -moz-linear-gradient(top, #ffff88 0%, #ffffc9 100%); /* FF3.6+ */
 	background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#ffff88), color-stop(100%,#ffffc9)); /* Chrome,Safari4+ */
@@ -63,6 +65,15 @@ nav.primary > ul li a {
     font-size: 1.2em;
     border:  1px solid black;
     -webkit-appearance: none;
+}
+
+#previousSlide,
+#nextSlide{
+    padding:  45px 0;
+    background: -moz-linear-gradient(top,  rgba(255,255,255,1) 0%, rgba(246,246,246,1) 47%, rgba(237,237,237,1) 100%); /* FF3.6+ */
+	background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,rgba(255,255,255,1)), color-stop(47%,rgba(246,246,246,1)), color-stop(100%,rgba(237,237,237,1))); /* Chrome,Safari4+ */
+	background: -webkit-linear-gradient(top,  rgba(255,255,255,1) 0%,rgba(246,246,246,1) 47%,rgba(237,237,237,1) 100%); /* Chrome10+,Safari5.1+ */
+	background: linear-gradient(top,  rgba(255,255,255,1) 0%,rgba(246,246,246,1) 47%,rgba(237,237,237,1) 100%); /* W3C */
 }
 
 #browser > h2 {

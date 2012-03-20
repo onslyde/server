@@ -308,7 +308,14 @@
                }
             }
 
-            var classes = id.className.split(' ');
+            var classes;
+            //todo use classList here
+            console.log(id.className.indexOf(' '));
+            try {
+               classes = id.className.split(' ');
+            } catch(e) {
+
+            }
 
             //2.)decide if the incoming page is assigned to right or left
             // (-1 if no match)
@@ -593,12 +600,15 @@
       var isopen = false;
       //var _onopen,_onmessage,_onclose,_onerror;
       slidfast.ws = slidfast.prototype = {
+
+          ip : function() {return '192.168.1.127'},
+
           connect : function(websocket,initString) {
               username = 'yomama';
               //var location = document.location.toString().replace('http://',
               //		'ws://').replace('https://', 'wss://');
               if(!websocket){
-                 var location = "ws://192.168.1.127:8081"
+                 var location = 'ws://' + this.ip() + ':8081';
                  ws = new WebSocket(location);
               }else{
                  ws = websocket;
@@ -697,6 +707,18 @@
                slidfast.slides.optionVote(e.vote,activeSlide);
             }, false);
 
+            window.addEventListener('clearRoute', function(e) {
+               slidfast.slides.clearRoute();
+            }, false);
+
+            window.addEventListener('slideEvent', function(e) {
+                if(e.action === 'next'){
+                    slidfast.slides.nextSlide();
+                }else if (e.action === 'previous'){
+                    slidfast.slides.prevSlide();
+                }
+            }, false);
+
             this.checkOptions();
             this.updateRemotes();
             slidfast.ui.slideTo(activeSlide);
@@ -732,6 +754,10 @@
 
                //}
             }
+         },
+
+         clearRoute : function(){
+             activeSlide.removeAttribute("data-route");
          },
 
          nextSlide : function() {
@@ -784,6 +810,10 @@
                this.updateRemotes();
                slidfast.ui.slideTo(activeSlide);
 
+               //reset votes
+               currentVotes = {};
+               totalVotes = 0;
+
 
             } else {
                //eop
@@ -826,6 +856,9 @@
 
                slidfast.ui.slideTo(activeSlide);
 
+               //reset votes
+               currentVotes = {};
+               totalVotes = 0;
 
             } else {
                //beginning of presentation

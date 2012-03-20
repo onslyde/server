@@ -71,7 +71,7 @@ slidfast({
 
         //alert(slidfast);
         // in fallback mode: connect returns a dummy object implementing the WebSocket interface
-        ws = $.gracefulWebSocket("ws://192.168.1.127:8081"); // the ws-protocol will automatically be changed to http
+        ws = $.gracefulWebSocket('ws://'+ slidfast.ws.ip() +':8081'); // the ws-protocol will automatically be changed to http
         // in fallback mode: sends message to server using HTTP POST
         ws = slidfast.ws.connect(ws);
 
@@ -120,6 +120,7 @@ window.addEventListener('updateOptions', function(e) {
         voteLabel.style.opacity = 1;
         option1.style.opacity = 1;
         option2.style.opacity = 1;
+        voteLabel.innerHTML = 'Vote!'
     }
 
 

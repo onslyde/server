@@ -110,7 +110,6 @@ public class MemberService implements Serializable {
    public Response createMember(@FormParam("user") String user, @FormParam("vote") String vote) {
       Response.ResponseBuilder builder = null;
 
-      System.out.println("***************" + user + " " + vote);
       slidFast.getCurrentVotes().add(vote);
 
       System.out.println("**************slidFast.getCurrentVotes()*" + slidFast.getCurrentVotes().size());

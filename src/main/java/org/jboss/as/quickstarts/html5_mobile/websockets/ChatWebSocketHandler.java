@@ -100,13 +100,15 @@ public class ChatWebSocketHandler extends WebSocketHandler {
             getWebsockets().add(this);
 
             //send current state to remotes
-            if(slidFast.getActiveOptions().size() == 2) {
+            //syncSlidFast(slidFast);
+            if(slidFast != null && slidFast.getActiveOptions().size() == 2) {
                 try {
                     this.connection.sendMessage(ClientEvent.createEvent("updateOptions",slidFast.getActiveOptions()));
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
             }
+
         }
 
         public void onMessage(String data) {
@@ -116,20 +118,22 @@ public class ChatWebSocketHandler extends WebSocketHandler {
             //btw, switch on string coming in JDK 7...quicker to use if/else if for now
             if(data.equals("nextSlide")) {
                 data = ("{\"cdievent\":{\"fire\":function(){" +
+                                        "window.eventObj = document.createEvent('Event');" +
                                         "eventObj.initEvent(\'slideEvent\', true, true);" +
                                         "eventObj.action = 'next';\n" +
                                         "document.dispatchEvent(eventObj);" +
                                         "}}}");
             }else if (data.equals("previousSlide")){
                 data = ("{\"cdievent\":{\"fire\":function(){" +
+                                        "window.eventObj = document.createEvent('Event');" +
                                         "eventObj.initEvent(\'slideEvent\', true, true);" +
                                         "eventObj.action = 'previous';\n" +
                                         "document.dispatchEvent(eventObj);" +
                                         "}}}");
-            }else if (data.equals("user:anonymous")){
+            }else if (data.equals("clearRoute")){
                 data = ("{\"cdievent\":{\"fire\":function(){" +
-                                        "eventObj.initEvent(\'slideGroup\', true, true);" +
-                                        "eventObj.group = 'default';\n" +
+                                        "window.eventObj = document.createEvent('Event');" +
+                                        "eventObj.initEvent(\'clearRoute\', true, true);" +
                                         "document.dispatchEvent(eventObj);" +
                                         "}}}");
             }else if (data.contains(ACTIVE_OPTIONS)){
