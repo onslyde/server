@@ -20,12 +20,15 @@ slidfast({
    slides: true
 });
 </script>
-
+ <script type="text/javascript" src="js/slidedeck.js" ></script>
 </head>
 <body>
 <div id="controller" style="display:none">
     <a href="javascript:slidfast.slides.prevSlide();void(0)"><< Previous Slide</a> |
     <a href="javascript:slidfast.slides.nextSlide();void(0)">Next Slide >></a>
+</div>
+<div id="wtf" class="hide-wtf">
+    WTF!!!
 </div>
 <div id="browser">
 
@@ -48,21 +51,32 @@ slidfast({
                     <li>Embedded Jetty WebSoket Server</li>
                     <li>Custom HTML5/JavaScript</li>
                 </ul>
+                <img src="images/what.gif" style="float:right;position:absolute;top:20px;right:0;width:40%"/>
             </article>
 
             <article class="slide" data-option="This is cool">
                 <h1>Java EE app server (JBoss AS7)</h1>
+                <ul>
+                    <li>Using the CDI programming model (Context and Dependency Injection)</li>
+                    <li>RESTful endpoints</li>
+                </ul>
             </article>
 
             <article class="slide" data-option="This is cool">
                 <h1>Embedded Jetty WebSoket Server</h1>
+                <ul>
+                    <li>Support ws and wss</li>
+                </ul>
             </article>
 
             <article class="slide" data-option="This is cool">
                 <h1>Custom HTML5/JavaScript</h1>
+                <ul>
+                    <li>Heavy utilization of JavaScript events over websockets</li>
+                </ul>
             </article>
 
-            <article class="slide" data-option="Dude seriously wtf">
+            <article class="slide" data-option="Dude seriously">
                 <h1>Awww... You no likey? :(</h1>
                 <h2>That was a short talk! Thanks!</h2>
             </article>
@@ -75,22 +89,23 @@ slidfast({
             <article class="slide" data-option="master">
                 <h1>HTML5 (aka The Open Web)</h1>
                 <h3>One billion HTML5-capable phones in 2013</h3>
-                <h4>Mobile First!</h4>
+                <h3>Mobile First!</h3>
             </article>
 
             <article class="slide" data-option="Why Mobile First">
-                <h1>Developing sites for constrained devices and resolutions will force you to create more fluid/flexible content</h1>
+                <h1>Constrained devices produce fluid/flexible content</h1>
             </article>
 
             <article class="slide" data-option="Why Mobile First">
-                <h1>Device features, such as accelerometer and geolocation hardware, present new business opportunities with technologies like Augmented Reality.</h1>
+                <h1>New business opportunities (geolocation, accelerometer, AR, etc...)</h1>
             </article>
 
             <article class="slide" data-option="Why Mobile First">
-                <h1>Think code quality. Today, it’s required for developers to worry about things like battery life when doing hardware accelerated animations with CSS.</h1>
+                <h1>CSS3 Hardware acceleration and battery life</h1>
+                <img src="images/css-animate.PNG" style="margin: 0 auto;width:45%"/>
             </article>
 
-            <article class="slide" data-option="Move on to frameworks">
+            <article class="slide" data-option="Browser Support">
                 <h1>OK! Let's go!</h1>
             </article>
 
@@ -100,8 +115,10 @@ slidfast({
         <section class="slide-group">
 
             <article class="slide" data-option="master">
-                <h1>What's Supported?</h1>
-                <h2>Fragmentation is a beeatch</h2>
+                <h1>Devices/Browsers</h1>
+                <h2>What's Supported?</h2>
+                <h2>Fragmentation is a beach</h2>
+                <img src="images/internet2.gif" style="float:right;position:absolute;top:20px;right:0;width:40%"/>
             </article>
 
             <article class="slide" data-option="The Browser Scene">
@@ -110,18 +127,26 @@ slidfast({
                 <ul>
                     <li>Mobile Safari</li>
                     <li>Android</li>
+                    <li>many others...</li>
                 </ul>
             </article>
 
             <article class="slide" data-option="The Browser Scene">
                 <h1>Mobile Firefox</h1>
-                <h2>B2G and WebAPIs</h2>
-                <h2>currently is winning over Mobile Safari</h2>
+                <ul>
+                    <li>HTML5 impl #1</li>
+                    <li>B2G and WebAPIs</li>
+                    <li><a href="http://html5test.com/">http://html5test.com</a></li>
+                </ul>
+                <img src="images/mobile-firefox-winner.png" style="float:right;position:absolute;top:20px;right:0;width:50%"/>
             </article>
 
             <article class="slide" data-option="The Browser Scene">
                 <h1>Opera Mobile</h1>
-                <h2>Opera Mini, Opera Mobile, WAT?</h2>
+                <ul>
+                    <li>Opera Mini</li>
+                    <li>Opera Mobile, WAT?</li>
+                </ul>
             </article>
 
             <article class="slide" data-option="The Browser Scene">
@@ -131,19 +156,26 @@ slidfast({
 
             <article class="slide" data-option="The Browser Scene">
                 <h1>Market Share</h1>
-                <h2>WebKit leads with over 75%</h2>
-                <h2>Opera Mini is second with 13%</h2>
-                <h2>Mozilla is coming...</h2>
+                <ul>
+                    <li>WebKit leads with over 75%</li>
+                    <li>Opera Mini is second with 13%</li>
+                    <li>Mozilla is coming...</li>
+                </ul>
             </article>
 
-            <article class="slide" data-option="HTML5E">
+            <article class="slide" data-option="The Browser Scene">
                 <h1>HTML5 Enterprise (HTML5E.org)</h1>
                 <img src="images/html5e.PNG" class="max-width-100"/>
             </article>
 
-            <article class="slide" data-option="HTML5E">
+            <article class="slide" data-option="The Browser Scene">
                 <h1>Browser Grading</h1>
                 <img src="images/browser.grading.PNG" class="max-width-100"/>
+            </article>
+
+            <article class="slide" data-option="WebKit IS the mobile web">
+                <h1>Sorry, You loose...</h1>
+                <img src="images/hi-hi.gif" class="max-width-100"/>
             </article>
         </section>
 
@@ -152,16 +184,18 @@ slidfast({
             <article class="slide" data-option="master">
                 <h1>Mobile Frameworks</h1>
                 <h3>One billion HTML5/JavaScript frameworks by 2013</h3>
-                <h3>Who's jQuery?</h3>
+                <img src="images/jquerymobile.jpg" style="float:right;position:absolute;top:250px;right:50px;width:45%"/>
             </article>
 
-            <article class="slide" data-option="Dont use jQuery">
+            <article class="slide" data-option="jQuery Sucks">
                 <h1>Mobile Browsers are Cutting Edge</h1>
-                <h2>document.querySelectorAll('#find-my-node')</h2>
-                <h2>Newer JavaScript impls</h2>
+                <ul>
+                    <li>document.querySelectorAll('#find-my-node')</li>
+                    <li>Newer JavaScript impls</li>
+                </ul>
             </article>
 
-            <article class="slide" data-option="Dont use jQuery">
+            <article class="slide" data-option="jQuery Sucks">
                 <h1>Old Browser Bloat</h1>
             </article>
 
@@ -171,6 +205,7 @@ slidfast({
                     <li>jQuery Mobile</li>
                     <li>JQTouch</li>
                 </ul>
+                <img src="images/jquery-component-setup.png" style="float:right;position:absolute;top:20px;right:0;width:50%"/>
             </article>
 
             <article class="slide" data-option="Framework SmackDown">
@@ -187,6 +222,7 @@ slidfast({
                     <li>Wink Toolkit</li>
                     <li>The-M-Project</li>
                 </ul>
+                <img src="images/sencha-component-setup.png" style="float:right;position:absolute;top:200px;right:0;width:50%"/>
             </article>
 
         </section>
@@ -197,7 +233,7 @@ slidfast({
                 <h1>WebStorage</h1>
             </article>
 
-            <article class="slide" data-option="W3C APIs">
+            <article class="slide" data-option="The basics">
                 <h1>Simple key value pairs</h1>
                 <ul>
                     <li>Store: <code>localStorage["currentGame"] = gameState</code></li>
@@ -205,7 +241,7 @@ slidfast({
                 </ul>
             </article>
 
-            <article class="slide" data-option="W3C APIs">
+            <article class="slide" data-option="The basics">
                 <h1>Well supported, but no data structure</h1>
                 <ul>
                     <li>Iterating over everything to find what you need</li>
@@ -221,16 +257,35 @@ slidfast({
             </article>
 
             <article class="slide" data-option="Frameworks">
-                <h1>Lawnchair</h1>
+                <h1>Persistence.js</h1>
                 <ul>
+                    <li>object relational mapper</li>
+                    <li>Integrates with node.js and MySQL backend</li>
                     <li>Supports all major mobile browsers</li>
-                    <li><pre><code>
-Persist Data:
+
+                </ul>
+                Persist Data:
+                    <pre><code>
 Lawnchair(function(){
     this.save({msg:'hooray!'})
 })
-                    </code></pre></li>
+                    </code></pre>
+
+            </article>
+
+            <article class="slide" data-option="Frameworks">
+                <h1>Lawnchair</h1>
+                <ul>
+                    <li>Supports all major mobile browsers</li>
+
                 </ul>
+                Persist Data:
+                    <pre><code>
+Lawnchair(function(){
+    this.save({msg:'hooray!'})
+})
+                    </code></pre>
+
             </article>
 
 
@@ -239,7 +294,8 @@ Lawnchair(function(){
         <section class="slide-group">
 
             <article class="slide" data-option="master">
-                 <h1>WebSocket</h1>
+                 <h1>WebSockets</h1>
+                 <h2>The Real Time Web</h2>
             </article>
 
             <article class="slide" data-option="Basic APIs">
@@ -273,11 +329,57 @@ objWebSocket .onclose = function(evt)
         <section class="slide-group">
 
             <article class="slide" data-option="master">
+                 <h1>Other HTML5E Related Specs</h1>
+            </article>
+
+            <article class="slide" data-option="The other specs">
+                 <h1>Geolocation</h1>
+                 <ul>
+                     <li><a href="http://code.google.com/p/geo-location-javascript/">http://code.google.com/p/geo-location-javascript/</a></li>
+                     <li>Supports most platforms and browsers</li>
+
+                 </ul>
+                <pre><code>
+ alert('lat='+p.coords.latitude.toFixed(2)+';lon='+p.coords.longitude.toFixed(2));
+                     </code></pre>
+            </article>
+
+            <article class="slide" data-option="The other specs">
+                 <h1>Geolocation</h1>
+                 <ul>
+                     <li><a href="http://afarkas.github.com/webshim/demos/">Webshims lib</a></li>
+                     <li>jQuery’s A graded browsers and latest Opera.</li>
+
+                 </ul>
+                <pre><code>
+$.webshims.setOptions('geolocation', {
+confirmText: '{location} wants to know your position. It is Ok to press Ok.'
+                     </code></pre>
+            </article>
+
+            <article class="slide" data-option="The other specs">
+                 <h1>Web Workers</h1>
+                 <ul>
+                     <li>The only shim currently available uses Google Gears</li>
+                     <li><a href="http://html5-shims.googlecode.com/svn/trunk/demo/workers.html">http://html5-shims.googlecode.com</a></li>
+                     <li>Uses? Graphs, Visualizations, and preprocessing Wiki text</li>
+                 </ul>
+            </article>
+
+            <article class="slide" data-option="Move along">
+                 <h1>Next stop, device testing and QA!</h1>
+            </article>
+        </section>
+
+        <section class="slide-group">
+
+            <article class="slide" data-option="master">
                  <h1>QA and Device Testing</h1>
             </article>
 
             <article class="slide" data-option="Emulators and Debuggers">
                  <h3><a href="http://www.mobilexweb.com/emulators">http://www.mobilexweb.com/emulators</a></h3>
+                 <img src="images/mobile-emulators.png"/>
             </article>
 
             <article class="slide" data-option="Emulators and Debuggers">
@@ -293,12 +395,49 @@ objWebSocket .onclose = function(evt)
                  <h2>WAT?!? It works to an extent</h2>
             </article>
 
+            <article class="slide" data-option="Emulators and Debuggers">
+                 <h1>Debugging with Chrome</h1>
+                 <pre><code>
+defaults write com.apple.Safari IncludeInternalDebugMenu 1
+                 </code></pre>
+                <img src="images/safari-debug-menu.png" style="float:right;position:absolute;top:200px;right:0;width:50%"/>
+            </article>
+
             <article class="slide" data-option="I dont test">
                  <h1>WAT!!!!!</h1>
             </article>
 
+        </section>
+
+        <section class="slide-group">
+
+            <article class="slide" data-option="master">
+                 <h1>Performance</h1>
+            </article>
+
+            <article class="slide" data-option="Throttling">
+                 <h1>Throttling Based on Connection Speed</h1>
+            </article>
+
+            <article class="slide" data-option="HTTP Requests">
+                 <h1>Mae it faster!</h1>
+            </article>
 
         </section>
+
+        <section class="slide-group">
+
+            <article class="slide">
+                 <h1>Thank You!!!</h1>
+                 <h2>@wesleyhales</h2>
+                 <h2><a href="http://wesleyhales.com">wesleyhales.com</a></h2>
+                 <img src="images/mybook.PNG" style="float:right;position:absolute;top:20px;right:0;width:60%"/>
+                <img src="images/hi-hi.gif" style="float:left;position:absolute;top:350px;left:10;width:30%"/>
+            </article>
+
+
+        </section>
+
     </div>
 </div>
 

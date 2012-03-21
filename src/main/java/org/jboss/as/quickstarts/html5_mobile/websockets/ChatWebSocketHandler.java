@@ -118,23 +118,29 @@ public class ChatWebSocketHandler extends WebSocketHandler {
             //btw, switch on string coming in JDK 7...quicker to use if/else if for now
             if(data.equals("nextSlide")) {
                 data = ("{\"cdievent\":{\"fire\":function(){" +
-                                        "window.eventObj = document.createEvent('Event');" +
-                                        "eventObj.initEvent(\'slideEvent\', true, true);" +
-                                        "eventObj.action = 'next';\n" +
-                                        "document.dispatchEvent(eventObj);" +
+                                        "window.eventObja = document.createEvent('Event');" +
+                                        "eventObja.initEvent(\'slideEvent\', true, true);" +
+                                        "eventObja.action = 'next';\n" +
+                                        "document.dispatchEvent(eventObja);" +
                                         "}}}");
             }else if (data.equals("previousSlide")){
                 data = ("{\"cdievent\":{\"fire\":function(){" +
-                                        "window.eventObj = document.createEvent('Event');" +
-                                        "eventObj.initEvent(\'slideEvent\', true, true);" +
-                                        "eventObj.action = 'previous';\n" +
-                                        "document.dispatchEvent(eventObj);" +
+                                        "window.eventObj1 = document.createEvent('Event');" +
+                                        "eventObj1.initEvent(\'slideEvent\', true, true);" +
+                                        "eventObj1.action = 'previous';\n" +
+                                        "document.dispatchEvent(eventObj1);" +
                                         "}}}");
             }else if (data.equals("clearRoute")){
                 data = ("{\"cdievent\":{\"fire\":function(){" +
-                                        "window.eventObj = document.createEvent('Event');" +
-                                        "eventObj.initEvent(\'clearRoute\', true, true);" +
-                                        "document.dispatchEvent(eventObj);" +
+                                        "window.eventObj2 = document.createEvent('Event');" +
+                                        "eventObj2.initEvent(\'clearRoute\', true, true);" +
+                                        "document.dispatchEvent(eventObj2);" +
+                                        "}}}");
+            }else if (data.equals("wtf")){
+                data = ("{\"cdievent\":{\"fire\":function(){" +
+                                        "window.eventObj3 = document.createEvent('Event');" +
+                                        "eventObj3.initEvent(\'wtf\', true, true);" +
+                                        "document.dispatchEvent(eventObj3);" +
                                         "}}}");
             }else if (data.contains(ACTIVE_OPTIONS)){
                 String options = data.substring(ACTIVE_OPTIONS.length(), data.length());

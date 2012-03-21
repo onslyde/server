@@ -707,18 +707,6 @@
                slidfast.slides.optionVote(e.vote,activeSlide);
             }, false);
 
-            window.addEventListener('clearRoute', function(e) {
-               slidfast.slides.clearRoute();
-            }, false);
-
-            window.addEventListener('slideEvent', function(e) {
-                if(e.action === 'next'){
-                    slidfast.slides.nextSlide();
-                }else if (e.action === 'previous'){
-                    slidfast.slides.prevSlide();
-                }
-            }, false);
-
             this.checkOptions();
             this.updateRemotes();
             slidfast.ui.slideTo(activeSlide);
@@ -962,7 +950,7 @@
                console.log(currentVotes[activeOptions[i]]);
                var optionHandler = activeSlide.querySelector('.option-handler-' + (i + 1));
                if(currentVotes[activeOptions[i]]){
-                  optionHandler.style.width = (currentVotes[activeOptions[i]]/totalVotes * 100) + '%';
+                  optionHandler.style.width = ((currentVotes[activeOptions[i]]/totalVotes) * 100) + '%';
                   optionHandler.style.backgroundColor = '#ffffff';
                   optionHandler.style.border = '1px solid #777';
                }else{

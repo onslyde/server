@@ -30,21 +30,21 @@ public class ClientEvent {
 
     public static String createEvent(String eventName, List options){
          return ("{\"cdievent\":{\"fire\":function(){" +
-                  "window.eventObj = document.createEvent('Event');" +
-                  "eventObj.initEvent(\'updateOptions\', true, true);" +
-                  "eventObj.option1 = '" + options.get(0) + "';\n" +
-                  "eventObj.option2 = '" + options.get(1) + "';\n" +
-                  "document.dispatchEvent(eventObj);" +
+                  "window.eventObjb = document.createEvent('Event');" +
+                  "eventObjb.initEvent(\'updateOptions\', true, true);" +
+                  "eventObjb.option1 = '" + options.get(0) + "';\n" +
+                  "eventObjb.option2 = '" + options.get(1) + "';\n" +
+                  "document.dispatchEvent(eventObjb);" +
                   "}}}");
 
     }
 
     public static String clientVote(String vote){
        return ("{\"cdievent\":{\"fire\":function(){" +
-                    "window.eventObj = document.createEvent('Event');" +
-                    "eventObj.initEvent(\'clientVote\', true, true);" +
-                    "eventObj.vote = '" + vote + "';\n" +
-                    "document.dispatchEvent(eventObj);" +
+                    "window.eventObjc = document.createEvent('Event');" +
+                    "eventObjc.initEvent(\'clientVote\', true, true);" +
+                    "eventObjc.vote = '" + vote + "';\n" +
+                    "document.dispatchEvent(eventObjc);" +
                     "}}}");
     }
 
