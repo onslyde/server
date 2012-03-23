@@ -70,7 +70,7 @@
 
             var pollInterval;
             var openTimout;
-            var posturl = opts.fallbackSendURL + '/jboss-as-html5-mobile/rest/members?' + $.param( opts.fallbackPollParams );
+            var posturl = opts.fallbackSendURL + '/html5/rest/members?' + $.param( opts.fallbackPollParams );
 
             // create WebSocket object
             var fws = {
@@ -137,7 +137,7 @@
 
                $.ajax({
                   type: opts.fallbackPollMethod,
-                  url: opts.fallbackPollURL + '/jboss-as-html5-mobile/rest/members/json',
+                  url: opts.fallbackPollURL + '/html5/rest/members/json',
                   dataType: 'text',
                   data: getFallbackParams(),
                   success: pollSuccess,

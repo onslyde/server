@@ -35,8 +35,9 @@ slidfast({
             <li><input id="option1" class="button" type="submit" value="" />
             <input id="option2" class="button" type="submit" value="" />
             <input id="wtf" class="button" type="submit" value="WTF!" /></li>
-            <li><a href="#sf-home-page" onclick="slidfast.ui.slideTo('about-page')">About this talk | </a>
-                <a href="#sf-contact-page" onclick="slidfast.ui.slideTo('wesley-page')">About Wesley</a></li>
+            <li><a href="#sf-contact-page" onclick="slidfast.ui.slideTo('wesley-page')">About Wesley | </a>
+                <a href="#sf-home-page" onclick="slidfast.ui.slideTo('about-page')">About this talk</a>
+                </li>
 
         </ul>
     </nav>
@@ -45,13 +46,25 @@ slidfast({
 
         <div id="front" class="normal">
 
-            <div id="about-page" class="slide">
-                <p>Developers are facing a new era of development with HTML5 for both mobile and desktop environments. It was once laughable to put mobile focused development ahead of the desktop, but those days are over. Whether you’re focused only on mobile, desktop, or both, there are a few critical questions which must be answered</p>
+            <div id="wesley-page" class="slide">
+                <p>
+                    Tell people about this talk!
+                    <a href="https://twitter.com/intent/tweet?screen_name=wesleyhales&text=talk%20on%20%23HTML5%20and%20%23WebSockets%20blew%20my%20mind!!!%20%23html5e" class="twitter-mention-button">Mention @wesleyhales!</a>
+<script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0];if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src="//platform.twitter.com/widgets.js";fjs.parentNode.insertBefore(js,fjs);}}(document,"script","twitter-wjs");</script>
+                    <br/>
+                    <br/>
+                    Or, follow me.
+                    <a href="https://twitter.com/wesleyhales" class="twitter-follow-button" data-show-count="false">Follow @wesleyhales</a>
+<script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0];if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src="//platform.twitter.com/widgets.js";fjs.parentNode.insertBefore(js,fjs);}}(document,"script","twitter-wjs");</script>
+                </p>
+
             </div>
 
-            <div id="wesley-page" class="slide stage-right">
-                <p>I'm writing a book! Go buy it! Then you can come hang out at my mansion.</p>
+            <div id="about-page" class="slide stage-right">
+                <p>This presentation was built with JBoss AS7, embedded Jetty (for WebSockets), and standard HTML5, CSS3 and JavaScript.</p>
             </div>
+
+
 
         </div>
 

@@ -601,7 +601,7 @@
       //var _onopen,_onmessage,_onclose,_onerror;
       slidfast.ws = slidfast.prototype = {
 
-          ip : function() {return '192.168.1.127'},
+          ip : function() {return '192.168.77.117'},
 
           connect : function(websocket,initString) {
               username = 'yomama';
@@ -634,19 +634,19 @@
           _onopen : function() {
               isopen = true;
               //basic auth until we get something better
-              console.log('sent onopen' + username);
+              //console.log('sent onopen' + username);
               slidfast.ws._send('user:'+username);
           },
 
           _onmessage : function(m) {
               if (m.data) {
-                  //console.log(m.data);
+                  ////console.log(m.data);
                   //check to see if this message is a CDI event
                  //alert('onmessage' + m.data);
                   if(m.data.indexOf('cdievent') > 0){
                       try{
                           //$('log').innerHTML = m.data;
-                           //console.log(m.data);
+                           ////console.log(m.data);
                           //avoid use of eval...
 
                           var event = (m.data);
@@ -670,7 +670,7 @@
           },
 
           _send : function(message) {
-              console.log('sent ');
+              //console.log('sent ');
               ws.send(message);
 
           }
@@ -713,14 +713,14 @@
          },
 
          checkOptions : function() {
-            console.log('checkOptions' + groupSlideIndex + ' ' + activeSlide.getAttribute("data-option"));
+            //console.log('checkOptions' + groupSlideIndex + ' ' + activeSlide.getAttribute("data-option"));
             if (groupSlideIndex == 0 &&
                   activeSlide.getAttribute("data-option") == 'master') {
                //init activeOptions
                var groupOptions = this.groupOptions(activeGroup);
 
                if(!activeSlide.querySelector('.option-handler-1')){
-                  console.log('checkOptions groupOptions' + groupOptions);
+                  //console.log('checkOptions groupOptions' + groupOptions);
                   var option1 = document.createElement("a");
                   option1.href = 'javascript:slidfast.slides.setOption(\'' + groupOptions[0] + '\');void(0)';
                   option1.appendChild(document.createTextNode('' + groupOptions[0]));
@@ -749,12 +749,12 @@
          },
 
          nextSlide : function() {
-            console.log('nextSlide' + futureSlides.length + ' ' + groupSlideIndex);
+            //console.log('nextSlide' + futureSlides.length + ' ' + groupSlideIndex);
             if (futureSlides.length > 0) {
 
                if(activeSlide.getAttribute("data-option") == 'master' &&
                   activeSlide.getAttribute("data-route") == null && totalVotes > 0) {
-                  console.log('decideroute');
+                  //console.log('decideroute');
                   this.decideRoute();
                }
 
@@ -769,7 +769,7 @@
          },
 
          prevSlide : function() {
-            console.log('prevSlide' + pastSlides.length + ' ' + groupSlideIndex);
+            //console.log('prevSlide' + pastSlides.length + ' ' + groupSlideIndex);
             if (pastSlides.length > 0 && groupSlideIndex > 0) {
                futureSlides.unshift(activeSlide);
                activeSlide = pastSlides.pop();
@@ -782,7 +782,7 @@
 
          nextGroup : function() {
 
-            console.log('nextGroup' + groupSlideIndex);
+            //console.log('nextGroup' + groupSlideIndex);
             if (futureGroups.length > 0) {
                activeOption = null;
 
@@ -809,7 +809,7 @@
          },
 
          prevGroup : function() {
-            console.log('prevGroup ' + pastGroups.length);
+            //console.log('prevGroup ' + pastGroups.length);
             if (pastGroups.length > 0) {
                futureGroups.unshift(activeGroup);
                activeGroup.style.display = 'none';
@@ -818,7 +818,7 @@
                //
                //pastSlides = toArray(this.groupSlides(activeGroup));
                //pastSlides.reverse();
-               console.log('pastOptions ' + pastOptions.length);
+               //console.log('pastOptions ' + pastOptions.length);
                if(pastOptions.length > 0){
                   //option has been selected for the current group
                   if(activeOption){
@@ -839,8 +839,8 @@
                activeSlide = pastSlides.pop();
                var groupOptions = this.groupOptions(activeGroup);
                this.updateRemotes();
-               console.log('---groupOptions ' + groupOptions);
-               console.log('activeSlide ' + activeSlide);
+               //console.log('---groupOptions ' + groupOptions);
+               //console.log('activeSlide ' + activeSlide);
 
                slidfast.ui.slideTo(activeSlide);
 
@@ -868,7 +868,7 @@
             activeOptions = [];
             var u = {}, option;
             var slides = toArray(this.groupSlides(group));
-            console.log(slides.length);
+            //console.log(slides.length);
             for (i = 0; i < slides.length; i++) {
                //or .dataset['option']
                option = slides[i].getAttribute("data-option");
@@ -879,7 +879,7 @@
                   u[option] = 1;
                }
             }
-            console.log('activeOptions ' + activeOptions);
+            //console.log('activeOptions ' + activeOptions);
 
             return activeOptions;
          },
@@ -902,7 +902,7 @@
                //include only chose option slides and master  ('master' + activeOption) is the only case we want to include master
                //todo - fix double arrow tap when going backwards on master
                if (slides[i].getAttribute("data-option") == option || (slides[i].getAttribute("data-option") == 'master' && activeOption != null)) {
-                  //console.log(slides[i]);
+                  ////console.log(slides[i]);
                   futureSlides.push(slides[i]);
                }
             }
@@ -915,10 +915,10 @@
          updateRemotes : function() {
             var activeOptionsString = 'activeOptions:' + activeOptions;
             if(!ws){
-               console.log('no conn');
+               //console.log('no conn');
                slidfast.ws.connect(null,activeOptionsString);
             }else{
-               console.log('conn');
+               //console.log('conn');
                slidfast.ws._send(activeOptionsString);
             }
 
@@ -932,13 +932,13 @@
                index = activeOptions.indexOf(vote);
                if(vote in currentVotes){
                   currentVotes[vote] += 1;
-                  //console.log(currentVotes);
+                  ////console.log(currentVotes);
                }else{
                   currentVotes[vote] = 1;
 
                }
             //}
-            //console.log(vote + ' ' + currentVotes[vote]);
+            ////console.log(vote + ' ' + currentVotes[vote]);
 
             for (i = 0; i < activeOptions.length; i++) {
                 if(currentVotes.hasOwnProperty(activeOptions[i]))
@@ -947,7 +947,7 @@
 
             //update the makeshift bar chart
             for (i = 0; i < activeOptions.length; i++) {
-               console.log(currentVotes[activeOptions[i]]);
+               //console.log(currentVotes[activeOptions[i]]);
                var optionHandler = activeSlide.querySelector('.option-handler-' + (i + 1));
                if(currentVotes[activeOptions[i]]){
                   optionHandler.style.width = ((currentVotes[activeOptions[i]]/totalVotes) * 100) + '%';
@@ -966,14 +966,14 @@
 
             var values = [];
             var sortedObj = [];
-            console.log(currentVotes);
+            //console.log(currentVotes);
             for(var opt in currentVotes){
                if (currentVotes.hasOwnProperty(opt)) {
                   values.push(currentVotes[opt])
                }
             }
             values.sort(function(a,b){return b-a});
-            console.log(values);
+            //console.log(values);
 
             //todo - check for tie condition
 
@@ -990,7 +990,7 @@
             activeSlide.setAttribute('data-route',winner);
             //clear votes for next slideGroup
             totalVotes = 0;
-            console.log('winner' + winner);
+            //console.log('winner' + winner);
             this.setOption(winner);
          },
 
