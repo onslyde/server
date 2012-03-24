@@ -864,7 +864,7 @@
          },
 
          groupOptions : function(group) {
-            //there are 2 options per group, based on default slide... return them
+            //there are 2 options per group, based on active slide... return them
             activeOptions = [];
             var u = {}, option;
             var slides = toArray(this.groupSlides(group));

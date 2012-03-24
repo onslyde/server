@@ -78,13 +78,7 @@ public class MemberService implements Serializable {
        System.out.println("!!!!!!!!!!!!!!!!poll " + optionList.size());
       if(optionList.size() == 2){
           data = ClientEvent.createEvent("updateOptions", optionList);
-//                  ("{\"cdievent\":{\"fire\":function(){" +
-//                  "window.eventObj = document.createEvent('Event');" +
-//                  "eventObj.initEvent(\'updateOptions\', true, true);" +
-//                  "eventObj.option1 = '" + optionList.get(0) + "';\n" +
-//                  "eventObj.option2 = '" + optionList.get(1) + "';\n" +
-//                  "document.dispatchEvent(eventObj);" +
-//                  "}}}");
+
       }
       //final List<Member> results = em.createQuery("select m from Member m order by m.name").getResultList();
       return data;
