@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="UTF-8"?><?xml-stylesheet href="treestyles.css" type="text/css"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"><!--This file has been created with toxhtml.xsl--><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/><title>SlidFast</title><link rel="stylesheet" href="SlidFast.html_files/treestyles.css" type="text/css"/><script type="text/javascript" src="SlidFast.html_files/marktree.js"> 
+	</script></head><body><div class="basetop"><a href="#" onclick="expandAll(document.getElementById('base'))">Expand</a> -
+<a href="#" onclick="collapseAll(document.getElementById('base'))">Collapse</a></div><div id="base" class="basetext"><ul>
+	<li class="col" id="FMID_1722758611FM"><div class="nodecontent">SlidFast</div>
+		<ul class="subexp">
+	<li class="col" id="FMID_1728528902FM"><div class="nodecontent">Business Ideas</div>
+		<ul class="subexp">
+	<li class="col" id="FMID_14530766FM"><div class="boxed"><div class="nodecontent">Freemium Model</div><div class="note-and-attributes"><span class="note"><p>
+      Maybe gve 15 connections for free... or unlimited connections for the first 10 days, etc...
+    </p></span></div></div>
+		<ul class="subexp">
+	<li class="col" id="FMID_433447654FM"><div class="boxed"><div class="nodecontent">Based on connection limit</div><div class="note-and-attributes"><span class="note"><p/><p/><p>
+      Just an idea....We could give the presenter an option of which devices they'd like to support. ws native clients would be cheapest. polling android clients would be a bit more expensive
+    </p></span></div></div>
+		<ul class="subexp">
+	<li class="basic" id="FMID_1248489896FM"><div class="nodecontent">ws</div></li>
+	<li class="basic" id="FMID_1820461688FM"><div class="nodecontent">polling</div></li>
+	<li class="basic" id="FMID_1929883144FM"><div class="nodecontent">long polling</div></li>
+	<li class="basic" id="FMID_172863404FM"><div class="nodecontent">other</div></li></ul></li></ul></li>
+	<li class="col" id="FMID_691014141FM"><div class="nodecontent">Conferences</div>
+		<ul class="subexp">
+	<li class="basic" id="FMID_1011841575FM"><div class="nodecontent">Data mining services for attendee data</div></li>
+	<li class="basic" id="FMID_885781169FM"><div class="nodecontent">Discount licenses for presenters</div></li>
+	<li class="basic" id="FMID_742898604FM"><div class="nodecontent"/></li></ul></li></ul></li>
+	<li class="col" id="FMID_885127194FM"><div class="nodecontent">Architecture</div>
+		<ul class="subexp">
+	<li class="col" id="FMID_1232294927FM"><div class="nodecontent">Storage</div>
+		<ul class="subexp">
+	<li class="basic" id="FMID_1922266961FM"><div class="nodecontent">Data will be stored for metrics and analytics</div></li>
+	<li class="basic" id="FMID_1620687795FM"><div class="nodecontent">what else?</div></li></ul></li>
+	<li class="col" id="FMID_1710423366FM"><div class="nodecontent">Hosting</div>
+		<ul class="subexp">
+	<li class="basic" id="FMID_1480268517FM"><div class="nodecontent">where do we host... on EC2 ourselves?</div></li></ul></li>
+	<li class="col" id="FMID_547245796FM"><div class="nodecontent">Backend</div>
+		<ul class="subexp">
+	<li class="col" id="FMID_1883163034FM"><div class="boxed"><div class="nodecontent">Java</div><div class="note-and-attributes"><span class="note"><p>
+      Current concerns with sharing and accessing data across threads. A singleton application scoped SlidFast objectis being shared across JEtty and JBoss instances
+    </p></span></div></div>
+		<ul class="subexp">
+	<li class="col" id="FMID_1789153791FM"><div class="nodecontent">Jetty</div>
+		<ul class="subexp">
+	<li class="basic" id="FMID_1528379498FM"><div class="nodecontent">ws/wss provider</div></li></ul></li>
+	<li class="col" id="FMID_1129486044FM"><div class="nodecontent">JBoss AS7</div>
+		<ul class="subexp">
+	<li class="basic" id="FMID_1980379936FM"><div class="nodecontent">Using RESTEasy for polling fallback when ws is not avaiable</div></li></ul></li>
+	<li class="basic" id="FMID_872274658FM"><div class="nodecontent">Whatever our new stack will be...</div></li></ul></li>
+	<li class="col" id="FMID_1204755911FM"><div class="boxed"><div class="nodecontent">JavaScript/JSON</div><div class="note-and-attributes"><span class="note"><p>
+      Controlling the events is a big concern for me. When events are sent to the browser, are they queued, or are concurrent events fired all at one - thus overwriting valid ones. i.e. 2 users vote at the same time, does only 1 vote event pass through... racey. I don't think this is happening, but I just need to be sure that the same JavaScript event can be fired concurrently and that the browser DOES queue them.
+    </p><p/><p>
+      Also, what is the performance of firing hundreds of events in the presenter's (slidfast slide deck) browser at any given time. All calculations are done through javascript in the slidfast slide deck. The websocket server is dumb and just giving us a way to relay the data out to connected clients.
+    </p></span></div></div>
+		<ul class="subexp">
+	<li class="basic" id="FMID_1371378315FM"><div class="nodecontent">Strings are built on server then executed as Javascript events in browser</div></li></ul></li></ul></li>
+	<li class="col" id="FMID_139519445FM"><div class="nodecontent">UI</div>
+		<ul class="subexp">
+	<li class="col" id="FMID_870011965FM"><div class="nodecontent">Public</div>
+		<ul class="subexp">
+	<li class="col" id="FMID_282949560FM"><div class="boxed"><div class="nodecontent">SlideDeck</div><div class="note-and-attributes"><span class="note"><p>
+      The slide deck Javascript is fairly solid. It needs to be refactored for reuse as there is a lot of duplicated code which was just copied and pasted
+    </p></span></div></div>
+		<ul class="subexp">
+	<li class="col" id="FMID_719494398FM"><div class="nodecontent">Works but history is buggy</div>
+		<ul class="subexp">
+	<li class="col" id="FMID_737113910FM"><div class="nodecontent">Needs to implement window.location</div>
+		<ul class="subexp">
+	<li class="basic" id="FMID_918143875FM"><div class="nodecontent">will give bookmarkable URL's to slides</div></li></ul></li></ul></li>
+	<li class="col" id="FMID_492793796FM"><div class="nodecontent">Slide groups should not be required to define on every data-option"" attribute</div>
+		<ul class="subexp">
+	<li class="basic" id="FMID_1488708665FM"><div class="nodecontent">there should be an abstract definition of group with slides under that</div></li></ul></li></ul></li>
+	<li class="col" id="FMID_1833535819FM"><div class="boxed"><div class="nodecontent">Client Remote</div><div class="note-and-attributes"><span class="note"><p>
+      Client remote is simple and would only need a news skin and minor touch ups
+    </p></span></div></div>
+		<ul class="subexp">
+	<li class="basic" id="FMID_1502607834FM"><div class="nodecontent">Needs some small fixes on informational panel transitions</div></li></ul></li>
+	<li class="col" id="FMID_1220509845FM"><div class="nodecontent">Admin Remote</div>
+		<ul class="subexp">
+	<li class="basic" id="FMID_701788927FM"><div class="nodecontent">Needs a better override capability</div></li>
+	<li class="basic" id="FMID_310376527FM"><div class="nodecontent">more responsive UI</div></li></ul></li></ul></li>
+	<li class="col" id="FMID_1398615300FM"><div class="nodecontent">Admin</div>
+		<ul class="subexp">
+	<li class="col" id="FMID_1871198483FM"><div class="boxed"><div class="nodecontent">Slide Builder</div><div class="note-and-attributes"><span class="note"><p>
+      I think we should start with manual building of slides by user. admin panels are expensive and time consuming.
+    </p></span></div></div>
+		<ul class="subexp">
+	<li class="basic" id="FMID_489729511FM"><div class="nodecontent">Should users build slides through a web interface?</div></li>
+	<li class="basic" id="FMID_1015912649FM"><div class="nodecontent">build them manually with HTML</div></li></ul></li>
+	<li class="col" id="FMID_175465177FM"><div class="nodecontent">Metrics and Analytics</div>
+		<ul class="subexp">
+	<li class="basic" id="FMID_1897103316FM"><div class="nodecontent">Who voted on what</div></li>
+	<li class="basic" id="FMID_1878864807FM"><div class="nodecontent">Which slides were most popular</div></li>
+	<li class="basic" id="FMID_1637945950FM"><div class="nodecontent">Attendee statistics</div></li>
+	<li class="basic" id="FMID_61069890FM"><div class="nodecontent">Tweets, etc...</div></li></ul></li></ul></li></ul></li>
+	<li class="basic" id="FMID_1746838989FM"><div class="boxed"><div class="nodecontent">Security</div><div class="note-and-attributes"><span class="note"><p>
+      We need to tie security into the ws events which are sent to and from the server. Maybe just prefix the JS events with a uuid based on session?
+    </p><p/><p>
+      Currently every event is sent to every conected client. When a vote is sent for a slidegroup, then all remote controls also receive the event (even though it is not executed on their device)...We need a way to route events to only the slidfast slide deck and only to attendee remote controls. In the end, it would be cool for the presenter to have the ability to send out specific data to clients who voted on a certain topic. e.g. If the majority of audience votes on "topicA", then presenter can send links or other info to user remotes who voted on "topicB"..
+    </p></span></div></div></li></ul></li>
+	<li class="col" id="FMID_1905552120FM"><div class="nodecontent">Work Flows</div>
+		<ul class="subexp">
+	<li class="col" id="FMID_559378692FM"><div class="nodecontent">User Sign Up</div>
+		<ul class="subexp">
+	<li class="col" id="FMID_688458657FM"><div class="nodecontent">email + password on home page required</div>
+		<ul class="subexp">
+	<li class="basic" id="FMID_427295289FM"><div class="nodecontent">user gets instructions for building slides and slidegroups, etc...</div></li></ul></li></ul></li>
+	<li class="col" id="FMID_1271709859FM"><div class="nodecontent">Presentation Start</div>
+		<ul class="subexp">
+	<li class="basic" id="FMID_312368744FM"><div class="nodecontent">User gives audience a unique URL for participation </div></li></ul></li></ul></li></ul></li></ul></div></body></html>
