@@ -120,8 +120,8 @@ function disablePoll(){
     option2.disabled = true;
     option1.style.opacity = .4;
     option2.style.opacity = .4;
-    voteLabel.style.opacity = .4;
-    voteLabel.innerHTML = 'You Voted!'
+    //voteLabel.style.opacity = .4;
+    //voteLabel.innerHTML = 'You Voted!'
 }
 
 
@@ -132,10 +132,10 @@ window.addEventListener('updateOptions', function(e) {
         option2.disabled = false;
         option1.value = e.option1;
         option2.value = e.option2;
-        voteLabel.style.opacity = 1;
+        //voteLabel.style.opacity = 1;
         option1.style.opacity = 1;
         option2.style.opacity = 1;
-        voteLabel.innerHTML = 'Vote!'
+        //voteLabel.innerHTML = 'Vote!'
     }
 
 
