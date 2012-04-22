@@ -601,7 +601,7 @@
       //var _onopen,_onmessage,_onclose,_onerror;
       slidfast.ws = slidfast.prototype = {
 
-          ip : function() {return '192.168.77.117'},
+          ip : function() {return '38.110.18.38'},
 
           connect : function(websocket,initString) {
               username = 'yomama';
@@ -719,8 +719,23 @@
                //init activeOptions
                var groupOptions = this.groupOptions(activeGroup);
 
+				barChart.clear();
+				$('div').remove('.placeholder');
+				for (var i = 0; i < groupOptions.length; i++) {
+					barChart.addVoteOption(groupOptions[i]);
+				}
+				
+				
+				var barChartDiv = document.createElement("div");
+				barChartDiv.className = 'placeholder';
+				activeSlide.appendChild(barChartDiv);
+				
+				barChart.draw();
+				  
                if(!activeSlide.querySelector('.option-handler-1')){
                   //console.log('checkOptions groupOptions' + groupOptions);
+				  
+				  /*
                   var option1 = document.createElement("a");
                   option1.href = 'javascript:slidfast.slides.setOption(\'' + groupOptions[0] + '\');void(0)';
                   option1.appendChild(document.createTextNode('' + groupOptions[0]));
@@ -738,6 +753,7 @@
                   optionHandler2.className = 'option-handler-2';
                   optionHandler2.appendChild(option2);
                   activeSlide.appendChild(optionHandler2);
+				  */
                }
 
                //}
@@ -944,7 +960,11 @@
                 if(currentVotes.hasOwnProperty(activeOptions[i]))
                 totalVotes += currentVotes[activeOptions[i]];
             }
+			
+			barChart.vote(vote);
+			barChart.redraw();
 
+			/*
             //update the makeshift bar chart
             for (i = 0; i < activeOptions.length; i++) {
                //console.log(currentVotes[activeOptions[i]]);
@@ -956,9 +976,8 @@
                }else{
                   optionHandler.style.width = '50%';
                }
-
             }
-
+			*/
          },
 
          decideRoute : function(){

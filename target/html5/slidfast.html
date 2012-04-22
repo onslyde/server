@@ -1,0 +1,580 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+<title>HTML5 Architecture</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+<meta name="viewport" content="width=device-width, minimum-scale=1.0, maximum-scale=1.0"/>
+<!-- enable full-screen mode -->
+<meta name="apple-mobile-web-app-capable" content="yes"/>
+<!-- controls the appearance of the status bar in full-screen mode -->
+<meta name="apple-mobile-web-app-status-bar-style" content="black"/>
+
+<link rel="stylesheet" media="all" href="css/slidfast.css" />
+
+<script type="text/javascript" src="js/slidfast.js" ></script>
+<script type="text/javascript">
+
+slidfast({
+   touchEnabled: false,
+   slides: true
+});
+</script>
+ <script type="text/javascript" src="js/slidedeck.js" ></script>
+ <script src="/html5/js/jquery-1.6.4.js"></script>
+ <script src="/html5/js/flot/jquery.flot.js"></script>
+</head>
+<body>
+<script>
+var barChart = (function($) {
+	var voteOptions = [
+		{
+			name: 'This is cool',
+			numVotes: 9
+		},
+		{
+			name: 'Dude seriously',
+			numVotes: 6
+		},
+		{
+			name: 'WTF!',
+			numVotes: 2
+		}
+	];
+	
+	function VoteOption(name) {
+		this.name = name;
+		this.numVotes = 0;
+	}
+	
+	function clearVoteOptions() {
+		voteOptions = [];
+	}
+	
+	function addVoteOption(voteOptionName) {
+		var voteOption = new VoteOption(voteOptionName);
+		voteOptions.push(voteOption);
+	}
+	
+	function addVote(name) {
+		for (var i = 0; i < voteOptions.length; i++) {
+			if (voteOptions[i].name == name) {
+				voteOptions[i].numVotes += 1;
+			}
+		}
+	}
+	
+	function getVotes(index) {
+		var data = [];
+		var numVotes = voteOptions[index].numVotes
+		var newArr = [numVotes, index];
+		data.push(newArr);
+		return data;
+	}
+	
+	function Series(data) {
+		this.data = data;
+		this.bars = { show: true }
+	}
+	
+	function getChartData() {
+		var dataArr = [];
+		for (var i = 0; i < voteOptions.length; i++) {
+			var data = getVotes(i);
+			var series = new Series(data);
+			dataArr.push(series);
+		}
+		return dataArr;
+	}
+	
+	function getChartOptions() {
+		return {
+			series: {
+				bars: {
+					barWidth: 1,
+					align: "center",
+					horizontal: true
+				}
+			},
+			xaxis: {
+				position: 'bottom',
+				tickDecimals: 0,
+				tickSize: 1
+			},
+			yaxis: {
+				ticks: getTicks(),
+				transform: function (v) { return -v; },
+				inverseTransform: function (v) { return -v; }
+			}
+		}
+	};
+	
+	function getTicks() {
+		var ticks = [];
+		for (var i = 0; i < voteOptions.length; i++) {
+			var voteOptionName = voteOptions[i].name;
+			var tick = [i, voteOptionName];
+			ticks.push(tick);
+		}
+		return ticks;
+	}
+	
+	function drawChart() {
+		$.plot($(".placeholder"), getChartData(), getChartOptions());
+	}
+	
+	return {
+		addVoteOption: addVoteOption,
+		clear: clearVoteOptions,
+		draw: drawChart,
+		redraw: drawChart,
+		vote: addVote
+	}
+})(jQuery);
+
+$(document).ready(function(e) {
+	//barChart.addVoteOption('Test Me');
+	//barChart.draw();
+	
+	
+	//setTimeout(function() { barChart.vote('Test Me'); barChart.draw(); }, 4000);
+	//setTimeout(function() { barChart.vote('Test Me'); barChart.draw(); }, 5000);
+	/*
+	setTimeout(function() { barChart.vote('WTF!'); barChart.draw(); }, 3000);
+	setTimeout(function() { barChart.vote('WTF!'); barChart.draw(); }, 4000);
+	setTimeout(function() { barChart.vote('Dude, seriously'); barChart.draw(); }, 5000);
+	setTimeout(function() { barChart.vote('WTF!'); barChart.draw(); }, 6000);
+	setTimeout(function() { barChart.vote('Dude, seriously'); barChart.draw(); }, 7000);
+	setTimeout(function() { barChart.vote('This is cool'); barChart.draw(); }, 8000);
+	*/
+	//setTimeout(barChart.draw, 10000);
+});
+</script>
+
+<style>
+.placeholder {
+	height: 125px;
+	width: 85%;
+}
+</style>
+
+<div id="controller" style="display:none">
+    <a href="javascript:slidfast.slides.prevSlide();void(0)"><< Previous Slide</a> |
+    <a href="javascript:slidfast.slides.nextSlide();void(0)">Next Slide >></a>
+</div>
+<div id="wtf" class="hide-wtf">
+    WTF!!!
+</div>
+<div id="browser">
+
+    <div id="slide-group-container">
+
+        <section class="slide-group" id="temp">
+
+            <article class="slide" data-option="master">
+                <h1>The Fundamentals of Enterprise HTML5 Development</h1>
+                <h2>DevNexus 2012</h2>
+                <h3>By: Wesley Hales</h3>
+                <h3>@wesleyhales</h3>
+            </article>
+
+            <article class="slide" data-option="This is cool">
+                <h1>This is cool!!</h1>
+                <h2>What's under the hood?</h2>
+                <ul>
+                    <li>Java EE app server (JBoss AS7)</li>
+                    <li>Embedded Jetty WebSoket Server</li>
+                    <li>Custom HTML5/JavaScript</li>
+                </ul>
+                <img src="images/what.gif" style="float:right;position:absolute;top:20px;right:0;width:40%"/>
+            </article>
+
+            <article class="slide" data-option="This is cool">
+                <h1>Java EE app server (JBoss AS7)</h1>
+                <ul>
+                    <li>Using the CDI programming model (Context and Dependency Injection)</li>
+                    <li>RESTful endpoints</li>
+                </ul>
+            </article>
+
+            <article class="slide" data-option="This is cool">
+                <h1>Embedded Jetty WebSocket Server</h1>
+                <ul>
+                    <li>Support ws and wss</li>
+                </ul>
+            </article>
+
+            <article class="slide" data-option="This is cool">
+                <h1>Custom HTML5/JavaScript</h1>
+                <ul>
+                    <li>Heavy utilization of JavaScript events over websockets</li>
+                </ul>
+            </article>
+
+            <article class="slide" data-option="Dude seriously">
+                <h1>Awww... You no likey? :(</h1>
+                <h2>That was a short talk! Thanks!</h2>
+            </article>
+
+
+        </section>
+
+        <section class="slide-group">
+
+            <article class="slide" data-option="master">
+                <h1>HTML5 (aka The Open Web)</h1>
+                <h3>One billion HTML5-capable phones in 2013</h3>
+                <h3>Mobile First!</h3>
+            </article>
+
+            <article class="slide" data-option="Why Mobile First">
+                <h1>Constrained devices produce fluid/flexible content</h1>
+            </article>
+
+            <article class="slide" data-option="Why Mobile First">
+                <h1>New business opportunities (geolocation, accelerometer, AR, etc...)</h1>
+            </article>
+
+            <article class="slide" data-option="Why Mobile First">
+                <h1>CSS3 Hardware acceleration and battery life</h1>
+                <img src="images/css-animate.PNG" style="margin: 0 auto;width:45%"/>
+            </article>
+
+            <article class="slide" data-option="Browser Support">
+                <h1>OK! Let's go!</h1>
+            </article>
+
+
+        </section>
+
+        <section class="slide-group">
+
+            <article class="slide" data-option="master">
+                <h1>Devices/Browsers</h1>
+                <h2>What's Supported?</h2>
+                <h2>Fragmentation is a beach</h2>
+                <img src="images/internet2.gif" style="float:right;position:absolute;top:20px;right:0;width:40%"/>
+            </article>
+
+            <article class="slide" data-option="The Browser Scene">
+                <h1>WebKit</h1>
+                <h2>...is not the mobile web!</h2>
+                <ul>
+                    <li>Mobile Safari</li>
+                    <li>Android</li>
+                    <li>many others...</li>
+                </ul>
+            </article>
+
+            <article class="slide" data-option="The Browser Scene">
+                <h1>Mobile Firefox</h1>
+                <ul>
+                    <li>HTML5 impl #1</li>
+                    <li>B2G and WebAPIs</li>
+                    <li><a href="http://html5test.com/">http://html5test.com</a></li>
+                </ul>
+                <img src="images/mobile-firefox-winner.png" style="float:right;position:absolute;top:20px;right:0;width:50%"/>
+            </article>
+
+            <article class="slide" data-option="The Browser Scene">
+                <h1>Opera Mobile</h1>
+                <ul>
+                    <li>Opera Mini</li>
+                    <li>Opera Mobile, WAT?</li>
+                </ul>
+            </article>
+
+            <article class="slide" data-option="The Browser Scene">
+                <h1>IE Mobile</h1>
+                <h2>based on IE9...move along... </h2>
+            </article>
+
+            <article class="slide" data-option="The Browser Scene">
+                <h1>Market Share</h1>
+                <ul>
+                    <li>WebKit leads with over 75%</li>
+                    <li>Opera Mini is second with 13%</li>
+                    <li>Mozilla is coming...</li>
+                </ul>
+            </article>
+
+            <article class="slide" data-option="The Browser Scene">
+                <h1>HTML5 Enterprise (HTML5E.org)</h1>
+                <img src="images/html5e.PNG" class="max-width-100"/>
+            </article>
+
+            <article class="slide" data-option="The Browser Scene">
+                <h1>Browser Grading</h1>
+                <img src="images/browser.grading.PNG" class="max-width-100"/>
+            </article>
+
+            <article class="slide" data-option="WebKit IS the mobile web">
+                <h1>Sorry, You loose...</h1>
+                <img src="images/hi-hi.gif" class="max-width-100"/>
+            </article>
+        </section>
+
+        <section class="slide-group">
+
+            <article class="slide" data-option="master">
+                <h1>Mobile Frameworks</h1>
+                <h3>One billion HTML5/JavaScript frameworks by 2013</h3>
+                <img src="images/jquerymobile.jpg" style="float:right;position:absolute;top:250px;right:50px;width:45%"/>
+            </article>
+
+            <article class="slide" data-option="jQuery Sucks">
+                <h1>Mobile Browsers are Cutting Edge</h1>
+                <ul>
+                    <li>document.querySelectorAll('#find-my-node')</li>
+                    <li>Newer JavaScript impls</li>
+                </ul>
+            </article>
+
+            <article class="slide" data-option="jQuery Sucks">
+                <h1>Old Browser Bloat</h1>
+            </article>
+
+            <article class="slide" data-option="Framework SmackDown">
+                <h1>Single Page</h1>
+                <ul>
+                    <li>jQuery Mobile</li>
+                    <li>JQTouch</li>
+                </ul>
+                <img src="images/jquery-component-setup.png" style="float:right;position:absolute;top:20px;right:0;width:50%"/>
+            </article>
+
+            <article class="slide" data-option="Framework SmackDown">
+                <h1>No Page Structure</h1>
+                <ul>
+                    <li>xui + Zepto</li>
+                </ul>
+            </article>
+
+            <article class="slide" data-option="Framework SmackDown">
+                <h1>Programatically Created UI</h1>
+                <ul>
+                    <li>Sencha Touch</li>
+                    <li>Wink Toolkit</li>
+                    <li>The-M-Project</li>
+                </ul>
+                <img src="images/sencha-component-setup.png" style="float:right;position:absolute;top:200px;right:0;width:50%"/>
+            </article>
+
+        </section>
+
+        <section class="slide-group">
+
+            <article class="slide" data-option="master">
+                <h1>WebStorage</h1>
+            </article>
+
+            <article class="slide" data-option="The basics">
+                <h1>Simple key value pairs</h1>
+                <ul>
+                    <li>Store: <code>localStorage["currentGame"] = gameState</code></li>
+                    <li>Load: <code>gameState = localStorage["currentGame"]</code></li>
+                </ul>
+            </article>
+
+            <article class="slide" data-option="The basics">
+                <h1>Well supported, but no data structure</h1>
+                <ul>
+                    <li>Iterating over everything to find what you need</li>
+                    <li>Racy (2 tabs open) - must ensure data integrity</li>
+                </ul>
+            </article>
+
+            <article class="slide" data-option="Frameworks">
+                <h1>We Need...</h1>
+                <ul>
+                    <li>A consistent storage API which works across all devices.</li>
+                </ul>
+            </article>
+
+            <article class="slide" data-option="Frameworks">
+                <h1>Persistence.js</h1>
+                <ul>
+                    <li>object relational mapper</li>
+                    <li>Integrates with node.js and MySQL backend</li>
+                    <li>Supports all major mobile browsers</li>
+
+                </ul>
+                Persist Data:
+                    <pre><code>
+Lawnchair(function(){
+    this.save({msg:'hooray!'})
+})
+                    </code></pre>
+
+            </article>
+
+            <article class="slide" data-option="Frameworks">
+                <h1>Lawnchair</h1>
+                <ul>
+                    <li>Supports all major mobile browsers</li>
+
+                </ul>
+                Persist Data:
+                    <pre><code>
+Lawnchair(function(){
+    this.save({msg:'hooray!'})
+})
+                    </code></pre>
+
+            </article>
+
+
+        </section>
+
+        <section class="slide-group">
+
+            <article class="slide" data-option="master">
+                 <h1>WebSockets</h1>
+                 <h2>The Real Time Web</h2>
+            </article>
+
+            <article class="slide" data-option="Basic APIs">
+                 <h1>Events</h1>
+                 <pre><code>
+objWebSocket.onopen = function(evt)
+{
+   alert("WebSocket connection opened successfully");
+};
+objWebSocket.onmessage = function(evt)
+{
+   alert("Message : " + evt.data);
+};
+objWebSocket .onclose = function(evt)
+{
+   alert("WebSocket connection closed”);
+};
+                 </code></pre>
+            </article>
+
+            <article class="slide" data-option="Frameworks">
+                 <h1>Frameworks</h1>
+                 <ul>
+                     <li>vert.x</li>
+                     <li>socket.io</li>
+                     <li>Atmosphere</li>
+                 </ul>
+            </article>
+        </section>
+
+        <section class="slide-group">
+
+            <article class="slide" data-option="master">
+                 <h1>Other HTML5E Related Specs</h1>
+            </article>
+
+            <article class="slide" data-option="The other specs">
+                 <h1>Geolocation</h1>
+                 <ul>
+                     <li><a href="http://code.google.com/p/geo-location-javascript/">http://code.google.com/p/geo-location-javascript/</a></li>
+                     <li>Supports most platforms and browsers</li>
+
+                 </ul>
+                <pre><code>
+ alert('lat='+p.coords.latitude.toFixed(2)+';lon='+p.coords.longitude.toFixed(2));
+                     </code></pre>
+            </article>
+
+            <article class="slide" data-option="The other specs">
+                 <h1>Geolocation</h1>
+                 <ul>
+                     <li><a href="http://afarkas.github.com/webshim/demos/">Webshims lib</a></li>
+                     <li>jQuery’s A graded browsers and latest Opera.</li>
+
+                 </ul>
+                <pre><code>
+$.webshims.setOptions('geolocation', {
+confirmText: '{location} wants to know your position. It is Ok to press Ok.'
+                     </code></pre>
+            </article>
+
+            <article class="slide" data-option="The other specs">
+                 <h1>Web Workers</h1>
+                 <ul>
+                     <li>The only shim currently available uses Google Gears</li>
+                     <li><a href="http://html5-shims.googlecode.com/svn/trunk/demo/workers.html">http://html5-shims.googlecode.com</a></li>
+                     <li>Uses? Graphs, Visualizations, and preprocessing Wiki text</li>
+                 </ul>
+            </article>
+
+            <article class="slide" data-option="Move along">
+                 <h1>Next stop, device testing and QA!</h1>
+            </article>
+        </section>
+
+        <section class="slide-group">
+
+            <article class="slide" data-option="master">
+                 <h1>QA and Device Testing</h1>
+            </article>
+
+            <article class="slide" data-option="Emulators and Debuggers">
+                 <h3><a href="http://www.mobilexweb.com/emulators">http://www.mobilexweb.com/emulators</a></h3>
+                 <img src="images/mobile-emulators.png"/>
+            </article>
+
+            <article class="slide" data-option="Emulators and Debuggers">
+                 <h1>Weinre</h1>
+                 <h2>Much like FireBug or WebKit's Web Inspector</h2>
+                 <ul>
+                     <li>Works on Android, PhoneGap, iOS, BlackBerry, and webOS</li>
+                 </ul>
+            </article>
+
+            <article class="slide" data-option="Emulators and Debuggers">
+                 <h1>Just Use WebKit/Chrome/Safari</h1>
+                 <h2>WAT?!? It works to an extent</h2>
+            </article>
+
+            <article class="slide" data-option="Emulators and Debuggers">
+                 <h1>Debugging with Chrome</h1>
+                 <pre><code>
+defaults write com.apple.Safari IncludeInternalDebugMenu 1
+                 </code></pre>
+                <img src="images/safari-debug-menu.png" style="float:right;position:absolute;top:200px;right:0;width:50%"/>
+            </article>
+
+            <article class="slide" data-option="I dont test">
+                 <h1>WAT!!!!!</h1>
+            </article>
+
+        </section>
+
+        <section class="slide-group">
+
+            <article class="slide" data-option="master">
+                 <h1>Performance</h1>
+            </article>
+
+            <article class="slide" data-option="Throttling">
+                 <h1>Throttling Based on Connection Speed</h1>
+            </article>
+
+            <article class="slide" data-option="HTTP Requests">
+                 <h1>Mae it faster!</h1>
+            </article>
+
+        </section>
+
+        <section class="slide-group">
+
+            <article class="slide">
+                 <h1>Thank You!!!</h1>
+                 <h2>@wesleyhales</h2>
+                 <h2><a href="http://wesleyhales.com">wesleyhales.com</a></h2>
+                 <img src="images/mybook.PNG" style="float:right;position:absolute;top:20px;right:0;width:60%"/>
+                <img src="images/hi-hi.gif" style="float:left;position:absolute;top:350px;left:10;width:30%"/>
+            </article>
+
+
+        </section>
+
+    </div>
+</div>
+
+</body>
+</html>
