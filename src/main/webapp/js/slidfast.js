@@ -732,7 +732,7 @@
 				
 				barChart.draw();
 				  
-               if(!activeSlide.querySelector('.option-handler-1')){
+               if(!activeSlide.querySelector('.option-handler-1') && groupOptions.length > 0){
                   //console.log('checkOptions groupOptions' + groupOptions);
 				  
 				  /*
