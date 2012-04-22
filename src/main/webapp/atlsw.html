@@ -20,7 +20,144 @@ slidfast({
    slides: true
 });
 </script>
+
  <script type="text/javascript" src="js/slidedeck.js" ></script>
+ <script src="/js/jquery-1.6.4.js"></script>
+ <script src="/js/flot/jquery.flot.js"></script>
+
+
+<script>
+var barChart = (function($) {
+	var voteOptions = [
+		{
+			name: 'This is cool',
+			numVotes: 9
+		},
+		{
+			name: 'Dude seriously',
+			numVotes: 6
+		},
+		{
+			name: 'WTF!',
+			numVotes: 2
+		}
+	];
+
+	function VoteOption(name) {
+		this.name = name;
+		this.numVotes = 0;
+	}
+
+	function clearVoteOptions() {
+		voteOptions = [];
+	}
+
+	function addVoteOption(voteOptionName) {
+		var voteOption = new VoteOption(voteOptionName);
+		voteOptions.push(voteOption);
+	}
+
+	function addVote(name) {
+		for (var i = 0; i < voteOptions.length; i++) {
+			if (voteOptions[i].name == name) {
+				voteOptions[i].numVotes += 1;
+			}
+		}
+	}
+
+	function getVotes(index) {
+		var data = [];
+		var numVotes = voteOptions[index].numVotes
+		var newArr = [numVotes, index];
+		data.push(newArr);
+		return data;
+	}
+
+	function Series(data) {
+		this.data = data;
+		this.bars = { show: true }
+	}
+
+	function getChartData() {
+		var dataArr = [];
+		for (var i = 0; i < voteOptions.length; i++) {
+			var data = getVotes(i);
+			var series = new Series(data);
+			dataArr.push(series);
+		}
+		return dataArr;
+	}
+
+	function getChartOptions() {
+		return {
+			series: {
+				bars: {
+					barWidth: 1,
+					align: "center",
+					horizontal: true
+				}
+			},
+			xaxis: {
+				position: 'bottom',
+				tickDecimals: 0,
+				tickSize: 1
+			},
+			yaxis: {
+				ticks: getTicks(),
+				transform: function (v) { return -v; },
+				inverseTransform: function (v) { return -v; }
+			}
+		}
+	};
+
+	function getTicks() {
+		var ticks = [];
+		for (var i = 0; i < voteOptions.length; i++) {
+			var voteOptionName = voteOptions[i].name;
+			var tick = [i, voteOptionName];
+			ticks.push(tick);
+		}
+		return ticks;
+	}
+
+	function drawChart() {
+		$.plot($(".placeholder"), getChartData(), getChartOptions());
+	}
+
+	return {
+		addVoteOption: addVoteOption,
+		clear: clearVoteOptions,
+		draw: drawChart,
+		redraw: drawChart,
+		vote: addVote
+	}
+})(jQuery);
+
+$(document).ready(function(e) {
+	//barChart.addVoteOption('Test Me');
+	//barChart.draw();
+
+
+	//setTimeout(function() { barChart.vote('Test Me'); barChart.draw(); }, 4000);
+	//setTimeout(function() { barChart.vote('Test Me'); barChart.draw(); }, 5000);
+	/*
+	setTimeout(function() { barChart.vote('WTF!'); barChart.draw(); }, 3000);
+	setTimeout(function() { barChart.vote('WTF!'); barChart.draw(); }, 4000);
+	setTimeout(function() { barChart.vote('Dude, seriously'); barChart.draw(); }, 5000);
+	setTimeout(function() { barChart.vote('WTF!'); barChart.draw(); }, 6000);
+	setTimeout(function() { barChart.vote('Dude, seriously'); barChart.draw(); }, 7000);
+	setTimeout(function() { barChart.vote('This is cool'); barChart.draw(); }, 8000);
+	*/
+	//setTimeout(barChart.draw, 10000);
+});
+</script>
+
+<style>
+.placeholder {
+	height: 125px;
+	width: 85%;
+}
+</style>
 </head>
 <body>
 <div id="controller" style="display:none">
@@ -37,26 +174,48 @@ slidfast({
         <section class="slide-group">
 
             <article class="slide" data-option="master">
-                <h1>onslyde</h1>
-                <h2>Real Time Audience Feedback and Interaction</h2>
-                <h3>Atlanta Startup Weekend 2012</h3>
-                <h3>onslyde.com</h3>
+                <h1>Are you connected?</h1>
+                <h1>http://38.110.18.202:8080/</h1>
+                <h2>onslyde</h2>
+                <h3>Real Time Audience Interaction</h3>
                 <h3>@onslyde</h3>
             </article>
 
-            <article class="slide" data-option="more please">
-                <h1>This is cool!!</h1>
+            <article class="slide" data-option="Yes">
+                <h1>onslyde</h1>
                 <h2>What problem does it solve?</h2>
                 <ul>
                     <li>Audience assessment and engagement</li>
                     <li>Detailed analytics on audience participation data</li>
                     <li>Evolution of paper based surveys</li>
                 </ul>
-                <img src="images/what.gif" style="float:right;position:absolute;top:20px;right:0;width:40%"/>
             </article>
 
-            <article class="slide" data-option="pass">
-                <h1>Not possible :)</h1>
+            <article class="slide" data-option="No">
+                <h1>onslyde</h1>
+                <h2>What problem does it solve?</h2>
+                <ul>
+                    <li>Audience assessment and engagement</li>
+                    <li>Detailed analytics on audience participation data</li>
+                    <li>Evolution of paper based surveys</li>
+                </ul>
+            </article>
+
+        </section>
+
+        <section class="slide-group">
+
+            <article class="slide" data-option="master">
+                <h1>Who are the users?</h1>
+                <ul>
+                    <li>Public Speakers
+                    <ul>
+                        <li>Tech Presenters</li>
+                        <li>Sales Professional</li>
+                    </ul>
+                    </li>
+                    <li>Professors</li>
+                </ul>
             </article>
 
         </section>
@@ -65,10 +224,11 @@ slidfast({
 
             <article class="slide" data-option="master">
                 <h1>Who are the customers?</h1>
-                <h2>Everyone who cares about the effectiveness of their presentation.</h2>
                 <ul>
-                    <li>Public Speakers</li>
-                    <li>Professors</li>
+                    <li>Organizations</li>
+                    <li>Corporations</li>
+                    <li>Conferences</li>
+                    <li>Academic Institutions</li>
                 </ul>
             </article>
 
@@ -79,20 +239,15 @@ slidfast({
             <article class="slide" data-option="master">
                 <h1>Core Value Proposition</h1>
                 <ul>
-                    <li>Free presentation platform + attendee data</li>
-                </ul>
-            </article>
-
-        </section>
-
-        <section class="slide-group">
-
-            <article class="slide" data-option="master">
-                <h1>Key activities</h1>
-                <h2>We produce...</h2>
-                <ul>
-                    <li>A free presentation platform with features for engaging the audience</li>
-                    <li>A paid analytics tool which gives us ownership of the data</li>
+                    <li>Free presentation platform</li>
+                    <li>Features:
+                        <ul>
+                        <li>Trivia</li>
+                        <li>Survey</li>
+                        <li>Forking</li>
+                        <li>Analytics</li>
+                        </ul>
+                    </li>
                 </ul>
             </article>
 
@@ -102,10 +257,14 @@ slidfast({
 
             <article class="slide" data-option="master">
                 <h1>Revenue Streams</h1>
-                <h2>For starters...</h2>
                 <ul>
-                    <li>Freemium model with limited access to data / upgradeable with monthly subscription</li>
-                    <li>One time fee for one off presenters</li>
+                    <li>Subscriptions
+                    <ul>
+                        <li>Individual</li>
+                        <li>Organization</li>
+                    </ul>
+                    </li>
+                    <li>On demand</li>
                 </ul>
             </article>
 
@@ -114,12 +273,22 @@ slidfast({
         <section class="slide-group">
 
             <article class="slide" data-option="master">
-                <h1>Cost Structure</h1>
+                <h1>The Dashboard...</h1>
+                <img src="images/atlsw/demo-charts-2.png" style="max-width:80%"/>
+            </article>
+
+        </section>
+
+
+        <section class="slide-group">
+
+            <article class="slide" data-option="master">
+                <h1>Projected Costs</h1>
                 <h2>Annual</h2>
                 <ul>
-                    <li>Salary: 3 developers, 1 sales = $400,000</li>
-                    <li>Marketing: $0</li>
-                    <li>Overhead: rent + utils + laptops</li>
+                    <li>Salary: developers + business = $500,000</li>
+                    <li>Marketing: $100,000</li>
+                    <li>Overhead: rent + utils + laptops + cloud = $100,000</li>
                 </ul>
             </article>
 
@@ -128,7 +297,7 @@ slidfast({
                 <h2>Let's go!</h2>
             </article>
 
-            <article class="slide" data-option="omg what r u doing">
+            <article class="slide" data-option="you need more">
                 <h1>I'm negotiable :)</h1>
             </article>
 
@@ -139,21 +308,14 @@ slidfast({
             <article class="slide" data-option="master">
                 <h1>Distribution Channels</h1>
                 <ul>
-                    <li>Conference -> Speaker</li>
+                    <li>Web: onslyde.com -> Speaker</li>
+                    <li>Reseller: Conference -> Speaker</li>
+                    <li>Direct:
+                    <ul>
                     <li>University -> Professor</li>
-                </ul>
-            </article>
-
-        </section>
-
-
-        <section class="slide-group">
-
-            <article class="slide" data-option="master">
-                <h1>Roll Our Strategy</h1>
-                <ul>
-                    <li>Tech speaking circuit</li>
-                    <li>CETL / University trials</li>
+                    <li>Industry Training -> Instructor</li>
+                    <li>Company -> Employee</li>
+                    </ul>
                 </ul>
             </article>
 
@@ -162,10 +324,8 @@ slidfast({
         <section class="slide-group">
 
             <article class="slide" data-option="master">
-                <h1>In Action</h1>
-                <ul>
-                    <li>Used in front of 2 audiences last month</li>
-                </ul>
+                <h1>In Action (60+ attendees)</h1>
+                <img src="images/atlsw/P1020953.JPG" style="max-width:70%"/>
             </article>
 
         </section>
@@ -173,11 +333,20 @@ slidfast({
         <section class="slide-group">
 
             <article class="slide" data-option="master">
-                <h1>Feedback</h1>
+                <h1>Customer Feedback</h1>
                 <ul>
                     <li>"This would let me give immediate feedback to my students. It would make
-                    me look good. The students would like it... and it would be no more work than I'm already doing"<p> - Michael A. Smith, mentor from this weekend with Mike Schinkel</p></li>
+                    me look good. The students would like it... and it would be no more work than I'm already doing".<p> - Michael A. Smith, mentor from this weekend with Mike Schinkel</p></li>
                 </ul>
+            </article>
+
+        </section>
+
+
+        <section class="slide-group">
+
+            <article class="slide" data-option="master">
+                <h1>Q&A</h1>
             </article>
 
         </section>

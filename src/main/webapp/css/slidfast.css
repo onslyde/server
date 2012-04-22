@@ -179,6 +179,12 @@ formatting
    line-height: 1.2em;
 }
 
+.slide ul li>ul li{
+   font-size: .9em;
+   padding:  6px;
+   line-height: 1.2em;
+}
+
 .max-width-100 {
     max-width: 100%;
 }

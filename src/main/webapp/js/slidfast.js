@@ -601,7 +601,7 @@
       //var _onopen,_onmessage,_onclose,_onerror;
       slidfast.ws = slidfast.prototype = {
 
-          ip : function() {return '38.110.18.38'},
+          ip : function() {return '38.110.18.202'},
 
           connect : function(websocket,initString) {
               username = 'yomama';
@@ -718,21 +718,21 @@
                   activeSlide.getAttribute("data-option") == 'master') {
                //init activeOptions
                var groupOptions = this.groupOptions(activeGroup);
+               if(groupOptions.length > 0){
+                  barChart.clear();
+                  $('div').remove('.placeholder');
+                  for (var i = 0; i < groupOptions.length; i++) {
+                     barChart.addVoteOption(groupOptions[i]);
+                  }
 
-				barChart.clear();
-				$('div').remove('.placeholder');
-				for (var i = 0; i < groupOptions.length; i++) {
-					barChart.addVoteOption(groupOptions[i]);
-				}
-				
-				
-				var barChartDiv = document.createElement("div");
-				barChartDiv.className = 'placeholder';
-				activeSlide.appendChild(barChartDiv);
-				
-				barChart.draw();
-				  
-               if(!activeSlide.querySelector('.option-handler-1') && groupOptions.length > 0){
+
+                  var barChartDiv = document.createElement("div");
+                  barChartDiv.className = 'placeholder';
+                  activeSlide.appendChild(barChartDiv);
+
+                  barChart.draw();
+               }
+               //if(!activeSlide.querySelector('.option-handler-1') && groupOptions.length > 0){
                   //console.log('checkOptions groupOptions' + groupOptions);
 				  
 				  /*
@@ -754,7 +754,7 @@
                   optionHandler2.appendChild(option2);
                   activeSlide.appendChild(optionHandler2);
 				  */
-               }
+               //}
 
                //}
             }
