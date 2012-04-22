@@ -782,6 +782,10 @@
                //move to next group
                this.nextGroup();
             }
+
+
+            //quick hack for hiding audience address bar
+            document.querySelector(".address").className = 'address-small'
          },
 
          prevSlide : function() {
