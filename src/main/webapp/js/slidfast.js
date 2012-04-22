@@ -601,7 +601,7 @@
       //var _onopen,_onmessage,_onclose,_onerror;
       slidfast.ws = slidfast.prototype = {
 
-          ip : function() {return '192.168.77.117'},
+          ip : function() {return '192.168.1.139'},
 
           connect : function(websocket,initString) {
               username = 'yomama';

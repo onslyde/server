@@ -1,8 +1,8 @@
 <map version="0.9.0">
 <!-- To view this file, download free mind mapping software FreeMind from http://freemind.sourceforge.net -->
 <node CREATED="1332608349036" ID="ID_1722758611" MODIFIED="1332608524952" STYLE="fork" TEXT="SlidFast">
-<node CREATED="1332608509536" ID="ID_1728528902" MODIFIED="1332610686218" POSITION="left" TEXT="Business Ideas">
-<node CREATED="1332608478868" ID="ID_14530766" MODIFIED="1332610596150" TEXT="Freemium Model">
+<node CREATED="1332608509536" ID="ID_1728528902" MODIFIED="1335027313951" POSITION="left" TEXT="Business Ideas">
+<node CREATED="1332608478868" ID="ID_14530766" MODIFIED="1335033490989" TEXT="Freemium Model">
 <richcontent TYPE="NOTE"><html>
   <head>
     
@@ -12,8 +12,7 @@
       Maybe gve 15 connections for free... or unlimited connections for the first 10 days, etc...
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 <node CREATED="1332608490606" ID="ID_433447654" MODIFIED="1332610591463" TEXT="Based on connection limit">
 <richcontent TYPE="NOTE"><html>
   <head>
@@ -30,8 +29,7 @@
       Just an idea....We could give the presenter an option of which devices they'd like to support. ws native clients would be cheapest. polling android clients would be a bit more expensive
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 <node CREATED="1332610463820" ID="ID_1248489896" MODIFIED="1332610465414" TEXT="ws"/>
 <node CREATED="1332610465836" ID="ID_1820461688" MODIFIED="1332610467986" TEXT="polling"/>
 <node CREATED="1332610468820" ID="ID_1929883144" MODIFIED="1332610473564" TEXT="long polling"/>
@@ -43,6 +41,8 @@
 <node CREATED="1332610701637" ID="ID_885781169" MODIFIED="1332610726046" TEXT="Discount licenses for presenters"/>
 <node CREATED="1332610710254" ID="ID_742898604" MODIFIED="1332610710254" TEXT=""/>
 </node>
+<node CREATED="1335027211157" ID="ID_1955644493" MODIFIED="1335027265131" TEXT="Like SlidesShare"/>
+<node CREATED="1335027315128" ID="ID_342847016" MODIFIED="1335027324725" TEXT="Like WebEx"/>
 </node>
 <node CREATED="1332608544067" ID="ID_885127194" MODIFIED="1332608550114" POSITION="right" TEXT="Architecture">
 <node CREATED="1332608401984" ID="ID_1232294927" MODIFIED="1332608451953" TEXT="Storage">
@@ -88,14 +88,13 @@
       Also, what is the performance of firing hundreds of events in the presenter's (slidfast slide deck) browser at any given time. All calculations are done through javascript in the slidfast slide deck. The websocket server is dumb and just giving us a way to relay the data out to connected clients.
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 <node CREATED="1332609384035" ID="ID_1371378315" MODIFIED="1332609406489" TEXT="Strings are built on server then executed as Javascript events in browser"/>
 </node>
 </node>
 <node CREATED="1332608631425" ID="ID_139519445" MODIFIED="1332608633761" TEXT="UI">
 <node CREATED="1332608361898" ID="ID_870011965" MODIFIED="1332609260246" TEXT="Public">
-<node CREATED="1332608595401" ID="ID_282949560" MODIFIED="1332611082261" TEXT="SlideDeck">
+<node CREATED="1332608595401" FOLDED="true" ID="ID_282949560" MODIFIED="1335020772421" TEXT="SlideDeck">
 <richcontent TYPE="NOTE"><html>
   <head>
     
