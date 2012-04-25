@@ -122,6 +122,7 @@
 
          ajax : function(url, callback, async) {
             var req = init();
+
             req.onreadystatechange = processRequest;
 
             function init() {
@@ -310,7 +311,7 @@
 
             var classes;
             //todo use classList here
-            console.log(id.className.indexOf(' '));
+            //this causes error with no classname--> console.log(id.className.indexOf(' '));
             try {
                classes = id.className.split(' ');
             } catch(e) {
@@ -595,24 +596,33 @@
 
       };
 
-      var ws;
-      var username;
-      var isopen = false;
-      //var _onopen,_onmessage,_onclose,_onerror;
-      slidfast.ws = slidfast.prototype = {
+       var ip,ws;
+       var username;
+       var isopen = false;
+       //var _onopen,_onmessage,_onclose,_onerror;
+       slidfast.ws = slidfast.prototype = {
 
-          ip : function() {return '38.110.18.202'},
+           ip : function() {
+               var ai = new slidfast.core.ajax('/rest/members/ip',function(text,url){
+//                   alert(text);
+                   ip = text;
+               },false);
+               ai.doGet();
+               return ip;
+           },
 
-          connect : function(websocket,initString) {
-              username = 'yomama';
-              //var location = document.location.toString().replace('http://',
-              //		'ws://').replace('https://', 'wss://');
-              if(!websocket){
-                 var location = 'ws://' + this.ip() + ':8081';
-                 ws = new WebSocket(location);
-              }else{
-                 ws = websocket;
-              }
+           connect : function(websocket,initString) {
+
+               username = 'yomama';
+               //here we check to see if we're passing in our mock websocket object from polling clients (using gracefulWebSocket.js)
+               if(!websocket){
+//               todo - use localstorage so we don't have to make future http requests for ip, but if ip changes we need to
+//               detect ws failure and refresh localstorage with new ip... //if(!localStorage['/rest/members/ip']){
+                  var location = 'ws://' + this.ip() + ':8081';
+                  ws = new WebSocket(location);
+               }else{
+                  ws = websocket;
+               }
               //ws = websocket;
               //this.ws = ws;
               ws.onopen = function() {
@@ -785,7 +795,10 @@
 
 
             //quick hack for hiding audience address bar
-            document.querySelector(".address").className = 'address-small'
+             var mainScreenAddressBar = document.querySelector(".address");
+             if(mainScreenAddressBar){
+                 document.querySelector(".address").className = 'address-small';
+             }
          },
 
          prevSlide : function() {

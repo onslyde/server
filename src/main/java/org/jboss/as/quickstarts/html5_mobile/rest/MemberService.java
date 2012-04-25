@@ -1,6 +1,8 @@
 package org.jboss.as.quickstarts.html5_mobile.rest;
 
 import java.io.Serializable;
+import java.net.InetAddress;
+import java.net.UnknownHostException;
 import java.util.*;
 import java.util.logging.Logger;
 
@@ -83,6 +85,20 @@ public class MemberService implements Serializable {
       //final List<Member> results = em.createQuery("select m from Member m order by m.name").getResultList();
       return data;
    }
+
+    @GET
+    @Path("/ip")
+    @Produces(MediaType.APPLICATION_JSON)
+    public String ip() {
+        String addr = null;
+        try {
+            addr = InetAddress.getLocalHost().getHostAddress();
+        } catch (UnknownHostException e) {
+            log.severe("can't get IP address, falling back to local");
+            addr = "127.0.0.1";
+        }
+        return addr;
+    }
 
    @GET
    @Path("/{id:[0-9][0-9]*}")
