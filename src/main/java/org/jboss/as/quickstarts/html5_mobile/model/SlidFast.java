@@ -21,9 +21,6 @@
  */
 package org.jboss.as.quickstarts.html5_mobile.model;
 
-import com.sun.istack.internal.Nullable;
-
-import javax.annotation.ManagedBean;
 import javax.annotation.PostConstruct;
 import javax.inject.Singleton;
 import javax.ejb.Stateful;
