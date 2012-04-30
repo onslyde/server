@@ -604,14 +604,14 @@
 
            ip : function() {
                //dev
-//               var ai = new slidfast.core.ajax('/rest/members/ip',function(text,url){
-//                   ip = text;
-//               },false);
-//               ai.doGet();
-//               return ip;
+               var ai = new slidfast.core.ajax('/rest/members/ip',function(text,url){
+                   ip = text;
+               },false);
+               ai.doGet();
+               return ip;
 
                //prod
-               return '107.22.176.73';
+               //return '107.22.176.73';
            },
 
            connect : function(websocket,initString) {
