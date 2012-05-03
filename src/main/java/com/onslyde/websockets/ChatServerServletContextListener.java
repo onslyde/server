@@ -28,9 +28,9 @@ public class ChatServerServletContextListener implements ServletContextListener 
             Connector connector = new SelectChannelConnector();
             connector.setPort(8081);
             //dev
-            connector.setHost(addr.getHostAddress());
+            //connector.setHost(addr.getHostAddress());
             //prod
-            //connector.setHost("107.22.176.73");
+            connector.setHost("0.0.0.0");
             server.addConnector(connector);
 
             // 2) Register ChatWebSocketHandler in the Jetty server instance.

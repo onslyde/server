@@ -46,6 +46,7 @@ public class PresenterService {
             log.severe("can't get IP address, falling back to local");
             addr = "127.0.0.1";
         }
+        //need to check for hosted mode
         return addr;
     }
 
