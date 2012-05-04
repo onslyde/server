@@ -61,7 +61,7 @@ function registerMember(memberData) {
             $('#reg')[0].reset();
 
             //mark success on the registration form
-            //$('#formMsgs').append($('<span class="success">Member Registered</span>'));
+            $('#formMsgs').append($('<span class="alert alert-success">Thanks! We\'ll get with you soon!</span>'));
 
             //updateMemberTable();
         },
