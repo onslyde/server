@@ -4,22 +4,15 @@
 */
 package com.onslyde.util;
 
-import java.io.ByteArrayOutputStream;
-import java.io.IOException;
-import java.io.PrintWriter;
-import java.util.regex.Pattern;
-
-import javax.servlet.Filter;
-import javax.servlet.FilterChain;
-import javax.servlet.FilterConfig;
-import javax.servlet.ServletException;
-import javax.servlet.ServletOutputStream;
-import javax.servlet.ServletRequest;
-import javax.servlet.ServletResponse;
+import javax.servlet.*;
 import javax.servlet.annotation.WebFilter;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpServletResponseWrapper;
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.io.PrintWriter;
+import java.util.regex.Pattern;
 
 /**
  * <p>This filter wraps qualified requests for JSON content with that standard JSONP padding.  This makes these calls accessible
@@ -31,7 +24,7 @@ import javax.servlet.http.HttpServletResponseWrapper;
  * @author balunasj
  *
  */
-@WebFilter("/rest/*")
+//@WebFilter("/rest/*")
 public class JSONPRequestFilter implements Filter {
     //The callback method to use
     private static final String CALLBACK_METHOD = "jsonpcallback";

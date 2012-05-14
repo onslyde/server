@@ -43,10 +43,9 @@ public class AttendeeService {
         String data = "";
         slidFastEventSrc.fire(slidFast);
         List optionList = slidFast.getActiveOptions();
-        System.out.println("!!!!!!!!!!!!!!!!poll " + optionList.size());
+        log.fine("!!!!!!!!!!!!!!!!poll " + optionList.size());
         if(optionList.size() == 2){
             data = ClientEvent.createEvent("updateOptions", optionList);
-
         }
         //final List<Member> results = em.createQuery("select m from Member m order by m.name").getResultList();
         return data;

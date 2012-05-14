@@ -1,5 +1,7 @@
 package com.onslyde.data;
 
+import com.onslyde.model.Member;
+
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
 import javax.persistence.EntityManager;
@@ -7,8 +9,6 @@ import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Root;
 import java.util.List;
-
-import com.onslyde.model.Member;
 
 @ApplicationScoped
 public class MemberRepository {

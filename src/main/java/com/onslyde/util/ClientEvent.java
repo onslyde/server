@@ -29,13 +29,17 @@ import java.util.List;
 public class ClientEvent {
 
     public static String createEvent(String eventName, List options){
-         return ("{\"cdievent\":{\"fire\":function(){" +
+        String eventOptions = "";
+        if(options.size() >= 0){
+                 eventOptions = ("{\"cdievent\":{\"fire\":function(){" +
                   "window.eventObjb = document.createEvent('Event');" +
                   "eventObjb.initEvent(\'updateOptions\', true, true);" +
                   "eventObjb.option1 = '" + options.get(0) + "';\n" +
                   "eventObjb.option2 = '" + options.get(1) + "';\n" +
                   "document.dispatchEvent(eventObjb);" +
                   "}}}");
+        }
+        return eventOptions;
 
     }
 

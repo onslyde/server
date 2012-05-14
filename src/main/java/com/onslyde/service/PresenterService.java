@@ -35,16 +35,22 @@ public class PresenterService {
     @Inject
     private SlidFast slidFast;
 
+    String addr = null;
+
     @GET
     @Path("/ip")
     @Produces(MediaType.APPLICATION_JSON)
     public String ip() {
-        String addr = null;
-        try {
-            addr = InetAddress.getLocalHost().getHostAddress();
-        } catch (UnknownHostException e) {
-            log.severe("can't get IP address, falling back to local");
-            addr = "127.0.0.1";
+        if(addr == null){
+            //hack to sync objects across threads for now
+            slidFastEventSrc.fire(slidFast);
+
+            try {
+                addr = InetAddress.getLocalHost().getHostAddress();
+            } catch (UnknownHostException e) {
+                log.severe("can't get IP address, falling back to local");
+                addr = "127.0.0.1";
+            }
         }
         //need to check for hosted mode
         return addr;

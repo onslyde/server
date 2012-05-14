@@ -4,12 +4,8 @@
 */
 package com.onslyde.service;
 
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-import java.util.logging.Logger;
+import com.onslyde.data.MemberRepository;
+import com.onslyde.model.Member;
 
 import javax.ejb.Stateful;
 import javax.enterprise.context.RequestScoped;
@@ -20,18 +16,16 @@ import javax.validation.ConstraintViolationException;
 import javax.validation.ValidationException;
 import javax.validation.Validator;
 import javax.ws.rs.Consumes;
-import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
-import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
-import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
-
-import com.onslyde.data.MemberRepository;
-import com.onslyde.model.Member;
-import com.onslyde.service.MemberRegistration;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Map;
+import java.util.Set;
+import java.util.logging.Logger;
 
 /**
  * JAX-RS Example

@@ -14,6 +14,7 @@ import java.io.IOException;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Set;
+import java.util.logging.Logger;
 
 /**
  * @author <a href="mailto:whales@redhat.com">Wesley Hales</a>
@@ -22,6 +23,8 @@ import java.util.Set;
 public class ChatWebSocketHandler extends WebSocketHandler {
 
     private static Set<ChatWebSocket> websockets = new ConcurrentHashSet<ChatWebSocket>();
+    @Inject
+    private Logger log;
 
     @Inject
     private MemberService ms;
@@ -36,7 +39,7 @@ public class ChatWebSocketHandler extends WebSocketHandler {
     public void observeItemEvent(@Observes SlidFast slidFast) {
 
         syncSlidFast(slidFast);
-        System.out.println("-observer event... votes#--------" + getSlidFast().getCurrentVotes());
+        log.fine("-observer event... votes#--------" + getSlidFast().getCurrentVotes());
         if(slidFast.getJsEvent() != null){
             try {
                 for (ChatWebSocket webSocket : getWebsockets()) {
@@ -114,21 +117,13 @@ public class ChatWebSocketHandler extends WebSocketHandler {
                 String options = data.substring(ACTIVE_OPTIONS.length(), data.length());
                 List<String> optionList = Arrays.asList(options.split("\\s*,\\s*"));
                 try {
-                    System.out.println("-slidFast.getCurrentVotes()-22-------" + getSlidFast().getCurrentVotes());
+                    System.out.println("-slidFast.getCurrentVotes()-count-------" + getSlidFast().getCurrentVotes());
                     getSlidFast().setActiveOptions(optionList);
                 } catch (Exception e) {
-                    e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
+                    e.printStackTrace();
                 }
 
                 data = ClientEvent.createEvent("updateOptions", optionList);
-
-//                        ("{\"cdievent\":{\"fire\":function(){" +
-//                                        "window.eventObj = document.createEvent('Event');" +
-//                                        "eventObj.initEvent(\'updateOptions\', true, true);" +
-//                                        "eventObj.option1 = '" + optionList.get(0) + "';\n" +
-//                                        "eventObj.option2 = '" + optionList.get(1) + "';\n" +
-//                                        "document.dispatchEvent(eventObj);" +
-//                                        "}}}");
 
             }else if (data.contains(VOTE)){
 
@@ -170,6 +165,6 @@ public class ChatWebSocketHandler extends WebSocketHandler {
     }
 
     public static synchronized SlidFast getSlidFast() {
-        return slidFast;
+        return slidFast;// == null ? new SlidFast() : slidFast;
     }
 }

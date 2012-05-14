@@ -951,14 +951,16 @@
 
          updateRemotes : function() {
             var activeOptionsString = 'activeOptions:' + activeOptions;
-            if(!ws){
-               //console.log('no conn');
-               slidfast.ws.connect(null,activeOptionsString);
-            }else{
-               //console.log('conn');
-               slidfast.ws._send(activeOptionsString);
+            console.log('===========' + activeOptions.length);
+            if(activeOptions.length >= 1){
+                if(!ws){
+                   //console.log('no conn');
+                   slidfast.ws.connect(null,activeOptionsString);
+                }else{
+                   //console.log('conn');
+                   slidfast.ws._send(activeOptionsString);
+                }
             }
-
 
          },
 
