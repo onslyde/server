@@ -951,7 +951,7 @@
 
          updateRemotes : function() {
             var activeOptionsString = 'activeOptions:' + activeOptions;
-            console.log('===========' + activeOptions.length);
+            //console.log('===========' + activeOptions.length);
             if(activeOptions.length >= 1){
                 if(!ws){
                    //console.log('no conn');
