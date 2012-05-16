@@ -2,14 +2,17 @@ package com.onslyde.service;
 
 import com.onslyde.model.SlidFast;
 import com.onslyde.util.ClientEvent;
+import org.eclipse.jetty.server.Request;
 
 import javax.ejb.Stateful;
 import javax.enterprise.context.RequestScoped;
 import javax.enterprise.event.Event;
 import javax.inject.Inject;
 import javax.persistence.EntityManager;
+import javax.servlet.http.HttpServletRequest;
 import javax.validation.Validator;
 import javax.ws.rs.*;
+import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import java.util.List;
@@ -54,12 +57,18 @@ public class AttendeeService {
     @POST
     @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
     @Produces(MediaType.APPLICATION_JSON)
-    public Response optionVote(@FormParam("user") String user, @FormParam("vote") String vote) {
+    public Response optionVote(@FormParam("user") String user, @FormParam("vote") String vote, @Context HttpServletRequest req) {
+
+        String ip = req.getRemoteAddr();
+        //get ip and verify attendee
+        slidFast.updateGroupVote(vote,ip);
+
+
+
         Response.ResponseBuilder builder = null;
+        //slidFast.getCurrentVotes().add(vote);
 
-        slidFast.getCurrentVotes().add(vote);
-
-        System.out.println("**************slidFast.getCurrentVotes()*" + slidFast.getCurrentVotes().size());
+        //System.out.println("**************slidFast.getCurrentVotes()*" + slidFast.getCurrentVotes().size());
         builder = Response.ok();
         //send new vote out to all conencted clients... should really only go to slide deck
 

@@ -27,12 +27,13 @@ import com.onslyde.service.MemberService;
 import javax.annotation.PostConstruct;
 import javax.ejb.Stateful;
 import javax.enterprise.context.ApplicationScoped;
+import javax.enterprise.context.SessionScoped;
+import javax.enterprise.event.Event;
 import javax.inject.Inject;
 import javax.inject.Singleton;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
 /**
  * @author <a href="mailto:whales@redhat.com">Wesley Hales</a>
@@ -46,6 +47,8 @@ public class SlidFast {
     private String activeOption;
     private List<String> currentVotes;
     private String jsEvent;
+
+    private Map<String,Attendee> ips = new HashMap<String, Attendee>();
 
     @Inject
     private MemberService ms;
@@ -68,9 +71,12 @@ public class SlidFast {
     @Inject
     private SlideGroupOptionsHome sgoHome;
 
+    @Inject
+    private Event<SlidFast> slidFastEventSrc;
+
     @PostConstruct
     public void initialize() {
-        System.out.println("_____________postconstruct");
+//        System.out.println("_____________postconstruct");
         this.activeOption = "";
         this.activeOptions = new ArrayList<String>();
         this.currentVotes = new ArrayList<String>();
@@ -78,21 +84,22 @@ public class SlidFast {
 
     private Session currentSession;
     private SlideGroup currentSlideGroup;
+    private boolean sessionStarted = false;
 
     public boolean startSession(){
         //should be based off presenters socket id or something
+        if(!sessionStarted){
+        sessionStarted = true;
         int id;
-
-
-        System.out.println("---------user: " + userHome.findById(1).getSessions());
-
         currentSession = new Session();
         currentSession.setSessionCode("dsfdsf");
         currentSession.setSessionName("atlhtml5");
         currentSession.setUser(userHome.findById(1));
         sessionHome.persist(currentSession);
-        System.out.println("---------check to see if id is populated: " + currentSession.getId());
+        //todo hack to sync objects across threads for now
+        slidFastEventSrc.fire(this);
         //currentSession.setId(id);
+        }
         return true;
     }
 
@@ -105,7 +112,7 @@ public class SlidFast {
         int sgid = sgHome.persist(currentSlideGroup);
 
         //SlideGroupOptions sgos = new SlideGroupOptions();
-        System.out.println("------------currentSlideGroup: " + sgid + " " + currentSlideGroup.getId());
+
         SlideGroupOptions sgOption = null;
         for(String option: options){
             sgOption = new SlideGroupOptions();
@@ -117,7 +124,7 @@ public class SlidFast {
             //on the fly creation, need to set this up in the code
             groupName += option;
         }
-        System.out.println("------------groupName: " + groupName);
+
         currentSlideGroup.setGroupName(groupName);
         //if(sgOption != null){
         sgHome.merge(currentSlideGroup);
@@ -127,19 +134,34 @@ public class SlidFast {
         //sessionHome.persist(currentSession);
     }
 
-    public void updateGroupVote(String vote){
+    public void updateGroupVote(String vote, String attendeeIP){
         SlideGroupVotes sgv = new SlideGroupVotes();
-        Attendee attendee = new Attendee();
-        attendee.setName("todo");
+        Attendee attendee;
+        boolean merge = false;
+        //manage the attendee object :(
+        if(!ips.containsKey(attendeeIP)){
+            attendee = new Attendee();
+            attendee.setName("unknown");
+            attendee.setIp(attendeeIP);
+            ips.put(attendeeIP, attendee);
+        }else{
+            attendee = ips.get(attendeeIP);
+            merge = true;
+        }
+
 
         for(SlideGroupOptions option : currentSlideGroup.getSlideGroupOptionses()){
             if(option.getName().equals(vote)){
                 sgv.setAttendee(attendee);
                 sgv.setSlideGroup(currentSlideGroup);
                 sgv.setSlideGroupOptions(option);
-                System.out.println("------------sgv: " + vote + " " + option);
                 //currentSlideGroup.getSlideGroupVoteses().add(sgv);
-                attendeeHome.persist(attendee);
+                if(merge){
+                    attendeeHome.merge(attendee);
+                }else{
+                    attendeeHome.persist(attendee);
+                }
+
                 slideGroupVotesHome.persist(sgv);
             }
         }

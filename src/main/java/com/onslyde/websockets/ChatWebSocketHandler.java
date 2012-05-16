@@ -33,13 +33,14 @@ public class ChatWebSocketHandler extends WebSocketHandler {
 
     public WebSocket doWebSocketConnect(HttpServletRequest request,
             String protocol) {
-        return new ChatWebSocket();
+        String attendeeIP = request.getRemoteAddr();
+        return new ChatWebSocket(attendeeIP);
     }
 
     public void observeItemEvent(@Observes SlidFast slidFast) {
 
         syncSlidFast(slidFast);
-        log.fine("-observer event... votes#--------" + getSlidFast().getCurrentVotes());
+        //System.out.println("-observer event... votes#--------" + getSlidFast().getCurrentVotes());
         if(slidFast.getJsEvent() != null){
             try {
                 for (ChatWebSocket webSocket : getWebsockets()) {
@@ -70,6 +71,12 @@ public class ChatWebSocketHandler extends WebSocketHandler {
         private String ACTIVE_OPTIONS = "activeOptions:";
         private String VOTE = "vote:";
         private String SEPARATOR = ":";
+
+        private String attendeeIP;
+
+        public ChatWebSocket(String attendeeIP) {
+            this.attendeeIP = attendeeIP;
+        }
 
         public void onOpen(Connection connection) {
             // Client (Browser) WebSockets has opened a connection.
@@ -129,6 +136,7 @@ public class ChatWebSocketHandler extends WebSocketHandler {
 
                 try {
                     if(!getSlidFast().startSession()){
+//                        System.out.println("-getSlidFast().startSession()-------false");
                         getSlidFast().startSession();
                     }
                     getSlidFast().addGroupOptions(optionList);
@@ -137,7 +145,7 @@ public class ChatWebSocketHandler extends WebSocketHandler {
                 }
 
                 try {
-                    System.out.println("-slidFast.getCurrentVotes()-count-------" + getSlidFast().getCurrentVotes());
+//                    System.out.println("-slidFast.getCurrentVotes()-count-------" + getSlidFast().getCurrentVotes());
                     getSlidFast().setActiveOptions(optionList);
                 } catch (Exception e) {
                     e.printStackTrace();
@@ -150,20 +158,20 @@ public class ChatWebSocketHandler extends WebSocketHandler {
                 String vote = data.substring(VOTE.length(), data.length());
 
                 try {
-                    getSlidFast().updateGroupVote(vote);
+                    getSlidFast().updateGroupVote(vote,attendeeIP);
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
 
                 try {
-                    getSlidFast().getCurrentVotes().add(vote);
+//                    getSlidFast().getCurrentVotes().add(vote);
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
                 data = ClientEvent.clientVote(vote);
             }
 
-            System.out.println("-----------" + data);
+//            System.out.println("-----------" + data);
             try {
                 for (ChatWebSocket webSocket : getWebsockets()) {
                     // send a message to the current client WebSocket.
