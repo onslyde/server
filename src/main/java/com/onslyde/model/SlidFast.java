@@ -122,7 +122,7 @@ public class SlidFast {
             //sgOption.setSlideGroupVoteses();
             sgoHome.persist(sgOption);
             //on the fly creation, need to set this up in the code
-            groupName += option;
+            groupName += option + ":";
         }
 
         currentSlideGroup.setGroupName(groupName);
