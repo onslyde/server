@@ -1,5 +1,6 @@
 package com.onslyde.service;
 
+import com.onslyde.domain.SessionHome;
 import com.onslyde.model.SlidFast;
 
 import javax.ejb.Stateful;
@@ -35,6 +36,9 @@ public class PresenterService {
     @Inject
     private SlidFast slidFast;
 
+    @Inject
+    private SessionHome sessionHome;
+
     String addr = null;
 
     @GET
@@ -42,7 +46,7 @@ public class PresenterService {
     @Produces(MediaType.APPLICATION_JSON)
     public String ip() {
         if(addr == null){
-            //hack to sync objects across threads for now
+            //todo hack to sync objects across threads for now
             slidFastEventSrc.fire(slidFast);
 
             try {

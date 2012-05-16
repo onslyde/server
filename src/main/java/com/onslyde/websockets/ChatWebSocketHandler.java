@@ -1,5 +1,6 @@
 package com.onslyde.websockets;
 
+import com.onslyde.domain.*;
 import com.onslyde.model.SlidFast;
 import com.onslyde.service.MemberService;
 import com.onslyde.util.ClientEvent;
@@ -26,8 +27,7 @@ public class ChatWebSocketHandler extends WebSocketHandler {
     @Inject
     private Logger log;
 
-    @Inject
-    private MemberService ms;
+
 
     private static SlidFast slidFast;
 
@@ -52,6 +52,16 @@ public class ChatWebSocketHandler extends WebSocketHandler {
             }
         }
     }
+
+    private int getAttendeeID(){
+        return 0;
+    }
+
+    private int addAttendee(){
+        //on ws connect
+        return 0;
+    }
+
 
 
     public class ChatWebSocket implements WebSocket.OnTextMessage {
@@ -116,6 +126,16 @@ public class ChatWebSocketHandler extends WebSocketHandler {
             }else if (data.contains(ACTIVE_OPTIONS)){
                 String options = data.substring(ACTIVE_OPTIONS.length(), data.length());
                 List<String> optionList = Arrays.asList(options.split("\\s*,\\s*"));
+
+                try {
+                    if(!getSlidFast().startSession()){
+                        getSlidFast().startSession();
+                    }
+                    getSlidFast().addGroupOptions(optionList);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+
                 try {
                     System.out.println("-slidFast.getCurrentVotes()-count-------" + getSlidFast().getCurrentVotes());
                     getSlidFast().setActiveOptions(optionList);
@@ -128,10 +148,17 @@ public class ChatWebSocketHandler extends WebSocketHandler {
             }else if (data.contains(VOTE)){
 
                 String vote = data.substring(VOTE.length(), data.length());
+
+                try {
+                    getSlidFast().updateGroupVote(vote);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+
                 try {
                     getSlidFast().getCurrentVotes().add(vote);
                 } catch (Exception e) {
-                    e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
+                    e.printStackTrace();
                 }
                 data = ClientEvent.clientVote(vote);
             }
