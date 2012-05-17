@@ -124,7 +124,7 @@ public class ChatWebSocketHandler extends WebSocketHandler {
                                         "eventObj2.initEvent(\'clearRoute\', true, true);" +
                                         "document.dispatchEvent(eventObj2);" +
                                         "}}}");
-            }else if (data.equals("wtf")){
+            }else if (data.equals("vote:wtf")){
                 data = ("{\"cdievent\":{\"fire\":function(){" +
                                         "window.eventObj3 = document.createEvent('Event');" +
                                         "eventObj3.initEvent(\'wtf\', true, true);" +
@@ -135,7 +135,7 @@ public class ChatWebSocketHandler extends WebSocketHandler {
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
-            }else if (data.equals("nice")){
+            }else if (data.equals("vote:nice")){
                 data = ("{\"cdievent\":{\"fire\":function(){" +
                         "window.eventObj4 = document.createEvent('Event');" +
                         "eventObj4.initEvent(\'nice\', true, true);" +

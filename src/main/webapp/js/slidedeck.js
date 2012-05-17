@@ -14,6 +14,7 @@ window.addEventListener('wtf', function(e) {
 }, false);
 
 window.addEventListener('nice', function(e) {
+//    console.log('nice');
     var wtf = document.querySelector("#wtf");
     wtf.innerHTML = "Nice Dude!";
     if(wtf){
