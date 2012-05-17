@@ -6,10 +6,20 @@ window.addEventListener('clearRoute', function(e) {
 
 window.addEventListener('wtf', function(e) {
    var wtf = document.querySelector("#wtf");
+   wtf.innerHTML = "WTF!";
    if(wtf){
       wtf.className = "show-wtf transition";
       setTimeout(function(){wtf.className = "hide-wtf transition"},800)
    }
+}, false);
+
+window.addEventListener('nice', function(e) {
+    var wtf = document.querySelector("#wtf");
+    wtf.innerHTML = "Nice Dude!";
+    if(wtf){
+        wtf.className = "show-wtf nice transition";
+        setTimeout(function(){wtf.className = "hide-wtf transition"},800)
+    }
 }, false);
 
 window.addEventListener('slideEvent', function(e) {

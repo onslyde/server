@@ -55,13 +55,16 @@ public class AttendeeService {
     }
 
     @POST
+    @Path("/vote")
     @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
     @Produces(MediaType.APPLICATION_JSON)
     public Response optionVote(@FormParam("user") String user, @FormParam("vote") String vote, @Context HttpServletRequest req) {
 
         String ip = req.getRemoteAddr();
         //get ip and verify attendee
+
         slidFast.updateGroupVote(vote,ip);
+
 
 
 

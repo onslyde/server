@@ -130,6 +130,22 @@ public class ChatWebSocketHandler extends WebSocketHandler {
                                         "eventObj3.initEvent(\'wtf\', true, true);" +
                                         "document.dispatchEvent(eventObj3);" +
                                         "}}}");
+                try {
+                   getSlidFast().updateGroupVote("wtf",attendeeIP);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }else if (data.equals("nice")){
+                data = ("{\"cdievent\":{\"fire\":function(){" +
+                        "window.eventObj4 = document.createEvent('Event');" +
+                        "eventObj4.initEvent(\'nice\', true, true);" +
+                        "document.dispatchEvent(eventObj4);" +
+                        "}}}");
+                try {
+                   getSlidFast().updateGroupVote("nice",attendeeIP);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
             }else if (data.contains(ACTIVE_OPTIONS)){
                 String options = data.substring(ACTIVE_OPTIONS.length(), data.length());
                 List<String> optionList = Arrays.asList(options.split("\\s*,\\s*"));
@@ -144,12 +160,12 @@ public class ChatWebSocketHandler extends WebSocketHandler {
                     e.printStackTrace();
                 }
 
-                try {
-//                    System.out.println("-slidFast.getCurrentVotes()-count-------" + getSlidFast().getCurrentVotes());
-                    getSlidFast().setActiveOptions(optionList);
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
+//                try {
+////                    System.out.println("-slidFast.getCurrentVotes()-count-------" + getSlidFast().getCurrentVotes());
+//                    getSlidFast().setActiveOptions(optionList);
+//                } catch (Exception e) {
+//                    e.printStackTrace();
+//                }
 
                 data = ClientEvent.createEvent("updateOptions", optionList);
 
@@ -163,11 +179,11 @@ public class ChatWebSocketHandler extends WebSocketHandler {
                     e.printStackTrace();
                 }
 
-                try {
-//                    getSlidFast().getCurrentVotes().add(vote);
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
+//                try {
+////                    getSlidFast().getCurrentVotes().add(vote);
+//                } catch (Exception e) {
+//                    e.printStackTrace();
+//                }
                 data = ClientEvent.clientVote(vote);
             }
 

@@ -92,7 +92,7 @@ public class SlidFast {
         sessionStarted = true;
         int id;
         currentSession = new Session();
-        currentSession.setSessionCode("dsfdsf");
+        currentSession.setSessionCode("pboggs");
         currentSession.setSessionName("atlhtml5");
         currentSession.setUser(userHome.findById(1));
         sessionHome.persist(currentSession);
@@ -104,71 +104,81 @@ public class SlidFast {
     }
 
     public void addGroupOptions(List<String> options){
-        String groupName = "";
-        currentSlideGroup = new SlideGroup();
-        currentSlideGroup.setSession(currentSession);
-        currentSlideGroup.setGroupName(groupName);
-        //currentSlideGroup.set
-        int sgid = sgHome.persist(currentSlideGroup);
+        if(options != null){
+            String groupName = "";
+            currentSlideGroup = new SlideGroup();
+            currentSlideGroup.setSession(currentSession);
+            currentSlideGroup.setGroupName(groupName);
+            //currentSlideGroup.set
+            int sgid = sgHome.persist(currentSlideGroup);
 
-        //SlideGroupOptions sgos = new SlideGroupOptions();
+            //SlideGroupOptions sgos = new SlideGroupOptions();
 
-        SlideGroupOptions sgOption = null;
-        for(String option: options){
-            sgOption = new SlideGroupOptions();
-            sgOption.setName(option);
-            currentSlideGroup.getSlideGroupOptionses().add(sgOption);
-            sgOption.setSlideGroup(sgHome.findById(sgid));
-            //sgOption.setSlideGroupVoteses();
-            sgoHome.persist(sgOption);
-            //on the fly creation, need to set this up in the code
-            groupName += option + ":";
+            SlideGroupOptions sgOption = null;
+            List<String> alloptions = new ArrayList<String>();
+            alloptions.addAll(options);
+            alloptions.add("wtf");
+            alloptions.add("nice");
+                for(String option: alloptions){
+                    sgOption = new SlideGroupOptions();
+                    sgOption.setName(option);
+                    currentSlideGroup.getSlideGroupOptionses().add(sgOption);
+                    sgOption.setSlideGroup(sgHome.findById(sgid));
+                    //sgOption.setSlideGroupVoteses();
+                    sgoHome.persist(sgOption);
+                    //on the fly creation, need to set this up in the code
+                    groupName += option + ":";
+                }
+
+                currentSlideGroup.setGroupName(groupName);
+                //if(sgOption != null){
+                sgHome.merge(currentSlideGroup);
+                //}
+                setActiveOptions(options);
         }
-
-        currentSlideGroup.setGroupName(groupName);
-        //if(sgOption != null){
-        sgHome.merge(currentSlideGroup);
-        //}
-
-
         //sessionHome.persist(currentSession);
     }
 
     public void updateGroupVote(String vote, String attendeeIP){
-        SlideGroupVotes sgv = new SlideGroupVotes();
-        Attendee attendee;
-        boolean merge = false;
-        //manage the attendee object :(
-        if(!ips.containsKey(attendeeIP)){
-            attendee = new Attendee();
-            attendee.setName("unknown");
-            attendee.setIp(attendeeIP);
-            ips.put(attendeeIP, attendee);
-        }else{
-            attendee = ips.get(attendeeIP);
-            merge = true;
-        }
 
-
-        for(SlideGroupOptions option : currentSlideGroup.getSlideGroupOptionses()){
-            if(option.getName().equals(vote)){
-                sgv.setAttendee(attendee);
-                sgv.setSlideGroup(currentSlideGroup);
-                sgv.setSlideGroupOptions(option);
-                //currentSlideGroup.getSlideGroupVoteses().add(sgv);
-                if(merge){
-                    attendeeHome.merge(attendee);
-                }else{
-                    attendeeHome.persist(attendee);
-                }
-
-                slideGroupVotesHome.persist(sgv);
+        if(vote != null){
+            SlideGroupVotes sgv = new SlideGroupVotes();
+            Attendee attendee;
+            boolean merge = false;
+            //manage the attendee object :(
+            if(!ips.containsKey(attendeeIP)){
+                attendee = new Attendee();
+                attendee.setName("unknown");
+                attendee.setIp(attendeeIP);
+                ips.put(attendeeIP, attendee);
+            }else{
+                attendee = ips.get(attendeeIP);
+                merge = true;
             }
-        }
 
-        //currentSession.getSlideGroups().add(currentSlideGroup);
-        //sgHome.persist(currentSlideGroup);
-        sessionHome.merge(currentSession);
+
+            for(SlideGroupOptions option : currentSlideGroup.getSlideGroupOptionses()){
+               if(option != null){
+                if(option.getName().equals(vote)){
+                    sgv.setAttendee(attendee);
+                    sgv.setSlideGroup(currentSlideGroup);
+                    sgv.setSlideGroupOptions(option);
+                    //currentSlideGroup.getSlideGroupVoteses().add(sgv);
+                    if(merge){
+                        attendeeHome.merge(attendee);
+                    }else{
+                        attendeeHome.persist(attendee);
+                    }
+
+                    slideGroupVotesHome.persist(sgv);
+                }
+               }
+            }
+
+            //currentSession.getSlideGroups().add(currentSlideGroup);
+            //sgHome.persist(currentSlideGroup);
+            sessionHome.merge(currentSession);
+        }
     }
 
 

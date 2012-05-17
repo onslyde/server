@@ -270,3 +270,7 @@ formatting
     font-size: 3em;
     z-index: 10;
 }
+
+.nice {
+    background-color: green;
+}

@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+<title>HTML5 Architecture</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+<meta name="viewport" content="width=device-width, minimum-scale=1.0, maximum-scale=1.0"/>
+<!-- enable full-screen mode -->
+<meta name="apple-mobile-web-app-capable" content="yes"/>
+<!-- controls the appearance of the status bar in full-screen mode -->
+<meta name="apple-mobile-web-app-status-bar-style" content="black"/>
+
+<link rel="stylesheet" media="all" href="css/slidfast.css" />
+<link rel="stylesheet" media="all" href="css/slidfastpat.css" />
+
+
+
+<style>
+.placeholder {
+	height: 125px;
+	width: 85%;
+}
+</style>
+</head>
+<body>
+<div class="address">
+     go to onslyde.com/pboggs
+</div>
+
+<div id="controller" style="display:none">
+    <a href="javascript:slidfast.slides.prevSlide();void(0)"><< Previous Slide</a> |
+    <a href="javascript:slidfast.slides.nextSlide();void(0)">Next Slide >></a>
+</div>
+<div id="wtf" class="hide-wtf">
+    WTF!!!
+</div>
+<div id="browser">
+
+    <div id="slide-group-container">
+
+        <section class="slide-group">
+
+            <article class="slide">
+                <h1>Building a Scalable UI or CSS3 Deep Dive</h1>
+                <h2>You Choose the path...</h2>
+                <h3>Twitter: @patrickclay</h3>
+            </article>
+
+        </section>
+
+        <section class="slide-group">
+
+            <article class="slide" data-option="master">
+                <h1>Are you a Developer or a Designer?</h1>
+
+            </article>
+
+            <article class="slide" data-option="Developer">
+                <h1>Developers</h1>
+                <p>I started as a designer. Now I am a Developer.</p>
+                <p>I am better at code.</p>
+            </article>
+
+            <article class="slide" data-option="Designer">
+                <h1>Designers</h1>
+                <p>I started as a designer. Now I am a Developer.</p>
+                <p>The bar was high at my first job. My code skills were better.</p>
+            </article>
+
+        </section>
+
+        <section class="slide-group">
+
+            <article class="slide" data-option="master">
+                <h1>Do you work for a small shop or a large company?</h1>
+
+            </article>
+
+            <article class="slide" data-option="Small">
+                <h1>Mostly Small Shops</h1>
+                <h2>I work for a large one.</h2>
+                <h3>4 Dev teams - 50+ Developers</h3>
+                <h3>4 UI Engineers - Desktop, Mobile, Kiosks</h3>
+                <h3>Tons of commits</h3>
+            </article>
+
+            <article class="slide" data-option="Large">
+                <h1>Large</h1>
+                <h2>I work for a large one.</h2>
+                <h3>4 Dev teams - 50+ Developers</h3>
+                <h3>4 UI Engineers - Desktop, Mobile, Kiosks</h3>
+                <h3>Tons of commits</h3>
+            </article>
+
+        </section>
+
+        <section class="slide-group">
+
+            <article class="slide" data-option="master">
+                <h1>What do you want to talk about first?</h1>
+                <h2>CSS or Modular UI?</h2>
+                <p>They cross a bit here and there, but I can do either one first.</p>
+            </article>
+
+            <article class="slide" data-option="CSS">
+                <h1>CSS it is.</h1>
+            </article>
+
+            <article class="slide" data-option="CSS">
+                <h1>CSS3 - Deep Dive and Some Practical Applications</h1>
+            </article>
+
+            <article class="slide" data-option="CSS">
+                <h2>$10 for the first person who shows me a really great CSS3 border-image implementation.</h2>
+                <h3>It cannot be a picture frame, a shadow or an iOS button...</h3>
+            </article>
+
+            <article class="slide" data-option="CSS">
+                <h1>Go forth, round corners, drop shadows and by all means, apply some gradients</h1>
+                <p><a href="atlhtml5-css.html">GO!</a></p>
+            </article>
+
+            <article class="slide" data-option="Modular UI">
+                <h1>Modular UI it is.</h1>
+                <p><a href="slidesModular.html">GO!</a></p>
+            </article>
+
+
+            <article class="slide" data-option="Modular UI">
+                <h1>Building a Scalable, Modular UI</h1>
+            </article>
+
+            <article class="slide" data-option="Modular UI">
+                <h2>Classitis is good.</h2>
+                <h3>I will back this up... kinda.</h3>
+                <p><a href="atlhtml5-modular.html">GO!</a></p>
+            </article>
+
+        </section>
+
+    </div>
+</div>
+<script type="text/javascript" src="js/slidfast.js" ></script>
+<script type="text/javascript">
+
+    slidfast({
+    touchEnabled: false,
+    slides: true
+    });
+</script>
+<script src="/js/libs/jquery-1.7.1.min.js"></script>
+<script src="/js/libs/jquery.flot.js"></script>
+<script type="text/javascript" src="js/slidedeck.js" ></script>
+</body>
+</html>
