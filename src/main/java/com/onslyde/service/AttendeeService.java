@@ -23,7 +23,7 @@ import java.util.logging.Logger;
 @Stateful
 public class AttendeeService {
     @Inject
-    private Logger log;
+    private Logger log;//
 
     @Inject
     private EntityManager em;

@@ -1,12 +1,11 @@
 package com.onslyde.domain;
 
-// Generated May 15, 2012 3:25:29 PM by Hibernate Tools 3.4.0.CR1
+// Generated Jun 15, 2012 8:41:06 AM by Hibernate Tools 3.4.0.CR1
 
 import javax.ejb.Stateless;
-import javax.enterprise.context.ApplicationScoped;
-import javax.inject.Inject;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import javax.inject.Inject;
 import java.util.logging.Logger;
 
 /**
@@ -14,14 +13,14 @@ import java.util.logging.Logger;
  * @see com.onslyde.domain.User
  * @author Hibernate Tools
  */
-@ApplicationScoped
+@Stateless
 public class UserHome {
 
-    @Inject
-    private Logger log;
+	@Inject
+    private Logger log;//(UserHome.class);
 
-    @PersistenceContext
-    private EntityManager entityManager;
+	@PersistenceContext
+	private EntityManager entityManager;
 
 	public void persist(User transientInstance) {
 		log.fine("persisting User instance");
@@ -29,7 +28,7 @@ public class UserHome {
 			entityManager.persist(transientInstance);
 			log.fine("persist successful");
 		} catch (RuntimeException re) {
-			log.severe("persist failed " + re);
+			log.severe("persist failed" + re);
 			throw re;
 		}
 	}
@@ -40,7 +39,7 @@ public class UserHome {
 			entityManager.remove(persistentInstance);
 			log.fine("remove successful");
 		} catch (RuntimeException re) {
-			log.severe("remove failed " + re);
+			log.severe("remove failed" + re);
 			throw re;
 		}
 	}
@@ -52,19 +51,19 @@ public class UserHome {
 			log.fine("merge successful");
 			return result;
 		} catch (RuntimeException re) {
-			log.severe("merge failed " + re);
+			log.severe("merge failed" + re);
 			throw re;
 		}
 	}
 
 	public User findById(Integer id) {
-		//log.fine("getting User instance with id: " + id);
+		log.fine("getting User instance with id: " + id);
 		try {
 			User instance = entityManager.find(User.class, id);
-			//log.fine("get successful");
+			log.fine("get successful");
 			return instance;
 		} catch (RuntimeException re) {
-			//log.severe("get failed " + re);
+			log.severe("get failed" + re);
 			throw re;
 		}
 	}

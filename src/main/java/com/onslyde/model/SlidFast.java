@@ -92,9 +92,11 @@ public class SlidFast {
         sessionStarted = true;
         int id;
         currentSession = new Session();
-        currentSession.setSessionCode("pboggs");
+        currentSession.setSessionCode("html5");
         currentSession.setSessionName("atlhtml5");
-        currentSession.setUser(userHome.findById(1));
+        currentSession.setUser(userHome.findById(3));
+        currentSession.setCreated(new Date());
+        currentSession.setStart(new Date());
         sessionHome.persist(currentSession);
         //todo hack to sync objects across threads for now
         slidFastEventSrc.fire(this);
@@ -109,6 +111,7 @@ public class SlidFast {
             currentSlideGroup = new SlideGroup();
             currentSlideGroup.setSession(currentSession);
             currentSlideGroup.setGroupName(groupName);
+            currentSlideGroup.setCreated(new Date());
             //currentSlideGroup.set
             int sgid = sgHome.persist(currentSlideGroup);
 
@@ -150,6 +153,7 @@ public class SlidFast {
                 attendee = new Attendee();
                 attendee.setName("unknown");
                 attendee.setIp(attendeeIP);
+                attendee.setCreated(new Date());
                 ips.put(attendeeIP, attendee);
             }else{
                 attendee = ips.get(attendeeIP);
@@ -163,6 +167,7 @@ public class SlidFast {
                     sgv.setAttendee(attendee);
                     sgv.setSlideGroup(currentSlideGroup);
                     sgv.setSlideGroupOptions(option);
+                    sgv.setVoteTime(new Date());
                     //currentSlideGroup.getSlideGroupVoteses().add(sgv);
                     if(merge){
                         attendeeHome.merge(attendee);
