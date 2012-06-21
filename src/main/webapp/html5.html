@@ -1,0 +1,200 @@
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title>HTML5</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <meta name="viewport" content="width=device-width, minimum-scale=1.0, maximum-scale=1.0"/>
+    <!-- enable full-screen mode -->
+    <meta name="apple-mobile-web-app-capable" content="yes"/>
+    <!-- controls the appearance of the status bar in full-screen mode -->
+    <meta name="apple-mobile-web-app-status-bar-style" content="black"/>
+
+    <link rel="stylesheet" media="all" href="css/slidfast.css" />
+    <link rel="stylesheet" media="all" href="css/slidfastpat.css" />
+
+
+
+    <style>
+        .placeholder {
+            height: 125px;
+            width: 85%;
+        }
+    </style>
+</head>
+<body>
+<div class="address">
+    go to onslyde.com/html5
+</div>
+
+<div id="controller" style="display:none">
+    <a href="javascript:slidfast.slides.prevSlide();void(0)"><< Previous Slide</a> |
+    <a href="javascript:slidfast.slides.nextSlide();void(0)">Next Slide >></a>
+</div>
+<div id="wtf" class="hide-wtf">
+    WTF!!!
+</div>
+<div id="browser">
+
+    <div id="slide-group-container">
+
+        <section class="slide-group">
+
+            <article class="slide">
+                <h1>Hands on HTML5</h1>
+                <h2>Toby Ho & Kevin Bandy</h2>
+            </article>
+
+            <article class="slide">
+                <h1>Goals</h1>
+                <ul>
+                    <li>What is HTML5?</li>
+                    <li>Code a web page</li>
+                </ul>
+            </article>
+
+            <article class="slide">
+                <h1>History</h1>
+                <ul>
+                    <li>...</li>
+                </ul>
+            </article>
+
+            <article class="slide">
+                <h1>What's in it?</h1>
+                <img src="features.png">
+            </article>
+
+            <article class="slide">
+                <h1>What we'll cover</h1>
+                <ul>
+                    <li>Doctype</li>
+                    <li>New HTML5 Elements/Tags</li>
+                    <li>Gradients</li>
+                    <li>Rounded corners</li>
+                    <li>Drop shadows</li>
+                    <li>rgda colors</li>
+                    <li>Media queries</li>
+                    <li>Web Fonts</li>
+                </ul>
+            </article>
+
+            <article class="slide">
+                <h1>Fallback Techniques</h1>
+                <ul>
+                    <li>Graceful degradation</li>
+                    <li>Progressive Enhancement</li>
+                    <li>Polyfills</li>
+                </ul>
+            </article>
+
+            <article class="slide">
+                <h1>Things we won't cover</h1>
+                <ul>
+                    <li>CSS frameworks</li>
+                    <li>Frameworks of any other kind</li>
+                    <li>CSS preprocessors</li>
+                </ul>
+            </article>
+
+            <article class="slide">
+                <h1>Let's Code!</h1>
+                <p>(Toby rolls up his sleeves)</p>
+            </article>
+
+            <article class="slide">
+                <h1>Doctype</h1>
+            </article>
+
+            <article class="slide" data-option="master">
+                <h1>Which doctype do you use?</h1>
+                <ul>
+                    <li>HTML 5</li>
+                    <li>HTML 4 Strict</li>
+                    <li>XHTML Strict</li>
+                    <li>What's a doctype?</li>
+                </ul>
+            </article>
+
+            <article class="slide">
+                <h1>The HTML 5 Doctype</h1>
+                <ul>
+                    <li>&lt;!doctype html&gt;</li>
+                    <li>Works in all browsers</li>
+                </ul>
+            </article>
+
+            <article class="slide">
+                <h1>New Semantic Elements</h1>
+                <ul>
+                    <li>&lt;section&gt;</li>
+                    <li>&lt;nav&gt;</li>
+                </ul>
+            </article>
+
+        </section>
+
+        <section class="slide-group">
+
+            <article class="slide" data-option="master">
+                <h1>Do you use a Doctype?</h1>
+            </article>
+
+            <article class="slide" data-option="Yes">
+                <h1>Doctype. Good for you.</h1>
+            </article>
+
+            <article class="slide" data-option="doctype?">
+                <h1>Quirksmode FTW.</h1>
+            </article>
+
+        </section>
+
+        <section class="slide-group">
+
+            <article class="slide" data-option="master">
+                <h1>Which doctype do you use?</h1>
+            </article>
+
+            <article class="slide" data-option="HTML 4 Transitional">
+                <h1></h1>
+            </article>
+
+            <article class="slide" data-option="XHTML Strict">
+                <h1></h1>
+            </article>
+
+        </section>
+
+        <section class="slide-group">
+
+            <article class="slide" data-option="master">
+                <h1>Font Choice: Serif or Sans-serif</h1>
+            </article>
+
+            <article class="slide" data-option="Serif">
+                <h1>Serif</h1>
+            </article>
+
+            <article class="slide" data-option="Sans-Serif">
+                <h1>Sans-Serif</h1>
+            </article>
+
+        </section>
+
+    </div>
+</div>
+<script type="text/javascript" src="/js/slidfast.js" ></script>
+<script type="text/javascript">
+
+    slidfast({
+        touchEnabled: false,
+        slides: true
+    });
+</script>
+<script src="/js/libs/jquery-1.7.1.min.js"></script>
+<script src="/js/libs/jquery.flot.js"></script>
+<script type="text/javascript" src="/js/slidedeck.js" ></script>
+</body>
+</html>
