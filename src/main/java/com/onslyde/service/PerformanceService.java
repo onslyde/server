@@ -77,8 +77,8 @@ public class PerformanceService {
         builder = Response.ok();
 
         //return builder.build();
-        return "<a href=\"/rest/performance/report?uuid=" + random.toString() + "\">Go here for report</a>";
-    }
+        return "/rest/performance/report?uuid=" + random.toString();
+}
 
 
     @GET
@@ -97,7 +97,7 @@ public class PerformanceService {
             while ((ln = in.readLine()) != null)
                 all += ln;
             in.close();
-            System.out.println(all);
+            //System.out.println(all);
         } catch (FileNotFoundException e) {
             e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
         } catch (IOException e) {

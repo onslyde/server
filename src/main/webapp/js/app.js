@@ -81,3 +81,48 @@ function registerMember(memberData) {
         }
     });
 }
+
+function runReport(reportData) {
+    //clear existing  msgs
+    // $('span.invalid').remove();
+    //$('span.success').remove();
+
+    $.get("/rest/performance/go", { url: reportData.url},
+        function(data){
+            alert("Data Loaded: " + data);
+        });
+
+
+//    $.get({
+//        url: 'rest/performance/go',
+//        contentType: "application/json",
+//        dataType: "json",
+//        type: "GET",
+//        data: JSON.stringify(reportData),
+//        success: function(data) {
+//            console.log("Report ran");
+//
+//            //clear input fields
+//            $('#report')[0].reset();
+//
+//            //mark success on the registration form
+//            $('#formMsgs').append($('<span class="alert alert-success">Coming up!</span>'));
+//
+//            //updateMemberTable();
+//        },
+//        error: function(error) {
+//            if ((error.status == 409) || (error.status == 400)) {
+//                //console.log("Validation error registering user!");
+//
+//                var errorMsg = $.parseJSON(error.responseText);
+//
+//                $.each(errorMsg, function(index, val) {
+//                    $('<span class="invalid">' + val + '</span>').insertAfter($('#' + index));
+//                });
+//            } else {
+//                //console.log("error - unknown server issue");
+//                $('#formMsgs').append($('<span class="invalid">Unknown server error</span>'));
+//            }
+//        }
+
+}
