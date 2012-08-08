@@ -10,16 +10,14 @@ import javax.ws.rs.*;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.UnsupportedEncodingException;
+import java.io.*;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLConnection;
 import java.net.URLDecoder;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 @Path("/performance")
 @RequestScoped
@@ -28,10 +26,10 @@ public class PerformanceService {
 
     @GET
     @Path("/go")
-    //@Consumes(MediaType.APPLICATION_FORM_URLENCODED)
-    @Produces(MediaType.APPLICATION_JSON)
-    public Response optionVote(@QueryParam("url") String url) {
+    @Produces("text/html")
+    public String go(@QueryParam("url") String url) {
         String param1AfterDecoding = "";
+        UUID random = UUID.randomUUID();
 //        try {
 //            param1AfterDecoding = URLDecoder.decode(url, "UTF-8");
 //            System.out.println(param1AfterDecoding);
@@ -57,28 +55,55 @@ public class PerformanceService {
         {
 
             for(int i = 0; i < 5; i++) {
-                Process p=Runtime.getRuntime().exec("phantomjs --disk-cache=no confess-mod.js "+ url +" performance csv");
+                Process p=Runtime.getRuntime().exec("phantomjs --disk-cache=no confess-mod.js "+ url +" performance json " + random.toString() );
                 //p.waitFor();
-                //BufferedReader reader=new BufferedReader(new InputStreamReader(p.getInputStream()));
-                //String line=reader.readLine();
-                //while(line!=null)
-                //{
-                   // System.out.println(line);
-                    //line=reader.readLine();
-                //}
+                BufferedReader reader=new BufferedReader(new InputStreamReader(p.getInputStream()));
+                String line=reader.readLine();
+                while(line!=null)
+                {
+                    System.out.println(line);
+                    line=reader.readLine();
+                }
             }
         }
         catch(IOException e1) {}
         //catch(InterruptedException e2) {}
 
-        System.out.println("Done");
+            System.out.println("Done");
         }else{
             System.out.println("Bad URL");
+            return "failed, sorry! check the url";
         }
         builder = Response.ok();
 
+        //return builder.build();
+        return "<a href=\"/rest/performance/report?uuid=" + random.toString() + "\">Go here for report</a>";
+    }
 
-        return builder.build();
+
+    @GET
+    @Path("/report")
+    @Produces(MediaType.APPLICATION_JSON)
+    public String report(@QueryParam("uuid") String uuid) {
+
+        Response.ResponseBuilder builder = null;
+
+        builder = Response.ok();
+        String all = "";
+        try {
+            BufferedReader in = new BufferedReader(new FileReader("/Users/wesleyhales/www/jboss-as-7.1.1.Final/confess-report-" + uuid + ".json"));
+            String ln;
+
+            while ((ln = in.readLine()) != null)
+                all += ln;
+            in.close();
+            System.out.println(all);
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
+        } catch (IOException e) {
+            e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
+        }
+        return all;
     }
 
 
