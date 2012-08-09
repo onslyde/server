@@ -55,25 +55,36 @@
                         <p>Enter a URL.</p>
                     </div>
                     <div class="span6 offset6">
-                        <form name="report" id="report" class="form-horizontal">
+                        <form name="reportform" id="reportform" class="form-horizontal">
                             <fieldset class="control-group">
                                 <legend>Get a report:</legend>
                                 <div id="formMsgs"></div>
-                                <div>
+                                <div id="formProgress"></div>
+                                <div id="formInputs">
                                     <label for="url">URL:</label>
                                     <input type="text" name="url" id="url" placeholder="http://www.whatever.com" required autofocus/>
-                                </div>
-                                <div style="padding: 10px;" class="span5">
-                                    <input type="submit" name="Report" id="reportbutton" value="Report!" class="btn btn-primary" style="float:right">
+                                    <input type="checkbox" name="cachedCheckbox" id="cachedCheckbox" value="true">
+                                    <br/>
+                                    <a href="" id="reportlink" style="display:none">Pick it up!</a>
+                                    <div style="padding: 10px;" class="span5">
+                                        <input type="submit" name="Report" id="reportbutton" value="Report!" class="btn btn-primary" style="float:right">
+                                    </div>
                                 </div>
                             </fieldset>
                         </form>
                     </div>
+
                 </div>
             </div>
         </div><!--/span-->
     </div><!--/row-->
+    <div class="row-fluid" >
+        <div class="span12">
+            <div id="report">
 
+            </div>
+        </div>
+    </div>
     <hr>
 
     <footer>
@@ -99,24 +110,102 @@
 <script src="bootstrap/js/bootstrap-carousel.js"></script>
 <script src="bootstrap/js/bootstrap-typeahead.js"></script>
 
+<script type="text/javascript">
+    var timer, $this = $('.progress .bar'),per = 50;
+    $("#formProgress").ajaxStart(function() {
+        $('#formInputs').fadeOut(200);
+        $(this).html('<div class=\"progress progress-striped active\"><div class=\"bar\" style=\"width: 50%;\"></div></div>').fadeIn(200);
+        timer = setTimeout(function(){
+            per += 5;
+            $this.attr('style','width:'+ per +'%');
+        },1000)
+
+    }).ajaxStop(function() {
+                clearTimeout(timer);
+        $(this).html('<div class=\"progress progress-striped active\"><div class=\"bar\" style=\"width: 100%;\"></div></div>').fadeOut(200);
+                $('#formInputs').fadeIn(200);
+    });
+
+    function updateProgress(ele,timer){
+
+    }
+</script>
 <script type="text/javascript" src="js/app.js"></script>
 <script type="text/javascript">
 
     $( document ).ready( function() {
 
         //Register an event listener on the sumbit action
-        $('#report').submit(function(event) {
+        $('#reportform').submit(function(event) {
             event.preventDefault();
-
+            var reportType = "cached";
             var reportData = $(this).serializeObject();
 
             if( reportData.reportbutton ) {
                 delete reportData.reportbutton;
             }
+
+            if(!reportData.cachedCheckbox){
+                reportData.cachedCheckbox = false;
+                reportType = "noncached";
+            }
             console.log(reportData);
-            runReport(reportData);
+
+            $.get("/rest/performance/go", { url: reportData.url, cached: reportData.cachedCheckbox},
+                function(data){
+                    //$("#reportlink").attr('href',data).show();
+                    if(data === "#fail"){
+                        $("#formProgress").hide();
+                        alert('Bad URL yo. Make sure you\'re using http\:\/\/ at the front.');
+                    }
+                    $.getJSON(data, function(json) {
+                        $('<h2>'+ reportData.url +'</h2><h3>' + reportType + '</h3><a href=\"' + data +'\">JSON Data</a>').appendTo('#report');
+                        buildReport(json);
+                    });
+                });
         });
 
+        function buildReport(reportjson){
+            var rows = [], gotem = false;
+            var $header = $('<thead></thead>');
+            var $table = $('<table class=\"table table-bordered table-striped\"></table>');
+            var errorIdx = 0;
+            for(obj in reportjson){
+                var thisreport = reportjson[obj];
+                if(!gotem){
+                for(var key in thisreport)
+                {
+                    if(thisreport.hasOwnProperty(key))
+                    {
+                        //console.log(key);
+                        if(key !== 'timeStamp'){
+                            var htext = key.replace(/([A-Z])/g, " $1");
+                            $header.append('<th>' + (htext.charAt(0).toUpperCase() + htext.slice(1)) + '</th>');
+                        }
+                    }
+                }
+                    gotem = true;
+                    $table.append($header);
+                }
+                var $row = $('<tr></tr>'),thisrow;
+                for(var key2 in thisreport){
+                    if(key2 === 'errors'){
+                        var rowWithErrors = $('<td>'+ thisreport[key2].length + ' JavaScript Errors</td>');
+                        for(error in thisreport[key2]){
+                            rowWithErrors.append('<div id=\"js-errors' + errorIdx + '\" class=\"js-error\" style=\"display:none\">' + thisreport[key2][error] + '</div>');
+                            errorIdx++;
+                        }
+                        thisrow = $row.append(rowWithErrors);
+                    }else if(key2 !== 'timeStamp'){
+                        thisrow = $row.append('<td>'+ thisreport[key2] +'</td>');
+                    }
+
+                }
+                $table.append(thisrow).appendTo('#report');
+            }
+            //$('<table></table>').append(header).append(rows.join('')).appendTo('#report');
+            //("#report").html(reportjson[0]);
+        }
 
 
     });
