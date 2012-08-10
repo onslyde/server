@@ -1,0 +1,62 @@
+package com.onslyde.jms;
+
+import com.onslyde.service.PerformanceService;
+
+import javax.inject.Inject;
+import javax.jms.Message;
+
+import javax.ejb.ActivationConfigProperty;
+import javax.ejb.MessageDriven;
+import javax.jms.JMSException;
+import javax.jms.MessageListener;
+import javax.jms.TextMessage;
+import java.util.logging.Logger;
+
+/**
+ * Created with IntelliJ IDEA.
+ * User: wesleyhales
+ * Date: 8/10/12
+ * Time: 8:02 AM
+ * To change this template use File | Settings | File Templates.
+ */
+@MessageDriven(name = "PerfMDB")
+//, activationConfig = {
+//        @ActivationConfigProperty(propertyName = "destinationType", propertyValue = "javax.jms.Queue"),
+//        @ActivationConfigProperty(propertyName = "destination", propertyValue = "queue/test"),
+//        @ActivationConfigProperty(propertyName = "acknowledgeMode", propertyValue = "Auto-acknowledge"),
+//        @ActivationConfigProperty(propertyName = "user", propertyValue = "quickstartUser"),
+//        @ActivationConfigProperty(propertyName = "password", propertyValue = "quickstartPassword")})
+public class PerfMDB implements MessageListener {
+
+    private final static Logger LOGGER = Logger.getLogger(PerfMDB.class.toString());
+//    @Inject
+//    PerformanceService perfService;
+    /**
+     * @see MessageListener#onMessage(Message)
+     */
+    public void onMessage(Message rcvMessage) {
+//        TextMessage msg = null;
+//        String jsonURL = null;
+//        try {
+//            if (rcvMessage instanceof TextMessage) {
+//                msg = (TextMessage) rcvMessage;
+//                System.out.println("---------");
+//                perfService.runTest(msg.getText());
+
+//                while(perfService.runTest(msg.getText()) == null){
+//                    try {
+//                        Thread.sleep(30000);
+//                    } catch (InterruptedException e) {
+//                        e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
+//                    }
+//                }
+//                LOGGER.info("Received Message: " + msg.getText());
+//            } else {
+//                LOGGER.warning("Message of wrong type: "
+//                        + rcvMessage.getClass().getName());
+//            }
+//        } catch (JMSException e) {
+//            throw new RuntimeException(e);
+//        }
+    }
+}
