@@ -154,14 +154,38 @@
             $.get("/rest/performance/go", { url: reportData.url, cached: reportData.cachedCheckbox},
                 function(data){
                     //$("#reportlink").attr('href',data).show();
+                    console.log('data',data);
                     if(data === "#fail"){
                         $("#formProgress").hide();
                         alert('Bad URL yo. Make sure you\'re using http\:\/\/ at the front.');
                     }
-                    $.getJSON(data, function(json) {
-                        $('<h2>'+ reportData.url +'</h2><h3>' + reportType + '</h3><a href=\"' + data +'\">JSON Data</a>').appendTo('#report');
-                        buildReport(json);
-                    });
+                    data = $.parseJSON(data);
+                    $('<h3>The report for '+reportData.url+' is #' + data.position + ' in line. It will show up here when it\'s ready.</h3>').appendTo('#report').fadeOut(9000);
+                    //var urlcheck = setInterval(function(){
+                        //if(data){
+                    setupReport();
+
+                    function setupReport(){
+                        setTimeout(function(){
+                            //$('<h2><a href=\"\/rest\/performance\/report\?uuid\='+ data.uuid +'\">Get Your Report</a></h2>').appendTo('#report');
+                                $.getJSON('\/rest\/performance\/report\?uuid\='+ data.uuid, function(json) {
+                                    console.log('json',json);
+                                    if(json === "#fail"){
+                                        setupReport();
+                                    }else{
+                                        $('<h2>'+ reportData.url +'</h2><h3>' + reportType + '</h3><a href=\"' + data +'\">JSON Data</a>').appendTo('#report');
+                                        buildReport(json);
+                                    }
+                                });
+                        },data.position * 25000);
+                    }
+                        //}
+                    //},10);
+
+//                    $.getJSON(data, function(json) {
+//                        $('<h2>'+ reportData.url +'</h2><h3>' + reportType + '</h3><a href=\"' + data +'\">JSON Data</a>').appendTo('#report');
+//                        buildReport(json);
+//                    });
                 });
         });
 

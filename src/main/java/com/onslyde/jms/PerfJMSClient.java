@@ -38,6 +38,8 @@ public class PerfJMSClient {
     MessageConsumer consumer = null;
     Destination destination = null;
 
+    private int incomingMsgs = 0;
+
     Context context = null;
     final Properties env = new Properties();
 
@@ -72,15 +74,15 @@ public class PerfJMSClient {
         } catch (Exception e) {
         log.severe(e.getMessage());
         throw e;
-//        } finally {
-//            if (context != null) {
-//                context.close();
-//            }
-//
-//            // closing the connection takes care of the session, producer, and consumer
-//            if (connection != null) {
-//                connection.close();
-//            }
+        } finally {
+            if (context != null) {
+                context.close();
+            }
+
+            // closing the connection takes care of the session, producer, and consumer
+            if (connection != null) {
+                connection.close();
+            }
         }
     }
 
