@@ -55,7 +55,7 @@ public class PerfQueueManager {
                         }
 
                     }
-                }, 5000, 5000);
+                }, 10000, 10000);
             }
         }
     }
@@ -167,6 +167,7 @@ public class PerfQueueManager {
                 for(int i = 0; i <= 5; i++) {
                     Process p=Runtime.getRuntime().exec("phantomjs --disk-cache=no confess-mod.js "+ url +" "+ taskName +" json " + random );
                     p.waitFor();
+                    Thread.sleep(2000);
 //                    BufferedReader reader=new BufferedReader(new InputStreamReader(p.getInputStream()));
 //                    String line=reader.readLine();
 //                    while(line!=null)

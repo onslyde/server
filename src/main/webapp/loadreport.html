@@ -34,11 +34,10 @@
                 <span class="icon-bar"></span>
                 <span class="icon-bar"></span>
             </a>
-            <a class="brand" href="#">Load Report</a>
+            <a class="brand" href="#">getsome.js</a>
             <div class="nav-collapse">
                 <ul class="nav">
-                    <li class="active"><a href="#">Home</a></li>
-                    <li><a href="http://twitter.com/wesleyhales">Wesley</a></li>
+                    <li class="active"><a href="http://twitter.com/wesleyhales">By Wesley</a></li>
                 </ul>
             </div><!--/.nav-collapse -->
         </div>
@@ -51,21 +50,23 @@
             <div class="hero-unit">
                 <div class="row-fluid">
                     <div class="span6">
-                        <h1>Yo</h1>
-                        <p>Enter a URL.</p>
+                        <h1>getsome.js</h1>
+                        <p>Enter a URL and let PhantomJS report all the data you get in Chrome developer tools or Firebug.
+                        You can use <a href="#">this script</a> in your automated build process (bamboo, jenkins, whatever).
+                        It gives you a baseline for pushes to dev/prod to ensure you're delivering better performance.
+                        <br/>
+                        Thanks to <a href="https://github.com/jamesgpearce/confess/">James Pierce for confess.js</a> which this is based off of.</p>
                     </div>
                     <div class="span6 offset6">
                         <form name="reportform" id="reportform" class="form-horizontal">
                             <fieldset class="control-group">
-                                <legend>Get a report:</legend>
+                                <!--<legend style="margin: 0">Get a report:</legend>-->
                                 <div id="formMsgs"></div>
-                                <div id="formProgress"></div>
                                 <div id="formInputs">
                                     <label for="url">URL:</label>
                                     <input type="text" name="url" id="url" placeholder="http://www.whatever.com" required autofocus/>
-                                    <input type="checkbox" name="cachedCheckbox" id="cachedCheckbox" value="true">
-                                    <br/>
-                                    <a href="" id="reportlink" style="display:none">Pick it up!</a>
+                                    <label for="cachedCheckbox">Cached? <input type="checkbox" name="cachedCheckbox" id="cachedCheckbox" value="true"></label>
+
                                     <div style="padding: 10px;" class="span5">
                                         <input type="submit" name="Report" id="reportbutton" value="Report!" class="btn btn-primary" style="float:right">
                                     </div>
@@ -81,14 +82,15 @@
     <div class="row-fluid" >
         <div class="span12">
             <div id="report">
-
+                <div id="formProgress"></div>
+                <div class="progress progress-striped active" style="display:none"><div class="bar" style="width: 10%;"></div></div>
             </div>
         </div>
     </div>
     <hr>
 
     <footer>
-        <p class="pull-right">&copy; onslyde.com 2012</p>
+        <!--<p class="pull-right">&copy; onslyde.com 2012</p>-->
     </footer>
 
 </div><!--/.fluid-container-->
@@ -111,19 +113,15 @@
 <script src="bootstrap/js/bootstrap-typeahead.js"></script>
 
 <script type="text/javascript">
-    var timer, $this = $('.progress .bar'),per = 50;
+    var timer, $this = $('.bar'),per = 40;
     $("#formProgress").ajaxStart(function() {
-        $('#formInputs').fadeOut(200);
-        $(this).html('<div class=\"progress progress-striped active\"><div class=\"bar\" style=\"width: 50%;\"></div></div>').fadeIn(200);
-        timer = setTimeout(function(){
-            per += 5;
-            $this.attr('style','width:'+ per +'%');
-        },1000)
+        //$('#formInputs').fadeOut(200);
+        $('#report .progress-striped').fadeIn(200);
+
 
     }).ajaxStop(function() {
-                clearTimeout(timer);
-        $(this).html('<div class=\"progress progress-striped active\"><div class=\"bar\" style=\"width: 100%;\"></div></div>').fadeOut(200);
-                $('#formInputs').fadeIn(200);
+
+                //$('#formInputs').fadeIn(200);
     });
 
     function updateProgress(ele,timer){
@@ -158,26 +156,32 @@
                     if(data === "#fail"){
                         $("#formProgress").hide();
                         alert('Bad URL yo. Make sure you\'re using http\:\/\/ at the front.');
-                    }
+                    }else{
+                    timer = setInterval(function(){
+                        per += 5;
+                        $('#report .progress-striped .bar').attr('style','width:'+ per +'%');
+                    },1000);
                     data = $.parseJSON(data);
-                    $('<h3>The report for '+reportData.url+' is #' + data.position + ' in line. It will show up here when it\'s ready.</h3>').appendTo('#report').fadeOut(9000);
+                    $('<h3>The report for '+reportData.url+' is <span style=\"color:blue\">#' + data.position + '</span> in line. It will show up below when it\'s ready.</h3>').appendTo('#report').fadeOut(9000);
                     //var urlcheck = setInterval(function(){
                         //if(data){
                     setupReport();
-
+                    //var position = data.position;
                     function setupReport(){
                         setTimeout(function(){
                             //$('<h2><a href=\"\/rest\/performance\/report\?uuid\='+ data.uuid +'\">Get Your Report</a></h2>').appendTo('#report');
                                 $.getJSON('\/rest\/performance\/report\?uuid\='+ data.uuid, function(json) {
-                                    console.log('json',json);
-                                    if(json === "#fail"){
+                                    console.log('json',json.length);
+                                    if(json === "#fail" || json.length < 5){
                                         setupReport();
                                     }else{
-                                        $('<h2>'+ reportData.url +'</h2><h3>' + reportType + '</h3><a href=\"' + data +'\">JSON Data</a>').appendTo('#report');
+                                        clearInterval(timer);
+                                        $('#formProgress').html('<div class=\"progress progress-striped active\"><div class=\"bar\" style=\"width: 100%;\"></div></div>').fadeOut(200);
+                                        $('<h2>'+ reportData.url +'</h2><h3>' + reportType + '</h3><a href=\"\/rest\/performance\/report\?uuid\='+ data.uuid +'\">JSON Data</a>').appendTo('#report');
                                         buildReport(json);
                                     }
                                 });
-                        },data.position * 25000);
+                        },25000);
                     }
                         //}
                     //},10);
@@ -186,6 +190,7 @@
 //                        $('<h2>'+ reportData.url +'</h2><h3>' + reportType + '</h3><a href=\"' + data +'\">JSON Data</a>').appendTo('#report');
 //                        buildReport(json);
 //                    });
+                    }
                 });
         });
 
@@ -202,7 +207,7 @@
                     if(thisreport.hasOwnProperty(key))
                     {
                         //console.log(key);
-                        if(key !== 'timeStamp'){
+                        if(key !== 'timeStamp' && key !== 'taskName' && key !== 'phantomCacheEnabled'){
                             var htext = key.replace(/([A-Z])/g, " $1");
                             $header.append('<th>' + (htext.charAt(0).toUpperCase() + htext.slice(1)) + '</th>');
                         }
@@ -213,6 +218,7 @@
                 }
                 var $row = $('<tr></tr>'),thisrow;
                 for(var key2 in thisreport){
+                    //console.log(key2);
                     if(key2 === 'errors'){
                         var rowWithErrors = $('<td>'+ thisreport[key2].length + ' JavaScript Errors</td>');
                         for(error in thisreport[key2]){
@@ -220,7 +226,7 @@
                             errorIdx++;
                         }
                         thisrow = $row.append(rowWithErrors);
-                    }else if(key2 !== 'timeStamp'){
+                    }else if(key2 !== 'timeStamp' && key2 !== 'taskName' && key2 !== 'phantomCacheEnabled'){
                         thisrow = $row.append('<td>'+ thisreport[key2] +'</td>');
                     }
 
