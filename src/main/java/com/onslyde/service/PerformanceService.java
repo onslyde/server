@@ -115,14 +115,15 @@ public class PerformanceService implements Serializable{
     public String report(@QueryParam("uuid") String uuid) {
 
         Response.ResponseBuilder builder = null;
-
+        String location = "/Users/wesleyhales/www/jboss-as-7.1.1.Final/reports/confess-report-";
+//        String location = "/www/jboss-as-7.1.1.Final/reports/confess-report-";
         builder = Response.ok();
         String all = "";
         try {
             BufferedReader in;
-            File locatedFile = new File("/Users/wesleyhales/www/jboss-as-7.1.1.Final/reports/confess-report-" + uuid + ".json");
+            File locatedFile = new File(location + uuid + ".json");
             if(locatedFile.exists()) {
-                in = new BufferedReader(new FileReader("/Users/wesleyhales/www/jboss-as-7.1.1.Final/reports/confess-report-" + uuid + ".json"));
+                in = new BufferedReader(new FileReader(location + uuid + ".json"));
             }else{
                 return "#fail";
             }

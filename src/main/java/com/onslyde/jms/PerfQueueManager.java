@@ -142,7 +142,7 @@ public class PerfQueueManager {
                 url = message.getString("url");
                 taskName = message.getString("taskName");
                 random = message.getString("uuid");
-                System.out.println("Received message with content " + message + "---" + incomingMsgs);
+                System.out.println("Received request for: " + url + "--" + taskName + "--" + random + "--" + incomingMsgs);
                 //tempMap = ((HashMap)message.getObject("tempMap"));
                 incomingMsgs--;
 
