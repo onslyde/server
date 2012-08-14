@@ -121,6 +121,10 @@
                 reportData.cachedCheckbox = false;
                 reportType = "noncached";
             }
+
+            if(reportData.url.indexOf('http://') === -1){
+                reportData.url = 'http://' + reportData.url;
+            }
 //            console.log(reportData);
 
             $.get("/rest/performance/go", { url: reportData.url, cached: reportData.cachedCheckbox},
