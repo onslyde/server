@@ -113,7 +113,7 @@ public class PerformanceService implements Serializable{
     @Path("/report")
     @Produces(MediaType.APPLICATION_JSON)
     public String report(@QueryParam("uuid") String uuid) {
-
+        //todo - check to see what this uuid position is and multiply timeout
         Response.ResponseBuilder builder = null;
         //the following location string is dependent on where you start the server (from the actual directory the command is ran from).
         String location = "/Users/wesleyhales/www/jboss-as-7.1.1.Final/reports/confess-report-";

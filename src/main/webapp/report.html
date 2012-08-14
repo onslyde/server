@@ -87,30 +87,28 @@
 <script src="bootstrap/js/bootstrap-typeahead.js"></script>
 
 <script type="text/javascript">
-    var timer, $this = $('.bar');
+    var $this = $('.bar');
     $("#formProgress").ajaxStart(function() {
         //$('#formInputs').fadeOut(200);
         $('#report .progress-striped').fadeIn(200);
 
 
-    }).ajaxStop(function() {
+    });//.ajaxStop(function() {
 
                 //$('#formInputs').fadeIn(200);
-    });
+    //});
 
-    function updateProgress(ele,timer){
-
-    }
 </script>
 <script type="text/javascript" src="js/app.js"></script>
 <script type="text/javascript">
 
     $( document ).ready( function() {
-
+        var bartimer;
         //Register an event listener on the sumbit action
         $('#reportform').submit(function(event) {
             event.preventDefault();
             var reportType = "cached";
+
             var reportData = $(this).serializeObject();
 
             if( reportData.reportbutton ) {
@@ -129,7 +127,6 @@
 
             $.get("/rest/performance/go", { url: reportData.url, cached: reportData.cachedCheckbox},
                 function(data){
-                    //$("#reportlink").attr('href',data).show();
                     $("#reportbutton").attr("disabled", "disabled");
 //                    console.log('data',data);
                     if(data === "#fail"){
@@ -138,41 +135,44 @@
                         alert('Bad URL yo. Make sure you\'re using http\:\/\/ at the front.');
                     }else{
                     var per = 10;
-                    timer = setInterval(function(){
+                        bartimer = window.setInterval(function(){
                         per += 1;
                         $('#report .progress-striped .bar').attr('style','width:'+ per +'%');
                     },2000);
+
                     data = $.parseJSON(data);
+//                    console.log('parsedjson',data);
                     $('<h3>The report for '+reportData.url+' is <span style=\"color:blue\">#' + data.position + '</span> in line. It will show up below when it\'s ready.</h3>').prependTo('#report').fadeOut(9000);
                     //var urlcheck = setInterval(function(){
                         //if(data){
-                    setupReport();
-                    //var position = data.position;
-                    function setupReport(){
-                        setTimeout(function(){
-                            //$('<h2><a href=\"\/rest\/performance\/report\?uuid\='+ data.uuid +'\">Get Your Report</a></h2>').appendTo('#report');
-                                $.getJSON('\/rest\/performance\/report\?uuid\='+ data.uuid, function(json) {
-//                                    console.log('json',json.length);
-                                    if(json === "#fail" || json.length < 5){
-                                        setupReport();
-                                    }else{
-                                        hideProgress();
-                                        $("#reportbutton").removeAttr("disabled");
-                                        clearInterval(timer);
-                                        $('#formProgress').html('<div class=\"progress progress-striped active\"><div class=\"bar\" style=\"width: 100%;\"></div></div>').fadeOut(200);
-                                        $('<h2>'+ reportData.url +'</h2><h3>' + reportType + '</h3><a href=\"\/rest\/performance\/report\?uuid\='+ data.uuid +'\">JSON Data</a>').appendTo('#report');
-                                        buildReport(json);
-                                    }
-                                });
-                        },25000);
-                    }
-                        //}
-                    //},10);
 
-//                    $.getJSON(data, function(json) {
-//                        $('<h2>'+ reportData.url +'</h2><h3>' + reportType + '</h3><a href=\"' + data +'\">JSON Data</a>').appendTo('#report');
-//                        buildReport(json);
-//                    });
+                    //var position = data.position;
+
+                    var reportchecker = window.setInterval(function(){
+//                        console.log('reportchecker');
+                        setupReport();
+                    },10000);
+
+                    function setupReport(){
+//                        console.log('setupreport');
+                        $.getJSON('\/rest\/performance\/report\?uuid\='+ data.uuid, function(json) {
+//                            console.log('json.length',json.length);
+                            if(json === "#fail" || json.length === undefined || json.length < 5){
+                                //setupReport();
+//                                console.log('fail',json);
+                            }else{
+//                                console.log('success',json);
+                                clearInterval(bartimer);
+                                clearInterval(reportchecker);
+                                hideProgress();
+                                $("#reportbutton").removeAttr("disabled");
+                                $('#formProgress').html('<div class=\"progress progress-striped active\"><div class=\"bar\" style=\"width: 100%;\"></div></div>').fadeOut(200);
+                                $('<h2>'+ reportData.url +'</h2><h3>' + reportType + '</h3><a href=\"\/rest\/performance\/report\?uuid\='+ data.uuid +'\">JSON Data</a>').appendTo('#report');
+                                buildReport(json);
+                            }
+                        });
+                    }
+
                     }
                 });
         });
