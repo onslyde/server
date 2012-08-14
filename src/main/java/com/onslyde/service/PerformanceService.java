@@ -115,8 +115,9 @@ public class PerformanceService implements Serializable{
     public String report(@QueryParam("uuid") String uuid) {
 
         Response.ResponseBuilder builder = null;
+        //the following location string is dependent on where you start the server (from the actual directory the command is ran from).
         String location = "/Users/wesleyhales/www/jboss-as-7.1.1.Final/reports/confess-report-";
-        //String location = "/www/jboss-as-7.1.1.Final/reports/confess-report-";
+        //String location = "/home/onslyde/dev/onslyde/reports/confess-report-";
         builder = Response.ok();
         String all = "";
         try {
