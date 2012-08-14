@@ -116,7 +116,7 @@ public class PerformanceService implements Serializable{
 
         Response.ResponseBuilder builder = null;
         String location = "/Users/wesleyhales/www/jboss-as-7.1.1.Final/reports/confess-report-";
-//        String location = "/www/jboss-as-7.1.1.Final/reports/confess-report-";
+        //String location = "/www/jboss-as-7.1.1.Final/reports/confess-report-";
         builder = Response.ok();
         String all = "";
         try {
