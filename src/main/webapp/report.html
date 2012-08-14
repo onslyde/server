@@ -121,13 +121,13 @@
                 reportData.cachedCheckbox = false;
                 reportType = "noncached";
             }
-            console.log(reportData);
+//            console.log(reportData);
 
             $.get("/rest/performance/go", { url: reportData.url, cached: reportData.cachedCheckbox},
                 function(data){
                     //$("#reportlink").attr('href',data).show();
                     $("#reportbutton").attr("disabled", "disabled");
-                    console.log('data',data);
+//                    console.log('data',data);
                     if(data === "#fail"){
                         hideProgress();
                         $("#reportbutton").removeAttr("disabled");
@@ -148,7 +148,7 @@
                         setTimeout(function(){
                             //$('<h2><a href=\"\/rest\/performance\/report\?uuid\='+ data.uuid +'\">Get Your Report</a></h2>').appendTo('#report');
                                 $.getJSON('\/rest\/performance\/report\?uuid\='+ data.uuid, function(json) {
-                                    console.log('json',json.length);
+//                                    console.log('json',json.length);
                                     if(json === "#fail" || json.length < 5){
                                         setupReport();
                                     }else{
