@@ -20,6 +20,7 @@ import javax.jms.Queue;
 import javax.naming.Context;
 import javax.naming.InitialContext;
 import javax.naming.NamingException;
+import javax.persistence.Cacheable;
 import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.*;
 
@@ -133,6 +134,40 @@ public class PerformanceService implements Serializable{
 
             while ((ln = in.readLine()) != null)
                 all += ln;
+            in.close();
+            //System.out.println(all);
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return all;
+    }
+
+    @GET
+    @Path("/speedreport")
+    @Produces(MediaType.TEXT_HTML)
+    public String speedreport(@QueryParam("uuid") String uuid) {
+        //todo - check to see what this uuid position is and multiply timeout
+        Response.ResponseBuilder builder = null;
+        //the following location string is dependent on where you start the server (from the actual directory the command is ran from).
+        String location = "/Users/wesleyhales/www/jboss-as-7.1.1.Final/speedreports/";
+        //String location = "/home/onslyde/dev/onslyde/reports/confess-report-";
+        builder = Response.ok();
+        String all = "";
+        try {
+            BufferedReader in;
+            File locatedFile = new File(location + uuid + ".html");
+            if(locatedFile.exists()) {
+                in = new BufferedReader(new FileReader(location + uuid + ".html"));
+            }else{
+                return "#fail";
+            }
+
+            String ln;
+
+            while ((ln = in.readLine()) != null)
+                all += ln + "\n";
             in.close();
             //System.out.println(all);
         } catch (FileNotFoundException e) {

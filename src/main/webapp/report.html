@@ -46,8 +46,8 @@
                     <div class="span6 offset6">
                         <h1>loadreport.js</h1>
                         <p>This <a href="https://github.com/wesleyhales/loadreport">handy little script</a> uses phantomjs to build a report of DOM and resource load times. The reports are created one-at-a-time to deliver the most accurate results - that's why it takes a few seconds.</p>
-                        <p>loadreport.js generates a JSON or CSV file (since there's no simple way to hook phantom up to a database). It will also generate a png filmstrip with how your site appears as it loads. Read this <a href="https://wesleyhales.com">blog post</a> for more.</p>
-                        <p style="font-size:14px">This is forked from confess.js, so thanks to <a href="http://twitter.com/jamespearce">James Pierce</a> for all his hard work!</p>
+                        <p>loadreport.js generates a JSON or CSV file (since there's no simple way to hook phantom up to a database). It will also generate a png filmstrip with how your site appears as it loads. Read this <a href="http://wesleyhales.com">blog post</a> for more.</p>
+                        <p style="font-size:14px">loadreport.js was forked from confess.js, so serious props to <a href="http://twitter.com/jamespearce">James Pearce</a> for the awesome work!</p>
                     </div>
 
                 </div>
@@ -65,7 +65,7 @@
     <hr>
 
     <footer>
-        <p class="pull-right">By: <a href="http://twitter.com/wesleyhales">Wesley Hales</a></p>
+        <p class="pull-right">By: <a href="http://twitter.com/wesleyhales">Wesley Hales</a> and <a href="http://twitter.com/ryanbridges">Ryan Bridges</a></p>
     </footer>
 
 </div><!--/.fluid-container-->
@@ -126,10 +126,11 @@
             }
 //            console.log(reportData);
 
+            $("#reportbutton").attr("disabled", "disabled");
+            $("#url").attr("disabled", "disabled");
+
             $.get("/rest/performance/go", { url: reportData.url, cached: reportData.cachedCheckbox},
                 function(data){
-                    $("#reportbutton").attr("disabled", "disabled");
-                    $("#url").attr("disabled", "disabled");
 //                    console.log('data',data);
                     if(data === "#fail"){
                         hideProgress();
@@ -146,10 +147,7 @@
                     data = $.parseJSON(data);
 //                    console.log('parsedjson',data);
                     $('<h3>The report for '+reportData.url+' is <span style=\"color:blue\">#' + data.position + '</span> in line. It will show up below when it\'s ready.</h3>').prependTo('#report').fadeOut(9000);
-                    //var urlcheck = setInterval(function(){
-                        //if(data){
 
-                    //var position = data.position;
 
                     var reportchecker = window.setInterval(function(){
 //                        console.log('reportchecker');
@@ -171,7 +169,9 @@
                                 $("#reportbutton").removeAttr("disabled");
                                 $("#url").removeAttr("disabled");
                                 $('#formProgress').html('<div class=\"progress progress-striped active\"><div class=\"bar\" style=\"width: 100%;\"></div></div>').fadeOut(200);
-                                $('<h2>'+ reportData.url +'</h2><h3>' + reportType + '</h3><a href=\"\/rest\/performance\/report\?uuid\='+ data.uuid +'\">JSON Data</a>').appendTo('#report');
+                                $('<h2>'+ reportData.url +'</h2><h3>' + reportType + '</h3>' +
+                                        '<button class="btn btn-info" onclick="location.href=\'\/rest\/performance\/speedreport\?uuid\='+ data.uuid +'\'\">Show Me Some Charts!</button>' +
+                                        '<br/><a href=\"\/rest\/performance\/report\?uuid\='+ data.uuid +'\">JSON</a>').appendTo('#report');
                                 buildReport(json);
                             }
                         });
@@ -215,8 +215,7 @@
                         $('<a>',{
                             text: thisreport[key2].length + ' JavaScript Errors',
                             title: 'errors',
-                            href: 'javascript:void(0)',
-                            click: function(){$('.js-error').show();}
+                            click: function(){$('.js-error').toggle();}
                         }).appendTo(rowWithErrors);
 
                         for(error in thisreport[key2]){
@@ -224,6 +223,15 @@
                             errorIdx++;
                         }
                         thisrow = $row.append(rowWithErrors);
+                    }else if(key2 === 'slowestResource' || key2 === 'largestResource'){
+                        var resRow = $('<td></td>');
+                        $('<a>',{
+                            text: 'Show it',
+                            title: 'res',
+                            click: function(){$('.res').toggle();}
+                        }).appendTo(resRow);
+                        resRow.append('<div class=\"res\" style=\"display:none\">' + thisreport[key2] + '</div>');
+                        thisrow = $row.append(resRow);
                     }else if(key2 !== 'timeStamp' && key2 !== 'taskName' && key2 !== 'phantomCacheEnabled'){
                         thisrow = $row.append('<td>'+ thisreport[key2] +'</td>');
                     }
@@ -255,6 +263,7 @@
     };
 
 </script>
+
 <script type="text/javascript">
 
     var _gaq = _gaq || [];

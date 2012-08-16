@@ -165,7 +165,7 @@ public class PerfQueueManager {
             {
 
                 for(int i = 0; i <= 5; i++) {
-                    Process p=Runtime.getRuntime().exec("phantomjs --disk-cache=no confess-mod.js "+ url +" "+ taskName +" json " + random );
+                    Process p=Runtime.getRuntime().exec("phantomjs --disk-cache=no loadreport.js "+ url +" "+ taskName +" json " + random );
                     p.waitFor();
                     Thread.sleep(2000);
 //                    BufferedReader reader=new BufferedReader(new InputStreamReader(p.getInputStream()));
@@ -175,6 +175,8 @@ public class PerfQueueManager {
 //                        line=reader.readLine();
 //                    }
                 }
+                Process p=Runtime.getRuntime().exec("phantomjs --disk-cache=no speedreport.js "+ url +" "+ random );
+                p.waitFor();
             }
             catch(IOException e1) {
                 e1.printStackTrace();
