@@ -40,25 +40,8 @@ public class PerformanceService implements Serializable{
     @Inject
     PerfQueueManager perfQueueManager;
 
-//    @PostConstruct
-//    public void init(){
-////        try {
-////            //perfJMSClient.init();
-////        } catch (Exception e) {
-////            e.printStackTrace();
-////        }
-//    }
-
-
-
-
-
-//    @Resource(mappedName = "java:/ConnectionFactory")
-//    private ConnectionFactory connectionFactory;
-//    @Resource(mappedName = "java:jms/queue/test")
-//    pr
-// ivate Queue queue;
-
+    private static String LOCATION = "/Users/wesleyhales/www/jboss-as-7.1.1.Final/speedreports/";
+    //private static String LOCATION = "/home/onslyde/dev/onslyde/reports/confess-report-";
 
 
     @GET
@@ -117,15 +100,13 @@ public class PerformanceService implements Serializable{
         //todo - check to see what this uuid position is and multiply timeout
         Response.ResponseBuilder builder = null;
         //the following location string is dependent on where you start the server (from the actual directory the command is ran from).
-        String location = "/Users/wesleyhales/www/jboss-as-7.1.1.Final/reports/confess-report-";
-        //String location = "/home/onslyde/dev/onslyde/reports/confess-report-";
         builder = Response.ok();
         String all = "";
         try {
             BufferedReader in;
-            File locatedFile = new File(location + uuid + ".json");
+            File locatedFile = new File(LOCATION + uuid + ".json");
             if(locatedFile.exists()) {
-                in = new BufferedReader(new FileReader(location + uuid + ".json"));
+                in = new BufferedReader(new FileReader(LOCATION + uuid + ".json"));
             }else{
                 return "#fail";
             }
@@ -151,15 +132,14 @@ public class PerformanceService implements Serializable{
         //todo - check to see what this uuid position is and multiply timeout
         Response.ResponseBuilder builder = null;
         //the following location string is dependent on where you start the server (from the actual directory the command is ran from).
-        String location = "/Users/wesleyhales/www/jboss-as-7.1.1.Final/speedreports/";
-        //String location = "/home/onslyde/dev/onslyde/reports/confess-report-";
         builder = Response.ok();
         String all = "";
+
         try {
             BufferedReader in;
-            File locatedFile = new File(location + uuid + ".html");
+            File locatedFile = new File(LOCATION + uuid + ".html");
             if(locatedFile.exists()) {
-                in = new BufferedReader(new FileReader(location + uuid + ".html"));
+                in = new BufferedReader(new FileReader(LOCATION + uuid + ".html"));
             }else{
                 return "#fail";
             }
@@ -177,6 +157,39 @@ public class PerformanceService implements Serializable{
         }
         return all;
     }
+
+    @GET
+    @Path("/js")
+    @Produces(MediaType.TEXT_HTML)
+    public String speedreportjs(@QueryParam("uuid") String uuid) {
+        //todo - check to see what this uuid position is and multiply timeout
+        Response.ResponseBuilder builder = null;
+        //the following location string is dependent on where you start the server (from the actual directory the command is ran from).
+        builder = Response.ok();
+        String all = "";
+        StringBuilder ln = new StringBuilder();
+        try {
+            BufferedReader in;
+            File locatedFile = new File(LOCATION + uuid + ".js");
+            if(locatedFile.exists()) {
+                in = new BufferedReader(new FileReader(LOCATION + uuid + ".js"));
+            }else{
+                return "#fail";
+            }
+
+
+            String tempString;
+            while ((tempString = in.readLine()) != null)
+                ln.append(tempString);
+            in.close();
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return ln.toString();
+    }
+
 
 
 }
