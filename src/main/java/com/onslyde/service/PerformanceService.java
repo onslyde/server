@@ -40,8 +40,8 @@ public class PerformanceService implements Serializable{
     @Inject
     PerfQueueManager perfQueueManager;
 
-    private static String LOCATION = "/Users/wesleyhales/www/jboss-as-7.1.1.Final/speedreports/";
-    //private static String LOCATION = "/home/onslyde/dev/onslyde/reports/confess-report-";
+    private static String LOCATION = "/Users/wesleyhales/www/jboss-as-7.1.1.Final/";
+    //private static String LOCATION = "/home/onslyde/dev/onslyde/";
 
 
     @GET
@@ -104,9 +104,9 @@ public class PerformanceService implements Serializable{
         String all = "";
         try {
             BufferedReader in;
-            File locatedFile = new File(LOCATION + uuid + ".json");
+            File locatedFile = new File(LOCATION + "reports/confess-report-" + uuid + ".json");
             if(locatedFile.exists()) {
-                in = new BufferedReader(new FileReader(LOCATION + uuid + ".json"));
+                in = new BufferedReader(new FileReader(LOCATION + "reports/confess-report-" + uuid + ".json"));
             }else{
                 return "#fail";
             }
@@ -137,9 +137,9 @@ public class PerformanceService implements Serializable{
 
         try {
             BufferedReader in;
-            File locatedFile = new File(LOCATION + uuid + ".html");
+            File locatedFile = new File(LOCATION + "speedreports/" + uuid + ".html");
             if(locatedFile.exists()) {
-                in = new BufferedReader(new FileReader(LOCATION + uuid + ".html"));
+                in = new BufferedReader(new FileReader(LOCATION + "speedreports/" + uuid + ".html"));
             }else{
                 return "#fail";
             }
@@ -170,9 +170,9 @@ public class PerformanceService implements Serializable{
         StringBuilder ln = new StringBuilder();
         try {
             BufferedReader in;
-            File locatedFile = new File(LOCATION + uuid + ".js");
+            File locatedFile = new File(LOCATION + "speedreports/" + uuid + ".js");
             if(locatedFile.exists()) {
-                in = new BufferedReader(new FileReader(LOCATION + uuid + ".js"));
+                in = new BufferedReader(new FileReader(LOCATION + "speedreports/" + uuid + ".js"));
             }else{
                 return "#fail";
             }
