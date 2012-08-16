@@ -170,8 +170,8 @@
                                 $("#url").removeAttr("disabled");
                                 $('#formProgress').html('<div class=\"progress progress-striped active\"><div class=\"bar\" style=\"width: 100%;\"></div></div>').fadeOut(200);
                                 $('<h2>'+ reportData.url +'</h2><h3>' + reportType + '</h3>' +
-                                        '<button class="btn btn-info" onclick="location.href=\'\/rest\/performance\/speedreport\?uuid\='+ data.uuid +'\'\">Show Me Some Charts!</button>' +
-                                        '<br/><a href=\"\/rest\/performance\/report\?uuid\='+ data.uuid +'\">JSON</a>').appendTo('#report');
+                                        '<button class="btn btn-info pull-right" onclick="location.href=\'\/rest\/performance\/speedreport\?uuid\='+ data.uuid +'\'\">Show Me Some Charts!</button>' +
+                                        '<a href=\"\/rest\/performance\/report\?uuid\='+ data.uuid +'\">JSON</a>').appendTo('#report');
                                 buildReport(json);
                             }
                         });
