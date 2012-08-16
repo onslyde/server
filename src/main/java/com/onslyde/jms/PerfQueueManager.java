@@ -37,22 +37,22 @@ public class PerfQueueManager {
     MessageProducer messageProducer;
     MessageConsumer consumer;
 
-    private int incomingMsgs = 1;
+    private int incomingMsgs = 0;
 
     private Timer timer = null;
 
-    private void startTimer(final int number){
+    private void startTimer(){
         if(timer == null){
-            if(number >= 0){
+            if(incomingMsgs >= 0){
                 timer = new Timer();
                 timer.schedule(new TimerTask() {
                     public void run()  {
                         // do stuff
-                        System.out.println("poll" + number);
-                        //if(number >= 0){
+                        System.out.println("poll:" + incomingMsgs);
+                        if(incomingMsgs >= 0){
                             runTest();
-                            System.out.println("poll");
-                        //}
+                            System.out.println("poll2:" + incomingMsgs);
+                        }
 
                     }
                 }, 10000, 10000);
@@ -84,7 +84,7 @@ public class PerfQueueManager {
     }
 
     public int storeMessage(String url, String taskName, String uuid){
-        startTimer(incomingMsgs);
+        startTimer();
 
         try {
             setupJMS();
@@ -138,7 +138,7 @@ public class PerfQueueManager {
 
             try {
                 setupJMS();
-                message = (MapMessage)consumer.receive(1000);
+                message = (MapMessage)consumer.receive(0);
                 url = message.getString("url");
                 taskName = message.getString("taskName");
                 random = message.getString("uuid");
