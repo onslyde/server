@@ -37,7 +37,7 @@ public class PerfQueueManager {
     MessageProducer messageProducer;
     MessageConsumer consumer;
 
-    private int incomingMsgs = 0;
+    private int incomingMsgs = 1;
 
     private Timer timer = null;
 
