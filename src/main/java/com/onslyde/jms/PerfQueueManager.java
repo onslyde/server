@@ -49,10 +49,10 @@ public class PerfQueueManager {
                     public void run()  {
                         // do stuff
                         System.out.println("poll" + number);
-                        if(number >= 0){
+                        //if(number >= 0){
                             runTest();
                             System.out.println("poll");
-                        }
+                        //}
 
                     }
                 }, 10000, 10000);
