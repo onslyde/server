@@ -47,7 +47,7 @@ public class PerformanceService implements Serializable{
     @GET
     @Path("/go")
     @Produces("text/html")
-    public String go(@QueryParam("url") String url, @QueryParam("cached") String cached) {
+    public String go(@QueryParam("url") String url, @QueryParam("cached") String cached, @QueryParam("email") String email) {
         String retVal = "";
         String taskName = "performance";
         int position = 0;
@@ -79,13 +79,13 @@ public class PerformanceService implements Serializable{
                 //tempMap.put("taskName",taskName);
             }
 
-            position = perfQueueManager.storeMessage(url,taskName,random.toString());
+            position = perfQueueManager.storeMessage(url,taskName,random.toString(),email);
         }else{
             System.out.println("Bad URL");
             return "#fail";
         }
 
-        return "{\"position\":" + position + ",\"uuid\":\"" + random.toString() + "\"}";
+        return "{\"position\":" + position + ",\"uuid\":\"" + random.toString() + "\",\"email\":\"" + (email.isEmpty() ? "false" : "true") + "\"}";
 
 
     }

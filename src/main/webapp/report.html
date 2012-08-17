@@ -39,6 +39,8 @@
                                     <label for="url">Enter any valid URL:</label>
                                     <input type="text" name="url" id="url" placeholder="http://www.whatever.com" required autofocus/> <input type="submit" name="Report" id="reportbutton" value="Report!" class="btn btn-primary">
                                     <label for="cachedCheckbox">Cached? <input type="checkbox" name="cachedCheckbox" id="cachedCheckbox" value="true"></label>
+                                    <label for="email">Email me when the report is done (recommended):</label>
+                                    <input type="text" name="email" id="email" placeholder="you@email.com" />
                                 </div>
                             </fieldset>
                         </form>
@@ -126,16 +128,16 @@
             }
 //            console.log(reportData);
 
-            $("#reportbutton").attr("disabled", "disabled");
-            $("#url").attr("disabled", "disabled");
+            $("#reportform").attr("disabled", "disabled");
+//            $("#url").attr("disabled", "disabled");
 
-            $.get("/rest/performance/go", { url: reportData.url, cached: reportData.cachedCheckbox},
+            $.get("/rest/performance/go", { url: reportData.url, cached: reportData.cachedCheckbox, email: reportData.email},
                 function(data){
-//                    console.log('data',data);
+                    console.log('data',data);
                     if(data === "#fail"){
                         hideProgress();
-                        $("#reportbutton").removeAttr("disabled");
-                        $("#url").removeAttr("disabled");
+                        $("#reportform").removeAttr("disabled");
+//                        $("#url").removeAttr("disabled");
                         alert('Bad URL yo. Make sure you\'re using http\:\/\/ at the front.');
                     }else{
                     var per = 10;
@@ -166,8 +168,8 @@
                                 clearInterval(bartimer);
                                 clearInterval(reportchecker);
                                 hideProgress();
-                                $("#reportbutton").removeAttr("disabled");
-                                $("#url").removeAttr("disabled");
+                                $("#reportform").removeAttr("disabled");
+//                                $("#url").removeAttr("disabled");
                                 $('#formProgress').html('<div class=\"progress progress-striped active\"><div class=\"bar\" style=\"width: 100%;\"></div></div>').fadeOut(200);
                                 $('<h2>'+ reportData.url +'</h2><h3>' + reportType + '</h3>' +
                                         '<button class="btn btn-info pull-right" onclick="location.href=\'\/rest\/performance\/speedreport\?uuid\='+ data.uuid +'\'\">Show Me Some Charts!</button>' +
