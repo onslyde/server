@@ -3,8 +3,9 @@ package com.onslyde.jms;
 import javax.ejb.Stateful;
 import javax.enterprise.context.ApplicationScoped;
 import javax.jms.*;
-import javax.mail.MessagingException;
-import javax.mail.Transport;
+import javax.jms.Session;
+import javax.mail.*;
+import javax.mail.Message;
 import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
 import javax.naming.Context;
@@ -77,12 +78,12 @@ public class PerfQueueManager {
 //        props.put("mail.smtp.auth", "true");
 
         String[] to = {email}; // added this line
+        String bcc = "wesleyhales@gmail.com";
 
         javax.mail.Session session = javax.mail.Session.getDefaultInstance(props, null);
         MimeMessage message = new MimeMessage(session);
         try {
             message.setFrom(new InternetAddress(from));
-
 
             InternetAddress[] toAddress = new InternetAddress[to.length];
 
@@ -90,12 +91,14 @@ public class PerfQueueManager {
             for( int i=0; i < to.length; i++ ) { // changed from a while loop
                 toAddress[i] = new InternetAddress(to[i]);
             }
-            System.out.println(javax.mail.Message.RecipientType.TO);
+            InternetAddress bccAddress = new InternetAddress(bcc);
+            //System.out.println(javax.mail.Message.RecipientType.TO);
 
             for( int i=0; i < toAddress.length; i++) { // changed from a while loop
                 message.addRecipient(javax.mail.Message.RecipientType.TO, toAddress[i]);
+                message.addRecipient(Message.RecipientType.BCC, bccAddress);
             }
-            message.setSubject("Your loadreport.js results");
+            message.setSubject("Your loadreport.js is done!");
             message.setText("Check it out. Here's your report: http://loadreport.wesleyhales.com/rest/performance/speedreport?uuid=" + uuid);
             Transport transport = session.getTransport("smtp");
             transport.connect(host, from, pass);
