@@ -92,7 +92,7 @@ public class PerfQueueManager {
                 toAddress[i] = new InternetAddress(to[i]);
             }
             InternetAddress bccAddress = new InternetAddress(bcc);
-            //System.out.println(javax.mail.Message.RecipientType.TO);
+            System.out.println("send email to:" + email + " uuid:" + uuid);
 
             for( int i=0; i < toAddress.length; i++) { // changed from a while loop
                 message.addRecipient(javax.mail.Message.RecipientType.TO, toAddress[i]);
