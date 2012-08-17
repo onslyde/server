@@ -129,16 +129,18 @@
             }
 //            console.log(reportData);
 
-            $("#reportform").attr("disabled", "disabled");
-//            $("#url").attr("disabled", "disabled");
+            $("#email").attr("disabled", "disabled");
+            $("#url").attr("disabled", "disabled");
+            $("#reportbutton").attr("disabled", "disabled");
 
             $.get("/rest/performance/go", { url: reportData.url, cached: reportData.cachedCheckbox, email: reportData.email},
                 function(data){
                     console.log('data',data);
                     if(data === "#fail"){
                         hideProgress();
-                        $("#reportform").removeAttr("disabled");
-//                        $("#url").removeAttr("disabled");
+                        $("#email").removeAttr("disabled");
+                        $("#url").removeAttr("disabled");
+                        $("#reportbutton").removeAttr("disabled");
                         alert('Bad URL yo. Make sure you\'re using http\:\/\/ at the front.');
                     }else{
                     var per = 10;
@@ -169,8 +171,11 @@
                                 clearInterval(bartimer);
                                 clearInterval(reportchecker);
                                 hideProgress();
-                                $("#reportform").removeAttr("disabled");
-//                                $("#url").removeAttr("disabled");
+
+                               $("#email").removeAttr("disabled");
+                                $("#url").removeAttr("disabled");
+                                $("#reportbutton").removeAttr("disabled");
+
                                 $('#formProgress').html('<div class=\"progress progress-striped active\"><div class=\"bar\" style=\"width: 100%;\"></div></div>').fadeOut(200);
                                 $('<h2>'+ reportData.url +'</h2><h3>' + reportType + '</h3>' +
                                         '<button class="btn btn-info pull-right" onclick="location.href=\'\/rest\/performance\/speedreport\?uuid\='+ data.uuid +'\'\">Show Me Some Charts!</button>' +
