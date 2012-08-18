@@ -66,24 +66,30 @@ public class PerfQueueManager {
     }
 
     private boolean sendMessage(String email, String uuid){
-        String host = "localhost";
-        String from = "donotreply@wesleyhales.com";
-        String pass = "password";
+        String host = "smtp.gmail.com";
+        final String from = "onslyde@gmail.com";
+        final String pass = "emailuser";
         Properties props = System.getProperties();
-//        props.put("mail.smtp.starttls.enable", "true"); // added this line
+        props.put("mail.smtp.starttls.enable", "true"); // added this line
         props.put("mail.smtp.host", host);
         props.put("mail.smtp.user", from);
-//        props.put("mail.smtp.password", pass);
-        props.put("mail.smtp.port", "25");
-//        props.put("mail.smtp.auth", "true");
+        props.put("mail.smtp.password", pass);
+        props.put("mail.smtp.port", "587");
+        props.put("mail.smtp.auth", "true");
 
         String[] to = {email}; // added this line
         String bcc = "wesleyhales@gmail.com";
-
-        javax.mail.Session session = javax.mail.Session.getDefaultInstance(props, null);
+        javax.mail.Authenticator authenticator = new javax.mail.Authenticator()
+        {
+            protected javax.mail.PasswordAuthentication getPasswordAuthentication()
+            {
+                return new javax.mail.PasswordAuthentication(from, pass);
+            }
+        };
+        javax.mail.Session session = javax.mail.Session.getInstance(props, authenticator);
         MimeMessage message = new MimeMessage(session);
         try {
-            message.setFrom(new InternetAddress(from));
+            message.setFrom(new InternetAddress("onslyde@gmail.com"));
 
             InternetAddress[] toAddress = new InternetAddress[to.length];
 
@@ -98,16 +104,18 @@ public class PerfQueueManager {
                 message.addRecipient(javax.mail.Message.RecipientType.TO, toAddress[i]);
                 message.addRecipient(Message.RecipientType.BCC, bccAddress);
             }
-            message.setSubject("Your loadreport.js is done!");
+            message.setSubject("Your loadreport is done!");
             message.setText("Check it out. Here's your report: http://loadreport.wesleyhales.com/rest/performance/speedreport?uuid=" + uuid);
-            Transport transport = session.getTransport("smtp");
-            transport.connect(host, from, pass);
+            Transport transport = session.getTransport("smtps");
+            transport.connect(host,from,pass);
+            System.out.println("-------send mail");
             transport.sendMessage(message, message.getAllRecipients());
             transport.close();
         } catch (MessagingException e) {
             e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
         }
         return true;
+
     }
 
     private void setupJMS() throws NamingException, JMSException {
