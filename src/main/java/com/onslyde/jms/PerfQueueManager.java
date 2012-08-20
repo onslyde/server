@@ -274,12 +274,11 @@ public class PerfQueueManager {
                 e1.printStackTrace();
                 return "#fail";
             }
-            catch(InterruptedException e2) {}
+            catch(InterruptedException e2) {e2.printStackTrace();}
 
             System.out.println("Done : " + random);
-            done = true;
-
         }
+        done = true;
         return random;
     }
 
