@@ -133,7 +133,7 @@
             $("#url").attr("disabled", "disabled");
             $("#reportbutton").attr("disabled", "disabled");
 
-            if($.trim($("#email").val())){
+            if(!$.trim($("#email").val())){
                 $.get("/rest/performance/go", { url: reportData.url, cached: reportData.cachedCheckbox, email: reportData.email},
                     function(data){
                     console.log('data',data);
@@ -188,6 +188,9 @@
 
                     }
                 });
+            }else{
+                hideProgress();
+                $('<h3>The report for '+reportData.url+' is <span style=\"color:blue\">#' + data.position + '</span> in line. It will show up in your inbox when it\'s ready.</h3>').prependTo('#report').fadeOut(9000);
             }
         });
 
