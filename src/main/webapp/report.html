@@ -189,20 +189,21 @@
 
                     }
 
-                    function disableForm(){
-                        $("#email").attr("disabled", "disabled");
-                        $("#url").attr("disabled", "disabled");
-                        $("#reportbutton").attr("disabled", "disabled");
-                    }
-
-                    function enableForm(){
-                        $("#email").removeAttr("disabled");
-                        $("#url").removeAttr("disabled");
-                        $("#reportbutton").removeAttr("disabled");
-                    }
                 });
 
         });
+
+        function disableForm(){
+            $("#email").attr("disabled", "disabled");
+            $("#url").attr("disabled", "disabled");
+            $("#reportbutton").attr("disabled", "disabled");
+        }
+
+        function enableForm(){
+            $("#email").removeAttr("disabled");
+            $("#url").removeAttr("disabled");
+            $("#reportbutton").removeAttr("disabled");
+        }
 
         function hideProgress(){
             $('#report .progress-striped .bar').fadeOut(200);
