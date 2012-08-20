@@ -129,19 +129,15 @@
             }
 //            console.log(reportData);
 
-            $("#email").attr("disabled", "disabled");
-            $("#url").attr("disabled", "disabled");
-            $("#reportbutton").attr("disabled", "disabled");
+            disableForm();
 
-            if(!$.trim($("#email").val())){
+
                 $.get("/rest/performance/go", { url: reportData.url, cached: reportData.cachedCheckbox, email: reportData.email},
                     function(data){
                     console.log('data',data);
                     if(data === "#fail"){
                         hideProgress();
-                        $("#email").removeAttr("disabled");
-                        $("#url").removeAttr("disabled");
-                        $("#reportbutton").removeAttr("disabled");
+                        enableForm();
                         alert('Bad URL yo. Make sure you\'re using http\:\/\/ at the front.');
                     }else{
                     var per = 10;
@@ -152,13 +148,18 @@
 
                     data = $.parseJSON(data);
 //                    console.log('parsedjson',data);
-                    $('<h3>The report for '+reportData.url+' is <span style=\"color:blue\">#' + data.position + '</span> in line. It will show up below when it\'s ready.</h3>').prependTo('#report').fadeOut(9000);
-
-
-                    var reportchecker = window.setInterval(function(){
+                    if(!$.trim($("#email").val())){
+                        $('<h3>The report for '+reportData.url+' is <span style=\"color:blue\">#' + data.position + '</span> in line. It will show up below when it\'s ready.</h3>').prependTo('#report').fadeOut(9000);
+                        var reportchecker = window.setInterval(function(){
 //                        console.log('reportchecker');
-                        setupReport();
-                    },10000);
+                            setupReport();
+                        },10000);
+                    }else{
+                        hideProgress();
+                        $('<h3>The report for '+reportData.url+' is <span style=\"color:blue\">#' + data.position + '</span> in line. It will show up in your inbox when it\'s ready.</h3>').prependTo('#report').fadeOut(9000);
+                        enableForm();
+                    }
+
 
                     function setupReport(){
 //                        console.log('setupreport');
@@ -187,11 +188,20 @@
                     }
 
                     }
+
+                    function disableForm(){
+                        $("#email").attr("disabled", "disabled");
+                        $("#url").attr("disabled", "disabled");
+                        $("#reportbutton").attr("disabled", "disabled");
+                    }
+
+                    function enableForm(){
+                        $("#email").removeAttr("disabled");
+                        $("#url").removeAttr("disabled");
+                        $("#reportbutton").removeAttr("disabled");
+                    }
                 });
-            }else{
-                hideProgress();
-                $('<h3>The report for '+reportData.url+' is <span style=\"color:blue\">#' + data.position + '</span> in line. It will show up in your inbox when it\'s ready.</h3>').prependTo('#report').fadeOut(9000);
-            }
+
         });
 
         function hideProgress(){
