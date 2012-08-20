@@ -205,9 +205,6 @@ public class PerfQueueManager {
         MapMessage message = null;
         if(incomingMsgs == 0){
             System.out.println("---------->closing connection");
-            timer.cancel();
-            timer.purge();
-            timer = null;
             try {
                 if (context != null) {
                     context.close();
