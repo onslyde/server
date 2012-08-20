@@ -5,7 +5,11 @@ import org.hornetq.api.core.SimpleString;
 import org.hornetq.api.core.TransportConfiguration;
 import org.hornetq.api.core.client.*;
 import org.hornetq.api.core.management.ManagementHelper;
+import org.hornetq.api.jms.HornetQJMSClient;
+import org.hornetq.api.jms.JMSFactoryType;
 import org.hornetq.core.remoting.impl.netty.NettyConnectorFactory;
+import org.hornetq.core.remoting.impl.netty.TransportConstants;
+import org.hornetq.jms.client.HornetQConnectionFactory;
 
 import javax.ejb.Singleton;
 import javax.ejb.Stateful;
@@ -22,10 +26,7 @@ import javax.naming.NamingException;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.util.HashMap;
-import java.util.Properties;
-import java.util.Timer;
-import java.util.TimerTask;
+import java.util.*;
 
 /**
  * Created with IntelliJ IDEA.
@@ -37,13 +38,16 @@ import java.util.TimerTask;
 @ApplicationScoped
 public class PerfQueueManager {
 
+//    todo implement for async code
+//    https://community.jboss.org/thread/178079
+
     private static final String DEFAULT_USERNAME = "quickstartUser";
     private static final String DEFAULT_PASSWORD = "quickstartPassword";
     private static final String INITIAL_CONTEXT_FACTORY = "org.jboss.naming.remote.client.InitialContextFactory";
     private static final String PROVIDER_URL = "remote://localhost:4447";
     private static final String DEFAULT_CONNECTION_FACTORY = "jms/RemoteConnectionFactory";
     Context context;
-    ConnectionFactory connectionFactory;
+    HornetQConnectionFactory connectionFactory;
     Destination destination;
     Connection connection;
     Session session;
@@ -142,7 +146,16 @@ public class PerfQueueManager {
             context = new InitialContext(env);
             //if(connectionFactory == null){
             String connectionFactoryString = System.getProperty("connection.factory", DEFAULT_CONNECTION_FACTORY);
-            connectionFactory = (ConnectionFactory) context.lookup("jms/RemoteConnectionFactory");
+            //connectionFactory = (ConnectionFactory) context.lookup("jms/RemoteConnectionFactory");
+
+            final Map<String, Object> p = new HashMap<String, Object>();
+            TransportConfiguration tc;
+
+
+            p.put(TransportConstants.HOST_PROP_NAME, "myHost");
+            tc = new TransportConfiguration(NettyConnectorFactory.class.getName(), p);
+
+            connectionFactory = HornetQJMSClient.createConnectionFactoryWithoutHA(JMSFactoryType.TOPIC_CF, tc);
             //}
             destination = (Destination) context.lookup("jms/queue/test");
             context.close();
