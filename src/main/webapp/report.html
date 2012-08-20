@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>Load Report</title>
+    <title>Loadreport.js</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="description" content="">
     <meta name="author" content="Wesley Hales">
@@ -133,8 +133,9 @@
             $("#url").attr("disabled", "disabled");
             $("#reportbutton").attr("disabled", "disabled");
 
-            $.get("/rest/performance/go", { url: reportData.url, cached: reportData.cachedCheckbox, email: reportData.email},
-                function(data){
+            if($.trim($("#email").val())){
+                $.get("/rest/performance/go", { url: reportData.url, cached: reportData.cachedCheckbox, email: reportData.email},
+                    function(data){
                     console.log('data',data);
                     if(data === "#fail"){
                         hideProgress();
@@ -187,6 +188,7 @@
 
                     }
                 });
+            }
         });
 
         function hideProgress(){
@@ -275,8 +277,8 @@
 <script type="text/javascript">
 
     var _gaq = _gaq || [];
-    _gaq.push(['_setAccount', 'UA-31854873-1']);
-    _gaq.push(['_setDomainName', 'onslyde.com']);
+    _gaq.push(['_setAccount', 'UA-1241000-11']);
+    _gaq.push(['_setDomainName', 'wesleyhales.com']);
     _gaq.push(['_trackPageview']);
 
     (function() {

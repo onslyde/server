@@ -84,8 +84,13 @@ public class PerformanceService implements Serializable{
             System.out.println("Bad URL");
             return "#fail";
         }
+        try{
+        retVal = "{\"position\":" + position + ",\"uuid\":\"" + random.toString() + "\",\"email\":\"" + (email.isEmpty() ? "false" : "true") + "\"}";
+        }catch(Exception e){
+         retVal = "#fail";
+        }
 
-        return "{\"position\":" + position + ",\"uuid\":\"" + random.toString() + "\",\"email\":\"" + (email.isEmpty() ? "false" : "true") + "\"}";
+        return retVal;
 
 
     }

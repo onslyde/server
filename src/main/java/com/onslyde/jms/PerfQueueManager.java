@@ -1,5 +1,12 @@
 package com.onslyde.jms;
 
+import org.hornetq.api.core.HornetQException;
+import org.hornetq.api.core.SimpleString;
+import org.hornetq.api.core.TransportConfiguration;
+import org.hornetq.api.core.client.*;
+import org.hornetq.api.core.management.ManagementHelper;
+import org.hornetq.core.remoting.impl.netty.NettyConnectorFactory;
+
 import javax.ejb.Stateful;
 import javax.enterprise.context.ApplicationScoped;
 import javax.jms.*;
@@ -155,6 +162,7 @@ public class PerfQueueManager {
 
             System.out.println("===========" + incomingMsgs);
             messageProducer.send(message);
+
             incomingMsgs++;
 
         } catch (JMSException e) {
@@ -259,12 +267,39 @@ public class PerfQueueManager {
             //running = false;
 
         }
-
-
-
         //return builder.build();
         return random;
+    }
 
-
+    private synchronized int size(){
+        ClientSession coreSession = null;
+        int count = 0;
+        try {
+            HashMap<String, Object> map = new HashMap<String, Object>();
+            map.put("host", "localhost");
+            map.put("port", 4447);
+            ServerLocator serverLocator = HornetQClient.createServerLocatorWithoutHA(new TransportConfiguration(NettyConnectorFactory.class.getName(), map));
+            ClientSessionFactory sf = serverLocator.createSessionFactory();
+            ClientSession session = sf.createSession(false, false, false);
+            ClientRequestor requestor = new ClientRequestor(session, "hornetq.management");
+            ClientMessage m = session.createMessage(false);
+            ManagementHelper.putAttribute(m, "core.queue.test", "messageCount");
+            ClientMessage reply = requestor.request(m);
+            count = (Integer) ManagementHelper.getResult(reply);
+            return count;
+        } catch (HornetQException e) {
+            e.printStackTrace();
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            if (coreSession!= null ){
+                try {
+                    coreSession.close();
+                } catch (HornetQException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+        return count;
     }
 }
