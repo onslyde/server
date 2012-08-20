@@ -7,6 +7,7 @@ import org.hornetq.api.core.client.*;
 import org.hornetq.api.core.management.ManagementHelper;
 import org.hornetq.core.remoting.impl.netty.NettyConnectorFactory;
 
+import javax.ejb.Singleton;
 import javax.ejb.Stateful;
 import javax.enterprise.context.ApplicationScoped;
 import javax.jms.*;
@@ -48,26 +49,32 @@ public class PerfQueueManager {
     Session session;
     MessageProducer messageProducer;
     MessageConsumer consumer;
+    boolean done = true;
 
     private int incomingMsgs = 0;
 
     private Timer timer = null;
 
+    private TimerTask timerTask = new TimerTask() {
+        public void run()  {
+            // do stuff
+            System.out.println("TimerTask running poll1: " + incomingMsgs);
+            if(incomingMsgs >= 0){
+                if(done){
+                    runTest();
+                    System.out.println("test ran poll2: " + incomingMsgs);
+                }
+            }
+
+        }
+    };
+
     private void startTimer(){
         if(timer == null){
+            timer = new Timer();
+            System.out.println("+++timer is null");
             if(incomingMsgs >= 0){
-                timer = new Timer();
-                timer.schedule(new TimerTask() {
-                    public void run()  {
-                        // do stuff
-                        System.out.println("poll:" + incomingMsgs);
-                        if(incomingMsgs >= 0){
-                            runTest();
-                            System.out.println("poll2:" + incomingMsgs);
-                        }
-
-                    }
-                }, 10000, 10000);
+                timer.schedule(timerTask, 10000, 10000);
             }
         }
     }
@@ -159,10 +166,9 @@ public class PerfQueueManager {
             message.setString("taskName", taskName);
             message.setString("uuid",uuid);
             message.setString("email",email);
-
-            System.out.println("===========" + incomingMsgs);
+            System.out.println("before message sent===");
             messageProducer.send(message);
-
+            System.out.println("message sent===========>uuid=" + uuid);
             incomingMsgs++;
 
         } catch (JMSException e) {
@@ -176,15 +182,18 @@ public class PerfQueueManager {
 
     public String runTest(){
         //Map<String,String> tempMap = null;
+        done = false;
+
         String url = "";
         String cached = "false";
         String random = "";
         String email = "";
+
         HashMap<String,String> tempMap = new HashMap<String, String>();
         String taskName = "performance";
         MapMessage message = null;
         if(incomingMsgs == 0){
-            System.out.println("----------closing connection");
+            System.out.println("---------->closing connection");
             timer.cancel();
             timer.purge();
             timer = null;
@@ -211,7 +220,7 @@ public class PerfQueueManager {
                 taskName = message.getString("taskName");
                 random = message.getString("uuid");
                 email = message.getString("email");
-                System.out.println("Received request for: " + url + "--" + taskName + "--" + random + "--" + incomingMsgs);
+                System.out.println("JMS received for: " + url + "--" + taskName + "--" + random + "--" + incomingMsgs);
                 //tempMap = ((HashMap)message.getObject("tempMap"));
                 incomingMsgs--;
 
@@ -258,16 +267,9 @@ public class PerfQueueManager {
             catch(InterruptedException e2) {}
 
             System.out.println("Done : " + random);
-
-            //if(incomingMsgs == 0){
-            //runTest();
-            //break;
-            //}
-
-            //running = false;
+            done = true;
 
         }
-        //return builder.build();
         return random;
     }
 

@@ -138,7 +138,7 @@
                     if(data === "#fail"){
                         hideProgress();
                         enableForm();
-                        alert('Bad URL yo. Make sure you\'re using http\:\/\/ at the front.');
+                        alert('Bad URL or problem with my server');
                     }else{
                     var per = 10;
                         bartimer = window.setInterval(function(){
@@ -155,7 +155,7 @@
                             setupReport();
                         },10000);
                     }else{
-                        hideProgress();
+                        $('#report .progress-striped .bar').hide();
                         $('<h3>The report for '+reportData.url+' is <span style=\"color:blue\">#' + data.position + '</span> in line. It will show up in your inbox when it\'s ready.</h3>').prependTo('#report').fadeOut(9000);
                         enableForm();
                     }
