@@ -59,26 +59,24 @@ public class PerfQueueManager {
 
     private Timer timer = null;
 
-    private TimerTask timerTask = new TimerTask() {
-        public void run()  {
-            // do stuff
-            System.out.println("TimerTask running poll1: " + incomingMsgs);
-            if(incomingMsgs >= 0){
-                if(done){
-                    runTest();
-                    System.out.println("test ran poll2: " + incomingMsgs);
-                }
-            }
-
-        }
-    };
-
     private void startTimer(){
         if(timer == null){
             timer = new Timer();
             System.out.println("+++timer is null");
             if(incomingMsgs >= 0){
-                timer.schedule(timerTask, 10000, 10000);
+                timer.schedule(new TimerTask() {
+                    public void run()  {
+                        // do stuff
+                        System.out.println("TimerTask running poll1: " + incomingMsgs);
+                        if(incomingMsgs >= 0){
+                            if(done){
+                                runTest();
+                                System.out.println("test ran poll2: " + incomingMsgs);
+                            }
+                        }
+
+                    }
+                }, 10000, 10000);
             }
         }
     }
@@ -152,7 +150,7 @@ public class PerfQueueManager {
             TransportConfiguration tc;
 
 
-            p.put(TransportConstants.HOST_PROP_NAME, "myHost");
+            p.put(TransportConstants.HOST_PROP_NAME, "localhost");
             tc = new TransportConfiguration(NettyConnectorFactory.class.getName(), p);
 
             connectionFactory = HornetQJMSClient.createConnectionFactoryWithoutHA(JMSFactoryType.TOPIC_CF, tc);
