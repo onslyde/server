@@ -67,12 +67,12 @@ public class PerfQueueManager {
                 timer.schedule(new TimerTask() {
                     public void run()  {
                         // do stuff
-                        System.out.println("TimerTask running poll1: " + incomingMsgs);
+                        //System.out.println("TimerTask running poll1: " + incomingMsgs);
                         if(incomingMsgs >= 0){
-                            if(done){
+                            //if(done){
                                 runTest();
                                 System.out.println("test ran poll2: " + incomingMsgs);
-                            }
+                            //}
                         }
 
                     }
