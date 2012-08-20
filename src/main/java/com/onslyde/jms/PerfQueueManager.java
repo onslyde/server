@@ -219,6 +219,7 @@ public class PerfQueueManager {
             } catch (JMSException e) {
                 e.printStackTrace();
             }
+            done = true;
         }else{
 
             try {
@@ -277,8 +278,9 @@ public class PerfQueueManager {
             catch(InterruptedException e2) {e2.printStackTrace();}
 
             System.out.println("Done : " + random);
+            done = true;
         }
-        done = true;
+
         return random;
     }
 
