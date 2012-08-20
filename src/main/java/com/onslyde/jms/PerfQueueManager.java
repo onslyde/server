@@ -264,8 +264,10 @@ public class PerfQueueManager {
                 Process p=Runtime.getRuntime().exec("phantomjs --disk-cache=no speedreport.js "+ url +" "+ random );
                 p.waitFor();
 
-                if(!email.isEmpty()){
-                    sendMessage(email,random);
+                if(email != null){
+                    if(!email.isEmpty()){
+                        sendMessage(email,random);
+                    }
                 }
             }
             catch(IOException e1) {
