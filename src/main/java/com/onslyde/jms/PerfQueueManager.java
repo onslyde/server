@@ -71,7 +71,7 @@ public class PerfQueueManager {
                         if(incomingMsgs >= 0){
                             //if(done){
                                 runTest();
-                                System.out.println("test ran poll2: " + incomingMsgs);
+//                                System.out.println("test ran poll2: " + incomingMsgs);
                             //}
                         }
 
@@ -204,7 +204,7 @@ public class PerfQueueManager {
         String taskName = "performance";
         MapMessage message = null;
         if(incomingMsgs == 0){
-            System.out.println("---------->closing connection");
+//            System.out.println("---------->closing connection");
             try {
                 if (context != null) {
                     context.close();
