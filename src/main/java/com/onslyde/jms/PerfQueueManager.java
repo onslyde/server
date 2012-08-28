@@ -179,7 +179,7 @@ public class PerfQueueManager {
             message.setString("email",email);
             System.out.println("before message sent===");
             messageProducer.send(message);
-            System.out.println("message sent===========>uuid=" + uuid);
+            System.out.println("message sent===========> uuid= " + uuid + " email=" + email + " url=" + url);
             incomingMsgs++;
 
         } catch (JMSException e) {
