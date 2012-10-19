@@ -20,7 +20,6 @@ import java.util.logging.Logger;
 
 @Path("/attendees")
 @RequestScoped
-@Stateful
 public class AttendeeService {
     @Inject
     private Logger log;//
@@ -62,19 +61,12 @@ public class AttendeeService {
 
         String ip = req.getRemoteAddr();
         //get ip and verify attendee
-
         slidFast.updateGroupVote(vote,ip);
-
-
-
-
         Response.ResponseBuilder builder = null;
         //slidFast.getCurrentVotes().add(vote);
-
         //System.out.println("**************slidFast.getCurrentVotes()*" + slidFast.getCurrentVotes().size());
         builder = Response.ok();
         //send new vote out to all conencted clients... should really only go to slide deck
-
         // could try to also validate that the vote matches one of the options
         if(vote != null){
             slidFast.setJsEvent(ClientEvent.clientVote(vote));

@@ -1,0 +1,297 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+<title>HTML5 Architecture</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+<meta name="viewport" content="width=device-width, minimum-scale=1.0, maximum-scale=1.0"/>
+<!-- enable full-screen mode -->
+<meta name="apple-mobile-web-app-capable" content="yes"/>
+<!-- controls the appearance of the status bar in full-screen mode -->
+<meta name="apple-mobile-web-app-status-bar-style" content="black"/>
+
+<link rel="stylesheet" media="all" href="css/slidfast.css" />
+
+
+
+<style>
+.placeholder {
+	height: 225px;
+	width: 95%;
+}
+</style>
+</head>
+<body>
+<div class="address">
+    <span style="color:orange;">go to </span> onslyde.com/remix12
+</div>
+
+<div id="controller" style="display:none">
+    <a href="javascript:slidfast.slides.prevSlide();void(0)"><< Previous Slide</a> |
+    <a href="javascript:slidfast.slides.nextSlide();void(0)">Next Slide >></a>
+</div>
+<div id="wtf" class="hide-wtf">
+    WTF!!!
+</div>
+<div id="nice" class="hide-nice">
+    Nice!!!
+</div>
+<div id="browser">
+
+    <div id="slide-group-container">
+
+        <section class="slide-group">
+
+            <article class="slide" data-option="master">
+                <h1>HTML5 on the Frontline</h1>
+                <h2>By: Wesley Hales</h2>
+                <h3>@wesleyhales</h3>
+                <h1 style="color:orange">Are you connected</h1>
+            </article>
+
+            <article class="slide" data-option="Yes">
+                <h1>Yay!!! \o/</h1>
+            </article>
+
+            <article class="slide" data-option="No">
+                <h1>y u no connect :(</h1>
+            </article>
+
+        </section>
+
+        <section class="slide-group">
+            <article class="slide" data-option="master">
+                <h1>WHOAMI</h1>
+                <ul>
+                    <li>Author</li>
+                    <li>Startup co-founder</li>
+                    <li>Extreme geek with way too many side projects</li>
+                </ul>
+            </article>
+        </section>
+
+        <section class="slide-group">
+
+            <article class="slide" data-option="master">
+                <h1>How to tell HTML from HTML5</h1>
+                <ul>
+                    <li>Try it out on Internet Explorer.</li>
+                    <li>Did it work?</li>
+                    <li>No?</li>
+                    <li>It's HTML5</li>
+                </ul>
+            </article>
+
+        </section>
+
+        <section class="slide-group">
+
+            <article class="slide" data-option="master">
+                <h1>HTML5 From 20,000 Feet</h1>
+                <img src="images/remix12/hypecycle.png" style="width: 90%"/>
+            </article>
+
+        </section>
+
+        <section class="slide-group">
+            <article class="slide" data-option="master">
+                <h1>html5e.org</h1>
+                <h2>desktop</h2>
+                <img src="images/remix12/html5e-desktop.png" style="width: 100%"/>
+            </article>
+        </section>
+
+        <section class="slide-group">
+            <article class="slide" data-option="master">
+                <h1>html5e.org</h1>
+                <h2>mobile</h2>
+                <img src="images/remix12/html5e-mobile.png" style="width: 100%"/>
+            </article>
+        </section>
+
+        <section class="slide-group">
+            <article class="slide" data-option="master">
+                <h1>HTML5 is all about Mobile!</h1>
+                <img src="images/remix12/android-ios.gif" style="width: 100%"/>
+            </article>
+        </section>
+
+        <section class="slide-group">
+            <article class="slide" data-option="master">
+                <h1>Worldwide Market Share 2012</h1>
+                <img src="images/remix12/mobile-marketshare-may2012.PNG" style="width: 70%"/>
+            </article>
+        </section>
+
+        <section class="slide-group">
+            <article class="slide" data-option="master">
+                <h1>We are witnessing a shift on the UI</h1>
+                <img src="images/remix12/80s-apple.jpg" style="width: 100%"/>
+            </article>
+        </section>
+
+        <section class="slide-group">
+            <article class="slide" data-option="master">
+                <h1>Before HTML5</h1>
+                <ul>
+                    <li>Everything was generated with server-side templating.</li>
+                    <li>Connections were unlimited.</li>
+                    <li>Must work on IE6</li>
+                </ul>
+            </article>
+        </section>
+
+        <section class="slide-group">
+            <article class="slide" data-option="master">
+                <h1>Today, traditional server-side UI is being replaced</h1>
+                <ul>
+                    <li>We must think in terms of "mobile first".</li>
+                    <li>We must support as many platforms as possible.</li>
+                    <li>We must pick from a million different JS based frameworks.</li>
+                </ul>
+            </article>
+        </section>
+
+        <section class="slide-group">
+            <article class="slide" data-option="master">
+                <h1>How to manage</h1>
+                <ul>
+                    <li>We must think in terms of "mobile first".</li>
+                    <li>We must support as many platforms as possible.</li>
+                    <li>We must pick from a million different JS based frameworks.</li>
+                </ul>
+            </article>
+        </section>
+
+        <section class="slide-group">
+            <article class="slide" data-option="master">
+                <h1>Are you currently using a MV* JavaScript Framework?</h1>
+            </article>
+
+            <article class="slide" data-option="yes">
+                <h1></h1>
+            </article>
+
+            <article class="slide" data-option="no">
+                <h1></h1>
+            </article>
+        </section>
+
+        <section class="slide-group">
+
+            <article class="slide" data-option="master">
+                <h1>Should apps function the same across all browsers?</h1>
+            </article>
+
+            <article class="slide" data-option="yes">
+                <h1>We need to talk :/</h1>
+                <ul>
+                    <li>Apps cannot be pixel perfect anymore</li>
+                    <li>We must push back on business design requirements. (and help designers)</li>
+                    <li>RWD, baby!</li>
+                </ul>
+            </article>
+
+            <article class="slide" data-option="no">
+                <h1>Yeah! OF course not!</h1>
+                <ul>
+                    <li>Apps cannot be pixel perfect anymore</li>
+                    <li>We must push back on business design requirements. (and help designers)</li>
+                    <li>RWD, baby!</li>
+                </ul>
+            </article>
+
+        </section>
+
+        <section class="slide-group">
+
+            <article class="slide" data-option="master">
+                <h1>What are you?</h1>
+            </article>
+
+            <article class="slide" data-option="User">
+                <h1>We have a lot of users!</h1>
+            </article>
+
+            <article class="slide" data-option="Customer">
+                <h1>We have a lot of customers!</h1>
+            </article>
+
+        </section>
+
+        <section class="slide-group">
+
+            <article class="slide" data-option="master">
+                <h1>Core Value Proposition</h1>
+                <ul>
+                    <li>Free presentation platform + paid analytics</li>
+                    <li>Features:
+                        <ul>
+                        <li>Trivia</li>
+                        <li>Survey</li>
+                        <li>Forking</li>
+                        <li>Analytics</li>
+                        <li>Free WTF button!</li>
+                        </ul>
+                    </li>
+                </ul>
+            </article>
+
+        </section>
+
+        <section class="slide-group">
+
+            <article class="slide" data-option="master">
+                <h1>Revenue Streams</h1>
+                <ul>
+                    <li>Subscriptions
+                    <ul>
+                        <li>Individual</li>
+                        <li>Organization</li>
+                    </ul>
+                    </li>
+                    <li>On demand</li>
+                </ul>
+            </article>
+
+        </section>
+
+
+        <section class="slide-group">
+
+            <article class="slide" data-option="master">
+                <h1>Projected Costs</h1>
+                <h2>Annual</h2>
+                <ul>
+                    <li>Salary: developers + business = $500,000</li>
+                    <li>Marketing: $100,000</li>
+                    <li>Overhead: rent + utils + laptops + cloud = $100,000</li>
+                </ul>
+            </article>
+
+            <article class="slide" data-option="love the numbers">
+                <h1>Excellent!!</h1>
+                <h2>Let's go!</h2>
+            </article>
+
+            <article class="slide" data-option="you need more">
+                <h1>Need More? Music to my ears</h1>
+            </article>
+
+        </section>
+
+    </div>
+</div>
+<script type="text/javascript" src="js/slidfast.js" ></script>
+<script type="text/javascript">
+
+    slidfast({
+    touchEnabled: false,
+    slides: true
+    });
+</script>
+<script src="/js/libs/jquery-1.7.1.min.js"></script>
+<script src="/js/libs/jquery.flot.js"></script>
+<script type="text/javascript" src="js/slidedeck.js" ></script>
+</body>
+</html>

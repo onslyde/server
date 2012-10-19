@@ -15,11 +15,11 @@ window.addEventListener('wtf', function(e) {
 
 window.addEventListener('nice', function(e) {
 //    console.log('nice');
-    var wtf = document.querySelector("#wtf");
-    wtf.innerHTML = "Nice Dude!";
-    if(wtf){
-        wtf.className = "show-wtf nice transition";
-        setTimeout(function(){wtf.className = "hide-wtf transition"},800)
+    var nice = document.querySelector("#nice");
+    nice.innerHTML = "Nice Dude!";
+    if(nice){
+        nice.className = "show-nice nice transition";
+        setTimeout(function(){nice.className = "hide-nice transition"},800)
     }
 }, false);
 

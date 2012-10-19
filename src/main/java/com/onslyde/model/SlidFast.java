@@ -144,7 +144,7 @@ public class SlidFast {
 
     public void updateGroupVote(String vote, String attendeeIP){
 
-        if(vote != null){
+        if(vote != null && !vote.isEmpty()){
             SlideGroupVotes sgv = new SlideGroupVotes();
             Attendee attendee;
             boolean merge = false;
@@ -160,29 +160,32 @@ public class SlidFast {
                 merge = true;
             }
 
+            if(currentSlideGroup != null) {
+                for(SlideGroupOptions option : currentSlideGroup.getSlideGroupOptionses()){
+                   if(option != null){
+                    if(option.getName().equals(vote)){
+                        sgv.setAttendee(attendee);
+                        sgv.setSlideGroup(currentSlideGroup);
+                        sgv.setSlideGroupOptions(option);
+                        sgv.setVoteTime(new Date());
+                        //currentSlideGroup.getSlideGroupVoteses().add(sgv);
+                        if(merge){
+                            attendeeHome.merge(attendee);
+                        }else{
+                            attendeeHome.persist(attendee);
+                        }
 
-            for(SlideGroupOptions option : currentSlideGroup.getSlideGroupOptionses()){
-               if(option != null){
-                if(option.getName().equals(vote)){
-                    sgv.setAttendee(attendee);
-                    sgv.setSlideGroup(currentSlideGroup);
-                    sgv.setSlideGroupOptions(option);
-                    sgv.setVoteTime(new Date());
-                    //currentSlideGroup.getSlideGroupVoteses().add(sgv);
-                    if(merge){
-                        attendeeHome.merge(attendee);
-                    }else{
-                        attendeeHome.persist(attendee);
+                        slideGroupVotesHome.persist(sgv);
                     }
-
-                    slideGroupVotesHome.persist(sgv);
+                   }
                 }
-               }
+
+                //currentSession.getSlideGroups().add(currentSlideGroup);
+                //sgHome.persist(currentSlideGroup);
+                sessionHome.merge(currentSession);
             }
 
-            //currentSession.getSlideGroups().add(currentSlideGroup);
-            //sgHome.persist(currentSlideGroup);
-            sessionHome.merge(currentSession);
+
         }
     }
 
