@@ -771,7 +771,7 @@
                groupSlideIndex++;
             } else {
                //move to next group
-               this.nextGroup();
+//               this.nextGroup();
             }
 
 
@@ -790,7 +790,7 @@
 //               slidfast.ui.slideTo(activeSlide);
                groupSlideIndex--;
             } else {
-               this.prevGroup();
+//               this.prevGroup();
             }
          },
 
@@ -922,7 +922,8 @@
                    //for reveal
                    if (slides[i].getAttribute("data-option") != 'master'){
 //                       console.log(slides[i]);
-                       slides[i].innerHTML = "";
+//                       slides[i].style.display = "none";
+                       slides[i].parentNode.removeChild(slides[i]);
                    }
                }
             }
@@ -1010,14 +1011,14 @@
                 case 13: // Enter
                 case 32: // space
                 case 34: // PgDn
-                  slidfast.slides.nextSlide();
+                  slidfast.slides.nextGroup();
                   event.preventDefault();
                   break;
 
                 case 37: // left arrow
                 case 8: // Backspace
                 case 33: // PgUp
-                  slidfast.slides.prevSlide();
+                  slidfast.slides.prevGroup();
                   event.preventDefault();
                   break;
 
