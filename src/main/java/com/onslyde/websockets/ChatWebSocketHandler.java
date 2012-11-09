@@ -45,11 +45,16 @@ public class ChatWebSocketHandler extends WebSocketHandler {
             try {
                 for (ChatWebSocket webSocket : getWebsockets()) {
                     //send out to all connected websockets
-                    webSocket.connection.sendMessage(slidFast.getJsEvent());
-                    slidFast.setJsEvent(null);
+                    //System.out.println("-slidFast.getJsEvent()#1--------" + slidFast.getJsEvent());
+                    if(slidFast.getJsEvent() != null){
+                        //System.out.println("-slidFast.getJsEvent()#2--------" + slidFast.getJsEvent());
+                        webSocket.connection.sendMessage(slidFast.getJsEvent());
+                        //System.out.println("send message--------" + slidFast.getJsEvent());
+                    }
                 }
             } catch (Exception x) {
                 //todo - do something
+                x.printStackTrace();
             }
         }
     }
@@ -102,7 +107,7 @@ public class ChatWebSocketHandler extends WebSocketHandler {
         public void onMessage(String data) {
             // Loop for each instance of ChatWebSocket to send message server to
             // each client WebSockets.
-
+             //System.out.println("------data-" + data);
             //btw, switch on string coming in JDK 7...quicker to use if/else if for now
             if(data.equals("nextSlide")) {
                 data = ("{\"cdievent\":{\"fire\":function(){" +

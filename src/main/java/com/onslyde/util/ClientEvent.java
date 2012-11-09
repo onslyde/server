@@ -52,4 +52,12 @@ public class ClientEvent {
                     "}}}");
     }
 
+    public static String clientProps(String prop){
+        return ("{\"cdievent\":{\"fire\":function(){" +
+                "window.eventObje = document.createEvent('Event');" +
+                "eventObje.initEvent(\'" + prop + "\', true, true);" +
+                "document.dispatchEvent(eventObje);" +
+                "}}}");
+    }
+
 }

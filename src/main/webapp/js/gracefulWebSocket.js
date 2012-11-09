@@ -78,6 +78,7 @@
                readyState: CONNECTING,
                bufferedAmount: 0,
                send: function (data) {
+                   console.log(data);
                   var success = true;
                   //replace colon from namespaced websocket data
                   data = data.replace(data[data.indexOf(':')],'=');
@@ -141,6 +142,8 @@
                   dataType: 'text',
                   data: getFallbackParams(),
                   success: pollSuccess,
+                  async: false,
+                  timeout: 30000,
                   error: function (xhr) {
                      $(fws).triggerHandler('error');
                   }

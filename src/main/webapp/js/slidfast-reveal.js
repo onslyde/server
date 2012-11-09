@@ -677,6 +677,7 @@
 
           _onclose : function(m) {
               ws = null;
+              console.log('closed!!!!')
           },
 
           _onerror : function(e) {

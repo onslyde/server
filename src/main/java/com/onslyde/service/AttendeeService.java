@@ -36,6 +36,8 @@ public class AttendeeService {
     @Inject
     private SlidFast slidFast;
 
+    private String currentOptions;
+
     @GET
     @Path("/json")
     @Produces(MediaType.APPLICATION_JSON)
@@ -45,11 +47,11 @@ public class AttendeeService {
         String data = "";
         slidFastEventSrc.fire(slidFast);
         List optionList = slidFast.getActiveOptions();
-        log.fine("!!!!!!!!!!!!!!!!poll " + optionList.size());
+        //System.out.println("!!!!!!!!!!!!!!!!poll " + optionList.size());
         if(optionList.size() == 2){
+            //System.out.println("!!!!!!!!!!!!!!!!options " + optionList.get(0).toString() + optionList.get(1).toString());
             data = ClientEvent.createEvent("updateOptions", optionList);
         }
-        //final List<Member> results = em.createQuery("select m from Member m order by m.name").getResultList();
         return data;
     }
 
@@ -58,21 +60,24 @@ public class AttendeeService {
     @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
     @Produces(MediaType.APPLICATION_JSON)
     public Response optionVote(@FormParam("user") String user, @FormParam("vote") String vote, @Context HttpServletRequest req) {
-
+        slidFastEventSrc.fire(slidFast);
         String ip = req.getRemoteAddr();
         //get ip and verify attendee
-        slidFast.updateGroupVote(vote,ip);
-        Response.ResponseBuilder builder = null;
-        //slidFast.getCurrentVotes().add(vote);
-        //System.out.println("**************slidFast.getCurrentVotes()*" + slidFast.getCurrentVotes().size());
-        builder = Response.ok();
-        //send new vote out to all conencted clients... should really only go to slide deck
-        // could try to also validate that the vote matches one of the options
+        //System.out.println("**************slidFast" + slidFast.getCurrentVotes().size() + "ip: " + ip + " vote:" + vote);
         if(vote != null){
-            slidFast.setJsEvent(ClientEvent.clientVote(vote));
-        }
+            slidFast.updateGroupVote(vote,ip);
+            if(vote.equals("wtf") || vote.equals("nice")){
+                slidFast.setJsEvent(ClientEvent.clientProps(vote));
+            }else{
+                slidFast.setJsEvent(ClientEvent.clientVote(vote));
+            }
 
-        slidFastEventSrc.fire(slidFast);
+            slidFastEventSrc.fire(slidFast);
+            slidFast.setJsEvent(null);
+        }
+        Response.ResponseBuilder builder = null;
+
+        builder = Response.ok();
 
         return builder.build();
     }

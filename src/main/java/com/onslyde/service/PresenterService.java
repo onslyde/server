@@ -48,7 +48,7 @@ public class PresenterService {
         if(addr == null){
             //todo hack to sync objects across threads for now
             slidFastEventSrc.fire(slidFast);
-
+            //System.out.println("hello-----");
             try {
                 addr = InetAddress.getLocalHost().getHostAddress();
             } catch (UnknownHostException e) {

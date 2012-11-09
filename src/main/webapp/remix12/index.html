@@ -84,16 +84,21 @@
     //var ws = slidfast.ws.join('client:anonymous2');
 
     option1.onclick = function(event) {
-    ws.send('vote:' + option1.value);
-    disablePoll();
-    return false;
+      return sendVote(event,option1.value);
     };
 
     option2.onclick = function(event) {
-    ws.send('vote:' + option2.value);
-    disablePoll();
-    return false;
+        return sendVote(event,option2.value);
     };
+
+    function sendVote(event,option){
+
+        if(option){
+            ws.send('vote:' + option);
+        }
+        disablePoll();
+        return false;
+    }
 
     wtf.onclick = function(event) {
     ws.send('vote:wtf');
@@ -115,32 +120,32 @@
     };
 
     function disablePoll(){
-    option1.disabled = true;
-    option2.disabled = true;
-    option1.style.opacity = .4;
-    option2.style.opacity = .4;
-    //voteLabel.style.opacity = .4;
-    //voteLabel.innerHTML = 'You Voted!'
+        option1.disabled = true;
+        option2.disabled = true;
+        option1.style.opacity = .4;
+        option2.style.opacity = .4;
+        //voteLabel.style.opacity = .4;
+        //voteLabel.innerHTML = 'You Voted!'
     }
 
 
     window.addEventListener('updateOptions', function(e) {
-    //quick check to make sure we don't re-enable on polling clients
-    if(option1.value != e.option1){
-    option1.disabled = false;
-    option2.disabled = false;
-    wtf.disabled = false;
-        nice.disabled = false;
-    option1.value = e.option1;
-    option2.value = e.option2;
-    wtf.value = 'WTF!';
-        nice.value = 'Nice!';
-    //voteLabel.style.opacity = 1;
-    option1.style.opacity = 1;
-    option2.style.opacity = 1;
-    wtf.style.opacity = 1;
-        nice.style.opacity = 1;
-    //voteLabel.innerHTML = 'Vote!'
+        //quick check to make sure we don't re-enable on polling clients
+        if(option1.value != e.option1){
+        option1.disabled = false;
+        option2.disabled = false;
+        wtf.disabled = false;
+            nice.disabled = false;
+        option1.value = e.option1;
+        option2.value = e.option2;
+        wtf.value = 'WTF!';
+            nice.value = 'Nice!';
+        //voteLabel.style.opacity = 1;
+        option1.style.opacity = 1;
+        option2.style.opacity = 1;
+        wtf.style.opacity = 1;
+            nice.style.opacity = 1;
+        //voteLabel.innerHTML = 'Vote!'
     }
 
 
