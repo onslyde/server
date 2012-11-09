@@ -31,11 +31,59 @@
                 height: 225px;
                 width: 95%;
             }
+
+            .hide-wtf,
+            .hide-nice {
+                opacity:0;
+                width:1px;
+                height: 1px;
+                background-color: red;
+                color: #fff;
+                position: absolute;
+
+                right:0;
+
+                bottom: 0;
+                font-size: .01em;
+                z-index: 10;
+            }
+
+            .show-wtf,
+            .show-nice {
+                opacity: 1;
+                /*width: 50%;*/
+                height: 10%;
+                background-color: red;
+                color: #fff;
+                text-align: center;
+                vertical-align: middle;
+                right:0;
+                left: 0;
+                bottom: 0;
+                padding: 5% 0 0 0;
+                position: absolute;
+                font-size: 3em;
+                z-index: 10;
+            }
+
+            .nice {
+                background-color: green;
+            }
+
+                /*=============== charts*/
+
+            .tickLabel {
+                font-size: 26px;
+            }
+
+            .xAxis .tickLabel {
+                margin: 10px 0 0 0;
+            }
         </style>
     </head>
 
     <body>
-    <div class="address">
+    <div class="address" style="display:none">
         <span style="color:orange;">go to </span> onslyde.com/remix12
     </div>
     <div id="wtf" class="hide-wtf">
@@ -48,11 +96,64 @@
 
             <!-- Any section element inside of this container is displayed as a slide -->
             <div class="slides">
+
+                <section>
+                    <h1>HTML5 AND JAVASCRIPT WEB APPS</h1>
+                    <h2 style="color:orange">Devoxx 2012 - University Session</h2>
+                    <h3>@wesleyhales</h3>
+                </section>
+
+                <section>
+                    <section>
+                        <h1>We've got 3 hours...</h1>
+                    </section>
+
+                    <section>
+                        <h1>To learn cool shit like...</h1>
+                    </section>
+
+                    <section>
+                        <h1>Everything Related to HTML5 and the Mobile Web</h1>
+                    </section>
+
+                    <section>
+                        <h1>The Browser Scene</h1>
+                        <h2>Web Browser === Platform</h2>
+                    </section>
+
+                    <section>
+                        <h1>Single Page Applications</h1>
+                        <h2>SPA, SOFEA, etc...</h2>
+                    </section>
+
+                    <section>
+                        <h1>Getting as close to native as possible</h1>
+                    </section>
+
+                    <section>
+                        <h1>Offline First</h1>
+                    </section>
+
+                    <section>
+                        <h1>Progressive Enhancement vs. Graceful Degradation</h1>
+                    </section>
+
+                    <section>
+                        <h1>Widely Supported HTML5/W3C APIs</h1>
+                        <h2>Web Workers, Web Sockets, Orientation, Geolocation, Web Storage</h2>
+                    </section>
+
+                </section>
+
+                <section>
+                    <h1>We've got 3 hours...</h1>
+                </section>
+
                 <section class="slide-group">
 
                     <section class="slide" data-option="master">
                         <h1 style="color:orange">Yo DAWG!</h1>
-                        <h2>are you connected?</h2>
+                        <h2>u connected?</h2>
                     </section>
 
                     <section class="slide" data-option="Yes">
