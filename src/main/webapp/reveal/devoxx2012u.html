@@ -99,7 +99,7 @@
 
                 <section>
                     <h1>HTML5 AND JAVASCRIPT WEB APPS</h1>
-                    <h2 style="color:orange">Devoxx 2012 - University Session</h2>
+                    <h2 class="orange-text">Devoxx 2012 - University Session</h2>
                     <h3>@wesleyhales</h3>
                 </section>
 
@@ -143,6 +143,15 @@
                         <h2>Web Workers, Web Sockets, Orientation, Geolocation, Web Storage</h2>
                     </section>
 
+                    <section>
+                        <h1>Front-end Performance</h1>
+                        <h2>Increase SEO, Leads, etc...</h2>
+                    </section>
+
+                    <section>
+                        <h1>Drink beer(s)</h1>
+                    </section>
+
                 </section>
 
 
@@ -151,8 +160,9 @@
                     <h1>WHOAMI</h1>
                     <ul>
                         <li>Recently wrote a book</li>
-                        <li>Spent 4+ years at JBoss working on UI stuff</li>
+                        <li>Spent the past decade+ on the UI</li>
                         <li>Changed jobs 4 times this year</li>
+                        <li>Senior Developer at Apigee</li>
                         <li>Loves me some UI</li>
                     </ul>
                 </section>
@@ -382,6 +392,12 @@
 
                     <section>
                         <h2>HTML5e</h2>
+                        <img src=""/>
+                    </section>
+
+                    <section>
+                        <h2>slidfast.js</h2>
+                        <img src=""/>
                     </section>
 
                 </section>
@@ -389,6 +405,7 @@
                 <section data-state="alert">
                     <section>
                         <h1>Code it</h1>
+                        <h2>Exercise 1</h2>
                     </section>
 
                     <section>
@@ -407,10 +424,11 @@
                     </section>
 
                     <section>
-                        <h2>Code What?</h2>
+                        <h2>What we'll do</h2>
                         <ul>
                             <li>Single Page Mobile Web App</li>
-                            <li>CSS3, HTML5, JavaScript</li>
+                            <li>Add touch support for native feel</li>
+                            <li>CSS3, HTML5, JavaScript around 100 lines each</li>
                             <li>Test across all browsers</li>
                         </ul>
                     </section>
@@ -423,20 +441,343 @@
                     </section>
                 </section>
 
+                <section>
+                    <h1>Need Break?</h1>
+                </section>
+
                 <section data-state="soothe">
-                    <h1>Hour 2</h1>
+                    <h1>Hour 2 (part1)</h1>
                     <ul>
-                        <li>Build Processes/Dev flow</li>
+                        <li>Offline Capability</li>
                     </ul>
                 </section>
 
                 <section>
-                    <h2>Grunt.js</h2>
+                    <h2>Online/Offline Events</h2>
+                    <pre><code contenteditable>
+window.addEventListener("offline", function (e) {
+//we just lost our connection and entered offline mode, disable eternal link
+slidfast.network.processOffline(e.type);
+}, false);
+                    </code></pre>
+                </section>
+
+                <section>
+                    <h2>Network Detection</h2>
+                    <pre><code contenteditable>
+var connection = navigator.connection || {'type':'0'};
+if (connection.type === 2 || connection.type === 1) {
+//...
+} else if (connection.type === 3) {
+//edge
+//ATT Edge latency: ~400-600ms
+//ATT Edge DL speed: ~2-10kbps
+slidfast.core.fetchAndCache(false);
+} else if (connection.type === 2) {
+//3g
+//ATT 3G latency: ~400ms
+//Verizon 3G latency: ~150-250ms
+//...
+}
+                    </code></pre>
+                </section>
+
+                <section>
+                    <h2>App Cache</h2>
+                    <pre><code contenteditable>
+//check for a new appCache
+window.applicationCache.addEventListener('updateready', function (e) {
+//alert('checking appcache' + window.applicationCache.status);
+    if (window.applicationCache.status === window.applicationCache.UPDATEREADY) {
+    // Browser downloaded a new app cache.
+    // Swap it in and reload the page to get the new hotness.
+    window.applicationCache.swapCache();
+        if (confirm('A new version of this site is available. Load it?')) {
+            window.location.reload();
+        }
+    }
+}, false);
+                    </code></pre>
+                </section>
+
+                <section>
+                    <h2>App Cache Config</h2>
+                    <pre><code contenteditable>
+CACHE MANIFEST
+# 2011-08-18:v4
+
+CACHE:
+demo1.html
+styles/demo1.css
+js/demo1.js
+
+NETWORK:
+*
+                    </code></pre>
+                </section>
+
+                <section>
+                    <h2>App Cache Config</h2>
+                    <p>The * indicates that the browser should allow all connections to non-cached resources from a cached page.</p>
+                    <pre><code contenteditable>
+...
+NETWORK:
+*
+                    </code></pre>
+                </section>
+
+                <section>
+                    <h2>Link Prefetching</h2>
+                    <p>Link prefetching allows developers to silently preload site contents to project a more fluid, seamless web experience:</p>
+                <pre><code contenteditable>
+<!-- full page -->
+&lt;link rel="prefetch" href="http://davidwalsh.name/css-enhancements-user-experience" /&gt;
+                </code></pre>
+                </section>
+
+                <section>
+                    <h2>Link Prefetching (slidfast.js)</h2>
+
+                <pre><code contenteditable>
+var getFrame = function () {
+var frame = document.getElementById("temp-frame");
+
+if (!frame) {
+// create frame
+frame = document.createElement("iframe");
+frame.setAttribute("id", "temp-frame");
+frame.setAttribute("name", "temp-frame");
+frame.setAttribute("seamless", "");
+frame.setAttribute("sandbox", "allow-same-origin");
+frame.style.display = 'none';
+document.documentElement.appendChild(frame);
+}
+// load a page
+return frame.contentDocument;
+};
+                </code></pre>
+                </section>
+
+                <section>
+                    <h2>Link Prefetching (slidfast.js)</h2>
+
+                <pre><code contenteditable>
+document.getElementById(location).appendChild(document.adoptNode(newPage));
+                </code></pre>
+                </section>
+
+                <section>
+                    <h1>Offline First</h1>
                     <ul>
-                        <li>Single Page Mobile Web App</li>
-                        <li>CSS3, HTML5, JavaScript</li>
-                        <li>Test across all browsers</li>
+                        <li>Demo</li>
                     </ul>
+                </section>
+
+
+
+
+
+                <section data-state="soothe">
+                    <h1>Hour 2 (part2)</h1>
+                    <ul>
+                        <li>HTML5 and W3C APIs
+                            <ul>
+                                <li>Web Sockets</li>
+                                <li>Web Workers</li>
+                                <li>Orientation</li>
+                                <li>Geolocation</li>
+                                <li>Web Storage</li>
+                            </ul>
+                        </li>
+                    </ul>
+                </section>
+
+                <section>
+
+                    <section>
+                        <h1>Web Sockets</h1>
+                    </section>
+
+                    <section>
+                        <h2>Every HTTP request sent from the browser includes headers, whether you want them or not.</h2>
+                    </section>
+
+                    <section>
+                        <h2>Uncompressed request and response headers can vary in size from 200 bytes to over 2K.</h2>
+                    </section>
+
+                    <section>
+                        <h2>WebSockets give you minimal overhead with full duplex communication through a single socket.</h2>
+                    </section>
+
+                    <section>
+                        <pre><code>
+supports_websocket:function () {
+    try {
+        return 'WebSocket' in window && window['WebSocket'] !== null;
+    } catch (e) {
+        return false;
+    }
+}
+                        </code></pre>
+                    </section>
+
+                    <section>
+                        <h1>Web Sockets</h1>
+                        <ul>
+                            <li>Demo</li>
+                        </ul>
+                    </section>
+
+                </section>
+
+                <section>
+
+                    <section>
+                        <h1>Web Storage</h1>
+                    </section>
+
+                    <section>
+                        <h2>Today, you have two well-supported mechanisms for storing data on the client: cookies and Web Storage. </h2>
+                    </section>
+
+                    <section>
+                        <h2>Cookies are much different than Web Storage and implicitly send data back to the server upon each request through HTTP headers.</h2>
+                    </section>
+
+                    <section>
+                        <h2>Cookies only give you 4kb of max storage per cookie</h2>
+                    </section>
+
+                    <section>
+                        <h1>Web Storage</h1>
+                        <pre><code contenteditable>
+localStorage.bookName = 'HTML5 and JavaScript Web Apps';
+//or
+localStorage['bookName'] = 'HTML5 and JavaScript Web Apps';
+//or
+localStorage.setItem('bookName') = 'HTML5 and JavaScript Web Apps';
+                        </code></pre>
+                    </section>
+
+                    <section>
+                        <pre><code>
+supports_local_storage:function () {
+    try {
+        return 'localStorage' in window && window['localStorage'] !== null;
+    } catch (e) {
+        return false;
+    }
+}
+                        </code></pre>
+                    </section>
+
+                </section>
+
+                <section>
+
+                    <section>
+                        <h1>Orientation</h1>
+                    </section>
+
+                    <section>
+                        <h2>Accelerometers, gyroscopes, and compasses are now commonplace in mobile devices and laptops.</h2>
+                    </section>
+
+                    <section>
+                        <pre><code contenteditable>
+supports_orientation : function() {
+    try {
+        return 'DeviceOrientationEvent' in
+        window && window['DeviceOrientationEvent'] !== null } catch (e) {
+        return false;
+    }
+}
+                        </code></pre>
+                    </section>
+
+                    <section>
+                        <h1>Orientation</h1>
+                        <ul>
+                            <li>Demo</li>
+                        </ul>
+                    </section>
+
+                </section>
+
+                <section>
+
+                    <section>
+                        <h1>Geolocation</h1>
+                        <h2>(not HTML5)</h2>
+                    </section>
+
+                    <section>
+                        <h2>The Geolocation API provides scripted access to geographical location information associated with the hosting device.</h2>
+                        <ul>
+                            <li>Geofencing</li>
+                            <li>Geocoding</li>
+                            <li>General tracking</li>
+                        </ul>
+                    </section>
+
+                    <section>
+                        <h2>The API itself is device agnostic; it doesn’t care how the browser determines location.</h2>
+                        <ul>
+                            <li>Wifi</li>
+                            <li>GPS</li>
+                            <li>(User Entered) Zip Code</li>
+                        </ul>
+                    </section>
+
+                    <section>
+                    <pre><code contenteditable>
+//geolocation cannot be accessed with dot notation in iOS5... will prevent page caching
+supports_geolocation:function () {
+    try {
+        return 'geolocation' in navigator && navigator['geolocation'] !== null;
+    } catch (e) {
+        return false;
+    }
+}
+                    </code></pre>
+                    WebKit caching bug (https://bugs.webkit.org/show_bug.cgi?id=43956).
+                    </section>
+
+                    <section>
+                        <h1>Geolocation</h1>
+                        <ul>
+                            <li>Demo</li>
+                        </ul>
+                    </section>
+
+                </section>
+
+                <section>
+
+                    <section>
+                        <h1>Web Workers</h1>
+                    </section>
+
+                    <section>
+                        <h2>The Web Workers interface spawns real OS-level threads, allowing for data to be passed back and forth between any given threads (or worker)</h2>
+                    </section>
+
+                    <section>
+                        <h2>You cannot access components unsafe to threads or the DOM, and you have to pass specific data in and out of a thread through serialized objects.</h2>
+                    </section>
+
+                    <section>
+                        <h1>Web Workers</h1>
+                        <ul>
+                            <li>Demo</li>
+                        </ul>
+                    </section>
+
+                </section>
+
+                <section>
+                    <h1>Need Break?</h1>
                 </section>
 
                 <section data-state="soothe">
@@ -490,13 +831,90 @@
                     <section>
                         <h1>Don't end up with a huge mess!</h1>
                         <ul>
-                            <li>2012-2013 is all about hybrid</li>
-                            <li>Microsoft, Blackberry, PhoneGap, Appcelerator...</li>
+                            <li>2012-2013 is all about hybrid
+                            <ul><li>Microsoft, Blackberry, PhoneGap, Appcelerator...</li></ul></li>
                             <li>Dealing with separate code bases takes special care</li>
                             <li>JavaScript MV* frameworks help with this</li>
                         </ul>
                     </section>
 
+                </section>
+
+                <section>
+                    <section>
+                        <h2>Front-End Performance</h2>
+                        <ul>
+                            <li>Developers inherently care about performance</li>
+                            <li>Product, Sales, and Marketing folks don’t care as much</li>
+                            <li>Performance impacts the bottom line of the business</li>
+                            <li>When speed drops off, the performance of the business drops off</li>
+                        </ul>
+                    </section>
+
+                    <section>
+                        <h1>An Experiment...</h1>
+                        <h2>By Google, Yahoo! and Bing</h2>
+                        <p>By Steve Souders</p>
+                    </section>
+
+                    <section>
+                        <h1>Google introduced +0.4 second delay</h1>
+                        <h2 class="red-text">Searches dropped by 0.6%</h2>
+                    </section>
+
+                    <section>
+                        <h1>Yahoo introduced +0.4 second delay</h1>
+                        <h2 class="red-text">Traffic dropped by 5-9% in full page traffic</h2>
+                    </section>
+
+                    <section>
+                        <h1>Bing introduced a full 2 second delay</h1>
+                        <h2 class="red-text">Revenue per user dropped 4%</h2>
+                    </section>
+
+                    <section>
+                        <h1>Shopzilla reduced page load by 5s</h1>
+                        <h2 class="green-text">Revenue increased by 12%</h2>
+                        <ul>
+                            <li class="green-text">Hardware reduced by 50%</li>
+                            <li class="green-text">Unique users doubled</li>
+                        </ul>
+                    </section>
+
+                    <section>
+                        <h1>An Experiment...</h1>
+                        <h2>On CNN.com</h2>
+                        <p>By Me</p>
+                    </section>
+
+                    <section>
+                        <h2>CNN removed jQuery and Protoaculous from concatenation and added to CDN</h2>
+                        <h2 class="green-text">Improved site performance by 17%</h2>
+                        <h2 class="green-text">Reduced almost 1TB of bandwidth per day</h2>
+                    </section>
+
+                </section>
+
+                <section data-state="alert">
+                    <section>
+                        <h1>Code it</h1>
+                        <h2>Final Exercise</h2>
+                    </section>
+
+                    <section>
+                        <h2>Tools Needed</h2>
+                        <ul>
+                            <li>PhantomJS</li>
+                            <li>loadreport.js</li>
+                        </ul>
+                    </section>
+
+                    <section>
+                        <h2>What we'll do</h2>
+                        <ul>
+                            <li>Generate a loadtest report so you can measure your site performance per build</li>
+                        </ul>
+                    </section>
                 </section>
             </div>
 
@@ -530,18 +948,6 @@
             });
 
         </script>
-
-        <script type="text/javascript" src="/js/slidfast-reveal.js" ></script>
-        <script type="text/javascript">
-
-            slidfast({
-                touchEnabled: false,
-                slides: true
-            });
-        </script>
-        <script src="/js/libs/jquery-1.7.1.min.js"></script>
-        <script src="/js/libs/jquery.flot.js"></script>
-        <script type="text/javascript" src="/js/slidedeck.js" ></script>
 
     </body>
 </html>

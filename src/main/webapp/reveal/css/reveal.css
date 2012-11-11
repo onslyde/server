@@ -1182,3 +1182,19 @@ body {
 }
 
 
+.reveal .green-text,
+.reveal li.green-text {
+    -webkit-text-stroke: 1px white;
+    color:green;
+}
+
+.reveal .red-text {
+    -webkit-text-stroke: 1px white;
+    color:red
+}
+
+.reveal .orange-text {
+    /*-webkit-text-stroke: 1px #ffc864;*/
+    color:orange
+}
+
