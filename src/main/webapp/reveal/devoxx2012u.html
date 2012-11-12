@@ -178,7 +178,8 @@
 
                 <section>
                     <section>
-                        <h1>The Web Browser is the platform</h1>
+                        <h3>The Web Browser is the platform</h3>
+                        <img src="/images/remix12/allbrowsers.png" style="width: 100%"/>
                     </section>
 
                     <section>
@@ -187,8 +188,16 @@
                     </section>
 
                     <section>
-                        <h2>Server side generated UI creates bottleneck</h2>
+                        <h2>ahh yes, JavaScript on the server :)</h2>
+                        <h3>Security - Introduces new attack vectors with eval (the same problems we had in JS)
+                        You are building a stack from scratch</h3>
                     </section>
+
+                    <section>
+                        <h2>NIO vs. Threading</h2>
+                        <h3>Overall, you’re writing single-threaded event loops where the callbacks (and blocking) must be managed.</h3>
+                    </section>
+
                 </section>
 
                 <section>
@@ -196,12 +205,21 @@
                         <h1>The Mobile Web</h1>
                     </section>
 
-                    <section>
-                        <h2>One billion HTML5-capable mobile devices will be sold in 2013</h2>
+                    <section class="slide-group">
+                        <article class="slide" data-option="master">
+                            <h3>HTML5 is (mostly) about Mobile!</h3>
+                            <img src="/images/remix12/android-ios.gif" style="width: 100%"/>
+                        </article>
                     </section>
 
                     <section>
-                        <h2>stats here</h2>
+                        <h2>One billion HTML5-capable mobile devices will be sold in 2013</h2>
+                        <img src="/images/remix12/mobile-marketshare-may2012.PNG"/>
+                    </section>
+
+                    <section>
+                        <h2>However, things are terribly fragmented</h2>
+                        <img src="/images/remix12/android-frag.png" style="height: 100%"/>
                     </section>
 
                     <section>
@@ -229,8 +247,12 @@
                     </section>
 
                     <section>
-                        <h2>Developing sites for constrained devices force fluid/flexible content</h2>
+                        <h3>Developing sites for constrained devices force fluid/flexible content</h3>
                         <img src="/images/devoxx2012u/responsive.png"/>
+                    </section>
+
+                    <section>
+                        <img src="/images/devoxx2012u/long-page.png"/>
                     </section>
 
                     <section>
@@ -286,12 +308,13 @@
 
                 </section>
 
+
                 <section>
+                    <h2>Mobile Web Browsers</h2>
+                    <img src="/images/remix12/allbrowsers.png"/>
+                </section>
 
-                    <section>
-                        <h2>Mobile Web Browsers</h2>
-                    </section>
-
+                <section>
                     <section>
                         <h2>WebKit</h2>
                         <ul>
@@ -304,7 +327,7 @@
 
                     <section>
                         <h2>WebKit Revisions</h2>
-                        <img src=""/>
+                        <img src="/images/devoxx2012u/webkit-graph.png"/>
                     </section>
 
                     <section>
@@ -327,6 +350,12 @@
                     </section>
 
                     <section>
+                        <h2>Android Marketshare</h2>
+                        <img src="/images/remix12/android-percents.png"/>
+                    </section>
+                </section>
+                <section>
+                    <section>
                         <h2>Firefox Mobile</h2>
                         <ul>
                             <li>Currently ahead of iOS HTML5 implementation</li>
@@ -335,11 +364,20 @@
                                     <li>HTML based OS (B2G)</li>
                                 </ul>
                             </li>
-
-                            <img src=""/>
                         </ul>
                     </section>
 
+                    <section>
+                        <h2>Firefox Phone (HTML5 OS)</h2>
+                        <img src="/images/devoxx2012u/firefox-phone.png"/>
+                    </section>
+
+                    <section>
+                        <h2>Firefox Phone (HTML5 OS)</h2>
+                        <img src="/images/devoxx2012u/b2g-example-apps.jpg"/>
+                    </section>
+                </section>
+                <section>
                     <section>
                         <h2>Opera Mobile</h2>
                         <ul>
@@ -352,7 +390,8 @@
 
                         </ul>
                     </section>
-
+                </section>
+                <section>
                     <section>
                         <h2>Internet Explorer Mobile</h2>
                         <ul>
@@ -367,10 +406,11 @@
                             </li>
                         </ul>
                     </section>
-
+                </section>
+                <section>
                     <section>
                         <h2>Mobile Browser Market Share</h2>
-                        <img src=""/>
+                        <img src="/images/remix12/mobile-marketshare-may2012.PNG"/>
                     </section>
 
                     <section>
@@ -378,26 +418,33 @@
                         <ul>
                             <li>Since October 2011 
                                 <ul>
-                                    <li>WebKit has jumped from 75% to 80%</li>
-                                    <li>Opera Mini shrunk from 18.65% to 12%</li>
-                                    <li>IE Browsers grew from .16% to .58%</li>
+                                    <li>WebKit has jumped from 75% to 87%</li>
+                                    <li>Opera Mini shrunk from 18.65% to 8%</li>
+                                    <li>IE Browsers grew from .16% to 1%</li>
+                                    <li>Blackberry grew to 1%</li>
                                 </ul>
                             </li>
                         </ul>
                     </section>
-
+                </section>
+                <section>
                     <section>
                         <h2>How do we keep up?</h2>
                     </section>
 
                     <section>
-                        <h2>HTML5e</h2>
-                        <img src=""/>
+                        <h2>HTML5e (desktop)</h2>
+                        <img src="/images/remix12/html5e-desktop.png"/>
+                    </section>
+
+                    <section>
+                        <h2>HTML5e (mobile)</h2>
+                        <img src="/images/remix12/html5e-mobile.png"/>
                     </section>
 
                     <section>
                         <h2>slidfast.js</h2>
-                        <img src=""/>
+                        <h3>Learning framework based on HTML5 concepts</h3>
                     </section>
 
                 </section>
@@ -567,6 +614,11 @@ document.getElementById(location).appendChild(document.adoptNode(newPage));
                 </section>
 
                 <section>
+                    <img src="/images/devoxx2012u/iframe-perf.png"/>
+                    <p>red = innerHTML</p>
+                </section>
+
+                <section>
                     <h1>Offline First</h1>
                     <ul>
                         <li>Demo</li>
@@ -625,7 +677,7 @@ supports_websocket:function () {
                     <section>
                         <h1>Web Sockets</h1>
                         <ul>
-                            <li>Demo</li>
+                            <li>Fun Demo</li>
                         </ul>
                     </section>
 
@@ -672,6 +724,10 @@ supports_local_storage:function () {
                         </code></pre>
                     </section>
 
+                <section>
+                    <h2>Web Storage Perf</h2>
+                    <img src="/images/remix12/jsperf-localstorage1.png"/>
+                </section>
                 </section>
 
                 <section>
@@ -764,7 +820,11 @@ supports_geolocation:function () {
                     </section>
 
                     <section>
-                        <h2>You cannot access components unsafe to threads or the DOM, and you have to pass specific data in and out of a thread through serialized objects.</h2>
+                        <h2>You cannot access components unsafe to threads or the DOM</h2>
+                    </section>
+
+                    <section>
+                        <h2>You have to pass specific data in and out of a thread through serialized objects.</h2>
                     </section>
 
                     <section>
