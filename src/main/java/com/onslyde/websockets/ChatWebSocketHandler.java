@@ -90,6 +90,8 @@ public class ChatWebSocketHandler extends WebSocketHandler {
             // 2) Add ChatWebSocket in the global list of ChatWebSocket
             // instances
             // instance.
+            this.connection.setMaxIdleTime(1000000);
+
             getWebsockets().add(this);
 
             //send current state to remotes

@@ -149,7 +149,7 @@
                     </section>
 
                     <section>
-                        <h1>Drink beer(s)</h1>
+                        <h1>...Then Drink beer(s)</h1>
                     </section>
 
                 </section>
@@ -159,10 +159,10 @@
                 <section>
                     <h1>WHOAMI</h1>
                     <ul>
-                        <li>Recently wrote a book</li>
+                        <li>Recently wrote a book (shameless plug)</li>
                         <li>Spent the past decade+ on the UI</li>
-                        <li>Changed jobs 4 times this year</li>
-                        <li>Senior Developer at Apigee</li>
+                        <li>Changed jobs 4 times this year (JBoss, Cox, CNN, Apigee)</li>
+                        <li>Currently Senior Developer at Apigee</li>
                         <li>Loves me some UI</li>
                     </ul>
                 </section>
@@ -179,7 +179,7 @@
                 <section>
                     <section>
                         <h3>The Web Browser is the platform</h3>
-                        <img src="/images/remix12/allbrowsers.png" style="width: 100%"/>
+                        <img src="/images/remix12/allbrowsers.png"/>
                     </section>
 
                     <section>
@@ -189,13 +189,18 @@
 
                     <section>
                         <h2>ahh yes, JavaScript on the server :)</h2>
-                        <h3>Security - Introduces new attack vectors with eval (the same problems we had in JS)
-                        You are building a stack from scratch</h3>
+                        <p>Security - Introduces new attack vectors with eval (the same problems we had in JS)</p>
+                        <p>You are building a stack from scratch</p>
                     </section>
 
                     <section>
                         <h2>NIO vs. Threading</h2>
                         <h3>Overall, you’re writing single-threaded event loops where the callbacks (and blocking) must be managed.</h3>
+                    </section>
+
+                    <section>
+                        <h2>But we're not going to get into that holy war :)</h2>
+                        <p>This talk is about writing offline capable apps - for mobile and desktop</p>
                     </section>
 
                 </section>
@@ -205,11 +210,54 @@
                         <h1>The Mobile Web</h1>
                     </section>
 
-                    <section class="slide-group">
-                        <article class="slide" data-option="master">
-                            <h3>HTML5 is (mostly) about Mobile!</h3>
-                            <img src="/images/remix12/android-ios.gif" style="width: 100%"/>
-                        </article>
+                    <section>
+                        <h3>HTML5 is (mostly) about Mobile!</h3>
+                        <img src="/images/remix12/android-ios.gif" style="width: 100%"/>
+                    </section>
+
+                    <section>
+                        <h2>Mobile development comes first, everything else follows.</h2>
+                    </section>
+
+                    <section>
+                        <h2>But sometimes, being first isn't what you expected...</h2>
+                        <img src="/images/devoxx2012u/me-first.png"/>
+                    </section>
+
+                    <section>
+                        <h2>Native vs. Mobile Web</h2>
+                        <h3>Hardware Lockout for HTML5...</h3>
+                        <ul>
+                            <li>No Camera (on iOS)</li>
+                            <li>No Address Book</li>
+                            <li>No Vibration</li>
+                            <li>...</li>
+                        </ul>
+                    </section>
+
+                    <section>
+                        <h3>Native is not for everybody...</h3>
+                        <p>Especially for media brands or large enterprises that cannot or will not invest in the developers to create a native app for every platform.</p>
+                    </section>
+
+                    <section>
+                        <h1>There is hope</h1>
+                    </section>
+
+                    <section>
+                        <h2>Apple had an advantage</h2>
+                        <p>NEXT -> OSX -> IOS -> ObjectiveC</p>
+                    </section>
+
+                    <section>
+                        <h2>Android had an advantage</h2>
+                        <p>First competitor, open platform, Google</p>
+                    </section>
+
+                    <section>
+                        <h2>Mozilla is bringing in more openness</h2>
+                        <p>With Firefox OS (WebAPI project)</p>
+                        <p>They upset IE with Firefox, and now must repeat with HTML5</p>
                     </section>
 
                     <section>
@@ -223,13 +271,14 @@
                     </section>
 
                     <section>
-                        <h2>Rethinking the Web (mobile and desktop)</h2>
+                        <h2>Rethinking the Web Today (mobile and desktop)</h2>
                         <ul>
                             <li>Web applications will not work the same across all browsers</li>
                             <li>Users of newer/modern browsers will get the cool stuff</li>
                             <li>Older browsers will have limited functionality</li>
                         </ul>
                     </section>
+
                 </section>
 
                 <section>
@@ -238,7 +287,7 @@
                     </section>
 
                     <section>
-                        <h2>Mobile development comes first, everything else follows.</h2>
+                        <h2>Mobile First === Offline First</h2>
                     </section>
 
                     <section>
@@ -277,15 +326,7 @@
 
                 </section>
 
-                <section>
-                    <h2>Mobile Web Challenges</h2>
-                    <ul>
-                        <li>Mobile Web is not Write once run anywhere</li>
-                        <li>Vendor Prefixes</li>
-                        <li>Fragmentation</li>
-                        <li>Older iPhones and any device which hasn’t upgraded past Android 4 will be the IE6s of this mobile era</li>
-                    </ul>
-                </section>
+
 
                 <section>
 
@@ -368,12 +409,12 @@
                     </section>
 
                     <section>
-                        <h2>Firefox Phone (HTML5 OS)</h2>
+                        <h2>Firefox OS (HTML5 OS)</h2>
                         <img src="/images/devoxx2012u/firefox-phone.png"/>
                     </section>
 
                     <section>
-                        <h2>Firefox Phone (HTML5 OS)</h2>
+                        <h2>Firefox OS (HTML5 OS)</h2>
                         <img src="/images/devoxx2012u/b2g-example-apps.jpg"/>
                     </section>
                 </section>
@@ -444,7 +485,7 @@
 
                     <section>
                         <h2>slidfast.js</h2>
-                        <h3>Learning framework based on HTML5 concepts</h3>
+                        <p>Learning framework based on HTML5e concepts</p>
                     </section>
 
                 </section>
@@ -462,9 +503,9 @@
                             <li>Browsers
                                 <ul>
                                     <li>Safari/WebKit/Chrome</li>
-                                    <li>Fennec</li>
                                     <li>Opera Mobile</li>
                                     <li>*Android</li>
+                                    <li>iOS Emulator</li>
                                 </ul>
                             </li>
                         </ul>
@@ -484,12 +525,12 @@
                         <h2>What we learned</h2>
                         <ul>
                             <li>You don't need jQuery Mobile</li>
+                            <li>Mobile Web is not Write once run anywhere</li>
+                            <li>Vendor Prefixes</li>
+                            <li>Fragmentation</li>
+                            <li>Older iPhones and any device which hasn’t upgraded past Android 4 will be the IE6s of this mobile era</li>
                         </ul>
                     </section>
-                </section>
-
-                <section>
-                    <h1>Need Break?</h1>
                 </section>
 
                 <section data-state="soothe">
@@ -624,10 +665,6 @@ document.getElementById(location).appendChild(document.adoptNode(newPage));
                         <li>Demo</li>
                     </ul>
                 </section>
-
-
-
-
 
                 <section data-state="soothe">
                     <h1>Hour 2 (part2)</h1>
@@ -834,10 +871,6 @@ supports_geolocation:function () {
                         </ul>
                     </section>
 
-                </section>
-
-                <section>
-                    <h1>Need Break?</h1>
                 </section>
 
                 <section data-state="soothe">
