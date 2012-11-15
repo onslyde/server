@@ -17,7 +17,7 @@
 </head>
 <body>
 <div id="browser">
-    <h2 id="vote-label"></h2>
+    <h2 id="vote-label">@wesleyhales</h2>
     <nav class="primary">
         <ul>
             <li><input id="option1" class="button" type="submit" value="" />
@@ -55,27 +55,7 @@
         singlePageModel: true
     });
 
-    window.addEventListener('updateOptions', function(e) {
-        //quick check to make sure we don't re-enable on polling clients
-        if(option1.value != e.option1){
-            option1.disabled = false;
-            option2.disabled = false;
-            wtf.disabled = false;
-            nice.disabled = false;
-            option1.value = e.option1;
-            option2.value = e.option2;
-            wtf.value = 'WTF!';
-            nice.value = 'Nice!';
-            //voteLabel.style.opacity = 1;
-            option1.style.opacity = 1;
-            option2.style.opacity = 1;
-            wtf.style.opacity = 1;
-            nice.style.opacity = 1;
-            voteLabel.innerHTML = 'Vote!';
-        }
 
-
-    }, false);
 
     var ws;
     (function ($) {
@@ -144,7 +124,25 @@
         voteLabel.innerHTML = 'Waiting...';
     }
 
-
+    window.addEventListener('updateOptions', function(e) {
+        //quick check to make sure we don't re-enable on polling clients
+        if(option1.value != e.option1){
+            option1.disabled = false;
+            option2.disabled = false;
+            wtf.disabled = false;
+            nice.disabled = false;
+            option1.value = e.option1;
+            option2.value = e.option2;
+            wtf.value = 'WTF!';
+            nice.value = 'Nice!';
+            //voteLabel.style.opacity = 1;
+            option1.style.opacity = 1;
+            option2.style.opacity = 1;
+            wtf.style.opacity = 1;
+            nice.style.opacity = 1;
+            voteLabel.innerHTML = 'Vote!';
+        }
+    }, false);
 
 </script>
 </body>
