@@ -777,10 +777,10 @@
 
 
             //quick hack for hiding audience address bar
-             var mainScreenAddressBar = document.querySelector(".address");
-             if(mainScreenAddressBar){
-                 document.querySelector(".address").className = 'address-small';
-             }
+//             var mainScreenAddressBar = document.querySelector(".address");
+//             if(mainScreenAddressBar){
+//                 document.querySelector(".address").className = 'address-small';
+//             }
          },
 
          prevSlide : function() {
