@@ -104,6 +104,426 @@
                     <h3>@wesleyhales</h3>
                 </section>
 
+                <section>
+
+                    <section>
+                        <p>Today, the front-end gets just as much consideration as the back-end</p>
+                    </section>
+
+                    <section>
+                        <p>Server-side UI frameworks can create a massive bottleneck, and tie you to stale ideas and structures</p>
+                    </section>
+
+                    <section>
+                        <p>What does a client-side heavy approach give us?</p>
+                    </section>
+
+                    <section>
+                        <p>Generating HTML on the client reduces server load and can deliver a better overall user experience</p>
+                    </section>
+
+                    <section>
+                        <p>JSON and XML use less bandwidth than presentation-ready HTML and there is less string concatenation and HTML escaping to perform</p>
+                    </section>
+
+                    <section>
+                        <p>The client browser must download the first payload of JavaScript and markup, but after that, it’s much easier to control how resources are delivered and how the application is enhanced</p>
+                    </section>
+
+                    <section>
+                        <p>Client-side code gives us the flexibility of using CDN bandwidth for popular libraries like jQuery</p>
+                    </section>
+
+                    <section>
+                        <p>When using a CDN for resource delivery, we are betting that the user has already downloaded this library through another Web site using the same CDN</p>
+                    </section>
+
+                    <section>
+                        <p>This spares them the bulk and expense of downloading a 33KB (gzipped) library like jQuery yet again</p>
+                    </section>
+
+                    <section>
+                        <p>However, when everything runs on the client, performance and security is reduced.</p>
+                    </section>
+
+                    <section>
+                        <p>Parsing JSON or XML and generating HTML uses more memory and processing time than just printing some server-rendered HTML</p>
+                    </section>
+
+                    <section>
+                        <p>When we create an offline capable application that is distributed across many different browsers, WebStorage (localStorage) is the only viable means for storing data on the client – and it offers no security</p>
+                    </section>
+
+                    <section>
+                        <p>Most of the time you’ll end up with a hybrid application that does some processing on the server and much more on the client</p>
+                    </section>
+
+                </section>
+
+                <section>
+                    <section>
+                        <h3>Offline First</h3>
+                        <p>"Offline First" is one of many *First buzzwords</p>
+                    </section>
+
+                    <section>
+                        <p>What does it mean?</p>
+                    </section>
+
+                    <section>
+                        <h2>Understanding "offline first"</h2>
+                        <p><a href="http://www.html5rocks.com/en/mobile/optimization-and-performance/#toc-network-detection">HTML5Rocks Article</a></p>
+                    </section>
+
+                    <section>
+                        <h2>Online/Offline Events</h2>
+                    <pre><code contenteditable>
+window.addEventListener("offline", function (e) {
+//we just lost our connection and entered offline mode, disable eternal link
+slidfast.network.processOffline(e.type);
+}, false);
+                    </code></pre>
+                    </section>
+
+                    <section>
+                        <h2>Network Detection</h2>
+                    <pre><code contenteditable>
+var connection = navigator.connection || {'type':'0'};
+if (connection.type === 2 || connection.type === 1) {
+//...
+} else if (connection.type === 3) {
+//edge
+//ATT Edge latency: ~400-600ms
+//ATT Edge DL speed: ~2-10kbps
+slidfast.core.fetchAndCache(false);
+} else if (connection.type === 2) {
+//3g
+//ATT 3G latency: ~400ms
+//Verizon 3G latency: ~150-250ms
+//...
+}
+                    </code></pre>
+                    </section>
+
+                    <section>
+                        <h2>App Cache</h2>
+                    <pre><code contenteditable>
+//check for a new appCache
+window.applicationCache.addEventListener('updateready', function (e) {
+//alert('checking appcache' + window.applicationCache.status);
+if (window.applicationCache.status === window.applicationCache.UPDATEREADY) {
+// Browser downloaded a new app cache.
+// Swap it in and reload the page to get the new hotness.
+window.applicationCache.swapCache();
+if (confirm('A new version of this site is available. Load it?')) {
+window.location.reload();
+}
+}
+}, false);
+                    </code></pre>
+                    </section>
+
+                    <section>
+                        <h2>App Cache Config</h2>
+                    <pre><code contenteditable>
+CACHE MANIFEST
+# 2011-08-18:v4
+
+CACHE:
+demo1.html
+styles/demo1.css
+js/demo1.js
+
+NETWORK:
+*
+                    </code></pre>
+                    </section>
+
+                    <section>
+                        <h2>App Cache Config</h2>
+                        <p>The * indicates that the browser should allow all connections to non-cached resources from a cached page.</p>
+                    <pre><code contenteditable>
+...
+NETWORK:
+*
+                    </code></pre>
+                    </section>
+
+                    <section>
+                        <h2>Link Prefetching</h2>
+                        <p>Link prefetching allows developers to silently preload site contents to project a more fluid, seamless web experience:</p>
+                <pre><code contenteditable>
+<!-- full page -->
+&lt;link rel="prefetch" href="http://davidwalsh.name/css-enhancements-user-experience" /&gt;
+                </code></pre>
+                    </section>
+
+                    <section>
+                        <h2>Link Prefetching (slidfast.js)</h2>
+
+                <pre><code contenteditable>
+var getFrame = function () {
+var frame = document.getElementById("temp-frame");
+
+if (!frame) {
+// create frame
+frame = document.createElement("iframe");
+frame.setAttribute("id", "temp-frame");
+frame.setAttribute("name", "temp-frame");
+frame.setAttribute("seamless", "");
+frame.setAttribute("sandbox", "allow-same-origin");
+frame.style.display = 'none';
+document.documentElement.appendChild(frame);
+}
+// load a page
+return frame.contentDocument;
+};
+                </code></pre>
+                    </section>
+
+                    <section>
+                        <h2>Link Prefetching (slidfast.js)</h2>
+
+                <pre><code contenteditable>
+document.getElementById(location).appendChild(document.adoptNode(newPage));
+                </code></pre>
+                    </section>
+
+                    <section>
+                        <img src="/images/devoxx2012u/iframe-perf.png"/>
+                        <p>red = innerHTML</p>
+                    </section>
+
+                    <section>
+                        <h3><a href="http://slidfast.appspot.com/network-detection.html#">Demo</a></h3>
+                    </section>
+
+                </section>
+
+                <section>
+                    <section>
+                        <h2>Browser Performance</h2>
+                    </section>
+
+                    <section>
+                        Performance impacts the bottom line of the business
+                    </section>
+
+                    <section>
+                        When speed drops off, the performance of the business drops off
+                    </section>
+
+                    <section>
+                        <h2>An Experiment...</h2>
+                        <h3>By Google, Yahoo! and Bing</h3>
+                        <p>By Steve Souders</p>
+                    </section>
+
+                    <section>
+                        <h2>Google introduced +0.4 second delay</h2>
+                        <h3 class="red-text">Searches dropped by 0.6%</h3>
+                    </section>
+
+                    <section>
+                        <h2>Yahoo introduced +0.4 second delay</h2>
+                        <h3 class="red-text">Traffic dropped by 5-9% in full page traffic</h3>
+                    </section>
+
+                    <section>
+                        <h2>Bing introduced a full 2 second delay</h2>
+                        <h3 class="red-text">Revenue per user dropped 4%</h3>
+                    </section>
+
+                    <section>
+                        <h2>Shopzilla reduced page load by 5s</h2>
+                        <h3 class="green-text">Revenue increased by 12%</h3>
+                        <ul>
+                            <li class="green-text">Hardware reduced by 50%</li>
+                            <li class="green-text">Unique users doubled</li>
+                        </ul>
+                    </section>
+
+                    <section>
+                        <h2>An Experiment...</h2>
+                        <h3>On CNN.com</h3>
+                        <p>By Me</p>
+                    </section>
+
+                    <section>
+                        <h2>CNN removed jQuery and Protoaculous from concatenation and added to CDN</h2>
+                        <h3 class="green-text">Improved site performance by 17%</h3>
+                        <h3 class="green-text">Reduced almost 1TB of bandwidth per day</h3>
+                    </section>
+
+                </section>
+                <section>
+                    <section>
+                        <p>What makes sites feel slow?</p>
+                    </section>
+
+                    <section>
+                        <p>Non-gzipped or non-cached resources</p>
+                    </section>
+
+                    <section>
+                        <p>Too much concatenation</p>
+                    </section>
+
+                    <section>
+                        <p>Script block (downloading and rendering)</p>
+                    </section>
+
+                    <section>
+                        <p>Figure out what's needed to render the page and defer everything else</p>
+                    </section>
+
+                    <section>
+                        <h3>UI Checklist</h3>
+                        <ul>
+                            <li>Make fewer HTTP requests</li>
+                            <li>Use a CDN</li>
+                            <li>Gzip components</li>
+                            <li>Put style sheets at the top</li>
+                            <li>Put scripts at the bottom</li>
+                            <li>Avoid CSS expressions</li>
+                        </ul>
+                    </section>
+
+                    <section>
+                        Avoid CSS expressions?
+                        <a href="http://wesleyhales.com/blog/2012/04/09/PhoneGap-iscroll-css3-choppiness/">Demo</a>
+                    </section>
+
+                </section>
+
+                <section>
+
+                    <section>
+                        <h2>Script Loading</h2>
+                    </section>
+
+                    <section>
+                        <p>Use defer - Introduced over 12 years ago with IE4</p>
+                        <pre><code>
+&lt;script src="file.js" defer&gt;&lt;/script&gt;
+                        </code></pre>
+                        <p>Download in background and execute in order</p>
+                    </section>
+
+                    <section>
+                        <p>With HTML5 - Use async</p>
+                        <pre><code>
+&lt;script src="file.js" async&gt;&lt;/script&gt;
+                        </code></pre>
+                        <p>Execute when downloaded but no order preservation</p>
+                    </section>
+
+                    <section>
+                        <p>Only Needed after page load...</p>
+                        <pre><code>
+var se = document.createElement(‘script’);
+se.src = ‘http://mydomain.com/script.js’
+//append to head
+                        </code></pre>
+                        <p>Used by Google Analytics - May not preserve order</p>
+                    </section>
+
+                    <section>
+                        <p>Only Needed after page load...(cont)</p>
+                        <pre><code>
+&lt;script type=“text/javascript”&gt;
+/*var …*/
+&lt;/script&gt;
+                    </code></pre>
+                        <p>Gmail Mobile - remove comment delimiters eval when needed</p>
+                    </section>
+
+                    <section>
+                        <p>ControlJS</p>
+                        <pre><code>
+&lt;script type="text/cjs" data-cjssrc="main.js"&gt;&lt;/script&gt;
+                        </code></pre>
+                        <p>Used By Washington Post - Crawls DOM, Loads scripts asyn</p>
+                    </section>
+
+                    <section>
+                        <h3>Diagnosing Problems</h3>
+                        <ul>
+                            <li>Yslow</li>
+                            <li>Page Speed (shows how much JS was actually used)</li>
+                            <li>WebPagetest.org</li>
+                        </ul>
+                    </section>
+                </section>
+
+            <section>
+                <section>
+                    <h2>Optimizing</h2>
+                </section>
+
+                <section>
+                    <p>If you want to optimize something you need to be able to measure it.</p>
+                </section>
+
+                <section>
+                    <p>80ms is the average response time noticed by the human eye</p>
+                </section>
+
+                <section>
+                    <h3>Loadreport.js</h3>
+                    <p><a href="http://loadreport.wesleyhales.com">Demo</a></p>
+                </section>
+
+            </section>
+
+            <section>
+                <section>
+                    <h2>Web Intents</h2>
+                </section>
+
+                <section>
+                    <p>Adding share buttons from Facebook, LinkedIn, Google, and Twitter come with a heavy cost</p>
+                </section>
+
+                <section>
+                    <p>Facebook share button comes with 11 HTTP requests and a 135KB download (after gzip)</p>
+                </section>
+
+                <section>
+                    <p>Alternatives</p>
+                    <ul>
+                        <li>The best alternative that works across browsers today is a simple share URL</li>
+                        <li>But there are still a few problems with this approach:</li>
+                    </ul>
+                </section>
+
+                <section>
+                    <p>We are faced with a potential list of social networks and options that our users may not even use or care about (the “share bar”)</p>
+                </section>
+
+                <section>
+                    <p>We don’t have any way of receiving a callback on whether the post/share was successful or not</p>
+                    <p>(We must use async analytics by embedding a unique identifier in the URL)</p>
+                </section>
+
+                <section>
+                    <ul>
+                        <li>The only browser supporting the WebKitIntent API is WebKit</li>
+                        <li>This includes Chrome versions ≥ 19</li>
+                        <li>But, even though the tag is supported, you must install a Chrome extension to actually fulfill the intent</li>
+                    </ul>
+                </section>
+
+                <section>
+                    <h3><a href="http://wesleyhales.com/blog/2012/07/11/Sharing-With-Web-Intents-Today/">Demo</a></h3>
+                </section>
+
+            </section>
+
+                <section class="slide-group">
+                    <h1>Thanks!!!</h1>
+                </section>
+
             </div>
 
 
