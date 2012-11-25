@@ -103,6 +103,421 @@
                     <h3>@wesleyhales</h3>
                 </section>
 
+                <section>
+                    <section>
+                        <h3>The Web Browser is the platform</h3>
+                        <img src="/images/remix12/allbrowsers.png"/>
+                    </section>
+
+                    <section>
+                        <p>The front-end gets just as much consideration as the back-end</p>
+                    </section>
+
+                    <section>
+                        <p>Mostly because of mobile</p>
+                    </section>
+
+                    <section>
+                        Going from native to mobile web...
+                    </section>
+
+                    <section>
+                        7000 types of mobile devices parsing Facebook each day
+                        <a href="https://twitter.com/firt/status/266274829462814721">Facebook at QCon</a>
+                    </section>
+
+                    <section>
+                        30% of Financial Times page views & 15% of new subscriptions come from mobile:
+                        <a href="http://www.currybet.net/cbet_blog/2012/11/wanifra-ft.php">http://www.currybet.net</a>
+                    </section>
+
+                    <section>
+                        Browser as a Platform Problems
+                    </section>
+
+                    <section>
+                        <img src="/images/devoxx2012u/mobile-first-no.png"/>
+                    </section>
+
+                    <section>
+                        <p>Did somebody say me first?</p>
+                        <img src="/images/devoxx2012u/me-first.png"/>
+                    </section>
+
+                    <section>
+                        <h3>Let's take a step back</h3>
+                        <p>Understand the problems and come up with an approach.</p>
+                    </section>
+
+                 </section>
+
+
+
+                <section>
+                    <h1>WHOAMI</h1>
+                    <ul>
+                        <li>Spent the past decade+ on the UI</li>
+                        <li>Currently Senior Developer at Apigee</li>
+                        <li>Loves me some UI</li>
+                    </ul>
+                </section>
+
+                <section>
+                    <section>
+                        <h3>Client vs. Server HTML Generation</h3>
+                    </section>
+
+                    <section>
+                        Somewhere between 2008 and 2009, generating HTML and other resources on the backend broke down.
+                    </section>
+
+                    <section>
+                        <p>This was mostly due to the progressive enhancement</p>
+                        (enhancing pages with AJAX and other performance optimizations.)
+                    </section>
+
+                    <section>
+                        This forced developers to create better APIs and more efficient ways of delivering data (through JSON and XML).
+                    </section>
+
+                    <section>
+                        When everything runs on the client, however, performance is reduced.
+                    </section>
+
+                    <section>
+                        Parsing JSON or XML and generating HTML uses more memory than just printing server-rendered HTML.
+                    </section>
+
+                    <section>
+                        JavaScript heavy applications are not SEO friendly
+                    </section>
+
+                    <section>
+                        Search engines cannot parse the JS (today)
+                    </section>
+
+                    <section>
+                        Server side pre-rendering?
+                    </section>
+
+                    <section>
+                        <h2>Client side generation (PROs):</h2>
+                        <ul>
+                            <li>Reduces server load</li>
+                            <li>JSON uses less bandwidth than presentation ready HTML</li>
+                            <li>CDN Bandwidth (jQuery, BackBone, etc...)</li>
+                            <li>Offline capability \o/</li>
+                        </ul>
+                    </section>
+
+                    <section>
+                        <h2>Client side generation (CONs):</h2>
+                        <ul>
+                            <li>Can reduce performance of device/browser</li>
+                            <li>Parsing JSON and generating HTML uses more memory</li>
+                            <li>Hardware access === battery drain</li>
+                            <li>SEO</li>
+                        </ul>
+                    </section>
+
+                    <section>
+                        <h2>The most notable client side con is security</h2>
+                        <ul>
+                            <li>Web Storage is widely supported but not secure</li>
+                        </ul>
+                    </section>
+
+                    <section>
+                        <h3>Don't end up with a huge mess!</h3>
+                        (Most of the time, you’ll end up with a hybrid app)
+                        <ul>
+                            <li>2013 is all about hybrid
+                                <ul><li>Microsoft, Blackberry, PhoneGap, Appcelerator...</li></ul></li>
+                            <li>Dealing with separate code bases takes special care</li>
+                            <li>JavaScript MV* frameworks help with this</li>
+                        </ul>
+                    </section>
+
+                </section>
+
+                <section>
+                    <section>
+                        <h2>Browser Performance</h2>
+                    </section>
+
+                    <section>
+                        Developers inherently care about performance
+                    </section>
+
+                    <section>
+                        Product, Sales, and Marketing folks don’t care as much
+                    </section>
+
+                    <section>
+                        Performance impacts the bottom line of the business
+                    </section>
+
+                    <section>
+                        When speed drops off, the performance of the business drops off
+                    </section>
+
+                    <section>
+                        <h2>An Experiment...</h2>
+                        <h3>By Google, Yahoo! and Bing</h3>
+                        <p>By Steve Souders</p>
+                    </section>
+
+                    <section>
+                        <h2>Google introduced +0.4 second delay</h2>
+                        <h3 class="red-text">Searches dropped by 0.6%</h3>
+                    </section>
+
+                    <section>
+                        <h2>Yahoo introduced +0.4 second delay</h2>
+                        <h3 class="red-text">Traffic dropped by 5-9% in full page traffic</h3>
+                    </section>
+
+                    <section>
+                        <h2>Bing introduced a full 2 second delay</h2>
+                        <h3 class="red-text">Revenue per user dropped 4%</h3>
+                    </section>
+
+                    <section>
+                        <h2>Shopzilla reduced page load by 5s</h2>
+                        <h3 class="green-text">Revenue increased by 12%</h3>
+                        <ul>
+                            <li class="green-text">Hardware reduced by 50%</li>
+                            <li class="green-text">Unique users doubled</li>
+                        </ul>
+                    </section>
+
+                    <section>
+                        <h2>An Experiment...</h2>
+                        <h3>On CNN.com</h3>
+                        <p>By Me</p>
+                    </section>
+
+                    <section>
+                        <h2>CNN removed jQuery and Protoaculous from concatenation and added to CDN</h2>
+                        <h3 class="green-text">Improved site performance by 17%</h3>
+                        <h3 class="green-text">Reduced almost 1TB of bandwidth per day</h3>
+                    </section>
+
+                </section>
+
+
+                <section>
+                    <section>
+                        Device and Feature Detection
+                    </section>
+
+                    <section>
+                        <h3>Which method is best?</h3>
+                        <p>(client vs. server)</p>
+                    </section>
+
+                    <section>
+                        Figuring out what the browser supports
+                    </section>
+
+                    <section>
+                        <pre><code>
+detectCanvas() ? showGraph() : showTable();
+function detectCanvas() {
+    var canvas = document.createElement("canvas"); return canvas.getContext ? true : false;
+}
+                        </code></pre>
+                    </section>
+
+                    <section>
+                        Checking a property of the created element is a must
+                        <pre>
+                            <code>
+...return canvas.getContext...
+                            </code>
+                        </pre>
+                    </section>
+
+                    <section>
+                        <h3>Same thing with Modernizr</h3>
+                        <pre><code>
+Modernizr.canvas ? showGraph() : showTable();
+                        </code></pre>
+                    </section>
+
+                    <section>
+                        Feature-detection frameworks may come at a cost.
+                    </section>
+
+                    <section>
+                        Running the full suite of Modernizr detections can take more than 30 milliseconds to run per page load.
+                    </section>
+
+                    <section>
+                        Can be dangerous on older devices.
+                    </section>
+
+                    <section>
+                        Server-side user agent detection
+                    </section>
+
+                    <section>
+                        Is unreliable
+                    </section>
+
+                    <section>
+                        When to use?
+                    </section>
+
+                    <section>
+                        You know, ahead of time, which platforms you are supporting and their UA strings report correctly
+                    </section>
+
+                    <section>
+                        Used in combination with feature detection ("light" feature detection)
+                    </section>
+
+                    <section>
+                        You need lighter downloads (don't download feature detection scripts)
+                    </section>
+
+                    <section>
+                        <h3>Client-Side UA Libraries</h3>
+                        <ul>
+                            <li><a href="https://github.com/Tobie/Ua-parser">UA-Parser (used by Google)</a></li>
+                            <li><a href="https://github.com/Bestiejs/Platform.js">Platform.js (used by jsperf.com)</a></li>
+                        </ul>
+                    </section>
+
+                    <section>
+                        <h3>Server-Side UA Libraries</h3>
+                        <ul>
+                            <li><a href="http://blog.mobileesp.com/">MobileESP</a>
+                            <ul>
+                                <li>PHP</li>
+                                <li>Java (server side)</li>
+                                <li>ASP.NET (C#)</li>
+                                <li>JavaScript</li>
+                                <li>Ruby</li>
+                                <li>Classic ASP (VBscript)</li>
+                            </ul>
+                            </li>
+                        </ul>
+                    </section>
+
+
+                </section>
+
+                <section>
+                    <section>
+                        Compression
+                    </section>
+
+                    <section>
+                        GZIP everything except stuff that's already (natively) compressed
+                    </section>
+
+                    <section>
+                        For example, GZIPing JPEG images will...
+                    </section>
+
+                    <section>
+                        Cause unneeded overhead on the server
+                    </section>
+
+                    <section>
+                        and applying HTTP compression to something that's already compressed (PNG, JPEG...) will not make it smaller.
+                    </section>
+
+                    <section>
+                        Example server configs:
+                        <ul>
+                            <li><a href="https://github.com/h5bp/server-configs">https://github.com/h5bp/server-configs</a></li>
+                        </ul>
+                    </section>
+
+                    <section>
+                        <h3>The ultimate combo...</h3>
+                        <ul>
+                            <li>Base64 images into CSS</li>
+                            <li>GZIP your CSS files</li>
+                        </ul>
+                    </section>
+
+                    <section>
+                        <h3>Base64 Demo with Canvas</h3>
+                        <ul>
+                            <li>Load the image via Javascript</li>
+                            <li>draw it into a canvas tag</li>
+                            <li>base64 the image data</li>
+                        </ul>
+                    </section>
+
+                    <section>
+                        This allows us to store the string via localStorage and use it when offline or on a slow connection.
+                    </section>
+
+                </section>
+
+                <section>
+                    <section>
+                        Minification
+                    </section>
+
+                    <section>
+                        Minification is the process of removing all unnecessary characters from source code, without changing its functionality.
+                    </section>
+
+                    <section>
+                        <h3>Available Libraries:</h3>
+                        <ul>
+                            <li><a href="http://www.crockford.com/javascript/jsmin.html">JSMin</a></li>
+                            <li><a href="http://dean.edwards.name/packer/">Packer</a></li>
+                            <li><a href="http://dojotoolkit.org/documentation/">Dojo ShrinkSafe</a></li>
+                            <li><a href="http://developer.yahoo.com/yui/compressor/">YUI Compressor</a></li>
+                        </ul>
+                    </section>
+
+                    <section>
+                        <h3>Demo</h3>
+                        How do you choose a minifier? <a href="http://compressorrater.thruhere.net/">CompressorRater</a>
+                    </section>
+
+                </section>
+
+
+                <section>
+                    <section>
+                        Bringing it all together
+                    </section>
+
+                    <section>
+                        <h3><a href="https://github.com/cowboy/grunt">gruntjs</a></h3>
+                    </section>
+
+                    <section>
+                        <ul>
+                            <li>concatenate files</li>
+                            <li>validate files with JSHint</li>
+                            <li>minify with UglifyJS</li>
+                            <li>run headless QUnit tests with a PhantomJS</li>
+                        </ul>
+                    </section>
+
+                    <section>
+                        <h3>Demo</h3>
+                        <p><a href="https://github.com/cowboy/grunt">gruntjs</a> basics</p>
+                    </section>
+                </section>
+
+                <section>
+                    <h3>Last Demo</h3>
+                    <p>Bringing nodejs into maven with the npm-maven-plugin</p>
+                </section>
+
+                <section>
+                    <h1>Thanks!</h1>
+                </section>
             </div>
 
 
