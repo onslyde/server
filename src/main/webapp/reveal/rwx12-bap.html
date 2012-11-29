@@ -129,6 +129,8 @@
                     <section>
                         30% of Financial Times page views & 15% of new subscriptions come from mobile:
                         <a href="http://www.currybet.net/cbet_blog/2012/11/wanifra-ft.php">http://www.currybet.net</a>
+                        <br/>
+                        <a href="http://app.ft.com/">app.ft.com</a>
                     </section>
 
                     <section>
@@ -150,8 +152,6 @@
                     </section>
 
                  </section>
-
-
 
                 <section>
                     <h1>WHOAMI</h1>
@@ -241,74 +241,12 @@
                 </section>
 
                 <section>
-                    <section>
-                        <h2>Browser Performance</h2>
-                    </section>
-
-                    <section>
-                        Developers inherently care about performance
-                    </section>
-
-                    <section>
-                        Product, Sales, and Marketing folks don’t care as much
-                    </section>
-
-                    <section>
-                        Performance impacts the bottom line of the business
-                    </section>
-
-                    <section>
-                        When speed drops off, the performance of the business drops off
-                    </section>
-
-                    <section>
-                        <h2>An Experiment...</h2>
-                        <h3>By Google, Yahoo! and Bing</h3>
-                        <p>By Steve Souders</p>
-                    </section>
-
-                    <section>
-                        <h2>Google introduced +0.4 second delay</h2>
-                        <h3 class="red-text">Searches dropped by 0.6%</h3>
-                    </section>
-
-                    <section>
-                        <h2>Yahoo introduced +0.4 second delay</h2>
-                        <h3 class="red-text">Traffic dropped by 5-9% in full page traffic</h3>
-                    </section>
-
-                    <section>
-                        <h2>Bing introduced a full 2 second delay</h2>
-                        <h3 class="red-text">Revenue per user dropped 4%</h3>
-                    </section>
-
-                    <section>
-                        <h2>Shopzilla reduced page load by 5s</h2>
-                        <h3 class="green-text">Revenue increased by 12%</h3>
-                        <ul>
-                            <li class="green-text">Hardware reduced by 50%</li>
-                            <li class="green-text">Unique users doubled</li>
-                        </ul>
-                    </section>
-
-                    <section>
-                        <h2>An Experiment...</h2>
-                        <h3>On CNN.com</h3>
-                        <p>By Me</p>
-                    </section>
-
-                    <section>
-                        <h2>CNN removed jQuery and Protoaculous from concatenation and added to CDN</h2>
-                        <h3 class="green-text">Improved site performance by 17%</h3>
-                        <h3 class="green-text">Reduced almost 1TB of bandwidth per day</h3>
-                    </section>
-
+                    <h2>Client-Side Basics</h2>
                 </section>
-
 
                 <section>
                     <section>
-                        Device and Feature Detection
+                        <h3>Device and Feature Detection</h3>
                     </section>
 
                     <section>
@@ -405,12 +343,19 @@ Modernizr.canvas ? showGraph() : showTable();
                         </ul>
                     </section>
 
+                    <section>
+                        <a href="http://blog.keithclark.co.uk/responsive-images-using-cookies/">...when all else fails</a>
+                        <pre><code>
+document.cookie = "device_dimensions=" + screen.width + "x" + screen.height;
+                        </code></pre>
+                    </section>
+
 
                 </section>
 
                 <section>
                     <section>
-                        Compression
+                        <h3>Compression</h3>
                     </section>
 
                     <section>
@@ -444,12 +389,15 @@ Modernizr.canvas ? showGraph() : showTable();
                         </ul>
                     </section>
 
-                    <section>
+                    <section data-state="alert">
                         <h3>Base64 Demo with Canvas</h3>
                         <ul>
                             <li>Load the image via Javascript</li>
                             <li>draw it into a canvas tag</li>
                             <li>base64 the image data</li>
+                            <li><a href="http://enable-cors.org/">http://enable-cors.org/</a></li>
+                            <li><a href="https://github.com/slidfast/slidfast/blob/master/slidfast.js#L244">Source</a></li>
+                            <li><a href="http://i-tools.org/gzip">simple string compressor (gzip)</a></li>
                         </ul>
                     </section>
 
@@ -461,7 +409,7 @@ Modernizr.canvas ? showGraph() : showTable();
 
                 <section>
                     <section>
-                        Minification
+                        <h3>Minification</h3>
                     </section>
 
                     <section>
@@ -478,9 +426,13 @@ Modernizr.canvas ? showGraph() : showTable();
                         </ul>
                     </section>
 
-                    <section>
+                    <section data-state="alert">
                         <h3>Demo</h3>
-                        How do you choose a minifier? <a href="http://compressorrater.thruhere.net/">CompressorRater</a>
+                        <p>How do you choose a minifier?</p>
+                        <ul>
+                            <li><a href="http://compressorrater.thruhere.net/">CompressorRater</a></li>
+                            <li><a href="http://marijnhaverbeke.nl/uglifyjs">uglifyjs</a></li>
+                        </ul>
                     </section>
 
                 </section>
@@ -504,16 +456,245 @@ Modernizr.canvas ? showGraph() : showTable();
                         </ul>
                     </section>
 
-                    <section>
+                    <section data-state="alert">
                         <h3>Demo</h3>
                         <p><a href="https://github.com/cowboy/grunt">gruntjs</a> basics</p>
+                    </section>
+
+                </section>
+
+                <section>
+                    <h2>Browser Performance</h2>
+                </section>
+
+                <section>
+
+                    <section>
+                        Developers inherently care about performance
+                    </section>
+
+                    <section>
+                        Product, Sales, and Marketing folks don’t care as much
+                    </section>
+
+                    <section>
+                        Performance impacts the bottom line of the business
+                    </section>
+
+                    <section>
+                        When speed drops off, the performance of the business drops off
+                    </section>
+
+                    <section>
+                        <h2>An Experiment...</h2>
+                        <h3>By Google, Yahoo! and Bing</h3>
+                        <p>By Steve Souders</p>
+                    </section>
+
+                    <section>
+                        <h2>Google introduced +0.4 second delay</h2>
+                        <h3 class="red-text">Searches dropped by 0.6%</h3>
+                    </section>
+
+                    <section>
+                        <h2>Yahoo introduced +0.4 second delay</h2>
+                        <h3 class="red-text">Traffic dropped by 5-9% in full page traffic</h3>
+                    </section>
+
+                    <section>
+                        <h2>Bing introduced a full 2 second delay</h2>
+                        <h3 class="red-text">Revenue per user dropped 4%</h3>
+                    </section>
+
+                    <section>
+                        <h2>Shopzilla reduced page load by 5s</h2>
+                        <h3 class="green-text">Revenue increased by 12%</h3>
+                        <ul>
+                            <li class="green-text">Hardware reduced by 50%</li>
+                            <li class="green-text">Unique users doubled</li>
+                        </ul>
+                    </section>
+
+                    <section>
+                        <h2>An Experiment...</h2>
+                        <h3>On CNN.com</h3>
+                        <p>By Me</p>
+                    </section>
+
+                    <section>
+                        <h2>CNN removed jQuery and Protoaculous from concatenation and added to CDN</h2>
+                        <h3 class="green-text">Improved site performance by 17%</h3>
+                        <h3 class="green-text">Reduced almost 1TB of bandwidth per day</h3>
+                    </section>
+
+                </section>
+
+                <section>
+                    <section>
+                        <p>What makes sites feel slow?</p>
+                    </section>
+
+                    <section>
+                        <p>Non-gzipped or non-cached resources</p>
+                    </section>
+
+                    <section>
+                        <p>Too much concatenation</p>
+                    </section>
+
+                    <section>
+                        <p>Script block (downloading and rendering)</p>
+                    </section>
+
+                    <section>
+                        <p>Figure out what's needed to render the page and defer everything else</p>
+                    </section>
+
+                    <section>
+                        <h3>UI Checklist</h3>
+                        <ul>
+                            <li>Make fewer HTTP requests</li>
+                            <li>Use a CDN</li>
+                            <li>Gzip components</li>
+                            <li>Put style sheets at the top</li>
+                            <li>Put scripts at the bottom</li>
+                            <li>Avoid CSS expressions</li>
+                        </ul>
+                    </section>
+
+                    <section>
+                        <p>Avoid CSS expressions?</p>
+                        <a href="http://wesleyhales.com/blog/2012/04/09/PhoneGap-iscroll-css3-choppiness/">CSS Demo</a>
+                    </section>
+
+                </section>
+
+                <section>
+
+                    <section>
+                        <h2>Script Loading</h2>
+                    </section>
+
+                    <section>
+                        <p>Use defer - Introduced over 12 years ago with IE4</p>
+                        <pre><code>
+&lt;script src="file.js" defer&gt;&lt;/script&gt;
+                        </code></pre>
+                        <p>Download in background and execute in order</p>
+                    </section>
+
+                    <section>
+                        <p>With HTML5 - Use async</p>
+                        <pre><code>
+&lt;script src="file.js" async&gt;&lt;/script&gt;
+                        </code></pre>
+                        <p>Execute when downloaded but no order preservation</p>
+                    </section>
+
+                    <section>
+                        <p>Only Needed after page load...</p>
+                        <pre><code>
+var se = document.createElement(‘script’);
+se.src = ‘http://mydomain.com/script.js’
+//append to head
+                        </code></pre>
+                        <p>Used by Google Analytics - May not preserve order</p>
+                    </section>
+
+                    <section>
+                        <p>Only Needed after page load...(cont)</p>
+                        <pre><code>
+&lt;script type=“text/javascript”&gt;
+/*var …*/
+&lt;/script&gt;
+                        </code></pre>
+                        <p>Gmail Mobile - remove comment delimiters eval when needed</p>
+                    </section>
+
+                    <section>
+                        <p>ControlJS</p>
+                        <pre><code>
+&lt;script type="text/cjs" data-cjssrc="main.js"&gt;&lt;/script&gt;
+                        </code></pre>
+                        <p>Used By Washington Post - Crawls DOM, Loads scripts asyn</p>
+                    </section>
+
+                    <section>
+                        <h3>Diagnosing Problems</h3>
+                        <ul>
+                            <li>Yslow</li>
+                            <li>Page Speed (shows how much JS was actually used)</li>
+                            <li>WebPagetest.org</li>
+                            <li><a href="http://loadreport.wesleyhales.com">loadreport.js...</a></li>
+                        </ul>
                     </section>
                 </section>
 
                 <section>
-                    <h3>Last Demo</h3>
-                    <p>Bringing nodejs into maven with the npm-maven-plugin</p>
+                    <section>
+                        <h2>Optimizing</h2>
+                    </section>
+
+                    <section>
+                        <p>If you want to optimize something you need to be able to measure it.</p>
+                    </section>
+
+                    <section>
+                        <p>80ms is the average response time noticed by the human eye</p>
+                    </section>
+
+                    <section>
+                        <h3>Loadreport.js</h3>
+                        <p><a href="http://loadreport.wesleyhales.com">Loadreport.js Demo</a></p>
+                    </section>
+
                 </section>
+
+                <section>
+                    <section>
+                        <h2>Web Intents</h2>
+                    </section>
+
+                    <section>
+                        <p>Adding share buttons from Facebook, LinkedIn, Google, and Twitter come with a heavy cost</p>
+                    </section>
+
+                    <section>
+                        <p>Facebook share button comes with 11 HTTP requests and a 135KB download (after gzip)</p>
+                    </section>
+
+                    <section>
+                        <p>Alternatives</p>
+                        <ul>
+                            <li>The best alternative that works across browsers today is a simple share URL</li>
+                            <li>But there are still a few problems with this approach:</li>
+                        </ul>
+                    </section>
+
+                    <section>
+                        <p>We are faced with a potential list of social networks and options that our users may not even use or care about (the “share bar”)</p>
+                    </section>
+
+                    <section>
+                        <p>We don’t have any way of receiving a callback on whether the post/share was successful or not</p>
+                        <p>(We must use async analytics by embedding a unique identifier in the URL)</p>
+                    </section>
+
+                    <section>
+                        <ul>
+                            <li>The only browser supporting the WebKitIntent API is WebKit</li>
+                            <li>This includes Chrome versions ≥ 19</li>
+                            <li>But, even though the tag is supported, you must install a Chrome extension to actually fulfill the intent</li>
+                        </ul>
+                    </section>
+
+                    <section>
+                        <h3><a href="http://wesleyhales.com/blog/2012/07/11/Sharing-With-Web-Intents-Today/">WebIntents Demo</a></h3>
+                    </section>
+
+                </section>
+
+
 
                 <section>
                     <h1>Thanks!</h1>

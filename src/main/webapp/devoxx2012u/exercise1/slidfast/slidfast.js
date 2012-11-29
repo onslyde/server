@@ -43,7 +43,7 @@
 
           }
         } catch (e) {
-          alert('Problem with init. Check your options: ' + e);
+          //alert('Problem with init. Check your options: ' + e);
         }
 
         slidfast.core.hideURLBar();
@@ -82,7 +82,7 @@
           try {
             id = getElement(id);
           } catch (e) {
-            console.log('You can\'t slideTo that element, because it doesn\'t exist');
+            //console.log('You can\'t slideTo that element, because it doesn\'t exist');
           }
         }
 
@@ -92,7 +92,7 @@
         try {
           classes = id.className.split(' ');
         } catch (e) {
-          console.log('problem with classname on .page: ' + id.id);
+          //console.log('problem with classname on .page: ' + id.id);
         }
 
         //2.)decide if the incoming page is assigned to right or left
@@ -170,7 +170,7 @@
 
     return slidfast;
 
-  })();
-})(window, document);
+  }());
+}(window, document));
 
 
