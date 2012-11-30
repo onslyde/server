@@ -45,7 +45,7 @@
 
                 bottom: 0;
                 font-size: .01em;
-                z-index: 10;
+                z-index: 12;
             }
 
             .show-wtf,
@@ -63,7 +63,7 @@
                 padding: 5% 0 0 0;
                 position: absolute;
                 font-size: 3em;
-                z-index: 10;
+                z-index: 12;
             }
 
             .nice {
@@ -74,36 +74,99 @@
 
             .tickLabel {
                 font-size: 26px;
+                color: #fff;
             }
 
             .xAxis .tickLabel {
                 margin: 10px 0 0 0;
             }
+
+            .address {
+                background-color: #000;
+                color: #fff;
+                text-align: center;
+                vertical-align: middle;
+                right:0;
+                left: 0;
+                bottom: 0;
+                position: absolute;
+                font-size: 1em;
+                z-index: 10;
+            }
+
+            .address h4 {
+                padding: 5px;
+            }
         </style>
     </head>
 
     <body>
-    <div class="address" style="display:none">
-        <span style="color:orange;">go to </span> onslyde.com/remix12
-    </div>
+
     <div id="wtf" class="hide-wtf">
         WTF!!!
     </div>
     <div id="nice" class="hide-nice">
         Nice!!!
     </div>
-        <div class="reveal">
+    <div class="reveal">
+    <div class="address">
+        <h4 style="text-transform: lowercase;">connect now <span style="color:#13daec;">http://onslyde.com/rwx12</span></h4>
+    </div>
 
             <!-- Any section element inside of this container is displayed as a slide -->
             <div class="slides">
 
-                <section>
-                    <h1>The Browser as a Platform</h1>
-                    <h2 class="orange-text">RWX 2012</h2>
-                    <h3>@wesleyhales</h3>
+                <section class="slide-group">
+
+                    <section class="slide" data-option="master">
+                        <h1>The Browser as a Platform</h1>
+                        <h2 class="orange-text">RWX 2012</h2>
+                        <h3>@wesleyhales</h3>
+                    </section>
+
+                    <section class="slide" data-option="Yes">
+                        <h1>Yay!!! \o/</h1>
+                    </section>
+
+                    <section class="slide" data-option="No">
+                        <h1>y u no connect :(</h1>
+                    </section>
+
                 </section>
 
-                <section>
+                <section class="slide-group">
+
+                    <section class="slide" data-option="master">
+                        <h2 class="orange-text">Are you connected?</h2>
+                    </section>
+
+                    <section class="slide" data-option="Yes">
+                        <h1>Yay!!! \o/</h1>
+                    </section>
+
+                    <section class="slide" data-option="No">
+                        <h1>y u no connect :(</h1>
+                    </section>
+
+                </section>
+
+                <section class="slide-group">
+
+                    <section class="slide" data-option="master">
+                        <h2 class="orange-text">I am more focused on...</h2>
+                    </section>
+
+                    <section class="slide" data-option="Client">
+                        <h1>Yay!!! \o/</h1>
+                    </section>
+
+                    <section class="slide" data-option="Server">
+                        <h1>y u no connect :(</h1>
+                    </section>
+
+                </section>
+
+                <section class="slide-group">
                     <section>
                         <h3>The Web Browser is the platform</h3>
                         <img src="/images/remix12/allbrowsers.png"/>
@@ -153,7 +216,7 @@
 
                  </section>
 
-                <section>
+                <section class="slide-group">
                     <h1>WHOAMI</h1>
                     <ul>
                         <li>Spent the past decade+ on the UI</li>
@@ -162,7 +225,7 @@
                     </ul>
                 </section>
 
-                <section>
+                <section class="slide-group">
                     <section>
                         <h3>Client vs. Server HTML Generation</h3>
                     </section>
@@ -240,11 +303,27 @@
 
                 </section>
 
-                <section>
+                <section class="slide-group">
                     <h2>Client-Side Basics</h2>
                 </section>
 
-                <section>
+                <section class="slide-group">
+
+                    <section class="slide" data-option="master">
+                        <h2 class="orange-text">What do you use for feature detection?</h2>
+                    </section>
+
+                    <section class="slide" data-option="Modernizr">
+                        <h1>Can be dangerous...</h1>
+                    </section>
+
+                    <section class="slide" data-option="UA">
+                        <h1>Can be dangerous too...</h1>
+                    </section>
+
+                </section>
+
+                <section class="slide-group">
                     <section>
                         <h3>Device and Feature Detection</h3>
                     </section>
@@ -353,7 +432,7 @@ document.cookie = "device_dimensions=" + screen.width + "x" + screen.height;
 
                 </section>
 
-                <section>
+                <section class="slide-group">
                     <section>
                         <h3>Compression</h3>
                     </section>
@@ -407,7 +486,7 @@ document.cookie = "device_dimensions=" + screen.width + "x" + screen.height;
 
                 </section>
 
-                <section>
+                <section class="slide-group">
                     <section>
                         <h3>Minification</h3>
                     </section>
@@ -437,8 +516,24 @@ document.cookie = "device_dimensions=" + screen.width + "x" + screen.height;
 
                 </section>
 
+                <section class="slide-group">
 
-                <section>
+                    <section class="slide" data-option="master">
+                        <h2 class="orange-text">Do you currently minify with maven?</h2>
+                    </section>
+
+                    <section class="slide" data-option="Yep">
+                        <h1>With what?</h1>
+                    </section>
+
+                    <section class="slide" data-option="Nope">
+                        <h1>There's a plugin for npm</h1>
+                    </section>
+
+                </section>
+
+
+                <section class="slide-group">
                     <section>
                         Bringing it all together
                     </section>
@@ -463,11 +558,11 @@ document.cookie = "device_dimensions=" + screen.width + "x" + screen.height;
 
                 </section>
 
-                <section>
+                <section class="slide-group">
                     <h2>Browser Performance</h2>
                 </section>
 
-                <section>
+                <section class="slide-group">
 
                     <section>
                         Developers inherently care about performance
@@ -529,7 +624,7 @@ document.cookie = "device_dimensions=" + screen.width + "x" + screen.height;
 
                 </section>
 
-                <section>
+                <section class="slide-group">
                     <section>
                         <p>What makes sites feel slow?</p>
                     </section>
@@ -569,7 +664,7 @@ document.cookie = "device_dimensions=" + screen.width + "x" + screen.height;
 
                 </section>
 
-                <section>
+                <section class="slide-group">
 
                     <section>
                         <h2>Script Loading</h2>
@@ -630,7 +725,7 @@ se.src = ‘http://mydomain.com/script.js’
                     </section>
                 </section>
 
-                <section>
+                <section class="slide-group">
                     <section>
                         <h2>Optimizing</h2>
                     </section>
@@ -650,7 +745,23 @@ se.src = ‘http://mydomain.com/script.js’
 
                 </section>
 
-                <section>
+                <section class="slide-group">
+
+                    <section class="slide" data-option="master">
+                        <h2 class="orange-text">Have you heard of Web Intents?</h2>
+                    </section>
+
+                    <section class="slide" data-option="Yep">
+                        <h1>Yay!!! \o/</h1>
+                    </section>
+
+                    <section class="slide" data-option="Nope">
+                        <h1>Awwww :(</h1>
+                    </section>
+
+                </section>
+
+                <section class="slide-group">
                     <section>
                         <h2>Web Intents</h2>
                     </section>
@@ -694,9 +805,23 @@ se.src = ‘http://mydomain.com/script.js’
 
                 </section>
 
+                <section class="slide-group">
 
+                    <section class="slide" data-option="master">
+                        <h2 class="orange-text">Did you learn something?</h2>
+                    </section>
 
-                <section>
+                    <section class="slide" data-option="Yep">
+                        <h1>Yay!!! \o/</h1>
+                    </section>
+
+                    <section class="slide" data-option="Nope">
+                        <h1>Awwww :(</h1>
+                    </section>
+
+                </section>
+
+                <section class="slide-group">
                     <h1>Thanks!</h1>
                 </section>
             </div>
