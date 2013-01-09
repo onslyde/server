@@ -695,6 +695,7 @@
       var pastOptions = [], activeOptions = [];
       var futureSlides = [], pastSlides = [];
       var futureGroups = [], pastGroups = [];
+      var guids = [];
       var groupSlideIndex = 0;
       var currentVotes = {};
       var totalVotes = 0;
@@ -728,27 +729,42 @@
          },
 
          checkOptions : function() {
-            //console.log('checkOptions' + groupSlideIndex + ' ' + activeSlide.getAttribute("data-option"));
-            if (groupSlideIndex == 0 &&
-                  activeSlide.getAttribute("data-option") == 'master') {
-               //init activeOptions
-               var groupOptions = this.groupOptions(activeGroup);
-               if(groupOptions.length > 0){
-                  barChart.clear();
-                  $('div').remove('.placeholder');
-                  for (var i = 0; i < groupOptions.length; i++) {
-                     barChart.addVoteOption(groupOptions[i]);
-                  }
+            //console.log('groupSlideIndex: ',activeGroup.querySelectorAll('section')[0].querySelectorAll('.chartimage').length);
+            if (groupSlideIndex === 0 && activeSlide !== 'undefined'){
+               //fix this with activeslide not returning master on reverse....
+               //if (activeSlide.getAttribute("data-option")  === 'master') {
+               if(activeGroup.querySelectorAll('section')[0].getAttribute("data-option")  === 'master') {
+                 //init activeOptions
+                 var groupOptions = this.groupOptions(activeGroup);
+                 console.log('groupOptions: ',groupOptions);
+                 if(groupOptions.length > 0){
+
+                    if(activeSlide.querySelectorAll('.placeholder').length === 0 && activeGroup.querySelectorAll('section')[0].querySelectorAll('.chartimage').length === 0) {
+                      barChart.clear();
+                      $('div').remove('.placeholder');
+                      for (var i = 0; i < groupOptions.length; i++) {
+                         barChart.addVoteOption(groupOptions[i]);
+                      }
+                      //console.log('activeSlide.querySelectorAll.placeholder.length', activeSlide.querySelectorAll('.placeholder').length);
+
+                      var barChartDiv = document.createElement("div");
+                      barChartDiv.className = 'placeholder';
+                      //give a unique id;
+                      barChartDiv.id = guid();
+                      activeSlide.appendChild(barChartDiv);
+                      barChart.draw();
+                      //catch all for enabling any past chart images
+                      var oldchartimages = document.querySelectorAll('.chartimage');
+                      for ( var o = 0; o < oldchartimages.length; o++ ) {
+                        oldchartimages[o].style.display = '';
+                      }
+
+                    }
 
 
-                  var barChartDiv = document.createElement("div");
-                  barChartDiv.className = 'placeholder';
-                   console.log(activeSlide)
-                  activeSlide.appendChild(barChartDiv);
+                 }
 
-                  barChart.draw();
-               }
-
+              }
             }
          },
 
@@ -760,8 +776,8 @@
             console.log('nextSlide' + futureSlides.length + ' ' + groupSlideIndex);
             if (futureSlides.length > 0) {
 
-               if(activeSlide.getAttribute("data-option") == 'master' &&
-                  activeSlide.getAttribute("data-route") == null && totalVotes > 0) {
+               if(activeSlide.getAttribute("data-option") === 'master' &&
+                  activeSlide.getAttribute("data-route") === null && totalVotes > 0) {
                   //console.log('decideroute');
                   this.decideRoute();
                }
@@ -797,7 +813,29 @@
 
          nextGroup : function() {
 
-            //console.log('nextGroup' + groupSlideIndex);
+           //generate an image of the chart to save state
+           var baseCanvas = activeGroup.querySelectorAll('section')[0].querySelectorAll('.base')[0];
+
+           if(baseCanvas){
+             //var placeHolder = activeGroup.querySelectorAll('section')[0].querySelectorAll('.placeholder')[0];
+             //console.log('baseCanvas ', placeHolder.querySelectorAll('.chartimage').length);
+             //fix this bullshit please, something is wrong with activeGRoup/Slide when backtracking
+               if(activeGroup.querySelectorAll('section')[0].querySelectorAll('.chartimage').length === 0){
+               var baseImage = new Image();
+               baseImage.src = baseCanvas.toDataURL();
+               //baseImage.id = placeHolder.id;
+               baseImage.className = 'chartimage';
+               baseImage.style.display = 'none';
+               activeGroup.querySelectorAll('section')[0].appendChild(baseImage);
+//               $('div').remove('.base');
+//               var placeHolderCopy = placeHolder;
+//                 placeHolderCopy.id = placeHolder.id + '-chartcopy';
+//                 placeHolderCopy.style.display = none;
+//                 activeGroup.querySelectorAll('section')[0].appendChild(placeHolderCopy);
+               //console.log('barChart image ', baseCanvas.toDataURL());
+             }
+           }
+
             if (futureGroups.length > 0) {
                activeOption = null;
 
@@ -806,8 +844,12 @@
                activeGroup.style.display = 'none';
                activeGroup = futureGroups.shift();
                activeGroup.style.display = '';
+
                futureSlides = toArray(this.groupSlides(activeGroup));
+               //console.log('next group:futureSlides', futureSlides);
+
                activeSlide = futureSlides.shift();
+
 
                this.checkOptions();
                this.updateRemotes();
@@ -850,9 +892,14 @@
                   //pastSlides.reverse();
                }
                futureSlides = [];
-               groupSlideIndex = pastSlides.length;
-               activeSlide = pastSlides.pop();
+               //this was for the old slide deck... allows to go back in history on chosen option
+               //groupSlideIndex = pastSlides.length;
+              //set to 0 for reveal
+              groupSlideIndex = 0;
+
+              activeSlide = pastSlides.pop();
                var groupOptions = this.groupOptions(activeGroup);
+               this.checkOptions();
                this.updateRemotes();
                //console.log('---groupOptions ' + groupOptions);
                //console.log('activeSlide ' + activeSlide);
@@ -875,7 +922,8 @@
 
          groupSlides : function(group) {
             //return all slides for a group
-            return group.querySelectorAll(".slide");
+            //return group.querySelectorAll(".slide");
+            return group.querySelectorAll('section');
          },
 
          groupOptions : function(group) {
@@ -968,9 +1016,9 @@
                 if(currentVotes.hasOwnProperty(activeOptions[i]))
                 totalVotes += currentVotes[activeOptions[i]];
             }
-			
-			barChart.vote(vote);
-			barChart.redraw();
+
+         barChart.vote(vote);
+         barChart.redraw();
          },
 
          decideRoute : function(){
@@ -978,14 +1026,12 @@
 
             var values = [];
             var sortedObj = [];
-            //console.log(currentVotes);
             for(var opt in currentVotes){
                if (currentVotes.hasOwnProperty(opt)) {
                   values.push(currentVotes[opt])
                }
             }
             values.sort(function(a,b){return b-a});
-            //console.log(values);
 
             //todo - check for tie condition
 
@@ -1052,6 +1098,24 @@
          } else {
             return document.getElementById(id);
          }
+      };
+
+      var guid = function()
+      {
+       var S4 = function ()
+       {
+         return Math.floor(
+           Math.random() * 0x10000 /* 65536 */
+         ).toString(16);
+       };
+
+       return (
+         S4() + S4() + "-" +
+           S4() + "-" +
+           S4() + "-" +
+           S4() + "-" +
+           S4() + S4() + S4()
+         );
       };
 
       var timerStart = function() {
