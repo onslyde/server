@@ -60,4 +60,13 @@ public class ClientEvent {
                 "}}}");
     }
 
+    public static String customIP(String ip){
+        return ("{\"cdievent\":{\"fire\":function(){" +
+                "window.eventObjf = document.createEvent('Event');" +
+                "eventObjf.initEvent(\'customIP\', true, true);" +
+                "eventObjf.customIP = '" + ip + "';\n" +
+                "document.dispatchEvent(eventObjf);" +
+                "}}}");
+    }
+
 }

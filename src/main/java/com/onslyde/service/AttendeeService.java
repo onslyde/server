@@ -61,19 +61,22 @@ public class AttendeeService {
         return min + (int)(Math.random() * ((max - min) + 1)) + "";
     }
 
+    private String ip = null;
+
     @POST
     @Path("/vote")
     @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
     @Produces(MediaType.APPLICATION_JSON)
     public Response optionVote(@FormParam("user") String user, @FormParam("vote") String vote, @Context HttpServletRequest req) {
         slidFastEventSrc.fire(slidFast);
-        String ip = null;//req.getRemoteAddr();
-        //get ip and verify attendee
-        //System.out.println("**************slidFast" + slidFast.getCurrentVotes().size() + "ip: " + ip + " vote:" + vote);
-        if(vote != null){
 
+        //req.getRemoteAddr();
+        //get ip and verify attendee
+        System.out.println("**************slidFast" + slidFast.getCurrentVotes().size() + "ip: " + ip + " vote:" + vote);
+        if(vote != null){
             if(ip == null && req.getSession().getAttribute("onslydeIP") == null){
-                ip = randomIPRange() + "." + randomIPRange() + "." + randomIPRange() + "." + randomIPRange();
+                //first subnet should be a user id for the presenter?
+                ip = "777." + randomIPRange() + "." + randomIPRange() + "." + randomIPRange();
                 req.getSession().setAttribute("onslydeIP",ip);
             }else{
                 ip = req.getSession().getAttribute("onslydeIP").toString();
@@ -81,7 +84,8 @@ public class AttendeeService {
 
             //System.out.println("**************slidFast" + ip);
 
-                    slidFast.updateGroupVote(vote,ip);
+            slidFast.updateGroupVote(vote,ip);
+
             if(vote.equals("wtf") || vote.equals("nice")){
                 slidFast.setJsEvent(ClientEvent.clientProps(vote));
             }else{
