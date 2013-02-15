@@ -1,0 +1,616 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+
+    <title>HTML5 and JavaScript Web Apps - DevNexus 2013</title>
+
+    <meta name="description" content="HTML5 and JavaScript Web Apps">
+    <meta name="author" content="Wesley Hales">
+
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+
+    <link rel="stylesheet" href="/css/reveal/reveal.css">
+    <link rel="stylesheet" href="/css/reveal/theme/default.css" id="theme">
+
+    <!-- For syntax highlighting -->
+    <link rel="stylesheet" href="/js/reveal/lib/css/zenburn.css">
+
+    <!-- If the query includes 'print-pdf', use the PDF print sheet -->
+    <script>
+        document.write( '<link rel="stylesheet" href="/css/reveal/print/' + ( window.location.search.match( /print-pdf/gi ) ? 'pdf' : 'paper' ) + '.css" type="text/css" media="print">' );
+    </script>
+
+    <!--[if lt IE 9]>
+    <script src="/js/reveal/lib/js/html5shiv.js"></script>
+    <![endif]-->
+    <style>
+        .placeholder {
+            height: 225px;
+            width: 95%;
+        }
+
+        .hide-wtf,
+        .hide-nice {
+            opacity:0;
+            width:1px;
+            height: 1px;
+            background-color: red;
+            color: #fff;
+            position: absolute;
+
+            right:0;
+
+            bottom: 0;
+            font-size: .01em;
+            z-index: 12;
+        }
+
+        .show-wtf,
+        .show-nice {
+            opacity: 1;
+            /*width: 50%;*/
+            height: 10%;
+            background-color: red;
+            color: #fff;
+            text-align: center;
+            vertical-align: middle;
+            right:0;
+            left: 0;
+            bottom: 0;
+            padding: 5% 0 0 0;
+            position: absolute;
+            font-size: 3em;
+            z-index: 12;
+        }
+
+        .nice {
+            background-color: green;
+        }
+
+            /*=============== charts*/
+
+        .tickLabel {
+            font-size: 26px;
+            color: #fff;
+        }
+
+        .xAxis .tickLabel {
+            margin: 10px 0 0 0;
+        }
+
+        .address {
+            background-color: #000;
+            color: #fff;
+            text-align: center;
+            vertical-align: middle;
+            right:0;
+            left: 0;
+            bottom: 0;
+            position: absolute;
+            font-size: 1em;
+            z-index: 10;
+        }
+
+        .address h4 {
+            padding: 5px;
+        }
+
+    </style>
+</head>
+
+<body>
+<script type="text/javascript">
+
+    var _gaq = _gaq || [];
+    _gaq.push(['_setAccount', 'UA-31854873-2']);
+    _gaq.push(['_trackPageview']);
+
+    (function() {
+        var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+        ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+        var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+    })();
+
+</script>
+<div id="wtf" class="hide-wtf">
+    WTF!!!
+</div>
+<div id="nice" class="hide-nice">
+    Nice!!!
+</div>
+<div class="reveal">
+<div class="address">
+    <h4 style="text-transform: lowercase;">connect now <span style="color:#13daec;">http://onslyde.com/devoxx12</span></h4>
+</div>
+<!-- Any section element inside of this container is displayed as a slide -->
+<div class="slides">
+
+<section class="slide-group">
+
+    <section class="slide">
+        <h2>Defragmenting Mobile HTML5 Web Apps</h2>
+        <h3>@wesleyhales</h3>
+    </section>
+
+</section>
+
+<section class="slide-group">
+
+    <section class="slide" data-option="master">
+        <h3 style="color:orange">Have you created a mobile web app?</h3>
+    </section>
+
+    <section class="slide" data-option="Yes">
+        Good!
+    </section>
+
+    <section class="slide" data-option="No">
+        Great!
+    </section>
+
+    <section class="slide" data-option="Yes">
+        <img src="/images/devoxx2012u/allbrowsers-frag.png"/>
+    </section>
+
+</section>
+
+<section class="slide-group">
+
+    <section>
+        From native to HTML5
+    </section>
+
+    <section>
+        7000 types of mobile devices parsing Facebook each day
+        <a href="https://twitter.com/firt/status/266274829462814721">Facebook at QCon</a>
+    </section>
+
+    <section>
+        30% of Financial Times page views & 15% of new subscriptions come from mobile:
+        <a href="http://www.currybet.net/cbet_blog/2012/11/wanifra-ft.php">http://www.currybet.net</a>
+    </section>
+
+</section>
+
+<section class="slide-group">
+
+    <section>
+        Problems
+    </section>
+
+    <section>
+        <img src="/images/devoxx2012u/mobile-first-no.png"/>
+    </section>
+
+    <section>
+        <p>Did somebody say me first?</p>
+        <img src="/images/devoxx2012u/me-first.png"/>
+    </section>
+
+    <section>
+        <h3>Let's take a step back</h3>
+        <p>Understand the problems and come up with an approach.</p>
+    </section>
+
+</section>
+
+<section class="slide-group">
+    <section>
+        <h1>Problems</h1>
+    </section>
+</section>
+
+<section class="slide-group">
+
+    <section>
+        JavaScript heavy applications are not SEO friendly
+    </section>
+
+    <section>
+        Search engines cannot parse the JS (today)
+    </section>
+
+    <section>
+        Server side pre-rendering?
+    </section>
+</section>
+
+<section class="slide-group">
+
+    <section>
+        Most companies only focus on iOS and/or Android
+    </section>
+
+    <section>
+        Why is that?
+    </section>
+
+    <section>
+        <h1>Fragmentation...</h1>
+        <p>is the inability to "write once and run anywhere"</p>
+    </section>
+
+    <section>
+        <h1>HTML5 Fragmentation</h1>
+        <p>Deals strictly with how browser APIs access hardware and other device features.</p>
+    </section>
+
+    <section>
+        We're going to focus on 5 APIs
+    </section>
+
+    <section>
+        Developers need a starting point if they're going to tackle all browser platforms
+    </section>
+
+    <section>
+        How can we define the starting point?
+    </section>
+
+</section>
+
+<section class="slide-group">
+    <section>
+        First let's take a look at our target browsers (platforms)
+    </section>
+</section>
+
+<section class="slide-group">
+
+    <section class="slide" data-option="master">
+        <p>What kind of browser are you using right now?</p>
+    </section>
+
+    <section class="slide" data-option="iOS">
+        Mostly iOS!
+    </section>
+
+    <section class="slide" data-option="Other">
+        Mostly Android!
+    </section>
+
+</section>
+
+<section class="slide-group">
+    <section>
+        <h1>Mobile Safari</h1>
+    </section>
+
+    <section>
+        Apple sold 5M iPhone 5s in 3 days.
+    </section>
+
+    <section>
+        <h2>61% Market Share</h2>
+        <p>iOS 4 - 6</p>
+    </section>
+
+    <section>
+        <h3>Upgrade Delay</h3>
+        <p>iPhone iOS6 = 60%</p>
+        <p>iPad iOS6 = 45%</p>
+        <p>iPod Touch iOS6 = 39%</p>
+    </section>
+
+    <section>
+        <h1>Android</h1>
+        <h2>23 Manufacturers</h2>
+        <h2>272 Device Types</h2>
+    </section>
+
+    <section>
+        <img src="/images/devoxx2012u/android-devices.png"/>
+    </section>
+
+    <section>
+        <h2>190 Million Devices Activated in 2011</h2>
+    </section>
+
+    <section>
+        <h2>500 Million Activated in 2012</h2>
+        <p>2.6x increase in 1 year!</p>
+    </section>
+
+    <section>
+        (Gingerbread 2.3 - ICS 4.0)
+        <img src="/images/remix12/android-frag.png"/>
+    </section>
+
+    <section>
+        <h3>Upgrade Delay</h3>
+        <p>21% Market Share (Total)</p>
+        <p>2.3 = 35%</p>
+        <p>4.0 = 45%</p>
+        <p>others = 20%</p>
+    </section>
+
+    <section>
+        <h2>WebKit</h2>
+        <img src="/images/devoxx2012u/webkit-graph.png"/>
+    </section>
+
+    <section>
+        <h1>Internet Explorer Mobile</h1>
+    </section>
+
+    <section>
+        Microsoft sold 4M Windows 8 upgrades in 3 days.
+        <img src="/images/devoxx2012u/operation-completed-succesfully-error-funny-error-messages.jpg"/>
+    </section>
+
+    <section>
+        <img src="/images/devoxx2012u/istilllovevista.png"/>
+    </section>
+
+    <section>
+        <img src="/images/devoxx2012u/minesweeperbug.jpg"/>
+    </section>
+
+    <section>
+        Windows Phone 8 (IE10) and up = 1%
+    </section>
+
+    <section>
+        <h1>Firefox Mobile/OS</h1>
+        <img src="/images/devoxx2012u/firefox-phone.png"/>
+    </section>
+
+    <section>
+        <p>WebAPI project rocks...</p>
+        <img src="/images/devoxx2012u/b2g-example-apps.jpg"/>
+    </section>
+
+    <section>
+        Opera Mobile 12+
+    </section>
+
+    <section>
+        <h2>One big happy family</h2>
+        <img src="/images/remix12/allbrowsers.png"/>
+    </section>
+
+</section>
+
+<section class="slide-group">
+
+    <section>
+        Next, the APIs we can use today...
+    </section>
+
+    <section>
+        <p>HTML5e.org</p>
+        <img src="/images/remix12/html5e-mobile.png"/>
+
+    </section>
+
+    <section>
+        <h1>Web Sockets</h1>
+        <img src="/images/devoxx2012u/web-sockets.png"/><br/>
+        <a href="http://caniuse.com">caniuse.com</a>
+    </section>
+
+    <section>
+        <p>Every HTTP request sent from the browser includes headers that can vary in size from 200 bytes to over 2K</p>
+    </section>
+
+    <section>
+        <p>WebSockets give you minimal overhead with full duplex communication through a single socket.</p>
+    </section>
+
+    <section>
+        <h1>Web Sockets</h1>
+        <ul>
+            <li>Demo (This is it)</li>
+        </ul>
+    </section>
+
+    <section>
+        <h1>Web Sockets Libs</h1>
+        <ul>
+            <li>vert.x</li>
+            <li>socket.io</li>
+            <li>atmosphere</li>
+        </ul>
+    </section>
+
+    <section>
+        <h1>Web Storage</h1>
+        <img src="/images/devoxx2012u/web-storage.png"/><br/>
+        <a href="http://caniuse.com">caniuse.com</a>
+    </section>
+
+    <section>
+        <p>Today, you have two well-supported mechanisms for storing data on the client: cookies and Web Storage.</p>
+    </section>
+
+    <section>
+        <p>Cookies are much different than Web Storage and implicitly send data back to the server upon each request through HTTP headers.</p>
+    </section>
+
+    <section>
+        <p>4kb of max storage per cookie</p>
+    </section>
+
+    <section>
+        <h1>Web Storage</h1>
+                        <pre><code contenteditable>
+                            localStorage.bookName = 'HTML5 and JavaScript Web Apps';
+                            //or
+                            localStorage['bookName'] = 'HTML5 and JavaScript Web Apps';
+                            //or
+                            localStorage.setItem('bookName') = 'HTML5 and JavaScript Web Apps';
+                        </code></pre>
+    </section>
+
+    <section>
+        <h2>Web Storage Perf</h2>
+        <img src="/images/remix12/jsperf-localstorage1.png"/>
+    </section>
+
+    <section>
+        <h2>Web Storage Libs</h2>
+        <a href="http://westcoastlogic.com/lawnchair">LawnChair</a>
+                        <pre><code contenteditable>
+                            Lawnchair(function(){
+                            this.save({msg:'hooray!'})
+                            })
+                        </code></pre>
+    </section>
+
+
+    <section>
+        <h1>Orientation</h1>
+        <img src="/images/devoxx2012u/orientation.png"/><br/>
+        <a href="http://caniuse.com">caniuse.com</a>
+    </section>
+
+    <section>
+        <p>Standard user interfaces are an illusion...</p>
+    </section>
+
+    <section>
+        <p>Cut through the illusion and let people interact directly with content</p>
+    </section>
+
+    <section>
+        <p>Accelerometers, gyroscopes, and compasses are now commonplace in mobile devices and laptops.</p>
+    </section>
+
+    <section>
+        <h1>Orientation</h1>
+        <ul>
+            <li><a href="http://html5e.org/example/orientation/">Demo</a></li>
+        </ul>
+    </section>
+
+    <section>
+        <h1>Geolocation</h1>
+        <img src="/images/devoxx2012u/geolocation.png"/><br/>
+        <a href="http://caniuse.com">caniuse.com</a>
+    </section>
+
+    <section>
+        <p>The Geolocation API provides scripted access to geographical location information associated with the hosting device.</p>
+        <ul>
+            <li>Geofencing</li>
+            <li>Geocoding</li>
+            <li>General tracking</li>
+        </ul>
+    </section>
+
+    <section>
+        <p>The API itself is device agnostic; it doesn’t care how the browser determines location.</p>
+        <ul>
+            <li>Wifi</li>
+            <li>GPS</li>
+            <li>(User Entered) Zip Code</li>
+        </ul>
+    </section>
+
+    <section>
+                        <pre><code contenteditable>
+                            //geolocation cannot be accessed with dot notation in iOS5... will prevent page caching
+                            return 'geolocation' in navigator && navigator['geolocation'] !== null;
+                        </code></pre>
+        <a href="https://bugs.webkit.org/show_bug.cgi?id=43956">WebKit caching bug</a>
+    </section>
+
+    <section>
+        <h1>Geolocation</h1>
+        <ul>
+            <li><a href="http://html5e.org/example/geo/">Demo</a></li>
+        </ul>
+    </section>
+
+    <section>
+        <h1>Web Workers</h1>
+        <img src="/images/devoxx2012u/web-workers.png"/><br/>
+        <a href="http://caniuse.com">caniuse.com</a>
+    </section>
+
+    <section>
+        <p>The Web Workers interface spawns real OS-level threads, allowing for data to be passed back and forth between any given threads (or worker)</p>
+    </section>
+
+    <section>
+        <p>With Web Workers and its multithreaded approach, you do not have access to the DOM (which is not thread safe), the window, document, or parent objects.</p>
+    </section>
+
+    <section>
+        <p>You can access the location object:</p>
+                        <pre><code>
+                            hash //the anchor portion of a URL
+                            host //the hostname and port of a URL
+                            hostname //the hostname of a URL
+                            href //the entire URL
+                            pathname //the path name of a URL
+                            port //the port number the server uses for a URL protocol //the protocol of a URL
+                            search //the query portion of a URL
+                        </code></pre>
+    </section>
+
+    <section>
+        <h1>Web Workers</h1>
+        <ul>
+            <li><a href="http://html5e.org/example/workers/">Demo</a></li>
+        </ul>
+    </section>
+
+</section>
+
+<section class="slide-group">
+    <section>
+        <h1>Thanks!!!</h1>
+    </section>
+</section>
+
+</div>
+
+
+</div>
+
+<script src="/js/reveal/lib/js/head.min.js"></script>
+<script src="/js/reveal/reveal.min.js"></script>
+
+<script>
+
+    // Full list of configuration options available here:
+    // https://github.com/hakimel/reveal.js#configuration
+    Reveal.initialize({
+        controls: true,
+        progress: true,
+        history: true,
+
+        theme: Reveal.getQueryHash().theme, // available themes are in /css/theme
+        transition: Reveal.getQueryHash().transition || 'default', // default/cube/page/concave/zoom/linear/none
+
+        // Optional libraries used to extend on reveal.js
+        dependencies: [
+            { src: '/js/reveal/lib/js/classList.js', condition: function() { return !document.body.classList; } },
+            { src: '/js/reveal/plugin/markdown/showdown.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
+            { src: '/js/reveal/plugin/markdown/markdown.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
+            { src: '/js/reveal/plugin/highlight/highlight.js', async: true, callback: function() { hljs.initHighlightingOnLoad(); } },
+            { src: '/js/reveal/plugin/zoom-js/zoom.js', async: true, condition: function() { return !!document.body.classList; } },
+            { src: '/js/reveal/plugin/notes/notes.js', async: true, condition: function() { return !!document.body.classList; } }
+        ]
+    });
+
+</script>
+
+<script type="text/javascript" src="/js/slidfast-reveal.js" ></script>
+<script type="text/javascript">
+
+    slidfast({
+        touchEnabled: false,
+        slides: true
+    });
+</script>
+<script src="/js/libs/jquery-1.7.1.min.js"></script>
+<script src="/js/libs/jquery.flot.js"></script>
+<script type="text/javascript" src="/js/slidedeck.js" ></script>
+
+</body>
+</html>
