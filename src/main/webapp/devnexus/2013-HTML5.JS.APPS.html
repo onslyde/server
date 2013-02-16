@@ -98,6 +98,44 @@
             padding: 5px;
         }
 
+        section .rubber_stamp {
+            font-family: 'Vollkorn', serif;
+            font-size: 45px;
+            line-height: 45px;
+            text-transform: uppercase;
+            font-weight: bold;
+            color: red;
+            border: 7px solid red;
+            float: left;
+            padding: 10px 7px;
+            border-radius: 10px;
+            position: absolute;
+            top: 79px;
+            right: 10px;
+            opacity: 0.8;
+            -webkit-transform:rotate(22deg);
+            -o-transform:rotate(-10deg);
+            -moz-transform:rotate(-10deg);
+            -ms-transform:rotate(-10deg);
+        }
+        section .rubber_stamp:after {
+            position: absolute;
+            content: " ";
+            width: 100%;
+            height: auto;
+            min-height:100%;
+            top: -10px;
+            left: -10px;
+            padding: 10px;
+        }
+
+        @font-face {
+            font-family: 'Vollkorn';
+            font-style: normal;
+            font-weight: 700;
+            src: local('Vollkorn Bold'), local('Vollkorn-Bold'), url(https://themes.googleusercontent.com/static/fonts/vollkorn/v3/wMZpbUtcCo9GUabw9JODerrIa-7acMAeDBVuclsi6Gc.woff) format('woff');
+        }
+
     </style>
 </head>
 
@@ -123,16 +161,19 @@
 </div>
 <div class="reveal">
 <div class="address">
-    <h4 style="text-transform: lowercase;">connect now <span style="color:#13daec;">http://onslyde.com/devoxx12</span></h4>
+    <h4 style="text-transform: lowercase;">connect now <span style="color:#13daec;">http://onslyde.com/devnexus</span></h4>
 </div>
 <!-- Any section element inside of this container is displayed as a slide -->
 <div class="slides">
 
 <section class="slide-group">
 
-    <section class="slide">
-        <h2>Defragmenting Mobile HTML5 Web Apps</h2>
-        <h3>@wesleyhales</h3>
+    <section>
+        <h2>HTML5 and JavaScript Web Apps</h2>
+        <h3><a href="http://twitter.com/wesleyhales">@wesleyhales</a></h3>
+        <div class="rubber_stamp">
+            Holla!!
+        </div>
     </section>
 
 </section>
@@ -140,19 +181,15 @@
 <section class="slide-group">
 
     <section class="slide" data-option="master">
-        <h3 style="color:orange">Have you created a mobile web app?</h3>
+        <h3 style="color:orange">What is HTML5 to you?</h3>
     </section>
 
-    <section class="slide" data-option="Yes">
+    <section class="slide" data-option="Hype">
         Good!
     </section>
 
-    <section class="slide" data-option="No">
-        Great!
-    </section>
-
-    <section class="slide" data-option="Yes">
-        <img src="/images/devoxx2012u/allbrowsers-frag.png"/>
+    <section class="slide" data-option="Reality">
+        Good!
     </section>
 
 </section>
@@ -160,39 +197,26 @@
 <section class="slide-group">
 
     <section>
-        From native to HTML5
+        <p>The Gartner Hype Cycle</p>
+        <img src="/images/remix12/hypecycle.png" style="height: 80%"/>
     </section>
 
     <section>
-        7000 types of mobile devices parsing Facebook each day
-        <a href="https://twitter.com/firt/status/266274829462814721">Facebook at QCon</a>
+        <h1>Before HTML5</h1>
+        <ul>
+            <li>Most everything was generated with server-side templating.</li>
+            <li>Connection speeds were solid.</li>
+            <li>Everything had to work on IE6</li>
+        </ul>
     </section>
 
     <section>
-        30% of Financial Times page views & 15% of new subscriptions come from mobile:
-        <a href="http://www.currybet.net/cbet_blog/2012/11/wanifra-ft.php">http://www.currybet.net</a>
-    </section>
-
-</section>
-
-<section class="slide-group">
-
-    <section>
-        Problems
-    </section>
-
-    <section>
-        <img src="/images/devoxx2012u/mobile-first-no.png"/>
-    </section>
-
-    <section>
-        <p>Did somebody say me first?</p>
-        <img src="/images/devoxx2012u/me-first.png"/>
-    </section>
-
-    <section>
-        <h3>Let's take a step back</h3>
-        <p>Understand the problems and come up with an approach.</p>
+        <h1>Today</h1>
+        <ul>
+            <li>Many companies are supporting latest browser versions -1</li>
+            <li>Designing from the browser (is just starting)</li>
+            <li>JavaScript is the language of choice</li>
+        </ul>
     </section>
 
 </section>
@@ -204,6 +228,13 @@
 </section>
 
 <section class="slide-group">
+    <section>
+        When everything runs on the client, however, performance is reduced.
+    </section>
+
+    <section>
+        Parsing JSON or XML and generating HTML uses more memory than just printing server-rendered HTML.
+    </section>
 
     <section>
         JavaScript heavy applications are not SEO friendly
@@ -219,6 +250,180 @@
 </section>
 
 <section class="slide-group">
+    <section>
+    <h1>WHOAMI</h1>
+    <ul>
+        <li>@wesleyhales</li>
+        <li>Spent the past decade+ on the UI</li>
+        <li>Currently Senior Developer at Apigee</li>
+    </ul>
+    </section>
+</section>
+
+<section class="slide-group">
+
+    <section class="slide" data-option="master">
+        <h3 style="color:orange">Are you required to support IE7?</h3>
+    </section>
+
+    <section class="slide" data-option="Yep">
+        <h3>Supporting Older Browsers</h3>
+        <ul>
+            <li>Build on the evergreens</li>
+            <li>Make it look really cool with CSS animations</li>
+            <li>Come up with a make it look "good" on older browsers approach
+            <ul>
+                <li>Use <a href="http://modernizr.com/">Modernizr</a></li>
+            </ul>
+            </li>
+        </ul>
+    </section>
+
+    <section class="slide" data-option="Nope :)">
+        Sweeeet!
+    </section>
+
+</section>
+
+<section class="slide-group">
+
+    <section>
+        <h3>Write once run everywhere:</h3>
+        <ul>
+            <li>Is a joke :)</li>
+            <li>HTML5 detection</li>
+            <li>Know your supported browsers</li>
+            <li>Come up with an approach</li>
+        </ul>
+    </section>
+
+    <section>
+        <img src="/images/devoxx2012u/mobile-first-no.png"/>
+    </section>
+
+    <section>
+        <p>Did somebody say me first?</p>
+        <img src="/images/devoxx2012u/me-first.png"/>
+    </section>
+
+    <section>
+        <h3>Let's take a step back</h3>
+        <p>Understand the problems and come up with an approach.</p>
+    </section>
+</section>
+
+<section class="slide-group">
+    <section>
+        <h3>Browser and Feature Detection</h3>
+    </section>
+
+    <section>
+        <h3>Which method is best?</h3>
+        <p>(client vs. server)</p>
+    </section>
+
+    <section>
+        Figuring out what the browser supports
+    </section>
+
+    <section>
+        <p>HTML5 Feature Detection</p>
+ <pre><code contenteditable>
+ detectCanvas() ? showGraph() :
+ showTable();
+
+ function detectCanvas() {
+    var canvas = document.createElement("canvas");
+    return canvas.getContext ? true : false;
+ }
+ </code></pre>
+    </section>
+
+<section>
+    <p>Feature Detection (Gotchas)</p>
+    Checking a property of the created element is a must
+<pre>
+    <code>
+...return canvas.getContext...
+    </code>
+</pre>
+</section>
+
+    <section>
+        <p>Feature Detection (Gotchas)</p>
+ <pre><code contenteditable>
+return 'geolocation' in navigator &&
+        navigator['geolocation'] !== null;
+ </code></pre>
+        <p style="color:#708090;">Using dot notation will disable page caching in IOS5</p>
+    </section>
+
+    <section>
+        <p>Same Detection with Modernizr</p>
+ <pre><code contenteditable>
+     Modernizr.canvas ? showGraph()
+     : showTable();;
+ </code></pre>
+        <p style="color:#708090;">The full suite of tests takes 30ms+ to run</p>
+    </section>
+
+</section>
+
+<section class="slide-group">
+    <section>
+        <h3>User Agent Detection</h3>
+        <p>When to use...</p>
+        <ul>
+            <li>Deliver specific features for device</li>
+            <li>Used in combination with feature detection</li>
+            <li>You can get by with only UA detection</li>
+        </ul>
+    </section>
+
+    <section>
+        <h3>User Agent Detection (Server)</h3>
+        <p>Yahoo! uses a DB with 10,000+ devices</p>
+        <p>Over half a million user agent strings</p>
+    </section>
+
+    <section>
+        <h3>User Agent Detection (Client)</h3>
+        <p>Google uses <a href="http://github.com/Tobie/Ua-parser">Ua-parser</a></p>
+        <p>jsperf.com uses <a href="https://github.com/Bestiejs/Platform.js">Platform.js</a></p>
+    </section>
+
+    <section>
+        <h3>Overall it's unreliable</h3>
+        <p>Use with caution</p>
+    </section>
+
+<section>
+<a href="http://blog.keithclark.co.uk/responsive-images-using-cookies/">...when all else fails</a>
+<pre><code>
+document.cookie = "device_dimensions=" + screen.width + "x" + screen.height;
+</code></pre>
+</section>
+
+</section>
+
+<section class="slide-group">
+    <section class="slide" data-option="master">
+        <h3 style="color:orange">Do you care about "Mobile First" in your current job?</h3>
+    </section>
+
+    <section class="slide" data-option="Yes">
+        Sweet! That's next...
+    </section>
+
+    <section class="slide" data-option="Desktop Only">
+        Plug your ears...
+    </section>
+</section>
+
+<section class="slide-group">
+    <section>
+        <h3>The Mobile Web</h3>
+    </section>
 
     <section>
         Most companies only focus on iOS and/or Android
@@ -249,29 +454,27 @@
     <section>
         How can we define the starting point?
     </section>
-
 </section>
 
 <section class="slide-group">
     <section>
-        First let's take a look at our target browsers (platforms)
+        Next, let's take a look at both mobile and desktop browsers...
     </section>
 </section>
 
 <section class="slide-group">
-
     <section class="slide" data-option="master">
-        <p>What kind of browser are you using right now?</p>
+        <h3 style="color:orange">What kind of browser are you using right now?</h3>
     </section>
 
-    <section class="slide" data-option="iOS">
-        Mostly iOS!
+    <section class="slide" data-option="WebKit">
+        <p>HTML5 is (mostly) about Mobile!</p>
+        <img src="/images/remix12/android-ios.gif" style="width: 100%"/>
     </section>
 
     <section class="slide" data-option="Other">
-        Mostly Android!
+        Wow!
     </section>
-
 </section>
 
 <section class="slide-group">
@@ -367,11 +570,6 @@
         Opera Mobile 12+
     </section>
 
-    <section>
-        <h2>One big happy family</h2>
-        <img src="/images/remix12/allbrowsers.png"/>
-    </section>
-
 </section>
 
 <section class="slide-group">
@@ -383,12 +581,13 @@
     <section>
         <p>HTML5e.org</p>
         <img src="/images/remix12/html5e-mobile.png"/>
-
+        <img src="/images/remix12/html5e-desktop.png"/>
     </section>
 
     <section>
-        <h1>Web Sockets</h1>
+        <h2>Web Sockets</h2>
         <img src="/images/devoxx2012u/web-sockets.png"/><br/>
+        <img src="/images/devoxx2012u/websockets-desktop.png"/><br/>
         <a href="http://caniuse.com">caniuse.com</a>
     </section>
 
@@ -401,14 +600,14 @@
     </section>
 
     <section>
-        <h1>Web Sockets</h1>
+        <h2>Web Sockets</h2>
         <ul>
             <li>Demo (This is it)</li>
         </ul>
     </section>
 
     <section>
-        <h1>Web Sockets Libs</h1>
+        <h2>Web Sockets Libs</h2>
         <ul>
             <li>vert.x</li>
             <li>socket.io</li>
@@ -417,8 +616,9 @@
     </section>
 
     <section>
-        <h1>Web Storage</h1>
+        <h2>Web Storage</h2>
         <img src="/images/devoxx2012u/web-storage.png"/><br/>
+        <img src="/images/devoxx2012u/webstorage-desktop.png"/><br/>
         <a href="http://caniuse.com">caniuse.com</a>
     </section>
 
@@ -435,14 +635,14 @@
     </section>
 
     <section>
-        <h1>Web Storage</h1>
-                        <pre><code contenteditable>
-                            localStorage.bookName = 'HTML5 and JavaScript Web Apps';
-                            //or
-                            localStorage['bookName'] = 'HTML5 and JavaScript Web Apps';
-                            //or
-                            localStorage.setItem('bookName') = 'HTML5 and JavaScript Web Apps';
-                        </code></pre>
+        <h2>Web Storage</h2>
+<pre><code contenteditable>
+localStorage.bookName = 'HTML5 and JavaScript Web Apps';
+//or
+localStorage['bookName'] = 'HTML5 and JavaScript Web Apps';
+//or
+localStorage.setItem('bookName') = 'HTML5 and JavaScript Web Apps';
+</code></pre>
     </section>
 
     <section>
@@ -453,17 +653,18 @@
     <section>
         <h2>Web Storage Libs</h2>
         <a href="http://westcoastlogic.com/lawnchair">LawnChair</a>
-                        <pre><code contenteditable>
-                            Lawnchair(function(){
-                            this.save({msg:'hooray!'})
-                            })
-                        </code></pre>
+<pre><code contenteditable>
+Lawnchair(function(){
+  this.save({msg:'hooray!'})
+})
+</code></pre>
     </section>
 
 
     <section>
-        <h1>Orientation</h1>
+        <h2>Orientation</h2>
         <img src="/images/devoxx2012u/orientation.png"/><br/>
+        <img src="/images/devoxx2012u/orientation-desktop.png"/><br/>
         <a href="http://caniuse.com">caniuse.com</a>
     </section>
 
@@ -480,15 +681,16 @@
     </section>
 
     <section>
-        <h1>Orientation</h1>
+        <h2>Orientation</h2>
         <ul>
             <li><a href="http://html5e.org/example/orientation/">Demo</a></li>
         </ul>
     </section>
 
     <section>
-        <h1>Geolocation</h1>
+        <h2>Geolocation</h2>
         <img src="/images/devoxx2012u/geolocation.png"/><br/>
+        <img src="/images/devoxx2012u/geo-desktop.png"/><br/>
         <a href="http://caniuse.com">caniuse.com</a>
     </section>
 
@@ -511,23 +713,24 @@
     </section>
 
     <section>
-                        <pre><code contenteditable>
-                            //geolocation cannot be accessed with dot notation in iOS5... will prevent page caching
-                            return 'geolocation' in navigator && navigator['geolocation'] !== null;
-                        </code></pre>
+<pre><code contenteditable>
+//geolocation cannot be accessed with dot notation in iOS5... will prevent page caching
+return 'geolocation' in navigator && navigator['geolocation'] !== null;
+</code></pre>
         <a href="https://bugs.webkit.org/show_bug.cgi?id=43956">WebKit caching bug</a>
     </section>
 
     <section>
-        <h1>Geolocation</h1>
+        <h2>Geolocation</h2>
         <ul>
             <li><a href="http://html5e.org/example/geo/">Demo</a></li>
         </ul>
     </section>
 
     <section>
-        <h1>Web Workers</h1>
+        <h2>Web Workers</h2>
         <img src="/images/devoxx2012u/web-workers.png"/><br/>
+        <img src="/images/devoxx2012u/workers-desktop.png"/><br/>
         <a href="http://caniuse.com">caniuse.com</a>
     </section>
 
@@ -541,25 +744,158 @@
 
     <section>
         <p>You can access the location object:</p>
-                        <pre><code>
-                            hash //the anchor portion of a URL
-                            host //the hostname and port of a URL
-                            hostname //the hostname of a URL
-                            href //the entire URL
-                            pathname //the path name of a URL
-                            port //the port number the server uses for a URL protocol //the protocol of a URL
-                            search //the query portion of a URL
-                        </code></pre>
+<pre><code>
+hash //the anchor portion of a URL
+host //the hostname and port of a URL
+hostname //the hostname of a URL
+href //the entire URL
+pathname //the path name of a URL
+port //the port number the server uses for a URL protocol //the protocol of a URL
+search //the query portion of a URL
+</code></pre>
     </section>
 
     <section>
-        <h1>Web Workers</h1>
+        <h2>Web Workers</h2>
         <ul>
             <li><a href="http://html5e.org/example/workers/">Demo</a></li>
         </ul>
     </section>
 
 </section>
+
+<section class="slide-group">
+    <section>
+        <h2>Understanding "offline first"</h2>
+        <p><a href="http://www.html5rocks.com/en/mobile/optimization-and-performance/#toc-network-detection">HTML5Rocks Article</a></p>
+    </section>
+
+    <section>
+        <h2>Online/Offline Events</h2>
+                    <pre><code contenteditable>
+window.addEventListener("offline", function (e) {
+//we just lost our connection and entered offline mode, disable eternal link
+slidfast.network.processOffline(e.type);
+}, false);
+                    </code></pre>
+    </section>
+
+    <section>
+        <h2>Network Detection</h2>
+                    <pre><code contenteditable>
+var connection = navigator.connection || {'type':'0'};
+if (connection.type === 2 || connection.type === 1) {
+//...
+} else if (connection.type === 3) {
+//edge
+//ATT Edge latency: ~400-600ms
+//ATT Edge DL speed: ~2-10kbps
+slidfast.core.fetchAndCache(false);
+} else if (connection.type === 2) {
+//3g
+//ATT 3G latency: ~400ms
+//Verizon 3G latency: ~150-250ms
+//...
+}
+                    </code></pre>
+    </section>
+
+    <section>
+        <h2>App Cache</h2>
+                    <pre><code contenteditable>
+//check for a new appCache
+window.applicationCache.addEventListener('updateready', function (e) {
+//alert('checking appcache' + window.applicationCache.status);
+if (window.applicationCache.status === window.applicationCache.UPDATEREADY) {
+// Browser downloaded a new app cache.
+// Swap it in and reload the page to get the new hotness.
+window.applicationCache.swapCache();
+if (confirm('A new version of this site is available. Load it?')) {
+window.location.reload();
+}
+}
+}, false);
+                    </code></pre>
+    </section>
+
+    <section>
+        <h2>App Cache Config</h2>
+                    <pre><code contenteditable>
+CACHE MANIFEST
+# 2011-08-18:v4
+
+CACHE:
+demo1.html
+styles/demo1.css
+js/demo1.js
+
+NETWORK:
+*
+                    </code></pre>
+    </section>
+
+    <section>
+        <h2>App Cache Config</h2>
+        <p>The * indicates that the browser should allow all connections to non-cached resources from a cached page.</p>
+                    <pre><code contenteditable>
+...
+NETWORK:
+*
+                    </code></pre>
+    </section>
+
+    <section>
+        <h2>Link Prefetching</h2>
+        <p>Link prefetching allows developers to silently preload site contents to project a more fluid, seamless web experience:</p>
+                <pre><code contenteditable>
+<!-- full page -->
+&lt;link rel="prefetch" href="http://davidwalsh.name/css-enhancements-user-experience" /&gt;
+                </code></pre>
+    </section>
+
+    <section>
+        <h2>Link Prefetching (slidfast.js)</h2>
+
+                <pre><code contenteditable>
+var getFrame = function () {
+var frame = document.getElementById("temp-frame");
+
+if (!frame) {
+// create frame
+frame = document.createElement("iframe");
+frame.setAttribute("id", "temp-frame");
+frame.setAttribute("name", "temp-frame");
+frame.setAttribute("seamless", "");
+frame.setAttribute("sandbox", "allow-same-origin");
+frame.style.display = 'none';
+document.documentElement.appendChild(frame);
+}
+// load a page
+return frame.contentDocument;
+};
+                </code></pre>
+    </section>
+
+    <section>
+        <h2>Link Prefetching (slidfast.js)</h2>
+
+                <pre><code contenteditable>
+                    document.getElementById(location).appendChild(document.adoptNode(newPage));
+                </code></pre>
+    </section>
+
+    <section>
+        <img src="/images/devoxx2012u/iframe-perf.png"/>
+        <p>red = innerHTML</p>
+    </section>
+
+    <section>
+        <h3><a href="http://slidfast.appspot.com/network-detection.html#">Offline Demo</a></h3>
+    </section>
+</section>
+
+
+
 
 <section class="slide-group">
     <section>

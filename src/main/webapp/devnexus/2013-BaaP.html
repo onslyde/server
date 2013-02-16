@@ -1,0 +1,199 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+
+    <title>The Browser as a Platform - DevNexus 2013</title>
+
+    <meta name="description" content="The Browser as a Platform">
+    <meta name="author" content="Wesley Hales">
+
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+
+    <link rel="stylesheet" href="/css/reveal/reveal.css">
+    <link rel="stylesheet" href="/css/reveal/theme/default.css" id="theme">
+
+    <!-- For syntax highlighting -->
+    <link rel="stylesheet" href="/js/reveal/lib/css/zenburn.css">
+
+    <!-- If the query includes 'print-pdf', use the PDF print sheet -->
+    <script>
+        document.write( '<link rel="stylesheet" href="/css/reveal/print/' + ( window.location.search.match( /print-pdf/gi ) ? 'pdf' : 'paper' ) + '.css" type="text/css" media="print">' );
+    </script>
+
+    <!--[if lt IE 9]>
+    <script src="/js/reveal/lib/js/html5shiv.js"></script>
+    <![endif]-->
+    <style>
+        .placeholder {
+            height: 225px;
+            width: 95%;
+        }
+
+        .hide-wtf,
+        .hide-nice {
+            opacity:0;
+            width:1px;
+            height: 1px;
+            background-color: red;
+            color: #fff;
+            position: absolute;
+
+            right:0;
+
+            bottom: 0;
+            font-size: .01em;
+            z-index: 12;
+        }
+
+        .show-wtf,
+        .show-nice {
+            opacity: 1;
+            /*width: 50%;*/
+            height: 10%;
+            background-color: red;
+            color: #fff;
+            text-align: center;
+            vertical-align: middle;
+            right:0;
+            left: 0;
+            bottom: 0;
+            padding: 5% 0 0 0;
+            position: absolute;
+            font-size: 3em;
+            z-index: 12;
+        }
+
+        .nice {
+            background-color: green;
+        }
+
+            /*=============== charts*/
+
+        .tickLabel {
+            font-size: 26px;
+            color: #fff;
+        }
+
+        .xAxis .tickLabel {
+            margin: 10px 0 0 0;
+        }
+
+        .address {
+            background-color: #000;
+            color: #fff;
+            text-align: center;
+            vertical-align: middle;
+            right:0;
+            left: 0;
+            bottom: 0;
+            position: absolute;
+            font-size: 1em;
+            z-index: 10;
+        }
+
+        .address h4 {
+            padding: 5px;
+        }
+
+    </style>
+</head>
+
+<body>
+<script type="text/javascript">
+
+    var _gaq = _gaq || [];
+    _gaq.push(['_setAccount', 'UA-31854873-2']);
+    _gaq.push(['_trackPageview']);
+
+    (function() {
+        var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+        ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+        var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+    })();
+
+</script>
+<div id="wtf" class="hide-wtf">
+    WTF!!!
+</div>
+<div id="nice" class="hide-nice">
+    Nice!!!
+</div>
+<div class="reveal">
+<div class="address">
+    <h4 style="text-transform: lowercase;">connect now <span style="color:#13daec;">http://onslyde.com/devoxx12</span></h4>
+</div>
+<!-- Any section element inside of this container is displayed as a slide -->
+<div class="slides">
+
+<section class="slide-group">
+
+    <section class="slide" data-option="master">
+        <h3 style="color:orange">Who uses a front-end build script?</h3>
+    </section>
+
+    <section class="slide" data-option="I do">
+        Good!
+    </section>
+
+    <section class="slide" data-option="Not me">
+        Awww :(
+    </section>
+
+</section>
+
+<section class="slide-group">
+    <section>
+        <h1>Thanks!!!</h1>
+    </section>
+</section>
+
+</div>
+
+
+</div>
+
+<script src="/js/reveal/lib/js/head.min.js"></script>
+<script src="/js/reveal/reveal.min.js"></script>
+
+<script>
+
+    // Full list of configuration options available here:
+    // https://github.com/hakimel/reveal.js#configuration
+    Reveal.initialize({
+        controls: true,
+        progress: true,
+        history: true,
+
+        theme: Reveal.getQueryHash().theme, // available themes are in /css/theme
+        transition: Reveal.getQueryHash().transition || 'default', // default/cube/page/concave/zoom/linear/none
+
+        // Optional libraries used to extend on reveal.js
+        dependencies: [
+            { src: '/js/reveal/lib/js/classList.js', condition: function() { return !document.body.classList; } },
+            { src: '/js/reveal/plugin/markdown/showdown.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
+            { src: '/js/reveal/plugin/markdown/markdown.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
+            { src: '/js/reveal/plugin/highlight/highlight.js', async: true, callback: function() { hljs.initHighlightingOnLoad(); } },
+            { src: '/js/reveal/plugin/zoom-js/zoom.js', async: true, condition: function() { return !!document.body.classList; } },
+            { src: '/js/reveal/plugin/notes/notes.js', async: true, condition: function() { return !!document.body.classList; } }
+        ]
+    });
+
+</script>
+
+<script type="text/javascript" src="/js/slidfast-reveal.js" ></script>
+<script type="text/javascript">
+
+    slidfast({
+        touchEnabled: false,
+        slides: true
+    });
+</script>
+<script src="/js/libs/jquery-1.7.1.min.js"></script>
+<script src="/js/libs/jquery.flot.js"></script>
+<script type="text/javascript" src="/js/slidedeck.js" ></script>
+
+</body>
+</html>
