@@ -77,9 +77,15 @@ public class AttendeeService {
             if(ip == null && req.getSession().getAttribute("onslydeIP") == null){
                 //first subnet should be a user id for the presenter?
                 ip = "777." + randomIPRange() + "." + randomIPRange() + "." + randomIPRange();
+//                System.out.println("**************random" + ip);
                 req.getSession().setAttribute("onslydeIP",ip);
+                int pollcount = slidFast.getPollcount();
+                pollcount++;
+                System.out.println("connect pollcount" + pollcount);
+                slidFast.setPollcount(pollcount);
             }else{
                 ip = req.getSession().getAttribute("onslydeIP").toString();
+//                System.out.println("**************else" + ip);
             }
 
             //System.out.println("**************slidFast" + ip);

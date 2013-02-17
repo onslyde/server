@@ -654,7 +654,6 @@
 
           _onmessage : function(m) {
               if (m.data) {
-                  ////console.log(m.data);
                   //check to see if this message is a CDI event
                  //alert('onmessage' + m.data);
                   if(m.data.indexOf('cdievent') > 0){
@@ -695,7 +694,7 @@
       var pastOptions = [], activeOptions = [];
       var futureSlides = [], pastSlides = [];
       var futureGroups = [], pastGroups = [];
-      var guids = [];
+      var guids = [],wscount,pollcount;
       var groupSlideIndex = 0;
       var currentVotes = {};
       var totalVotes = 0;
@@ -723,9 +722,36 @@
                slidfast.slides.optionVote(e.vote,activeSlide);
             }, false);
 
+            window.addEventListener('updateCount', function(e) {
+              console.log('event fired');
+               slidfast.slides.updateCount(e.wsCount,e.pollCount);
+            }, false);
+
             this.checkOptions();
             this.updateRemotes();
 //            slidfast.ui.slideTo(activeSlide);
+
+           //ws connect
+             if(!ws){
+               slidfast.ws.connect(null,'connect');
+             }else{
+               slidfast.ws._send('connect');
+             }
+         },
+
+         updateCount : function(wsc,pc) {
+              wscount = wsc;
+              pollcount = pc;
+              document.getElementById('wscount').innerHTML = wscount;
+              document.getElementById('pollcount').innerHTML = pollcount;
+         },
+
+         wsCount : function() {
+              return wscount;
+         },
+
+         pollCount : function() {
+              return pollcount;
          },
 
          checkOptions : function() {
@@ -1063,7 +1089,6 @@
                   break;
 
                 case 37: // left arrow
-                case 8: // Backspace
                 case 33: // PgUp
                   slidfast.slides.prevGroup();
                   event.preventDefault();

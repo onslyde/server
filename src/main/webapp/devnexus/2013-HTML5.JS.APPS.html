@@ -136,6 +136,22 @@
             src: local('Vollkorn Bold'), local('Vollkorn-Bold'), url(https://themes.googleusercontent.com/static/fonts/vollkorn/v3/wMZpbUtcCo9GUabw9JODerrIa-7acMAeDBVuclsi6Gc.woff) format('woff');
         }
 
+        #stats {
+            position: absolute;
+            top: 0;
+            right: 0;
+            color: #000;
+            font-family: "League Gothic", Impact, sans-serif;
+            font-size: 22px;
+        }
+
+        #stats > span {
+            display: inline-block;
+            margin: 2px;
+            background-color: #999;
+            padding: 5px;
+        }
+
     </style>
 </head>
 
@@ -158,6 +174,9 @@
 </div>
 <div id="nice" class="hide-nice">
     Nice!!!
+</div>
+<div id="stats">
+    <span><span id="wscount"></span> WebSocket </span><span><span id="pollcount"></span> Polling</span>
 </div>
 <div class="reveal">
 <div class="address">
@@ -213,8 +232,8 @@
     <section>
         <h1>Today</h1>
         <ul>
+            <li>Code is generated on teh client</li>
             <li>Many companies are supporting latest browser versions -1</li>
-            <li>Designing from the browser (is just starting)</li>
             <li>JavaScript is the language of choice</li>
         </ul>
     </section>
@@ -229,7 +248,7 @@
 
 <section class="slide-group">
     <section>
-        When everything runs on the client, however, performance is reduced.
+        When everything runs on the client, performance can be reduced.
     </section>
 
     <section>
@@ -255,7 +274,7 @@
     <ul>
         <li>@wesleyhales</li>
         <li>Spent the past decade+ on the UI</li>
-        <li>Currently Senior Developer at Apigee</li>
+        <li>Currently at Apigee</li>
     </ul>
     </section>
 </section>
@@ -341,12 +360,13 @@
 
 <section>
     <p>Feature Detection (Gotchas)</p>
-    Checking a property of the created element is a must
+
 <pre>
     <code>
 ...return canvas.getContext...
     </code>
 </pre>
+    <p style="color:#708090;">Checking a property of the created element is a must</p>
 </section>
 
     <section>
@@ -408,10 +428,10 @@ document.cookie = "device_dimensions=" + screen.width + "x" + screen.height;
 
 <section class="slide-group">
     <section class="slide" data-option="master">
-        <h3 style="color:orange">Do you care about "Mobile First" in your current job?</h3>
+        <h3 style="color:orange">I can haz "Mobile First"?</h3>
     </section>
 
-    <section class="slide" data-option="Yes">
+    <section class="slide" data-option="I <3 Mobile">
         Sweet! That's next...
     </section>
 
@@ -772,17 +792,17 @@ search //the query portion of a URL
 
     <section>
         <h2>Online/Offline Events</h2>
-                    <pre><code contenteditable>
+<pre><code contenteditable>
 window.addEventListener("offline", function (e) {
 //we just lost our connection and entered offline mode, disable eternal link
 slidfast.network.processOffline(e.type);
 }, false);
-                    </code></pre>
+</code></pre>
     </section>
 
     <section>
         <h2>Network Detection</h2>
-                    <pre><code contenteditable>
+<pre><code contenteditable>
 var connection = navigator.connection || {'type':'0'};
 if (connection.type === 2 || connection.type === 1) {
 //...
@@ -797,12 +817,12 @@ slidfast.core.fetchAndCache(false);
 //Verizon 3G latency: ~150-250ms
 //...
 }
-                    </code></pre>
+</code></pre>
     </section>
 
     <section>
         <h2>App Cache</h2>
-                    <pre><code contenteditable>
+<pre><code contenteditable>
 //check for a new appCache
 window.applicationCache.addEventListener('updateready', function (e) {
 //alert('checking appcache' + window.applicationCache.status);
@@ -815,12 +835,12 @@ window.location.reload();
 }
 }
 }, false);
-                    </code></pre>
+</code></pre>
     </section>
 
     <section>
         <h2>App Cache Config</h2>
-                    <pre><code contenteditable>
+<pre><code contenteditable>
 CACHE MANIFEST
 # 2011-08-18:v4
 
@@ -831,32 +851,32 @@ js/demo1.js
 
 NETWORK:
 *
-                    </code></pre>
+</code></pre>
     </section>
 
     <section>
         <h2>App Cache Config</h2>
         <p>The * indicates that the browser should allow all connections to non-cached resources from a cached page.</p>
-                    <pre><code contenteditable>
-...
+<pre><code contenteditable>
+//...
 NETWORK:
 *
-                    </code></pre>
+</code></pre>
     </section>
 
     <section>
         <h2>Link Prefetching</h2>
         <p>Link prefetching allows developers to silently preload site contents to project a more fluid, seamless web experience:</p>
-                <pre><code contenteditable>
-<!-- full page -->
+<pre><code contenteditable>
+//full page
 &lt;link rel="prefetch" href="http://davidwalsh.name/css-enhancements-user-experience" /&gt;
-                </code></pre>
+</code></pre>
     </section>
 
     <section>
         <h2>Link Prefetching (slidfast.js)</h2>
 
-                <pre><code contenteditable>
+<pre><code contenteditable>
 var getFrame = function () {
 var frame = document.getElementById("temp-frame");
 
@@ -873,15 +893,15 @@ document.documentElement.appendChild(frame);
 // load a page
 return frame.contentDocument;
 };
-                </code></pre>
+</code></pre>
     </section>
 
     <section>
         <h2>Link Prefetching (slidfast.js)</h2>
 
-                <pre><code contenteditable>
-                    document.getElementById(location).appendChild(document.adoptNode(newPage));
-                </code></pre>
+<pre><code contenteditable>
+document.getElementById(location).appendChild(document.adoptNode(newPage));
+</code></pre>
     </section>
 
     <section>
@@ -894,12 +914,19 @@ return frame.contentDocument;
     </section>
 </section>
 
-
-
-
 <section class="slide-group">
-    <section>
+    <section class="slide" data-option="master">
+        <h3 style="color:orange">This was the best talk EVAR!!!</h3>
+    </section>
+
+    <section class="slide" data-option="Yep!">
         <h1>Thanks!!!</h1>
+        Come to my talk tomorrow
+    </section>
+
+    <section class="slide" data-option="Nope!">
+        <h1>Thanks!!!</h1>
+        Come to my talk tomorrow
     </section>
 </section>
 

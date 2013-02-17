@@ -40,7 +40,6 @@ public class ClientEvent {
                   "}}}");
         }
         return eventOptions;
-
     }
 
     public static String clientVote(String vote){
@@ -60,11 +59,12 @@ public class ClientEvent {
                 "}}}");
     }
 
-    public static String customIP(String ip){
+    public static String updateCount(int wscount, int pollcount){
         return ("{\"cdievent\":{\"fire\":function(){" +
                 "window.eventObjf = document.createEvent('Event');" +
-                "eventObjf.initEvent(\'customIP\', true, true);" +
-                "eventObjf.customIP = '" + ip + "';\n" +
+                "eventObjf.initEvent(\'updateCount\', true, true);" +
+                "eventObjf.wsCount = '" + wscount + "';\n" +
+                "eventObjf.pollCount = '" + pollcount + "';\n" +
                 "document.dispatchEvent(eventObjf);" +
                 "}}}");
     }

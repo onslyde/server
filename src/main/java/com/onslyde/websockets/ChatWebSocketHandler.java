@@ -27,13 +27,18 @@ public class ChatWebSocketHandler extends WebSocketHandler {
     @Inject
     private Logger log;
 
-
+    private String randomIPRange(){
+        int min = 256;
+        int max = 555;
+        return min + (int)(Math.random() * ((max - min) + 1)) + "";
+    }
 
     private static SlidFast slidFast;
 
     public WebSocket doWebSocketConnect(HttpServletRequest request,
             String protocol) {
-        String attendeeIP = request.getRemoteAddr();
+        String attendeeIP = "777." + randomIPRange() + "." + randomIPRange() + "." + randomIPRange();
+//        String attendeeIP = request.getRemoteAddr();
         return new ChatWebSocket(attendeeIP);
     }
 
@@ -63,10 +68,7 @@ public class ChatWebSocketHandler extends WebSocketHandler {
         return 0;
     }
 
-    private int addAttendee(){
-        //on ws connect
-        return 0;
-    }
+    private int wscount = 0;
 
 
 
@@ -98,11 +100,28 @@ public class ChatWebSocketHandler extends WebSocketHandler {
             //syncSlidFast(slidFast);
             if(slidFast != null && slidFast.getActiveOptions().size() == 2) {
                 try {
+                    //only send options to this connection
                     this.connection.sendMessage(ClientEvent.createEvent("updateOptions",slidFast.getActiveOptions()));
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
             }
+            //update count on deck
+            try {
+                assert slidFast != null;
+                int wscount = slidFast.getWscount();
+                wscount++;
+                System.out.println("connect" + wscount);
+                slidFast.setWscount(wscount);
+                //todo - very inefficient... this only needs to go to presenter/slide deck
+                for (ChatWebSocket webSocket : getWebsockets()) {
+                    webSocket.connection.sendMessage(ClientEvent.updateCount(wscount, slidFast.getPollcount()));
+                }
+
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+
 
         }
 
@@ -192,9 +211,17 @@ public class ChatWebSocketHandler extends WebSocketHandler {
 //                    e.printStackTrace();
 //                }
                 data = ClientEvent.clientVote(vote);
+
+            }else if (data.contains("connect")){
+                try {
+                    getSlidFast().setPollcount(0);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
             }
 
 //            System.out.println("-----------" + data);
+            //fan out
             try {
                 for (ChatWebSocket webSocket : getWebsockets()) {
                     // send a message to the current client WebSocket.
@@ -210,6 +237,10 @@ public class ChatWebSocketHandler extends WebSocketHandler {
         public void onClose(int closeCode, String message) {
             // Remove ChatWebSocket in the global list of ChatWebSocket
             // instance.
+            int wscount = slidFast.getWscount();
+            wscount--;
+            System.out.println("disconnect" + wscount);
+            slidFast.setWscount(wscount);
             getWebsockets().remove(this);
         }
     }

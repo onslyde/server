@@ -48,6 +48,9 @@ public class SlidFast {
     private List<String> currentVotes;
     private String jsEvent;
 
+    private int wscount = 0;
+    private int pollcount = 0;
+
     private Map<String,Attendee> ips = new HashMap<String, Attendee>();
 
     @Inject
@@ -220,5 +223,21 @@ public class SlidFast {
 
     public void setJsEvent(String jsEvent) {
         this.jsEvent = jsEvent;
+    }
+
+    public int getWscount() {
+        return wscount;
+    }
+
+    public void setWscount(int wscount) {
+        this.wscount = wscount;
+    }
+
+    public int getPollcount() {
+        return pollcount;
+    }
+
+    public void setPollcount(int pollcount) {
+        this.pollcount = pollcount;
     }
 }
