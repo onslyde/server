@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="en">
+<html lang="en" xmlns="http://www.w3.org/1999/html">
 
 <head>
     <meta charset="utf-8">
@@ -188,7 +188,7 @@
 <section class="slide-group">
 
     <section>
-        <h2>HTML5 and JavaScript Web Apps</h2>
+        <h2 class="send">HTML5 and JavaScript Web Apps</h2>
         <h3><a href="http://twitter.com/wesleyhales">@wesleyhales</a></h3>
         <div class="rubber_stamp">
             Holla!!
@@ -234,7 +234,7 @@
     <section>
         <h1>Today</h1>
         <ul class="send">
-            <li>Code is generated on teh client</li>
+            <li>Code is generated on the client</li>
             <li>Many companies are supporting latest browser versions -1</li>
             <li>JavaScript is the language of choice</li>
         </ul>
@@ -286,17 +286,17 @@
 <section class="slide-group">
 
     <section class="slide" data-option="master">
-        <h3 style="color:orange">Are you still supporting IE7?</h3>
+        <h3 class="send" style="color:orange">Are you still supporting IE7?</h3>
     </section>
 
     <section class="slide" data-option="Yep">
         <h3>Supporting Older Browsers</h3>
-        <ul>
+        <ul class="send">
             <li>Build on the evergreens</li>
             <li>Make it look really cool with CSS animations</li>
             <li>Come up with a make it look "good" on older browsers approach
             <ul>
-                <li>Use <a href="http://modernizr.com/">Modernizr</a></li>
+                <li>Use <a href="http://modernizr.com/" target="_blank">Modernizr</a></li>
             </ul>
             </li>
         </ul>
@@ -312,7 +312,7 @@
 
     <section>
         <h3>Write once run everywhere:</h3>
-        <ul>
+        <ul class="send">
             <li>Is a joke :)</li>
             <li>HTML5 detection</li>
             <li>Know your supported browsers</li>
@@ -321,27 +321,31 @@
     </section>
 
     <section>
+        <div class="send">
         <img src="/images/devoxx2012u/mobile-first-no.png"/>
+        </div>
     </section>
 
     <section>
+        <div class="send">
         <p>Did somebody say me first?</p>
         <img src="/images/devoxx2012u/me-first.png"/>
+        </div>
     </section>
 
     <section>
         <h3>Let's take a step back</h3>
-        <p>Understand the problems and come up with an approach.</p>
+        <p class="send">Understand the problems and come up with an approach.</p>
     </section>
 </section>
 
 <section class="slide-group">
     <section>
-        <h3>Browser and Feature Detection</h3>
+        <h3 class="send">Browser and Feature Detection</h3>
     </section>
 
     <section>
-        <h3>Which method is best?</h3>
+        <h3 class="send">Which method is best?</h3>
         <p>(client vs. server)</p>
     </section>
 
@@ -350,6 +354,7 @@
     </section>
 
     <section>
+        <div class="send">
         <p>HTML5 Feature Detection</p>
  <pre><code contenteditable>
  detectCanvas() ? showGraph() :
@@ -359,10 +364,11 @@
     var canvas = document.createElement("canvas");
     return canvas.getContext ? true : false;
  }
- </code></pre>
+ </code></pre></div>
     </section>
 
 <section>
+    <div class="send">
     <p>Feature Detection (Gotchas)</p>
 
 <pre>
@@ -371,24 +377,29 @@
     </code>
 </pre>
     <p style="color:#708090;">Checking a property of the created element is a must</p>
+      </div>
 </section>
 
     <section>
+
         <p>Feature Detection (Gotchas)</p>
  <pre><code contenteditable>
 return 'geolocation' in navigator &&
         navigator['geolocation'] !== null;
  </code></pre>
         <p style="color:#708090;">Using dot notation will disable page caching in IOS5</p>
+
     </section>
 
     <section>
+        <div class="send">
         <p>Same Detection with Modernizr</p>
  <pre><code contenteditable>
      Modernizr.canvas ? showGraph()
      : showTable();;
  </code></pre>
         <p style="color:#708090;">The full suite of tests takes 30ms+ to run</p>
+            </div>
     </section>
 
 </section>
@@ -397,7 +408,7 @@ return 'geolocation' in navigator &&
     <section>
         <h3>User Agent Detection</h3>
         <p>When to use...</p>
-        <ul>
+        <ul class="send">
             <li>Deliver specific features for device</li>
             <li>Used in combination with feature detection</li>
             <li>You can get by with only UA detection</li>
@@ -405,34 +416,42 @@ return 'geolocation' in navigator &&
     </section>
 
     <section>
+        <div class="send">
         <h3>User Agent Detection (Server)</h3>
         <p>Yahoo! uses a DB with 10,000+ devices</p>
         <p>Over half a million user agent strings</p>
+            </div>
     </section>
 
     <section>
+        <div class="send">
         <h3>User Agent Detection (Client)</h3>
-        <p>Google uses <a href="http://github.com/Tobie/Ua-parser">Ua-parser</a></p>
-        <p>jsperf.com uses <a href="https://github.com/Bestiejs/Platform.js">Platform.js</a></p>
+        <p>Google uses <a href="http://github.com/Tobie/Ua-parser" target="_blank">Ua-parser</a></p>
+        <p>jsperf.com uses <a href="https://github.com/Bestiejs/Platform.js" target="_blank">Platform.js</a></p>
+        </div>
     </section>
 
     <section>
-        <h3>Overall it's unreliable</h3>
+        <div class="send">
+        <h3>Overall its unreliable</h3>
         <p>Use with caution</p>
+            </div>
     </section>
 
 <section>
-<a href="http://blog.keithclark.co.uk/responsive-images-using-cookies/">...when all else fails</a>
+<div class="send">
+<a href="http://blog.keithclark.co.uk/responsive-images-using-cookies/" target="_blank">...when all else fails</a>
 <pre><code>
 document.cookie = "device_dimensions=" + screen.width + "x" + screen.height;
 </code></pre>
+</div>
 </section>
 
 </section>
 
 <section class="slide-group">
     <section class="slide" data-option="master">
-        <h3 style="color:orange">I can haz "Mobile First"?</h3>
+        <h3 style="color:orange" class="send">I can haz "Mobile First"?</h3>
     </section>
 
     <section class="slide" data-option="I <3 Mobile">
@@ -450,7 +469,7 @@ document.cookie = "device_dimensions=" + screen.width + "x" + screen.height;
     </section>
 
     <section>
-        Most companies only focus on iOS and/or Android
+        <p class="send">Most companies only focus on iOS and/or Android</p>
     </section>
 
     <section>
@@ -458,13 +477,17 @@ document.cookie = "device_dimensions=" + screen.width + "x" + screen.height;
     </section>
 
     <section>
+        <div class="send">
         <h1>Fragmentation...</h1>
         <p>is the inability to "write once and run anywhere"</p>
+        </div>
     </section>
 
     <section>
+        <div class="send">
         <h1>HTML5 Fragmentation</h1>
         <p>Deals strictly with how browser APIs access hardware and other device features.</p>
+        </div>
     </section>
 
     <section>
@@ -481,14 +504,14 @@ document.cookie = "device_dimensions=" + screen.width + "x" + screen.height;
 </section>
 
 <section class="slide-group">
-    <section>
+    <section class="send">
         Next, let's take a look at both mobile and desktop browsers...
     </section>
 </section>
 
 <section class="slide-group">
     <section class="slide" data-option="master">
-        <h3 style="color:orange">What kind of browser are you using right now?</h3>
+        <h3 class="send" style="color:orange">What kind of browser are you using right now?</h3>
     </section>
 
     <section class="slide" data-option="WebKit">
@@ -503,7 +526,7 @@ document.cookie = "device_dimensions=" + screen.width + "x" + screen.height;
 
 <section class="slide-group">
     <section>
-        <h1>Mobile Safari</h1>
+        <h1 class="send">Mobile Safari</h1>
     </section>
 
     <section>
@@ -523,7 +546,7 @@ document.cookie = "device_dimensions=" + screen.width + "x" + screen.height;
     </section>
 
     <section>
-        <h1>Android</h1>
+        <h1 class="send">Android</h1>
         <h2>23 Manufacturers</h2>
         <h2>272 Device Types</h2>
     </section>
@@ -555,21 +578,25 @@ document.cookie = "device_dimensions=" + screen.width + "x" + screen.height;
     </section>
 
     <section>
-        <h2>WebKit</h2>
+        <h2 class="send">WebKit</h2>
         <img src="/images/devoxx2012u/webkit-graph.png"/>
     </section>
 
     <section>
-        <h1>Internet Explorer Mobile</h1>
+        <h1 class="send">Internet Explorer Mobile</h1>
     </section>
 
     <section>
+        <div class="send">
         Microsoft sold 4M Windows 8 upgrades in 3 days.
         <img src="/images/devoxx2012u/operation-completed-succesfully-error-funny-error-messages.jpg"/>
+        </div>
     </section>
 
     <section>
+        <div class="send">
         <img src="/images/devoxx2012u/istilllovevista.png"/>
+        </div>
     </section>
 
     <section>
@@ -581,12 +608,12 @@ document.cookie = "device_dimensions=" + screen.width + "x" + screen.height;
     </section>
 
     <section>
-        <h1>Firefox Mobile/OS</h1>
+        <h1 class="send">Firefox Mobile/OS</h1>
         <img src="/images/devoxx2012u/firefox-phone.png"/>
     </section>
 
     <section>
-        <p>WebAPI project rocks...</p>
+        <p class="send">WebAPI project rocks...</p>
         <img src="/images/devoxx2012u/b2g-example-apps.jpg"/>
     </section>
 
@@ -603,16 +630,16 @@ document.cookie = "device_dimensions=" + screen.width + "x" + screen.height;
     </section>
 
     <section>
-        <p>HTML5e.org</p>
+        <p class="send">HTML5e.org</p>
         <img src="/images/remix12/html5e-mobile.png"/>
         <img src="/images/remix12/html5e-desktop.png"/>
     </section>
 
     <section>
-        <h2>Web Sockets</h2>
+        <h2 class="send">Web Sockets</h2>
         <img src="/images/devoxx2012u/web-sockets.png"/><br/>
         <img src="/images/devoxx2012u/websockets-desktop.png"/><br/>
-        <a href="http://caniuse.com">caniuse.com</a>
+        <a href="http://caniuse.com" target="_blank">caniuse.com</a>
     </section>
 
     <section>
@@ -624,42 +651,47 @@ document.cookie = "device_dimensions=" + screen.width + "x" + screen.height;
     </section>
 
     <section>
+        <div class="send">
         <h2>Web Sockets</h2>
         <ul>
-            <li>Demo (This is it)</li>
+            <li class="send">Demo (This is it)</li>
         </ul>
+        </div>
     </section>
 
     <section>
+        <div class="send">
         <h2>Web Sockets Libs</h2>
         <ul>
             <li>vert.x</li>
             <li>socket.io</li>
             <li>atmosphere</li>
         </ul>
+        </div>
     </section>
 
     <section>
-        <h2>Web Storage</h2>
+        <h2 class="send">Web Storage</h2>
         <img src="/images/devoxx2012u/web-storage.png"/><br/>
         <img src="/images/devoxx2012u/webstorage-desktop.png"/><br/>
-        <a href="http://caniuse.com">caniuse.com</a>
+        <a href="http://caniuse.com" target="_blank">caniuse.com</a>
     </section>
 
     <section>
-        <p>Today, you have two well-supported mechanisms for storing data on the client: cookies and Web Storage.</p>
+        <p class="send">Today, you have two well-supported mechanisms for storing data on the client: cookies and Web Storage.</p>
     </section>
 
     <section>
-        <p>Cookies are much different than Web Storage and implicitly send data back to the server upon each request through HTTP headers.</p>
+        <p class="send">Cookies are much different than Web Storage and implicitly send data back to the server upon each request through HTTP headers.</p>
     </section>
 
     <section>
-        <p>4kb of max storage per cookie</p>
+        <p class="send">4kb of max storage per cookie</p>
     </section>
 
     <section>
-        <h2>Web Storage</h2>
+
+        <h2 class="send">Web Storage</h2>
 <pre><code contenteditable>
 localStorage.bookName = 'HTML5 and JavaScript Web Apps';
 //or
@@ -670,49 +702,52 @@ localStorage.setItem('bookName') = 'HTML5 and JavaScript Web Apps';
     </section>
 
     <section>
-        <h2>Web Storage Perf</h2>
+        <h2 class="send">Web Storage Perf</h2>
         <img src="/images/remix12/jsperf-localstorage1.png"/>
     </section>
 
     <section>
-        <h2>Web Storage Libs</h2>
-        <a href="http://westcoastlogic.com/lawnchair">LawnChair</a>
+        <div >
+        <h2 class="send">Web Storage Libs</h2>
+        <a href="http://westcoastlogic.com/lawnchair" target="_blank">LawnChair</a>
 <pre><code contenteditable>
 Lawnchair(function(){
   this.save({msg:'hooray!'})
 })
-</code></pre>
+</code></pre></div>
     </section>
 
 
     <section>
-        <h2>Orientation</h2>
+        <h2 class="send">Orientation</h2>
         <img src="/images/devoxx2012u/orientation.png"/><br/>
         <img src="/images/devoxx2012u/orientation-desktop.png"/><br/>
         <a href="http://caniuse.com">caniuse.com</a>
     </section>
 
     <section>
-        <p>Standard user interfaces are an illusion...</p>
+        <p class="send">Standard user interfaces are an illusion...</p>
     </section>
 
     <section>
-        <p>Cut through the illusion and let people interact directly with content</p>
+        <p class="send">Cut through the illusion and let people interact directly with content</p>
     </section>
 
     <section>
-        <p>Accelerometers, gyroscopes, and compasses are now commonplace in mobile devices and laptops.</p>
+        <p class="send">Accelerometers, gyroscopes, and compasses are now commonplace in mobile devices and laptops.</p>
     </section>
 
     <section>
-        <h2>Orientation</h2>
+        <div class="send">
+        <h2 >Orientation</h2>
         <ul>
-            <li><a href="http://html5e.org/example/orientation/">Demo</a></li>
+            <li><a href="http://html5e.org/example/orientation/" target="_blank">Demo</a></li>
         </ul>
+        </div>
     </section>
 
     <section>
-        <h2>Geolocation</h2>
+        <h2 class="send">Geolocation</h2>
         <img src="/images/devoxx2012u/geolocation.png"/><br/>
         <img src="/images/devoxx2012u/geo-desktop.png"/><br/>
         <a href="http://caniuse.com">caniuse.com</a>
@@ -720,7 +755,7 @@ Lawnchair(function(){
 
     <section>
         <p>The Geolocation API provides scripted access to geographical location information associated with the hosting device.</p>
-        <ul>
+        <ul class="send">
             <li>Geofencing</li>
             <li>Geocoding</li>
             <li>General tracking</li>
@@ -729,7 +764,7 @@ Lawnchair(function(){
 
     <section>
         <p>The API itself is device agnostic; it doesn’t care how the browser determines location.</p>
-        <ul>
+        <ul class="send">
             <li>Wifi</li>
             <li>GPS</li>
             <li>(User Entered) Zip Code</li>
@@ -741,29 +776,31 @@ Lawnchair(function(){
 //geolocation cannot be accessed with dot notation in iOS5... will prevent page caching
 return 'geolocation' in navigator && navigator['geolocation'] !== null;
 </code></pre>
-        <a href="https://bugs.webkit.org/show_bug.cgi?id=43956">WebKit caching bug</a>
+        <a href="https://bugs.webkit.org/show_bug.cgi?id=43956" target="_blank">WebKit caching bug</a>
     </section>
 
     <section>
-        <h2>Geolocation</h2>
+        <div class="send">
+        <h2 class="send">Geolocation</h2>
         <ul>
-            <li><a href="http://html5e.org/example/geo/">Demo</a></li>
+            <li><a href="http://html5e.org/example/geo/" target="_blank">Demo</a></li>
         </ul>
+        </div>
     </section>
 
     <section>
-        <h2>Web Workers</h2>
+        <h2 class="send">Web Workers</h2>
         <img src="/images/devoxx2012u/web-workers.png"/><br/>
         <img src="/images/devoxx2012u/workers-desktop.png"/><br/>
-        <a href="http://caniuse.com">caniuse.com</a>
+        <a href="http://caniuse.com" target="_blank">caniuse.com</a>
     </section>
 
     <section>
-        <p>The Web Workers interface spawns real OS-level threads, allowing for data to be passed back and forth between any given threads (or worker)</p>
+        <p class="send">The Web Workers interface spawns real OS-level threads, allowing for data to be passed back and forth between any given threads (or worker)</p>
     </section>
 
     <section>
-        <p>With Web Workers and its multithreaded approach, you do not have access to the DOM (which is not thread safe), the window, document, or parent objects.</p>
+        <p class="send">With Web Workers and its multithreaded approach, you do not have access to the DOM (which is not thread safe), the window, document, or parent objects.</p>
     </section>
 
     <section>
@@ -780,22 +817,24 @@ search //the query portion of a URL
     </section>
 
     <section>
-        <h2>Web Workers</h2>
+        <div class="send">
+        <h2 class="send">Web Workers</h2>
         <ul>
-            <li><a href="http://html5e.org/example/workers/">Demo</a></li>
+            <li><a href="http://html5e.org/example/workers/" target="_blank">Demo</a></li>
         </ul>
+        </div>
     </section>
 
 </section>
 
 <section class="slide-group">
     <section>
-        <h2>Understanding "offline first"</h2>
-        <p><a href="http://www.html5rocks.com/en/mobile/optimization-and-performance/#toc-network-detection">HTML5Rocks Article</a></p>
+        <h2 class="send">Understanding "offline first"</h2>
+        <p><a href="http://www.html5rocks.com/en/mobile/optimization-and-performance/#toc-network-detection" target="_blank">HTML5Rocks Article</a></p>
     </section>
 
     <section>
-        <h2>Online/Offline Events</h2>
+        <h2 class="send">Online/Offline Events</h2>
 <pre><code contenteditable>
 window.addEventListener("offline", function (e) {
 //we just lost our connection and entered offline mode, disable eternal link
@@ -805,7 +844,7 @@ slidfast.network.processOffline(e.type);
     </section>
 
     <section>
-        <h2>Network Detection</h2>
+        <h2 class="send">Network Detection</h2>
 <pre><code contenteditable>
 var connection = navigator.connection || {'type':'0'};
 if (connection.type === 2 || connection.type === 1) {
@@ -825,7 +864,7 @@ slidfast.core.fetchAndCache(false);
     </section>
 
     <section>
-        <h2>App Cache</h2>
+        <h2 class="send">App Cache</h2>
 <pre><code contenteditable>
 //check for a new appCache
 window.applicationCache.addEventListener('updateready', function (e) {
@@ -843,7 +882,7 @@ window.location.reload();
     </section>
 
     <section>
-        <h2>App Cache Config</h2>
+        <h2 class="send">App Cache Config</h2>
 <pre><code contenteditable>
 CACHE MANIFEST
 # 2011-08-18:v4
@@ -859,7 +898,7 @@ NETWORK:
     </section>
 
     <section>
-        <h2>App Cache Config</h2>
+        <h2 class="send">App Cache Config</h2>
         <p>The * indicates that the browser should allow all connections to non-cached resources from a cached page.</p>
 <pre><code contenteditable>
 //...
@@ -869,7 +908,7 @@ NETWORK:
     </section>
 
     <section>
-        <h2>Link Prefetching</h2>
+        <h2 class="send">Link Prefetching</h2>
         <p>Link prefetching allows developers to silently preload site contents to project a more fluid, seamless web experience:</p>
 <pre><code contenteditable>
 //full page
@@ -878,7 +917,7 @@ NETWORK:
     </section>
 
     <section>
-        <h2>Link Prefetching (slidfast.js)</h2>
+        <h2 class="send">Link Prefetching (slidfast.js)</h2>
 
 <pre><code contenteditable>
 var getFrame = function () {
@@ -909,28 +948,34 @@ document.getElementById(location).appendChild(document.adoptNode(newPage));
     </section>
 
     <section>
+        <div class="send">
         <img src="/images/devoxx2012u/iframe-perf.png"/>
         <p>red = innerHTML</p>
+        </div>
     </section>
 
     <section>
-        <h3><a href="http://slidfast.appspot.com/network-detection.html#">Offline Demo</a></h3>
+        <h3 class="send"><a href="http://slidfast.appspot.com/network-detection.html#" target="_blank">Offline Demo</a></h3>
     </section>
 </section>
 
 <section class="slide-group">
     <section class="slide" data-option="master">
-        <h3 style="color:orange">This was the best talk EVAR!!!</h3>
+        <h3 style="color:orange" class="send">This was the best talk EVAR!!!</h3>
     </section>
 
     <section class="slide" data-option="Yep!">
+        <div class="send">
         <h1>Thanks!!!</h1>
-        Come to my talk tomorrow
+        Come to my talk <a href="http://www.devnexus.com/s/presentations#id-1411" target="_blank">tomorrow</a>
+        </div>
     </section>
 
     <section class="slide" data-option="Nope!">
-        <h1>Thanks!!!</h1>
-        Come to my talk tomorrow
+        <div class="send">
+            <h1>Thanks!!!</h1>
+            Come to my talk <a href="http://www.devnexus.com/s/presentations#id-1411" target="_blank">tomorrow</a>
+        </div>
     </section>
 </section>
 
