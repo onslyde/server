@@ -241,6 +241,10 @@ nav.primary > ul li a {
 
 }
 
+#from-slide img {
+    width: 100%;
+}
+
 </style>
 
 </head>
@@ -279,6 +283,8 @@ nav.primary > ul li a {
                 <p>
                     <a href="https://twitter.com/wesleyhales" target="_blank">Follow @wesleyhales</a>
                 </p>
+                <div id="from-slide">
+                </div>
             </div>
 
         </div>
@@ -290,43 +296,6 @@ nav.primary > ul li a {
 
 
 <script type="text/javascript">
-
-/**
- * WebSocket with graceful degradation - jQuery plugin
- * @author David Lindkvist
- * @version 0.1
- *
- * Returns an object implementing the WebSocket API.
- *
- * If browser supports WebSockets a native WebSocket instance is returned.
- * If not, a simulated half-duplex implementation is returned which uses polling
- * over HTTP to retrieve new messages
- *
- * OPTIONS
- * -----------------------------------------------------------------------------
- *
- * {Number}		fallbackOpenDelay		number of ms to delay simulated open
- * 										event for fallback
- * {Number}		fallbackPollInterval	number of ms between requests for
- * 										fallback polling
- * {Object}		fallbackPollParams		optional params to pass with each poll
- * 										requests
- *
- * EXAMPLES
- * -----------------------------------------------------------------------------
- *
- * 	var websocket = $.gracefulWebSocket("ws://127.0.0.1:8080/");
- *
- * 	var websocket = $.gracefulWebSocket({
- * 		fallbackPollParams:  {
- * 			"latestMessageID": function () {
- * 				return latestMessageID;
- * 			}
- *  	}
- * 	});
- *
- */
-
 (function ($) {
 
     $.extend({
@@ -371,7 +340,7 @@ nav.primary > ul li a {
                     readyState: CONNECTING,
                     bufferedAmount: 0,
                     send: function (data) {
-                        console.log(data);
+//                        console.log(data);
                         var success = true;
                         //replace colon from namespaced websocket data
                         data = data.replace(data[data.indexOf(':')],'=');
@@ -479,7 +448,7 @@ nav.primary > ul li a {
         // in fallback mode: connect returns a dummy object implementing the WebSocket interface
         ws = $.gracefulWebSocket('ws://'+ slidfast.ws.ip() +':8081'); // the ws-protocol will automatically be changed to http
         // in fallback mode: sends message to server using HTTP POST
-        console.log(ws);
+//        console.log(ws);
         ws = slidfast.ws.connect(ws);
     })(jQuery);
 
@@ -557,6 +526,11 @@ nav.primary > ul li a {
             nice.style.opacity = 1;
             voteLabel.innerHTML = 'Vote!';
         }
+    }, false);
+
+    window.addEventListener('remoteMarkup', function(e) {
+        var markup = jQuery.parseJSON(e.markup)
+        document.getElementById('from-slide').innerHTML = decodeURIComponent(markup.remoteMarkup);
     }, false);
 
 </script>

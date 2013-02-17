@@ -616,7 +616,7 @@
 
            connect : function(websocket,initString) {
 
-               username = 'yomama';
+               username = 'anonymous';
                //here we check to see if we're passing in our mock websocket object from polling clients (using gracefulWebSocket.js)
                console.log('!websocket ' + websocket);
                if(!websocket){
@@ -660,7 +660,7 @@
                   if(m.data.indexOf('cdievent') > 0){
                       try{
                           //$('log').innerHTML = m.data;
-                           ////console.log(m.data);
+//                           console.log(m.data);
                           //avoid use of eval...
 
                           var event = (m.data);

@@ -69,4 +69,13 @@ public class ClientEvent {
                 "}}}");
     }
 
+    public static String remoteMarkup(String markup){
+        return ("{\"cdievent\":{\"fire\":function(){" +
+                "window.eventObjg = document.createEvent('Event');" +
+                "eventObjg.initEvent(\'remoteMarkup\', true, true);" +
+                "eventObjg.markup = '" + markup + "';\n" +
+                "document.dispatchEvent(eventObjg);" +
+                "}}}");
+    }
+
 }

@@ -76,6 +76,7 @@ public class ChatWebSocketHandler extends WebSocketHandler {
 
         private Connection connection;
         private String ACTIVE_OPTIONS = "activeOptions:";
+        private String REMOTE_MARKUP = "remoteMarkup";
         private String VOTE = "vote:";
         private String SEPARATOR = ":";
 
@@ -111,7 +112,7 @@ public class ChatWebSocketHandler extends WebSocketHandler {
                 assert slidFast != null;
                 int wscount = slidFast.getWscount();
                 wscount++;
-                System.out.println("connect" + wscount);
+//                System.out.println("connect" + wscount);
                 slidFast.setWscount(wscount);
                 //todo - very inefficient... this only needs to go to presenter/slide deck
                 for (ChatWebSocket webSocket : getWebsockets()) {
@@ -212,6 +213,10 @@ public class ChatWebSocketHandler extends WebSocketHandler {
 //                }
                 data = ClientEvent.clientVote(vote);
 
+            }else if (data.contains(REMOTE_MARKUP)){
+
+                data = ClientEvent.remoteMarkup(data);
+//                System.out.println("-----------" + data);
             }else if (data.contains("connect")){
                 try {
                     getSlidFast().setPollcount(0);
@@ -222,15 +227,7 @@ public class ChatWebSocketHandler extends WebSocketHandler {
 
 //            System.out.println("-----------" + data);
             //fan out
-            try {
-                for (ChatWebSocket webSocket : getWebsockets()) {
-                    // send a message to the current client WebSocket.
-                    webSocket.connection.sendMessage(data);
-                }
-            } catch (IOException x) {
-                // Error was detected, close the ChatWebSocket client side
-                this.connection.disconnect();
-            }
+            sendToAll(data,this.connection);
 
         }
 
@@ -239,9 +236,21 @@ public class ChatWebSocketHandler extends WebSocketHandler {
             // instance.
             int wscount = slidFast.getWscount();
             wscount--;
-            System.out.println("disconnect" + wscount);
+//            System.out.println("disconnect" + wscount);
             slidFast.setWscount(wscount);
             getWebsockets().remove(this);
+        }
+    }
+
+    private void sendToAll(String data, WebSocket.Connection connection){
+        try {
+            for (ChatWebSocket webSocket : getWebsockets()) {
+                // send a message to the current client WebSocket.
+                webSocket.connection.sendMessage(data);
+            }
+        } catch (IOException x) {
+            // Error was detected, close the ChatWebSocket client side
+            connection.disconnect();
         }
     }
 

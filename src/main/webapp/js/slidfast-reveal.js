@@ -812,6 +812,24 @@
                activeSlide = futureSlides.shift();
 //               slidfast.ui.slideTo(activeSlide);
                groupSlideIndex++;
+
+               //see if there's anything on the new slide to send to remotes EXPERIMENTAL
+               if(activeSlide !== 'undefined'){
+                 for(var i = 0; i < activeSlide.querySelectorAll('.send').length;i++) {
+
+                    //send to remotes
+                   var remoteMarkup = JSON.stringify({remoteMarkup : encodeURIComponent(activeSlide.querySelectorAll('.send')[i].outerHTML)});
+                   console.log(remoteMarkup);
+                   if(!ws){
+                     console.log('no conn');
+                     slidfast.ws.connect(null,remoteMarkup);
+                   }else{
+                     console.log('conn');
+                     slidfast.ws._send(remoteMarkup);
+                   }
+
+                 }
+               }
             } else {
                //move to next group
 //               this.nextGroup();
@@ -884,6 +902,26 @@
                //reset votes
                currentVotes = {};
                totalVotes = 0;
+
+
+              //todo.. emergency - abstract this out as it is duped above....
+              // see if there's anything on the new slide to send to remotes EXPERIMENTAL
+              if(activeSlide !== 'undefined'){
+                for(var i = 0; i < activeSlide.querySelectorAll('.send').length;i++) {
+
+                  //send to remotes
+                  var remoteMarkup = JSON.stringify({remoteMarkup : encodeURIComponent(activeSlide.querySelectorAll('.send')[i].outerHTML)});
+                  console.log(remoteMarkup);
+                  if(!ws){
+                    console.log('no conn');
+                    slidfast.ws.connect(null,remoteMarkup);
+                  }else{
+                    console.log('conn');
+                    slidfast.ws._send(remoteMarkup);
+                  }
+
+                }
+              }
 
 
             } else {
