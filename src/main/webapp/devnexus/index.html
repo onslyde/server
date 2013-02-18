@@ -308,7 +308,7 @@ nav.primary > ul li a {
                 keepAlive: false,		// not implemented - should ping server to keep socket open
                 autoReconnect: false,	// not implemented - should try to reconnect silently if socket is closed
                 fallback: true,			// not implemented - always use HTTP fallback if native browser support is missing
-                fallbackSendURL: url.replace('ws:', 'http:').replace('wss:', 'https:').replace('8081','8080'),
+                fallbackSendURL: url === 'ws://107.22.176.73:8081' ? 'http://onslyde.com' : url.replace('ws:', 'http:').replace('wss:', 'https:').replace('8081','8080'),
                 fallbackSendMethod: 'POST',
                 fallbackPollURL: url === 'ws://107.22.176.73:8081' ? 'http://onslyde.com' : url.replace('ws:', 'http:').replace('wss:', 'https:').replace('8081','8080'),
                 fallbackPollMethod: 'GET',
