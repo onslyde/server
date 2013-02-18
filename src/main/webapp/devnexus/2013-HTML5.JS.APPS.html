@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="en" xmlns="http://www.w3.org/1999/html">
+<html lang="en" xmlns="http://www.w3.org/1999/html" xmlns="http://www.w3.org/1999/html">
 
 <head>
     <meta charset="utf-8">
@@ -278,6 +278,7 @@
         <li>@wesleyhales</li>
         <li>Spent the past decade+ on the UI</li>
         <li>Currently at Apigee</li>
+        <li><a href="http://wesleyhales.com" target="_blank">http://wesleyhales.com</a></li>
     </ul>
     </div>
     </section>
@@ -350,7 +351,7 @@
     </section>
 
     <section>
-        Figuring out what the browser supports
+        <p class="send">Figuring out what the browser supports</p>
     </section>
 
     <section>
@@ -465,7 +466,7 @@ document.cookie = "device_dimensions=" + screen.width + "x" + screen.height;
 
 <section class="slide-group">
     <section>
-        <h3>The Mobile Web</h3>
+        <h3 class="send">The Mobile Web</h3>
     </section>
 
     <section>
@@ -491,15 +492,15 @@ document.cookie = "device_dimensions=" + screen.width + "x" + screen.height;
     </section>
 
     <section>
-        We're going to focus on 5 APIs
+        <p class="send">We are going to focus on 5 APIs</p>
     </section>
 
     <section>
-        Developers need a starting point if they're going to tackle all browser platforms
+        <p class="send">Developers need a starting point if they will tackle all browser platforms</p>
     </section>
 
     <section>
-        How can we define the starting point?
+        <p class="send">How can we define the starting point?</p>
     </section>
 </section>
 
@@ -515,8 +516,10 @@ document.cookie = "device_dimensions=" + screen.width + "x" + screen.height;
     </section>
 
     <section class="slide" data-option="WebKit">
+        <div class="send">
         <p>HTML5 is (mostly) about Mobile!</p>
         <img src="/images/remix12/android-ios.gif" style="width: 100%"/>
+        </div>
     </section>
 
     <section class="slide" data-option="Other">
@@ -530,56 +533,72 @@ document.cookie = "device_dimensions=" + screen.width + "x" + screen.height;
     </section>
 
     <section>
-        Apple sold 5M iPhone 5s in 3 days.
+        <p class="send">Apple sold 5M iPhone 5s in 3 days.</p>
     </section>
 
     <section>
+        <div class="send">
         <h2>61% Market Share</h2>
         <p>iOS 4 - 6</p>
+        </div>
     </section>
 
     <section>
+        <div class="send">
         <h3>Upgrade Delay</h3>
         <p>iPhone iOS6 = 60%</p>
         <p>iPad iOS6 = 45%</p>
         <p>iPod Touch iOS6 = 39%</p>
+        </div>
     </section>
 
     <section>
-        <h1 class="send">Android</h1>
+        <div class="send">
+        <h1>Android</h1>
         <h2>23 Manufacturers</h2>
         <h2>272 Device Types</h2>
+        </div>
     </section>
 
     <section>
+        <div class="send">
         <img src="/images/devoxx2012u/android-devices.png"/>
+            </div>
     </section>
 
     <section>
-        <h2>190 Million Devices Activated in 2011</h2>
+        <h2 class="send">190 Million Devices Activated in 2011</h2>
     </section>
 
     <section>
+        <div class="send">
         <h2>500 Million Activated in 2012</h2>
         <p>2.6x increase in 1 year!</p>
+            </div>
     </section>
 
     <section>
+        <div class="send">
         (Gingerbread 2.3 - ICS 4.0)
         <img src="/images/remix12/android-frag.png"/>
+            </div>
     </section>
 
     <section>
+        <div class="send">
         <h3>Upgrade Delay</h3>
         <p>21% Market Share (Total)</p>
         <p>2.3 = 35%</p>
         <p>4.0 = 45%</p>
         <p>others = 20%</p>
+            </div>
     </section>
 
     <section>
+        <div class="send">
         <h2 class="send">WebKit</h2>
         <img src="/images/devoxx2012u/webkit-graph.png"/>
+            </div>
     </section>
 
     <section>
@@ -604,21 +623,25 @@ document.cookie = "device_dimensions=" + screen.width + "x" + screen.height;
     </section>
 
     <section>
-        Windows Phone 8 (IE10) and up = 1%
+        <p class="send">Windows Phone 8 (IE10) and up = 1%</p>
     </section>
 
     <section>
-        <h1 class="send">Firefox Mobile/OS</h1>
+        <div class="send">
+        <h1>Firefox Mobile/OS</h1>
         <img src="/images/devoxx2012u/firefox-phone.png"/>
+        </div>
     </section>
 
     <section>
-        <p class="send">WebAPI project rocks...</p>
+        <div class="send">
+        <p>WebAPI project rocks...</p>
         <img src="/images/devoxx2012u/b2g-example-apps.jpg"/>
+        </div>
     </section>
 
     <section>
-        Opera Mobile 12+
+        <p class="send">Opera Mobile 12+</p>
     </section>
 
 </section>
@@ -626,7 +649,7 @@ document.cookie = "device_dimensions=" + screen.width + "x" + screen.height;
 <section class="slide-group">
 
     <section>
-        Next, the APIs we can use today...
+        <p class="send">Next, the APIs we can use today...</p>
     </section>
 
     <section>
@@ -643,11 +666,11 @@ document.cookie = "device_dimensions=" + screen.width + "x" + screen.height;
     </section>
 
     <section>
-        <p>Every HTTP request sent from the browser includes headers that can vary in size from 200 bytes to over 2K</p>
+        <p class="send">Every HTTP request sent from the browser includes headers that can vary in size from 200 bytes to over 2K</p>
     </section>
 
     <section>
-        <p>WebSockets give you minimal overhead with full duplex communication through a single socket.</p>
+        <p class="send">WebSockets give you minimal overhead with full duplex communication through a single socket.</p>
     </section>
 
     <section>
@@ -829,8 +852,10 @@ search //the query portion of a URL
 
 <section class="slide-group">
     <section>
-        <h2 class="send">Understanding "offline first"</h2>
+        <div class="send">
+        <h2>Understanding "offline first"</h2>
         <p><a href="http://www.html5rocks.com/en/mobile/optimization-and-performance/#toc-network-detection" target="_blank">HTML5Rocks Article</a></p>
+        </div>
     </section>
 
     <section>
@@ -955,7 +980,7 @@ document.getElementById(location).appendChild(document.adoptNode(newPage));
     </section>
 
     <section>
-        <h3 class="send"><a href="http://slidfast.appspot.com/network-detection.html#" target="_blank">Offline Demo</a></h3>
+        <h3 class="send"><a href="http://onslyde.com/examples/offline/" target="_blank">Offline Demo</a></h3>
     </section>
 </section>
 
