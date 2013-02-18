@@ -6,6 +6,10 @@
 	<welcome-file-list>
 		<welcome-file>index.html</welcome-file>
 	</welcome-file-list>
+    <mime-mapping>
+        <extension>appcache</extension>
+        <mime-type>text/cache-manifest</mime-type>
+    </mime-mapping>
 	<listener>
 		<listener-class>com.onslyde.websockets.ChatServerServletContextListener</listener-class>
 	</listener>

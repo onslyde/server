@@ -1,0 +1,11 @@
+CACHE MANIFEST
+# 2013-02-18:v5
+
+CACHE:
+demo/about-cto.html
+demo.css
+slidfast.js
+slidfast.css
+
+NETWORK:
+*
