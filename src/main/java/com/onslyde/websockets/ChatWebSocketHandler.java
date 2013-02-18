@@ -109,14 +109,15 @@ public class ChatWebSocketHandler extends WebSocketHandler {
             }
             //update count on deck
             try {
-                assert slidFast != null;
-                int wscount = slidFast.getWscount();
-                wscount++;
-//                System.out.println("connect" + wscount);
-                slidFast.setWscount(wscount);
-                //todo - very inefficient... this only needs to go to presenter/slide deck
-                for (ChatWebSocket webSocket : getWebsockets()) {
-                    webSocket.connection.sendMessage(ClientEvent.updateCount(wscount, slidFast.getPollcount()));
+                if(slidFast != null){
+                    int wscount = slidFast.getWscount();
+                    wscount++;
+    //                System.out.println("connect" + wscount);
+                    slidFast.setWscount(wscount);
+                    //todo - very inefficient... this only needs to go to presenter/slide deck
+                    for (ChatWebSocket webSocket : getWebsockets()) {
+                        webSocket.connection.sendMessage(ClientEvent.updateCount(wscount, slidFast.getPollcount()));
+                    }
                 }
 
             } catch (IOException e) {
