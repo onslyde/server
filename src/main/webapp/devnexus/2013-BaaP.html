@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="en">
+<html lang="en" xmlns="http://www.w3.org/1999/html" xmlns="http://www.w3.org/1999/html">
 
 <head>
     <meta charset="utf-8">
@@ -98,6 +98,60 @@
             padding: 5px;
         }
 
+        section .rubber_stamp {
+            font-family: 'Vollkorn', serif;
+            font-size: 45px;
+            line-height: 45px;
+            text-transform: uppercase;
+            font-weight: bold;
+            color: red;
+            border: 7px solid red;
+            float: left;
+            padding: 10px 7px;
+            border-radius: 10px;
+            position: absolute;
+            top: 79px;
+            right: 10px;
+            opacity: 0.8;
+            -webkit-transform:rotate(22deg);
+            -o-transform:rotate(-10deg);
+            -moz-transform:rotate(-10deg);
+            -ms-transform:rotate(-10deg);
+        }
+        section .rubber_stamp:after {
+            position: absolute;
+            content: " ";
+            width: 100%;
+            height: auto;
+            min-height:100%;
+            top: -10px;
+            left: -10px;
+            padding: 10px;
+        }
+
+        @font-face {
+            font-family: 'Vollkorn';
+            font-style: normal;
+            font-weight: 700;
+            src: local('Vollkorn Bold'), local('Vollkorn-Bold'), url(https://themes.googleusercontent.com/static/fonts/vollkorn/v3/wMZpbUtcCo9GUabw9JODerrIa-7acMAeDBVuclsi6Gc.woff) format('woff');
+        }
+
+        #stats {
+            position: absolute;
+            top: 0;
+            right: 0;
+            color: #000;
+            font-family: "League Gothic", Impact, sans-serif;
+            font-size: 22px;
+        }
+
+        #stats > span {
+            display: inline-block;
+            margin: 2px;
+            background-color: #999;
+            padding: 5px;
+        }
+
     </style>
 </head>
 
@@ -121,12 +175,268 @@
 <div id="nice" class="hide-nice">
     Nice!!!
 </div>
+<div id="stats">
+    <span><span id="wscount"></span> WebSocket </span><span><span id="pollcount"></span> Polling</span>
+</div>
 <div class="reveal">
 <div class="address">
-    <h4 style="text-transform: lowercase;">connect now <span style="color:#13daec;">http://onslyde.com/devoxx12</span></h4>
+    <h4 style="text-transform: lowercase;">connect now <span style="color:#13daec;">http://onslyde.com/devnexus</span></h4>
 </div>
 <!-- Any section element inside of this container is displayed as a slide -->
 <div class="slides">
+
+<section class="slide-group">
+    <section>
+    <h2 class="send">The Browser as a Platform</h2>
+    <h3><a href="http://twitter.com/wesleyhales">@wesleyhales</a></h3>
+    </section>
+</section>
+
+<section class="slide-group">
+    <section>
+        <h3>The Web Browser is the platform</h3>
+        <img src="/images/remix12/allbrowsers.png"/>
+    </section>
+
+    <section>
+        <p>The front-end gets just as much consideration as the back-end</p>
+    </section>
+
+    <section>
+        <p>Mostly because of mobile</p>
+    </section>
+
+    <section>
+        <p>Regardless of the device, we are dealing with a web browser.</p>
+    </section>
+
+    <section>
+        7000 types of mobile devices parsing Facebook mobile web each day
+        <a href="https://twitter.com/firt/status/266274829462814721">Facebook at QCon</a>
+    </section>
+
+    <section>
+        (Financial Times) 30% of page views & 15% of new subscriptions come from mobile:
+        <a href="http://www.currybet.net/cbet_blog/2012/11/wanifra-ft.php">http://www.currybet.net</a>
+        <br/>
+        <a href="http://app.ft.com/">app.ft.com</a>
+    </section>
+
+    <section>
+        Browser as a Platform Problems
+    </section>
+
+    <section>
+        <img src="/images/devoxx2012u/mobile-first-no.png"/>
+    </section>
+
+    <section>
+        <p>Did somebody say me first?</p>
+        <img src="/images/devoxx2012u/me-first.png"/>
+    </section>
+
+    <section>
+        <h3>Let's take a step back</h3>
+        <p>Understand the problems and come up with an approach.</p>
+    </section>
+
+</section>
+
+<section class="slide-group">
+    <section>
+        <h3>Client vs. Server HTML Generation</h3>
+    </section>
+
+    <section>
+        Somewhere between 2008 and 2009, generating HTML and other resources on the backend broke down.
+    </section>
+
+    <section>
+        <p>This was mostly due to the progressive enhancement</p>
+        (enhancing pages with AJAX and other performance optimizations.)
+    </section>
+
+    <section>
+        This forced developers to create better APIs and more efficient ways of delivering data (through JSON and XML).
+    </section>
+
+    <section>
+        When everything runs on the client, however, performance is reduced.
+    </section>
+
+    <section>
+        Parsing JSON or XML and generating HTML uses more memory than just printing server-rendered HTML.
+    </section>
+
+    <section>
+        JavaScript heavy applications are not SEO friendly
+    </section>
+
+    <section>
+        Server side pre-rendering?
+    </section>
+
+    <section>
+        <h2>Client side generation (PROs):</h2>
+        <ul>
+            <li>Reduces server load</li>
+            <li>JSON uses less bandwidth than presentation ready HTML</li>
+            <li>CDN Bandwidth (jQuery, BackBone, etc...)</li>
+            <li>Offline capability \o/</li>
+        </ul>
+    </section>
+
+    <section>
+        <h2>Client side generation (CONs):</h2>
+        <ul>
+            <li>Can reduce performance of device/browser</li>
+            <li>Parsing JSON and generating HTML uses more memory</li>
+            <li>Hardware access === battery drain</li>
+            <li>SEO</li>
+        </ul>
+    </section>
+
+    <section>
+        <h2>The most notable client side con is security</h2>
+        <ul>
+            <li>Web Storage is widely supported but not secure</li>
+        </ul>
+    </section>
+
+    <section>
+        <h3>Don't end up with a huge mess!</h3>
+        (Most of the time, you’ll end up with a hybrid app)
+        <ul>
+            <li>Dealing with separate code bases takes special care</li>
+            <li>JavaScript MV* frameworks help with this</li>
+        </ul>
+    </section>
+
+</section>
+
+<section class="slide-group">
+    <section>
+        <h2>Performance and Optimizing</h2>
+    </section>
+
+    <section>
+        <p>If you want to optimize something you need to be able to measure it.</p>
+    </section>
+
+    <section>
+        <p>80ms is the average response time noticed by the human eye</p>
+    </section>
+
+    <section>
+        Client Side Performance - Reflow
+        <iframe width="420" height="315" src="http://www.youtube.com/embed/ZTnIxIA5KGw" frameborder="0" allowfullscreen></iframe>
+    </section>
+
+    <section>
+        Client Side Performance Tools
+        <ul>
+            <li>Skia Debugger for Chrome</li>
+            <li>Scripting + PhantomJS</li>
+            <li>Chrome Dev Tools / Firebug for Firefox</li>
+        </ul>
+    </section>
+
+    <section data-state="alert">
+        <h3>Demo</h3>
+        <p>Review Performance Tools</p>
+        <ul>
+            <li><a href="https://sites.google.com/site/skiadocs/developer-documentation/skia-debugger">Skia Debugger</a></li>
+            <li><a href="http://loadreport.wesleyhales.com/">Loadreport.js</a></li>
+            <li>Chrome Dev Tools</li>
+        </ul>
+    </section>
+
+
+</section>
+
+<section class="slide-group">
+    <section>
+        <h3>Compression</h3>
+    </section>
+
+    <section>
+        GZIP everything except stuff that's already (natively) compressed
+    </section>
+
+    <section>
+        For example, GZIPing JPEG images will...
+    </section>
+
+    <section>
+        Cause unneeded overhead on the server
+    </section>
+
+    <section>
+        and applying HTTP compression to something that's already compressed (PNG, JPEG...) will not make it smaller.
+    </section>
+
+    <section>
+        Example server configs:
+        <ul>
+            <li><a href="https://github.com/h5bp/server-configs">https://github.com/h5bp/server-configs</a></li>
+        </ul>
+    </section>
+
+    <section>
+        <h3>The ultimate combo...</h3>
+        <ul>
+            <li>Base64 images into CSS</li>
+            <li>GZIP your CSS files</li>
+        </ul>
+    </section>
+
+    <section data-state="alert">
+        <h3>Base64 Demo with Canvas</h3>
+        <ul>
+            <li>Load the image via Javascript</li>
+            <li>draw it into a canvas tag</li>
+            <li>base64 the image data</li>
+            <li><a href="http://enable-cors.org/">http://enable-cors.org/</a></li>
+            <li><a href="https://github.com/slidfast/slidfast/blob/master/slidfast.js#L244">Source</a></li>
+            <li><a href="http://i-tools.org/gzip">simple string compressor (gzip)</a></li>
+        </ul>
+    </section>
+
+    <section>
+        This allows us to store the string via localStorage and use it when offline or on a slow connection.
+    </section>
+
+</section>
+
+<section class="slide-group">
+    <section>
+        <h3>Minification</h3>
+    </section>
+
+    <section>
+        Minification is the process of removing all unnecessary characters from source code, without changing its functionality.
+    </section>
+
+    <section>
+        <h3>Available Libraries:</h3>
+        <ul>
+            <li><a href="http://www.crockford.com/javascript/jsmin.html">JSMin</a></li>
+            <li><a href="http://dean.edwards.name/packer/">Packer</a></li>
+            <li><a href="http://dojotoolkit.org/documentation/">Dojo ShrinkSafe</a></li>
+            <li><a href="http://developer.yahoo.com/yui/compressor/">YUI Compressor</a></li>
+        </ul>
+    </section>
+
+    <section data-state="alert">
+        <h3>Demo</h3>
+        <p>How do you choose a minifier?</p>
+        <ul>
+            <li><a href="http://compressorrater.thruhere.net/">CompressorRater</a></li>
+            <li><a href="http://marijnhaverbeke.nl/uglifyjs">uglifyjs</a></li>
+        </ul>
+    </section>
+
+</section>
 
 <section class="slide-group">
 
@@ -143,6 +453,202 @@
     </section>
 
 </section>
+
+<section class="slide-group">
+    <section>
+        Bringing it all together
+    </section>
+
+    <section>
+        <h3><a href="https://github.com/cowboy/grunt">gruntjs</a></h3>
+    </section>
+
+    <section>
+        <ul>
+            <li>concatenate files</li>
+            <li>validate files with JSHint</li>
+            <li>minify with UglifyJS</li>
+            <li>run headless QUnit tests with a PhantomJS</li>
+        </ul>
+    </section>
+
+    <section data-state="alert">
+        <h3>Demo</h3>
+        <p><a href="https://github.com/cowboy/grunt">gruntjs</a> basics</p>
+    </section>
+
+</section>
+
+<section class="slide-group">
+    <section>
+        <h2>Browser Performance</h2>
+    </section>
+</section>
+
+<section class="slide-group">
+
+    <section>
+        Developers inherently care about performance
+    </section>
+
+    <section>
+        Product, Sales, and Marketing folks don’t care as much
+    </section>
+
+    <section>
+        Performance impacts the bottom line of the business
+    </section>
+
+    <section>
+        When speed drops off, the performance of the business drops off
+    </section>
+
+    <section>
+        <h2>An Experiment...</h2>
+        <h3>By Google, Yahoo! and Bing</h3>
+        <p>By Steve Souders</p>
+    </section>
+
+    <section>
+        <h2>Google introduced +0.4 second delay</h2>
+        <h3 class="red-text">Searches dropped by 0.6%</h3>
+    </section>
+
+    <section>
+        <h2>Yahoo introduced +0.4 second delay</h2>
+        <h3 class="red-text">Traffic dropped by 5-9% in full page traffic</h3>
+    </section>
+
+    <section>
+        <h2>Bing introduced a full 2 second delay</h2>
+        <h3 class="red-text">Revenue per user dropped 4%</h3>
+    </section>
+
+    <section>
+        <h2>Shopzilla reduced page load by 5s</h2>
+        <h3 class="green-text">Revenue increased by 12%</h3>
+        <ul>
+            <li class="green-text">Hardware reduced by 50%</li>
+            <li class="green-text">Unique users doubled</li>
+        </ul>
+    </section>
+
+    <section>
+        <h2>An Experiment...</h2>
+        <h3>On CNN.com</h3>
+        <p>By Me</p>
+    </section>
+
+    <section>
+        <h2>CNN removed jQuery and Protoaculous from concatenation and added to CDN</h2>
+        <h3 class="green-text">Improved site performance by 17%</h3>
+        <h3 class="green-text">Reduced almost 1TB of bandwidth per day</h3>
+    </section>
+
+</section>
+
+<section class="slide-group">
+    <section>
+        <p>What makes sites feel slow?</p>
+    </section>
+
+    <section>
+        <p>Non-gzipped or non-cached resources</p>
+    </section>
+
+    <section>
+        <p>Too much concatenation</p>
+    </section>
+
+    <section>
+        <p>Script block (downloading and rendering)</p>
+    </section>
+
+    <section>
+        <p>Figure out what's needed to render the page and defer everything else</p>
+    </section>
+
+    <section>
+        <h3>UI Checklist</h3>
+        <ul>
+            <li>Make fewer HTTP requests</li>
+            <li>Use a CDN</li>
+            <li>Gzip components</li>
+            <li>Put style sheets at the top</li>
+            <li>Put scripts at the bottom</li>
+            <li>Avoid CSS expressions</li>
+        </ul>
+    </section>
+
+    <section>
+        <p>Avoid CSS expressions?</p>
+        <a href="http://wesleyhales.com/blog/2012/04/09/PhoneGap-iscroll-css3-choppiness/">CSS Demo</a>
+    </section>
+
+</section>
+
+<section class="slide-group">
+
+    <section>
+        <h2>Script Loading</h2>
+    </section>
+
+    <section>
+        <p>Use defer - Introduced over 12 years ago with IE4</p>
+<pre><code>
+&lt;script src="file.js" defer&gt;&lt;/script&gt;
+</code></pre>
+        <p>Download in background and execute in order</p>
+    </section>
+
+    <section>
+        <p>With HTML5 - Use async</p>
+<pre><code>
+&lt;script src="file.js" async&gt;&lt;/script&gt;
+</code></pre>
+        <p>Execute when downloaded but no order preservation</p>
+    </section>
+
+    <section>
+        <p>Only Needed after page load...</p>
+<pre><code>
+var se = document.createElement(‘script’);
+se.src = ‘http://mydomain.com/script.js’
+//append to head
+</code></pre>
+        <p>Used by Google Analytics - May not preserve order</p>
+    </section>
+
+    <section>
+        <p>Only Needed after page load...(cont)</p>
+<pre><code>
+&lt;script type=“text/javascript”&gt;
+/*var …*/
+&lt;/script&gt;
+</code></pre>
+        <p>Gmail Mobile - remove comment delimiters eval when needed</p>
+    </section>
+
+    <section>
+        <p>ControlJS</p>
+<pre><code>
+&lt;script type="text/cjs" data-cjssrc="main.js"&gt;&lt;/script&gt;
+</code></pre>
+        <p>Used By Washington Post - Crawls DOM, Loads scripts asyn</p>
+    </section>
+
+    <section>
+        <h3>Diagnosing Problems</h3>
+        <ul>
+            <li>Yslow</li>
+            <li>Page Speed (shows how much JS was actually used)</li>
+            <li>WebPagetest.org</li>
+            <li><a href="http://loadreport.wesleyhales.com">loadreport.js...</a></li>
+        </ul>
+    </section>
+</section>
+
+
 
 <section class="slide-group">
     <section>
