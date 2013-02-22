@@ -1,0 +1,1046 @@
+<!doctype html>
+<html lang="en">
+
+    <head>
+        <meta charset="utf-8">
+
+        <title>HTML5 and JavaScript Web Apps - Devoxx University 2012</title>
+
+        <meta name="description" content="HTML5 and JavaScript Web Apps - Devoxx University 2012">
+        <meta name="author" content="Wesley Hales">
+
+        <meta name="apple-mobile-web-app-capable" content="yes" />
+        <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+
+        <link rel="stylesheet" href="css/reveal.css">
+        <link rel="stylesheet" href="css/theme/default.css" id="theme">
+
+        <!-- For syntax highlighting -->
+        <link rel="stylesheet" href="lib/css/zenburn.css">
+
+        <!-- If the query includes 'print-pdf', use the PDF print sheet -->
+        <script>
+            document.write( '<link rel="stylesheet" href="css/print/' + ( window.location.search.match( /print-pdf/gi ) ? 'pdf' : 'paper' ) + '.css" type="text/css" media="print">' );
+        </script>
+
+        <!--[if lt IE 9]>
+        <script src="lib/js/html5shiv.js"></script>
+        <![endif]-->
+        <style>
+            .placeholder {
+                height: 225px;
+                width: 95%;
+            }
+
+            .hide-wtf,
+            .hide-nice {
+                opacity:0;
+                width:1px;
+                height: 1px;
+                background-color: red;
+                color: #fff;
+                position: absolute;
+
+                right:0;
+
+                bottom: 0;
+                font-size: .01em;
+                z-index: 10;
+            }
+
+            .show-wtf,
+            .show-nice {
+                opacity: 1;
+                /*width: 50%;*/
+                height: 10%;
+                background-color: red;
+                color: #fff;
+                text-align: center;
+                vertical-align: middle;
+                right:0;
+                left: 0;
+                bottom: 0;
+                padding: 5% 0 0 0;
+                position: absolute;
+                font-size: 3em;
+                z-index: 10;
+            }
+
+            .nice {
+                background-color: green;
+            }
+
+                /*=============== charts*/
+
+            .tickLabel {
+                font-size: 26px;
+            }
+
+            .xAxis .tickLabel {
+                margin: 10px 0 0 0;
+            }
+        </style>
+    </head>
+
+    <body>
+    <div class="address" style="display:none">
+        <span style="color:orange;">go to </span> onslyde.com/remix12
+    </div>
+    <div id="wtf" class="hide-wtf">
+        WTF!!!
+    </div>
+    <div id="nice" class="hide-nice">
+        Nice!!!
+    </div>
+        <div class="reveal">
+
+            <!-- Any section element inside of this container is displayed as a slide -->
+            <div class="slides">
+
+                <section>
+                    <h1>HTML5 AND JAVASCRIPT WEB APPS</h1>
+                    <h2 class="orange-text">Devoxx 2012 - University Session</h2>
+                    <h3>@wesleyhales</h3>
+                </section>
+
+                <section>
+                    <section>
+                        <h1>We've got 3 hours...</h1>
+                    </section>
+
+                    <section>
+                        <h1>To learn cool shit like...</h1>
+                    </section>
+
+                    <section>
+                        <h1>Everything Related to HTML5 and the Mobile Web</h1>
+                    </section>
+
+                    <section>
+                        <h1>The Browser Scene</h1>
+                        <h2>Web Browser === Platform</h2>
+                    </section>
+
+                    <section>
+                        <h1>Single Page Applications</h1>
+                        <h2>SPA, SOFEA, etc...</h2>
+                    </section>
+
+                    <section>
+                        <h1>Getting as close to native as possible</h1>
+                    </section>
+
+                    <section>
+                        <h1>Offline First</h1>
+                    </section>
+
+                    <section>
+                        <h1>Progressive Enhancement vs. Graceful Degradation</h1>
+                    </section>
+
+                    <section>
+                        <h1>Widely Supported HTML5/W3C APIs</h1>
+                        <h2>Web Workers, Web Sockets, Orientation, Geolocation, Web Storage</h2>
+                    </section>
+
+                    <section>
+                        <h1>Front-end Performance</h1>
+                        <h2>Increase SEO, Leads, etc...</h2>
+                    </section>
+
+                    <section>
+                        <h1>...Then Drink beer(s)</h1>
+                    </section>
+
+                </section>
+
+
+
+                <section>
+                    <h1>WHOAMI</h1>
+                    <ul>
+                        <li>Recently wrote a book (shameless plug)</li>
+                        <li>Spent the past decade+ on the UI</li>
+                        <li>Changed jobs 4 times this year (JBoss, Cox, CNN, Apigee)</li>
+                        <li>Currently Senior Developer at Apigee</li>
+                        <li>Loves me some UI</li>
+                    </ul>
+                </section>
+
+                <section data-state="soothe">
+                    <h1>First Hour</h1>
+                    <ul>
+                        <li>Talk about browser as a platform</li>
+                        <li>Look at some data</li>
+                        <li>Start writing an offline web app</li>
+                    </ul>
+                </section>
+
+                <section>
+                    <section>
+                        <h3>The Web Browser is the platform</h3>
+                        <img src="/images/remix12/allbrowsers.png"/>
+                    </section>
+
+                    <section>
+                        <h2>The front-end gets just as much consideration as the back-end</h2>
+                        <h3>JavaScript used on both sides</h3>
+                    </section>
+
+                    <section>
+                        <h2>ahh yes, JavaScript on the server :)</h2>
+                        <p>Security - Introduces new attack vectors with eval (the same problems we had in JS)</p>
+                        <p>You are building a stack from scratch</p>
+                    </section>
+
+                    <section>
+                        <h2>NIO vs. Threading</h2>
+                        <h3>Overall, you’re writing single-threaded event loops where the callbacks (and blocking) must be managed.</h3>
+                    </section>
+
+                    <section>
+                        <h2>But we're not going to get into that holy war :)</h2>
+                        <p>This talk is about writing offline capable apps - for mobile and desktop</p>
+                    </section>
+
+                </section>
+
+                <section>
+                    <section>
+                        <h1>The Mobile Web</h1>
+                    </section>
+
+                    <section>
+                        <h3>HTML5 is (mostly) about Mobile!</h3>
+                        <img src="/images/remix12/android-ios.gif" style="width: 100%"/>
+                    </section>
+
+                    <section>
+                        <h2>Mobile development comes first, everything else follows.</h2>
+                    </section>
+
+                    <section>
+                        <h2>But sometimes, being first isn't what you expected...</h2>
+                        <img src="/images/devoxx2012u/me-first.png"/>
+                    </section>
+
+                    <section>
+                        <h2>Native vs. Mobile Web</h2>
+                        <h3>Hardware Lockout for HTML5...</h3>
+                        <ul>
+                            <li>No Camera (on iOS)</li>
+                            <li>No Address Book</li>
+                            <li>No Vibration</li>
+                            <li>...</li>
+                        </ul>
+                    </section>
+
+                    <section>
+                        <h3>Native is not for everybody...</h3>
+                        <p>Especially for media brands or large enterprises that cannot or will not invest in the developers to create a native app for every platform.</p>
+                    </section>
+
+                    <section>
+                        <h1>There is hope</h1>
+                    </section>
+
+                    <section>
+                        <h2>Apple had an advantage</h2>
+                        <p>NEXT -> OSX -> IOS -> ObjectiveC</p>
+                    </section>
+
+                    <section>
+                        <h2>Android had an advantage</h2>
+                        <p>First competitor, open platform, Google</p>
+                    </section>
+
+                    <section>
+                        <h2>Mozilla is bringing in more openness</h2>
+                        <p>With Firefox OS (WebAPI project)</p>
+                        <p>They upset IE with Firefox, and now must repeat with HTML5</p>
+                    </section>
+
+                    <section>
+                        <h2>One billion HTML5-capable mobile devices will be sold in 2013</h2>
+                        <img src="/images/remix12/mobile-marketshare-may2012.PNG"/>
+                    </section>
+
+                    <section>
+                        <h2>However, things are terribly fragmented</h2>
+                        <img src="/images/remix12/android-frag.png" style="height: 100%"/>
+                    </section>
+
+                    <section>
+                        <h2>Rethinking the Web Today (mobile and desktop)</h2>
+                        <ul>
+                            <li>Web applications will not work the same across all browsers</li>
+                            <li>Users of newer/modern browsers will get the cool stuff</li>
+                            <li>Older browsers will have limited functionality</li>
+                        </ul>
+                    </section>
+
+                </section>
+
+                <section>
+                    <section>
+                        <h1>Mobile First</h1>
+                    </section>
+
+                    <section>
+                        <h2>Mobile First === Offline First</h2>
+                    </section>
+
+                    <section>
+                        <h2>Progressive Enhancement</h2>
+                        <h3>What does this approach give us?</h3>
+                    </section>
+
+                    <section>
+                        <h3>Developing sites for constrained devices force fluid/flexible content</h3>
+                        <img src="/images/devoxx2012u/responsive.png"/>
+                    </section>
+
+                    <section>
+                        <img src="/images/devoxx2012u/long-page.png"/>
+                    </section>
+
+                    <section>
+                        <h2>Developing for newer hardware</h2>
+                        <ul>
+                            <li>Geolocation</li>
+                            <li>Accelerometer</li>
+                            <li>Augmented Reality</li>
+                            <li>Touchscreens - new/fun ways of interacting with content</li>
+                        </ul>
+                    </section>
+
+                    <section>
+                        <h2>Code Quality</h2>
+                        <ul>
+                            <li>We now have to worry about battery life when writing CSS</li>
+                            <li>Single payload of all assets</li>
+                            <li>Better perf === better SEO</li>
+                            <li>Overall - A lot more focus on the front-end</li>
+                        </ul>
+                    </section>
+
+                </section>
+
+
+
+                <section>
+
+                    <section>
+                        <h2>Deciding what to support</h2>
+                        <ul>
+                            <li>Multiple platforms and browsers</li>
+                            <li>Developing against core HTML5 APIs must be gracefully degraded</li>
+                        </ul>
+                    </section>
+
+                    <section>
+                        <h2>Writing apps for all browsers</h2>
+                        <ul>
+                            <li>Spanning all browsers can be a huge undertaking</li>
+                            <li>Previously, web developers didn't care about hardware</li>
+                            <li>The Mobile Web adds another dimension of support</li>
+                        </ul>
+                    </section>
+
+                </section>
+
+
+                <section>
+                    <h2>Mobile Web Browsers</h2>
+                    <img src="/images/remix12/allbrowsers.png"/>
+                </section>
+
+                <section>
+                    <section>
+                        <h2>WebKit</h2>
+                        <ul>
+                            <li>Mobile Safari</li>
+                            <li>Android</li>
+                            <li>Chrome</li>
+                            <li>Many others...</li>
+                        </ul>
+                    </section>
+
+                    <section>
+                        <h2>WebKit Revisions</h2>
+                        <img src="/images/devoxx2012u/webkit-graph.png"/>
+                    </section>
+
+                    <section>
+                        <h2>Mobile Safari</h2>
+                        <ul>
+                            <li>Standard hardware</li>
+                            <li>Multi-core technology</li>
+                            <li>GPU access through CSS3e</li>
+                        </ul>
+                    </section>
+
+                    <section>
+                        <h2>Android</h2>
+                        <ul>
+                            <li>Default browser sucks</li>
+                            <li>Fragmented</li>
+                            <li>HTML5 support varies across devices</li>
+                            <li>Browsers like Firefox, Chrome, and Dolphin make things a lot better.</li>
+                        </ul>
+                    </section>
+
+                    <section>
+                        <h2>Android Marketshare</h2>
+                        <img src="/images/remix12/android-percents.png"/>
+                    </section>
+                </section>
+                <section>
+                    <section>
+                        <h2>Firefox Mobile</h2>
+                        <ul>
+                            <li>Currently ahead of iOS HTML5 implementation</li>
+                            <li>Leading the WebAPI project
+                                <ul>
+                                    <li>HTML based OS (B2G)</li>
+                                </ul>
+                            </li>
+                        </ul>
+                    </section>
+
+                    <section>
+                        <h2>Firefox OS (HTML5 OS)</h2>
+                        <img src="/images/devoxx2012u/firefox-phone.png"/>
+                    </section>
+
+                    <section>
+                        <h2>Firefox OS (HTML5 OS)</h2>
+                        <img src="/images/devoxx2012u/b2g-example-apps.jpg"/>
+                    </section>
+                </section>
+                <section>
+                    <section>
+                        <h2>Opera Mobile</h2>
+                        <ul>
+                            <li>Opera has two separate browsers for mobile phones: Opera Mobile and Opera Mini
+                                <ul>
+                                    <li>In Opera Mini, the Opera Presto browser engine is located on a server</li>
+                                </ul>
+                            </li>
+                            <li>Opera Mini holds a large percentage of market share amongst other browsers</li>
+
+                        </ul>
+                    </section>
+                </section>
+                <section>
+                    <section>
+                        <h2>Internet Explorer Mobile</h2>
+                        <ul>
+                            <li>Windows Phone 7.5 == IE9</li>
+                            <li>Windows Phone 8 == IE10
+                                <ul>
+                                    <li>WebSockets</li>
+                                    <li>Web Workers</li>
+                                    <li>Application Cache</li>
+                                    <li>IndexedDB</li>
+                                </ul>
+                            </li>
+                        </ul>
+                    </section>
+                </section>
+                <section>
+                    <section>
+                        <h2>Mobile Browser Market Share</h2>
+                        <img src="/images/remix12/mobile-marketshare-may2012.PNG"/>
+                    </section>
+
+                    <section>
+                        <h2>Things are moving fast!</h2>
+                        <ul>
+                            <li>Since October 2011 
+                                <ul>
+                                    <li>WebKit has jumped from 75% to 87%</li>
+                                    <li>Opera Mini shrunk from 18.65% to 8%</li>
+                                    <li>IE Browsers grew from .16% to 1%</li>
+                                    <li>Blackberry grew to 1%</li>
+                                </ul>
+                            </li>
+                        </ul>
+                    </section>
+                </section>
+                <section>
+                    <section>
+                        <h2>How do we keep up?</h2>
+                    </section>
+
+                    <section>
+                        <h2>HTML5e (desktop)</h2>
+                        <img src="/images/remix12/html5e-desktop.png"/>
+                    </section>
+
+                    <section>
+                        <h2>HTML5e (mobile)</h2>
+                        <img src="/images/remix12/html5e-mobile.png"/>
+                    </section>
+
+                    <section>
+                        <h2>slidfast.js</h2>
+                        <p>Learning framework based on HTML5e concepts</p>
+                    </section>
+
+                </section>
+
+                <section data-state="alert">
+                    <section>
+                        <h1>Code it</h1>
+                        <h2>Exercise 1</h2>
+                    </section>
+
+                    <section>
+                        <h2>Tools Needed</h2>
+                        <ul>
+                            <li>IDE/Editor</li>
+                            <li>Browsers
+                                <ul>
+                                    <li>Safari/WebKit/Chrome</li>
+                                    <li>Opera Mobile</li>
+                                    <li>*Android</li>
+                                    <li>iOS Emulator</li>
+                                </ul>
+                            </li>
+                        </ul>
+                    </section>
+
+                    <section>
+                        <h2>What we'll do</h2>
+                        <ul>
+                            <li>Single Page Mobile Web App</li>
+                            <li>Add touch support for native feel</li>
+                            <li>CSS3, HTML5, JavaScript around 100 lines each</li>
+                            <li>Test across all browsers</li>
+                        </ul>
+                    </section>
+
+                    <section>
+                        <h2>What we learned</h2>
+                        <ul>
+                            <li>You don't need jQuery Mobile</li>
+                            <li>Mobile Web is not Write once run anywhere</li>
+                            <li>Vendor Prefixes</li>
+                            <li>Fragmentation</li>
+                            <li>Older iPhones and any device which hasn’t upgraded past Android 4 will be the IE6s of this mobile era</li>
+                        </ul>
+                    </section>
+                </section>
+
+                <section data-state="soothe">
+                    <h1>Hour 2 (part1)</h1>
+                    <ul>
+                        <li>Offline Capability</li>
+                    </ul>
+                </section>
+
+                <section>
+                    <h2>Online/Offline Events</h2>
+                    <pre><code contenteditable>
+window.addEventListener("offline", function (e) {
+//we just lost our connection and entered offline mode, disable eternal link
+slidfast.network.processOffline(e.type);
+}, false);
+                    </code></pre>
+                </section>
+
+                <section>
+                    <h2>Network Detection</h2>
+                    <pre><code contenteditable>
+var connection = navigator.connection || {'type':'0'};
+if (connection.type === 2 || connection.type === 1) {
+//...
+} else if (connection.type === 3) {
+//edge
+//ATT Edge latency: ~400-600ms
+//ATT Edge DL speed: ~2-10kbps
+slidfast.core.fetchAndCache(false);
+} else if (connection.type === 2) {
+//3g
+//ATT 3G latency: ~400ms
+//Verizon 3G latency: ~150-250ms
+//...
+}
+                    </code></pre>
+                </section>
+
+                <section>
+                    <h2>App Cache</h2>
+                    <pre><code contenteditable>
+//check for a new appCache
+window.applicationCache.addEventListener('updateready', function (e) {
+//alert('checking appcache' + window.applicationCache.status);
+    if (window.applicationCache.status === window.applicationCache.UPDATEREADY) {
+    // Browser downloaded a new app cache.
+    // Swap it in and reload the page to get the new hotness.
+    window.applicationCache.swapCache();
+        if (confirm('A new version of this site is available. Load it?')) {
+            window.location.reload();
+        }
+    }
+}, false);
+                    </code></pre>
+                </section>
+
+                <section>
+                    <h2>App Cache Config</h2>
+                    <pre><code contenteditable>
+CACHE MANIFEST
+# 2011-08-18:v4
+
+CACHE:
+demo1.html
+styles/demo1.css
+js/demo1.js
+
+NETWORK:
+*
+                    </code></pre>
+                </section>
+
+                <section>
+                    <h2>App Cache Config</h2>
+                    <p>The * indicates that the browser should allow all connections to non-cached resources from a cached page.</p>
+                    <pre><code contenteditable>
+...
+NETWORK:
+*
+                    </code></pre>
+                </section>
+
+                <section>
+                    <h2>Link Prefetching</h2>
+                    <p>Link prefetching allows developers to silently preload site contents to project a more fluid, seamless web experience:</p>
+                <pre><code contenteditable>
+<!-- full page -->
+&lt;link rel="prefetch" href="http://davidwalsh.name/css-enhancements-user-experience" /&gt;
+                </code></pre>
+                </section>
+
+                <section>
+                    <h2>Link Prefetching (slidfast.js)</h2>
+
+                <pre><code contenteditable>
+var getFrame = function () {
+var frame = document.getElementById("temp-frame");
+
+if (!frame) {
+// create frame
+frame = document.createElement("iframe");
+frame.setAttribute("id", "temp-frame");
+frame.setAttribute("name", "temp-frame");
+frame.setAttribute("seamless", "");
+frame.setAttribute("sandbox", "allow-same-origin");
+frame.style.display = 'none';
+document.documentElement.appendChild(frame);
+}
+// load a page
+return frame.contentDocument;
+};
+                </code></pre>
+                </section>
+
+                <section>
+                    <h2>Link Prefetching (slidfast.js)</h2>
+
+                <pre><code contenteditable>
+document.getElementById(location).appendChild(document.adoptNode(newPage));
+                </code></pre>
+                </section>
+
+                <section>
+                    <img src="/images/devoxx2012u/iframe-perf.png"/>
+                    <p>red = innerHTML</p>
+                </section>
+
+                <section>
+                    <h1>Offline First</h1>
+                    <ul>
+                        <li>Demo</li>
+                    </ul>
+                </section>
+
+                <section data-state="soothe">
+                    <h1>Hour 2 (part2)</h1>
+                    <ul>
+                        <li>HTML5 and W3C APIs
+                            <ul>
+                                <li>Web Sockets</li>
+                                <li>Web Workers</li>
+                                <li>Orientation</li>
+                                <li>Geolocation</li>
+                                <li>Web Storage</li>
+                            </ul>
+                        </li>
+                    </ul>
+                </section>
+
+                <section>
+
+                    <section>
+                        <h1>Web Sockets</h1>
+                    </section>
+
+                    <section>
+                        <h2>Every HTTP request sent from the browser includes headers, whether you want them or not.</h2>
+                    </section>
+
+                    <section>
+                        <h2>Uncompressed request and response headers can vary in size from 200 bytes to over 2K.</h2>
+                    </section>
+
+                    <section>
+                        <h2>WebSockets give you minimal overhead with full duplex communication through a single socket.</h2>
+                    </section>
+
+                    <section>
+                        <pre><code>
+supports_websocket:function () {
+    try {
+        return 'WebSocket' in window && window['WebSocket'] !== null;
+    } catch (e) {
+        return false;
+    }
+}
+                        </code></pre>
+                    </section>
+
+                    <section>
+                        <h1>Web Sockets</h1>
+                        <ul>
+                            <li>Fun Demo</li>
+                        </ul>
+                    </section>
+
+                </section>
+
+                <section>
+
+                    <section>
+                        <h1>Web Storage</h1>
+                    </section>
+
+                    <section>
+                        <h2>Today, you have two well-supported mechanisms for storing data on the client: cookies and Web Storage. </h2>
+                    </section>
+
+                    <section>
+                        <h2>Cookies are much different than Web Storage and implicitly send data back to the server upon each request through HTTP headers.</h2>
+                    </section>
+
+                    <section>
+                        <h2>Cookies only give you 4kb of max storage per cookie</h2>
+                    </section>
+
+                    <section>
+                        <h1>Web Storage</h1>
+                        <pre><code contenteditable>
+localStorage.bookName = 'HTML5 and JavaScript Web Apps';
+//or
+localStorage['bookName'] = 'HTML5 and JavaScript Web Apps';
+//or
+localStorage.setItem('bookName') = 'HTML5 and JavaScript Web Apps';
+                        </code></pre>
+                    </section>
+
+                    <section>
+                        <pre><code>
+supports_local_storage:function () {
+    try {
+        return 'localStorage' in window && window['localStorage'] !== null;
+    } catch (e) {
+        return false;
+    }
+}
+                        </code></pre>
+                    </section>
+
+                <section>
+                    <h2>Web Storage Perf</h2>
+                    <img src="/images/remix12/jsperf-localstorage1.png"/>
+                </section>
+                </section>
+
+                <section>
+
+                    <section>
+                        <h1>Orientation</h1>
+                    </section>
+
+                    <section>
+                        <h2>Accelerometers, gyroscopes, and compasses are now commonplace in mobile devices and laptops.</h2>
+                    </section>
+
+                    <section>
+                        <pre><code contenteditable>
+supports_orientation : function() {
+    try {
+        return 'DeviceOrientationEvent' in
+        window && window['DeviceOrientationEvent'] !== null } catch (e) {
+        return false;
+    }
+}
+                        </code></pre>
+                    </section>
+
+                    <section>
+                        <h1>Orientation</h1>
+                        <ul>
+                            <li>Demo</li>
+                        </ul>
+                    </section>
+
+                </section>
+
+                <section>
+
+                    <section>
+                        <h1>Geolocation</h1>
+                        <h2>(not HTML5)</h2>
+                    </section>
+
+                    <section>
+                        <h2>The Geolocation API provides scripted access to geographical location information associated with the hosting device.</h2>
+                        <ul>
+                            <li>Geofencing</li>
+                            <li>Geocoding</li>
+                            <li>General tracking</li>
+                        </ul>
+                    </section>
+
+                    <section>
+                        <h2>The API itself is device agnostic; it doesn’t care how the browser determines location.</h2>
+                        <ul>
+                            <li>Wifi</li>
+                            <li>GPS</li>
+                            <li>(User Entered) Zip Code</li>
+                        </ul>
+                    </section>
+
+                    <section>
+                    <pre><code contenteditable>
+//geolocation cannot be accessed with dot notation in iOS5... will prevent page caching
+supports_geolocation:function () {
+    try {
+        return 'geolocation' in navigator && navigator['geolocation'] !== null;
+    } catch (e) {
+        return false;
+    }
+}
+                    </code></pre>
+                    WebKit caching bug (https://bugs.webkit.org/show_bug.cgi?id=43956).
+                    </section>
+
+                    <section>
+                        <h1>Geolocation</h1>
+                        <ul>
+                            <li>Demo</li>
+                        </ul>
+                    </section>
+
+                </section>
+
+                <section>
+
+                    <section>
+                        <h1>Web Workers</h1>
+                    </section>
+
+                    <section>
+                        <h2>The Web Workers interface spawns real OS-level threads, allowing for data to be passed back and forth between any given threads (or worker)</h2>
+                    </section>
+
+                    <section>
+                        <h2>You cannot access components unsafe to threads or the DOM</h2>
+                    </section>
+
+                    <section>
+                        <h2>You have to pass specific data in and out of a thread through serialized objects.</h2>
+                    </section>
+
+                    <section>
+                        <h1>Web Workers</h1>
+                        <ul>
+                            <li>Demo</li>
+                        </ul>
+                    </section>
+
+                </section>
+
+                <section data-state="soothe">
+                    <h1>Hour 3</h1>
+                    <ul>
+                        <li>Performance</li>
+                    </ul>
+                </section>
+
+                <section>
+                    <section>
+                        <h1>Client vs. Server UI</h1>
+                    </section>
+
+                    <section>
+                        <h2>Between 2008-2009 HTML generation on the back-end broke down</h2>
+                        <h3>Progressive enhancement with AJAX</h3>
+                    </section>
+
+                    <section>
+                        <h2>This forced developers to create better APIs</h2>
+                        <h3>...and more efficient ways of delivering data via JSON and XML</h3>
+                    </section>
+
+                    <section>
+                        <h2>Client side generation (PROs):</h2>
+                        <ul>
+                            <li>Reduces server load</li>
+                            <li>JSON uses less bandwidth than presentation ready HTML</li>
+                            <li>CDN Bandwidth (jQuery, BackBone, etc...)</li>
+                            <li>Offline capability \o/</li>
+                        </ul>
+                    </section>
+
+                    <section>
+                        <h2>Client side generation (CONs):</h2>
+                        <ul>
+                            <li>Can reduce performance of device/browser</li>
+                            <li>Parsing JSON and generating HTML uses more memory</li>
+                            <li>Hardware access === battery drain</li>
+                        </ul>
+                    </section>
+
+                    <section>
+                        <h2>The most notable client side con is security</h2>
+                        <ul>
+                            <li>Web Storage is widely supported but not secure</li>
+                        </ul>
+                    </section>
+
+                    <section>
+                        <h1>Don't end up with a huge mess!</h1>
+                        <ul>
+                            <li>2012-2013 is all about hybrid
+                            <ul><li>Microsoft, Blackberry, PhoneGap, Appcelerator...</li></ul></li>
+                            <li>Dealing with separate code bases takes special care</li>
+                            <li>JavaScript MV* frameworks help with this</li>
+                        </ul>
+                    </section>
+
+                </section>
+
+                <section>
+                    <section>
+                        <h2>Front-End Performance</h2>
+                        <ul>
+                            <li>Developers inherently care about performance</li>
+                            <li>Product, Sales, and Marketing folks don’t care as much</li>
+                            <li>Performance impacts the bottom line of the business</li>
+                            <li>When speed drops off, the performance of the business drops off</li>
+                        </ul>
+                    </section>
+
+                    <section>
+                        <h1>An Experiment...</h1>
+                        <h2>By Google, Yahoo! and Bing</h2>
+                        <p>By Steve Souders</p>
+                    </section>
+
+                    <section>
+                        <h1>Google introduced +0.4 second delay</h1>
+                        <h2 class="red-text">Searches dropped by 0.6%</h2>
+                    </section>
+
+                    <section>
+                        <h1>Yahoo introduced +0.4 second delay</h1>
+                        <h2 class="red-text">Traffic dropped by 5-9% in full page traffic</h2>
+                    </section>
+
+                    <section>
+                        <h1>Bing introduced a full 2 second delay</h1>
+                        <h2 class="red-text">Revenue per user dropped 4%</h2>
+                    </section>
+
+                    <section>
+                        <h1>Shopzilla reduced page load by 5s</h1>
+                        <h2 class="green-text">Revenue increased by 12%</h2>
+                        <ul>
+                            <li class="green-text">Hardware reduced by 50%</li>
+                            <li class="green-text">Unique users doubled</li>
+                        </ul>
+                    </section>
+
+                    <section>
+                        <h1>An Experiment...</h1>
+                        <h2>On CNN.com</h2>
+                        <p>By Me</p>
+                    </section>
+
+                    <section>
+                        <h2>CNN removed jQuery and Protoaculous from concatenation and added to CDN</h2>
+                        <h2 class="green-text">Improved site performance by 17%</h2>
+                        <h2 class="green-text">Reduced almost 1TB of bandwidth per day</h2>
+                    </section>
+
+                </section>
+
+                <section data-state="alert">
+                    <section>
+                        <h1>Code it</h1>
+                        <h2>Final Exercise</h2>
+                    </section>
+
+                    <section>
+                        <h2>Tools Needed</h2>
+                        <ul>
+                            <li>PhantomJS</li>
+                            <li>loadreport.js</li>
+                        </ul>
+                    </section>
+
+                    <section>
+                        <h2>What we'll do</h2>
+                        <ul>
+                            <li>Generate a loadtest report so you can measure your site performance per build</li>
+                        </ul>
+                    </section>
+                </section>
+            </div>
+
+
+        </div>
+
+        <script src="lib/js/head.min.js"></script>
+        <script src="js/reveal.min.js"></script>
+
+        <script>
+
+            // Full list of configuration options available here:
+            // https://github.com/hakimel/reveal.js#configuration
+            Reveal.initialize({
+                controls: true,
+                progress: true,
+                history: true,
+
+                theme: Reveal.getQueryHash().theme, // available themes are in /css/theme
+                transition: Reveal.getQueryHash().transition || 'default', // default/cube/page/concave/zoom/linear/none
+
+                // Optional libraries used to extend on reveal.js
+                dependencies: [
+                    { src: 'lib/js/classList.js', condition: function() { return !document.body.classList; } },
+                    { src: 'plugin/markdown/showdown.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
+                    { src: 'plugin/markdown/markdown.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
+                    { src: 'plugin/highlight/highlight.js', async: true, callback: function() { hljs.initHighlightingOnLoad(); } },
+                    { src: 'plugin/zoom-js/zoom.js', async: true, condition: function() { return !!document.body.classList; } },
+                    { src: 'plugin/notes/notes.js', async: true, condition: function() { return !!document.body.classList; } }
+                ]
+            });
+
+        </script>
+
+    </body>
+</html>

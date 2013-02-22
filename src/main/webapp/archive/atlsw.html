@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+<title>HTML5 Architecture</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+<meta name="viewport" content="width=device-width, minimum-scale=1.0, maximum-scale=1.0"/>
+<!-- enable full-screen mode -->
+<meta name="apple-mobile-web-app-capable" content="yes"/>
+<!-- controls the appearance of the status bar in full-screen mode -->
+<meta name="apple-mobile-web-app-status-bar-style" content="black"/>
+
+<link rel="stylesheet" media="all" href="../css/slidfast.css" />
+
+
+
+<style>
+.placeholder {
+	height: 125px;
+	width: 85%;
+}
+</style>
+</head>
+<body>
+<div class="address">
+     go to onslyde.com
+</div>
+
+<div id="controller" style="display:none">
+    <a href="javascript:slidfast.slides.prevSlide();void(0)"><< Previous Slide</a> |
+    <a href="javascript:slidfast.slides.nextSlide();void(0)">Next Slide >></a>
+</div>
+<div id="wtf" class="hide-wtf">
+    WTF!!!
+</div>
+<div id="browser">
+
+    <div id="slide-group-container">
+
+        <section class="slide-group">
+
+            <article class="slide" data-option="master">
+                <h1><img src="../images/atlsw/logo.png"/></h1>
+                <h2>Real Time Audience Interaction</h2>
+                <h3>Twitter: @onslyde</h3>
+            </article>
+
+        </section>
+
+        <section class="slide-group">
+
+            <article class="slide" data-option="master">
+                <h1>Are you connected?</h1>
+
+            </article>
+
+            <article class="slide" data-option="Yes">
+                <h1><img src="../images/atlsw/logo.png"/></h1>
+                <h2>What Problem Does This Solve?</h2>
+                <ul>
+                    <li>Presenter performance</li>
+                    <li>Audience engagement</li>
+                    <li>Detailed analytics on presentation</li>
+                </ul>
+            </article>
+
+            <article class="slide" data-option="No">
+                <h1><img src="../images/atlsw/logo.png"/></h1>
+                <h2>What Problem Does This Solve?</h2>
+                <ul>
+                    <li>Presenter performance</li>
+                    <li>Audience engagement</li>
+                    <li>Detailed analytics on presentation</li>
+                </ul>
+            </article>
+
+        </section>
+
+
+        <section class="slide-group">
+
+            <article class="slide" data-option="master">
+                <h1>Who are the users?</h1>
+                <ul>
+                    <li>Public Speakers
+                    <ul>
+                        <li>Tech Presenters</li>
+                        <li>Sales Professional</li>
+                    </ul>
+                    </li>
+                    <li>Professors</li>
+                </ul>
+            </article>
+
+        </section>
+
+
+        <section class="slide-group">
+
+            <article class="slide" data-option="master">
+                <h1>Who are the customers?</h1>
+                <ul>
+                    <li>Organizations</li>
+                    <li>Corporations</li>
+                    <li>Conferences</li>
+                    <li>Academic Institutions</li>
+                </ul>
+            </article>
+
+        </section>
+
+        <section class="slide-group">
+
+            <article class="slide" data-option="master">
+                <h1>What are you?</h1>
+            </article>
+
+            <article class="slide" data-option="User">
+                <h1>We have a lot of users!</h1>
+            </article>
+
+            <article class="slide" data-option="Customer">
+                <h1>We have a lot of customers!</h1>
+            </article>
+
+        </section>
+
+        <section class="slide-group">
+
+            <article class="slide" data-option="master">
+                <h1>Core Value Proposition</h1>
+                <ul>
+                    <li>Free presentation platform + paid analytics</li>
+                    <li>Features:
+                        <ul>
+                        <li>Trivia</li>
+                        <li>Survey</li>
+                        <li>Forking</li>
+                        <li>Analytics</li>
+                        <li>Free WTF button!</li>
+                        </ul>
+                    </li>
+                </ul>
+            </article>
+
+        </section>
+
+        <section class="slide-group">
+
+            <article class="slide" data-option="master">
+                <h1>Revenue Streams</h1>
+                <ul>
+                    <li>Subscriptions
+                    <ul>
+                        <li>Individual</li>
+                        <li>Organization</li>
+                    </ul>
+                    </li>
+                    <li>On demand</li>
+                </ul>
+            </article>
+
+        </section>
+
+
+        <section class="slide-group">
+
+            <article class="slide" data-option="master">
+                <h1>Projected Costs</h1>
+                <h2>Annual</h2>
+                <ul>
+                    <li>Salary: developers + business = $500,000</li>
+                    <li>Marketing: $100,000</li>
+                    <li>Overhead: rent + utils + laptops + cloud = $100,000</li>
+                </ul>
+            </article>
+
+            <article class="slide" data-option="love the numbers">
+                <h1>Excellent!!</h1>
+                <h2>Let's go!</h2>
+            </article>
+
+            <article class="slide" data-option="you need more">
+                <h1>Need More? Music to my ears</h1>
+            </article>
+
+        </section>
+
+        <section class="slide-group">
+
+            <article class="slide" data-option="master">
+                <h1>Customer Feedback</h1>
+                <img src="../images/atlsw/P1020953.JPG" style="max-width:50%"/>
+                <p style="font-size: 2em;line-height: 1.2em;">"This would let me give immediate feedback to my students. It would make
+                    me look good. The students would like it... and it would be no more work than I'm already doing."<br/><span style="color:#777"> - Michael A. Smith, professor and mentor from this weekend with Mike Schinkel</span>
+                </p>
+            </article>
+
+        </section>
+
+    </div>
+</div>
+<script type="text/javascript" src="../js/slidfast.js" ></script>
+<script type="text/javascript">
+
+    slidfast({
+    touchEnabled: false,
+    slides: true
+    });
+</script>
+<script src="/js/libs/jquery-1.7.1.min.js"></script>
+<script src="/js/libs/jquery.flot.js"></script>
+<script type="text/javascript" src="../js/slidedeck.js" ></script>
+</body>
+</html>

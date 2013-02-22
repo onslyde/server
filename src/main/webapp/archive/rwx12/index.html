@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+<title>RWX 2012</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+<meta name="viewport" content="width=device-width, minimum-scale=1.0, maximum-scale=1.0"/>
+<!-- enable full-screen mode -->
+<meta name="apple-mobile-web-app-capable" content="yes"/>
+<!-- controls the appearance of the status bar in full-screen mode -->
+<meta name="apple-mobile-web-app-status-bar-style" content="black"/>
+
+<link rel="stylesheet" media="all" href="/css/slidfast.css" />
+<link rel="stylesheet" media="all" href="/css/remote.css" />
+
+
+</head>
+<body>
+<div id="browser">
+    <h2 id="vote-label">@wesleyhales</h2>
+    <nav class="primary">
+        <ul>
+            <li><input id="option1" class="button" type="submit" value="" />
+            <input id="option2" class="button" type="submit" value="" />
+            <input id="nice" class="button" type="submit" value="Nice!" />
+            <input id="wtf" class="button" type="submit" value="WTF!" />
+            </li>
+
+        </ul>
+    </nav>
+
+    <div id="slide-group-container">
+
+        <div id="front" class="normal">
+
+            <div id="wesley-page" class="slide">
+                <p>
+                    <a href="https://twitter.com/wesleyhales" target="_blank">Follow @wesleyhales</a>
+                </p>
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+<script type="text/javascript" src="/js/libs/jquery-1.7.1.min.js" ></script>
+<script type="text/javascript" src="/js/gracefulWebSocket.js" ></script>
+<script type="text/javascript" src="/js/slidfast.js" ></script>
+<script type="text/javascript">
+
+    slidfast({
+        defaultPageID:'wesley-page',
+        touchEnabled: false,
+        singlePageModel: true
+    });
+
+
+
+    var ws;
+    (function ($) {
+
+        // in fallback mode: connect returns a dummy object implementing the WebSocket interface
+        ws = $.gracefulWebSocket('ws://'+ slidfast.ws.ip() +':8081'); // the ws-protocol will automatically be changed to http
+        // in fallback mode: sends message to server using HTTP POST
+        console.log(ws);
+        ws = slidfast.ws.connect(ws);
+
+
+
+
+    })(jQuery);
+
+    var option1 = document.querySelector('#option1');
+    var option2 = document.querySelector('#option2');
+    var wtf = document.querySelector('#wtf');
+    var nice = document.querySelector('#nice');
+    var voteLabel = document.querySelector('#vote-label');
+    //todo make this unique user for session management/voter registration
+    //var ws = slidfast.ws.join('client:anonymous2');
+
+    disablePoll()
+
+    option1.onclick = function(event) {
+      return sendVote(event,option1.value);
+    };
+
+    option2.onclick = function(event) {
+        return sendVote(event,option2.value);
+    };
+
+    function sendVote(event,option){
+
+        if(option){
+            ws.send('vote:' + option);
+        }
+        disablePoll();
+        return false;
+    }
+
+    wtf.onclick = function(event) {
+    ws.send('vote:wtf');
+    wtf.disabled = true;
+    wtf.style.opacity = .4;
+    wtf.value = "you only get one per vote :)"
+    return false;
+
+    };
+
+    nice.onclick = function(event) {
+//        console.log('send nice');
+        ws.send('vote:nice');
+        nice.disabled = true;
+        nice.style.opacity = .4;
+        nice.value = "you only get one per vote :)"
+        return false;
+
+    };
+
+    function disablePoll(){
+        option1.disabled = true;
+        option2.disabled = true;
+        option1.style.opacity = .4;
+        option2.style.opacity = .4;
+        //voteLabel.style.opacity = .4;
+        voteLabel.innerHTML = 'Waiting...';
+    }
+
+    window.addEventListener('updateOptions', function(e) {
+        //quick check to make sure we don't re-enable on polling clients
+        if(option1.value != e.option1){
+            option1.disabled = false;
+            option2.disabled = false;
+            wtf.disabled = false;
+            nice.disabled = false;
+            option1.value = e.option1;
+            option2.value = e.option2;
+            wtf.value = 'WTF!';
+            nice.value = 'Nice!';
+            //voteLabel.style.opacity = 1;
+            option1.style.opacity = 1;
+            option2.style.opacity = 1;
+            wtf.style.opacity = 1;
+            nice.style.opacity = 1;
+            voteLabel.innerHTML = 'Vote!';
+        }
+    }, false);
+
+</script>
+</body>
+
+
+</html>

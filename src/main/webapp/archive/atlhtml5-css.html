@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+<title>HTML5 Architecture</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+<meta name="viewport" content="width=device-width, minimum-scale=1.0, maximum-scale=1.0"/>
+<!-- enable full-screen mode -->
+<meta name="apple-mobile-web-app-capable" content="yes"/>
+<!-- controls the appearance of the status bar in full-screen mode -->
+<meta name="apple-mobile-web-app-status-bar-style" content="black"/>
+
+<link rel="stylesheet" media="all" href="../css/slidfast.css" />
+<link rel="stylesheet" media="all" href="../css/slidfastpat.css" />
+
+
+
+<style>
+.placeholder {
+	height: 125px;
+	width: 85%;
+}
+</style>
+</head>
+<body>
+<div class="address">
+     go to <strong>onslyde.com/pboggs</strong>
+</div>
+
+<div id="controller" style="display:none">
+    <a href="javascript:slidfast.slides.prevSlide();void(0)"><< Previous Slide</a> |
+    <a href="javascript:slidfast.slides.nextSlide();void(0)">Next Slide >></a>
+</div>
+<div id="wtf" class="hide-wtf">
+    WTF!!!
+</div>
+<div id="browser">
+
+    <div id="slide-group-container">
+
+        <section class="slide-group" >
+            <article class="slide" data-option="master">
+                <h1>Are we using CSS3 on productions sites?</h1>
+            </article>
+            <article class="slide" data-option="Yes">
+                <h1>We are all forward thinkers.</h1>
+                <p>I have to support IE6+ - We can work around it.</p>
+            </article>
+            <article class="slide" data-option="No">
+                <h1>My goal. Convince you there is a place for it.</h1>
+                <p>We may have to support IE6, IE7 and IE8 for a long time.</p>
+            </article>
+        </section>
+        <section class="slide-group" >
+            <article class="slide" data-option="master">
+                <h1>CSS3</h1>
+                <h2>More baked than you think.</h2>
+                <h2>Mobile browsers are your best friend (until they aren't).</h2>
+                <h2>Surprising level of support... if you ignore IE.</h2>
+            </article>
+        </section>
+        <section class="slide-group" >
+            <article class="slide" data-option="master">
+                <h1>Let's cover some of the best supported features in-depth</h1>
+                <h2>Stop me if you have a question.</h2>
+            </article>
+        </section>
+        <section class="slide-group" >
+            <article class="slide" data-option="master">
+                <h1>Support. If in doubt.</h1>
+                <h2><a href="http://caniuse.com" target="_blank">caniuse.com</a></h2>
+                <h3>Great resource for browser capabilities.</h3>
+            </article>
+        </section>
+        <section class="slide-group" >
+            <article class="slide" data-option="master">
+                <h3>We all know about Gradients, rounded corners, box shadow &amp; text shadow, right? Don't worry if you don't, we will (or did) discuss those features as part of the modular discussion.</h3>
+                <h3>How about we start with some cool stuff?</h3>
+                <h3><a href="css3Features.html">To the Browser</a></h3>
+            </article>
+        </section>
+
+    </div>
+</div>
+<script type="text/javascript" src="../js/slidfast.js" ></script>
+<script type="text/javascript">
+
+    slidfast({
+    touchEnabled: false,
+    slides: true
+    });
+</script>
+<script src="/js/libs/jquery-1.7.1.min.js"></script>
+<script src="/js/libs/jquery.flot.js"></script>
+<script type="text/javascript" src="../js/slidedeck.js" ></script>
+</body>
+</html>

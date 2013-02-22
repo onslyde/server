@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+<title>HTML5 Architecture</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+<meta name="viewport" content="width=device-width, minimum-scale=1.0, maximum-scale=1.0"/>
+<!-- enable full-screen mode -->
+<meta name="apple-mobile-web-app-capable" content="yes"/>
+<!-- controls the appearance of the status bar in full-screen mode -->
+<meta name="apple-mobile-web-app-status-bar-style" content="black"/>
+
+<link rel="stylesheet" media="all" href="../css/slidfast.css" />
+<link rel="stylesheet" media="all" href="../css/slidfastpat.css" />
+
+
+
+<style>
+.placeholder {
+	height: 125px;
+	width: 85%;
+}
+</style>
+</head>
+<body>
+<div class="address">
+     go to onslyde.com/pboggs
+</div>
+
+<div id="controller" style="display:none">
+    <a href="javascript:slidfast.slides.prevSlide();void(0)"><< Previous Slide</a> |
+    <a href="javascript:slidfast.slides.nextSlide();void(0)">Next Slide >></a>
+</div>
+<div id="wtf" class="hide-wtf">
+    WTF!!!
+</div>
+<div id="browser">
+
+    <div id="slide-group-container">
+
+        <section class="slide-group" >
+            <article class="slide" data-option="master">
+                <h3 class="hThree">Does your CSS look like this?</h3>
+                <h3 class="codeSample">
+                    #header	{styles...}<br>
+                    #header #nav {styles...}<br>
+                    #header #nav a	{styles...}
+                </h3>
+            </article>
+
+            <article class="slide" data-option="yes">
+                <h2>Mine does.</h2>
+                <h3>It's OK. That used to be right.</h3>
+            </article>
+            <article class="slide" data-option="no">
+                <h2>Class dismissed... let's drink more beer.</h2>
+                <h2>A lot of CSS does look like this.</h2>
+                <h3>It's OK. That used to be right.</h3>
+                <p>(Snooze if you already fixed yours)</p>
+            </article>
+        </section>
+        <section class="slide-group">
+
+            <article class="slide" data-option="master">
+                <h2>The trouble with IDs</h2>
+                <h3>Specificity.</h3>
+
+                <h1 class="codeSample marginL">#news</h1>
+            </article>
+        </section>
+        <section class="slide-group">
+            <article class="slide" data-option="master">
+                <h2>The trouble with IDs</h2>
+                <h3>Specificity.</h3>
+                <h1 class="codeSample marginL">#news</h1>
+                <h1 class="codeSample marginL">#news.specialCase</h1>
+            </article>
+        </section>
+        <section class="slide-group">
+            <article class="slide" data-option="master">
+                <h2>You have a list and need to show an alert on one item in the list.</h2>
+                <h3 class="codeSample marginL">
+                    #featured li {color:#369;}<br>
+                    #featured li.alert {color:red;}<br>
+                </h3>
+                <h4>OR</h4>
+                <h3 class="codeSample marginL">
+                    .featured li {color:#369;}<br>
+                    li.alert {color:red;}<br>
+                </h3>
+                <p>In fact...</p>
+            </article>
+        </section>
+        <section class="slide-group">
+            <article class="slide" data-option="master">
+                <h1>Wherein the author says something inflammatory</h1>
+                <h3 class="codeSample marginL">
+                    .featured li {color:#369;}<br>
+                    .alert {color:red <span class="alert">!important</span>;}
+                </h3>
+            </article>
+        </section>
+        <section class="slide-group">
+            <article class="slide" data-option="master">
+                <h2>Without !important</h2>
+                <h3 class="codeSample">
+                    .featured li {color:#369;}<br><br>
+
+                    li.alert,<br>
+                    .featured .messageBox .alert,<br>
+                    .promo .featured li.alert {color:red;}
+                </h3>
+                <p class="codeSample">:( - sad ui dev...</p>
+            </article>
+        </section>
+        <section class="slide-group">
+            <article class="slide" data-option="master">
+                <h2>I know. Weird huh.</h2>
+                <h3>I actually recommend using !important sometimes.<span class="alert">*</span></h3>
+                <p>Somewhere <a href="http://www.zeldman.com/" target="_blank">Jeffrey Zeldman</a> and <a href="http://meyerweb.com/" target="_blank">Eric Meyer</a> just got chills.</p>
+            </article>
+        </section>
+        <section class="slide-group">
+            <article class="slide" data-option="master">
+                <h1 class="textL">Here is a real world example from a project I work on.</h1>
+                <h3 class="codeSample">
+                    #search_results_empty_id p	{font-weight:normal;}<br>
+                    #search_results_empty_id p.bold	{font-size:18px; font-weight:bold;}<br>
+                    #search_results_empty_id p #save_search_button 	{margin:0;}<br><br>
+                </h3>
+                <p>(there are many things to talk about here)</p>
+            </article>
+        </section>
+        <section class="slide-group">
+            <article class="slide" data-option="master">
+                <h1 class="textL">More expert CSS</h1>
+                <h2 class="codeSample">table.listings th.selected_sort_column div.sort_ascending a {uh...}</h2>
+                <h3 class="textL">There is no cascade left - no planning and 4 years of neglect = no cascade</h3>
+            </article>
+        </section>
+        <section class="slide-group">
+            <article class="slide" data-option="master">
+                <h1>Let's pretend we are building something from scratch</h1>
+                <h2>First question (and then we go to code)</h2>
+                <h2>Do we use a reset?</h2>
+            </article>
+            <article class="slide" data-option="yes">
+                <h1>Yes, resets make my life easier.</h1>
+                <h2>There are pitfalls.</h2>
+                <h2>I like 'em.</h2>
+                <p><a href="simpleBoxStart.html">To the Browser</a></p>
+            </article>
+            <article class="slide" data-option="no">
+                <h1>No, resets are like nuclear weapons.</h1>
+                <h2>There are pitfalls.</h2>
+                <p><a href="main.html">To the Browser</a></p>
+            </article>
+        </section>
+
+    </div>
+</div>
+<script type="text/javascript" src="../js/slidfast.js" ></script>
+<script type="text/javascript">
+
+    slidfast({
+    touchEnabled: false,
+    slides: true
+    });
+</script>
+<script src="/js/libs/jquery-1.7.1.min.js"></script>
+<script src="/js/libs/jquery.flot.js"></script>
+<script type="text/javascript" src="../js/slidedeck.js" ></script>
+</body>
+</html>
