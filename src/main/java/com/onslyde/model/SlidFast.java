@@ -43,7 +43,7 @@ import java.util.*;
 @ApplicationScoped
 public class SlidFast {
 
-    private List<String> activeOptions;
+    private Map<Integer,List<String>> activeOptions;
     private String activeOption;
     private List<String> currentVotes;
     private String jsEvent;
@@ -83,7 +83,7 @@ public class SlidFast {
     public void initialize() {
 //        System.out.println("_____________postconstruct");
         this.activeOption = "";
-        this.activeOptions = new ArrayList<String>();
+        this.activeOptions = new HashMap<Integer, List<String>>();
         this.currentVotes = new ArrayList<String>();
     }
 
@@ -94,13 +94,16 @@ public class SlidFast {
     public boolean startSession(int sessionID){
 
         if(!sessionStarted){
+            System.out.println("session started!!!!!");
             currentSession = sessionHome.findById(sessionID);
             currentSession.setStart(new Date());
             sessionHome.merge(currentSession);
             //todo hack to sync objects across threads for now
-            sessionStarted = true;
+//            sessionStarted = true;
             setPresenterID(currentSession.getUser().getId());
-            getSessionID().add(currentSession.getId());
+            if(!getSessionID().contains(currentSession.getId())){
+                getSessionID().add(currentSession.getId());
+            }
             slidFastEventSrc.fire(this);
             return true;
         }else{
@@ -143,7 +146,7 @@ public class SlidFast {
                 //if(sgOption != null){
                 sgHome.merge(currentSlideGroup);
                 //}
-                setActiveOptions(options);
+                getActiveOptions().put(currentSession.getId(),options);
         }
         //sessionHome.persist(currentSession);
     }
@@ -155,17 +158,21 @@ public class SlidFast {
             Attendee attendee;
             boolean merge = false;
             //manage the attendee object :(
+            System.out.println("'attendeeIP''''''''''''''''" + attendeeIP);
+            System.out.println("'ips.containsKey(attendeeIP)''''''''''''''''" + ips.containsKey(attendeeIP));
+
             if(!ips.containsKey(attendeeIP)){
                 attendee = new Attendee();
                 attendee.setName("unknown");
                 attendee.setIp(attendeeIP);
                 attendee.setCreated(new Date());
+                attendeeHome.persist(attendee);
                 ips.put(attendeeIP, attendee);
             }else{
                 attendee = ips.get(attendeeIP);
                 merge = true;
             }
-//            System.out.println("'attendee.getId()''''''''''''''''" + attendee.getId());
+            System.out.println("'attendee.getId()''''''''''''''''" + attendee.getId());
             if(currentSlideGroup != null) {
                 for(SlideGroupOptions option : currentSlideGroup.getSlideGroupOptionses()){
                    if(option != null){
@@ -175,12 +182,12 @@ public class SlidFast {
                         sgv.setSlideGroupOptions(option);
                         sgv.setVoteTime(new Date());
                         //currentSlideGroup.getSlideGroupVoteses().add(sgv);
-                        if(merge){
-                            attendeeHome.merge(attendee);
-                        }else{
-                            attendeeHome.persist(attendee);
-                        }
-//                        System.out.println("'sgv.getAttendee().getId()''''''''''''''''" + sgv.getAttendee().getId());
+//                        if(merge){
+//                            attendeeHome.merge(attendee);
+//                        }else{
+//                            attendeeHome.persist(attendee);
+//                        }
+                        System.out.println("'sgv.getAttendee().getId()''''''''''''''''" + sgv.getAttendee().getId());
                         slideGroupVotesHome.persist(sgv);
                     }
                    }
@@ -196,11 +203,14 @@ public class SlidFast {
     }
 
 
-    public List<String> getActiveOptions() {
+    public Map<Integer, List<String>> getActiveOptions() {
+        if(activeOptions == null){
+            activeOptions = new HashMap<Integer, List<String>>();
+        }
         return activeOptions;
     }
 
-    public void setActiveOptions(List<String> activeOptions) {
+    public void setActiveOptions(Map<Integer, List<String>> activeOptions) {
         this.activeOptions = activeOptions;
     }
 

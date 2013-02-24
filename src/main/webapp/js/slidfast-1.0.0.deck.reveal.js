@@ -110,13 +110,15 @@
           slidfast.core.cacheExternalImage();
         }
 
+        if(onslyde && onslyde.sessionID){
+          window.onslydeSessionID = onslyde.sessionID;
+        }
+
         if(onslyde && onslyde.deck){
           slidfast.slides.init(onslyde.sessionID);
         }
 
-        if(onslyde && onslyde.sessionID){
-          window.onslydeSessionID = onslyde.sessionID;
-        }
+
       },
 
       hideURLBar:function () {
@@ -977,7 +979,7 @@
 
     };
 
-    var ip,ws;
+    var ip = null,ws;
     var username;
     var isopen = false;
     //var _onopen,_onmessage,_onclose,_onerror;
@@ -985,10 +987,15 @@
 
       ip : function(sessionID) {
         //dev
+        console.log('sessionID',sessionID);
         var ai = new slidfast.core.ajax('/go/presenters/ip?session=' + sessionID,function(text,url){
           ip = text;
         },false);
-        ai.doGet();
+        if(ip === null){
+          console.log('ip req');
+          ai.doGet();
+        }
+
         return ip;
 
         //prod
@@ -1003,7 +1010,11 @@
         if(!websocket){
 //               todo - use localstorage so we don't have to make future http requests for ip, but if ip changes we need to
 //               detect ws failure and refresh localstorage with new ip... //if(!localStorage['/go/members/ip']){
-          var location = 'ws://' + this.ip(sessionID) + ':8081/?session=' + sessionID;
+          if(!ip){
+            ip = this.ip(window.onslydeSessionID);
+          }
+          console.log('ip',ip);
+          var location = 'ws://' + ip + ':8081/?session=' + window.onslydeSessionID;
           ws = new WebSocket(location);
         }else{
           ws = websocket;
@@ -1075,7 +1086,7 @@
     slidfast.slides = slidfast.prototype = {
 
       init : function(sessionID) {
-        csessionID = sessionID
+        csessionID = sessionID;
 
         futureGroups = toArray(this.groups());
         for (var i = 0; i < futureGroups.length; i++) {
@@ -1368,7 +1379,7 @@
 
         //only show slides for selected option
         var slides = toArray(this.groupSlides(activeGroup));
-        for (i = 0; i < slides.length; i++) {
+        for (var i = 0; i < slides.length; i++) {
           //include only chose option slides and master  ('master' + activeOption) is the only case we want to include master
           //todo - fix double arrow tap when going backwards on master
           if (slides[i].getAttribute("data-option") == option || (slides[i].getAttribute("data-option") == 'master' && activeOption != null)) {

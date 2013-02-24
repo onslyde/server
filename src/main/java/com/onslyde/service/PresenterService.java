@@ -71,7 +71,7 @@ public class PresenterService {
 
 
 
-        slidFastEventSrc.fire(slidFast);
+             slidFastEventSrc.fire(slidFast);
 //        if(sessionID == null){
 //            //send message that ID is invalid
 //        }else{

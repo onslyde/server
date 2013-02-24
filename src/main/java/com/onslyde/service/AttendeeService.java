@@ -15,6 +15,7 @@ import javax.ws.rs.*;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Logger;
 
@@ -46,7 +47,10 @@ public class AttendeeService {
         //executing this every second on poll... nice :)
         String data = "";
         slidFastEventSrc.fire(slidFast);
-        List optionList = slidFast.getActiveOptions();
+        List optionList = new ArrayList();
+        if(slidFast.getActiveOptions().containsKey(sessionID)){
+        optionList.addAll(slidFast.getActiveOptions().get(sessionID));
+        }
         //System.out.println("!!!!!!!!!!!!!!!!poll " + optionList.size());
         if(optionList.size() == 2){
             //System.out.println("!!!!!!!!!!!!!!!!options " + optionList.get(0).toString() + optionList.get(1).toString());
