@@ -987,8 +987,8 @@
 
       ip : function(sessionID) {
         //dev
-        console.log('sessionID',sessionID);
-        var ai = new slidfast.core.ajax('/go/presenters/ip?session=' + sessionID,function(text,url){
+        console.log('window.onslydeSessionID',window.onslydeSessionID);
+        var ai = new slidfast.core.ajax('/go/presenters/ip?session=' + window.onslydeSessionID,function(text,url){
           ip = text;
         },false);
         if(ip === null){
@@ -1013,7 +1013,7 @@
           if(!ip){
             ip = this.ip(window.onslydeSessionID);
           }
-          console.log('ip',ip);
+          console.log('ip',ip,'window.onslydeSessionID',window.onslydeSessionID);
           var location = 'ws://' + ip + ':8081/?session=' + window.onslydeSessionID;
           ws = new WebSocket(location);
         }else{

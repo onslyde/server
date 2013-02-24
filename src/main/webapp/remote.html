@@ -297,10 +297,30 @@ nav.primary > ul li a {
 </div>
 <script type="text/javascript" src="http://code.jquery.com/jquery-1.7.1.min.js" ></script>
 
-
+<script type="text/javascript" src="/js/slidfast-1.0.0.deck.reveal.js" ></script>
 <script type="text/javascript">
-(function ($) {
 
+
+    slidfast({
+        defaultPageID:'about-page',
+        touchEnabled: false,
+        singlePageModel: true,
+        onslyde: {sessionID: getParameterByName("session")}
+    });
+
+    var ws;
+    window.addEventListener('load', function (e) {
+        // in fallback mode: connect returns a dummy object implementing the WebSocket interface
+        ws = $.gracefulWebSocket('ws://'+ slidfast.ws.ip(window.onslydeSessionID) + ':8081'); // the ws-protocol will automatically be changed to http
+        // in fallback mode: sends message to server using HTTP POST
+//        console.log(ws);
+        ws = slidfast.ws.connect(ws);
+    }, false);
+
+    function getParameterByName(name) {
+        var match = RegExp('[?&]' + name + '=([^&]*)').exec(window.location.search);
+        return match && decodeURIComponent(match[1].replace(/\+/g, ' '));
+    }
     $.extend({
 
         gracefulWebSocket: function (url, options) {
@@ -433,31 +453,15 @@ nav.primary > ul li a {
             }
 
             // create a new websocket or fallback
-            var ws = window.WebSocket ? new WebSocket(url) : new FallbackSocket();
+            var ws = window.WebSocket ? new WebSocket(url + '?session=' + window.onslydeSessionID) : new FallbackSocket();
             $(window).unload(function () { ws.close(); ws = null });
             return ws;
         }
     });
 
-})(jQuery);
-</script>
-<script type="text/javascript" src="/js/slidfast-1.0.0.deck.reveal.js" ></script>
-<script type="text/javascript">
-    slidfast({
-        defaultPageID:'about-page',
-        touchEnabled: false,
-        singlePageModel: true,
-        onslyde: {sessionID: getParameterByName("sid")}
-    });
 
-    var ws;
-    window.addEventListener('load', function (e) {
-        // in fallback mode: connect returns a dummy object implementing the WebSocket interface
-        ws = $.gracefulWebSocket('ws://'+ slidfast.ws.ip(window.onslydeSessionID) + ':8081'); // the ws-protocol will automatically be changed to http
-        // in fallback mode: sends message to server using HTTP POST
-//        console.log(ws);
-        ws = slidfast.ws.connect(ws);
-    }, false);
+
+
 
     var option1 = document.querySelector('#option1');
     var option2 = document.querySelector('#option2');
@@ -540,10 +544,6 @@ nav.primary > ul li a {
         document.getElementById('from-slide').innerHTML = decodeURIComponent(markup.remoteMarkup);
     }, false);
 
-    function getParameterByName(name) {
-        var match = RegExp('[?&]' + name + '=([^&]*)').exec(window.location.search);
-        return match && decodeURIComponent(match[1].replace(/\+/g, ' '));
-    }
 
 </script>
 </body>
