@@ -985,7 +985,7 @@
 
       ip : function(sessionID) {
         //dev
-        var ai = new slidfast.core.ajax('/rest/presenters/ip?session=' + sessionID,function(text,url){
+        var ai = new slidfast.core.ajax('/go/presenters/ip?session=' + sessionID,function(text,url){
           ip = text;
         },false);
         ai.doGet();
@@ -1002,7 +1002,7 @@
         console.log('!websocket ' + websocket);
         if(!websocket){
 //               todo - use localstorage so we don't have to make future http requests for ip, but if ip changes we need to
-//               detect ws failure and refresh localstorage with new ip... //if(!localStorage['/rest/members/ip']){
+//               detect ws failure and refresh localstorage with new ip... //if(!localStorage['/go/members/ip']){
           var location = 'ws://' + this.ip(sessionID) + ':8081/?session=' + sessionID;
           ws = new WebSocket(location);
         }else{
@@ -1027,16 +1027,9 @@
         return ws;
       },
 
-      _onopen : function() {
-        isopen = true;
-        //basic auth until we get something better
-        //console.log('sent onopen' + username);
-        slidfast.ws._send('user:'+username);
-      },
-
       _onmessage : function(m) {
         if (m.data) {
-//          console.log(m.data);
+          console.log(m.data);
           //check to see if this message is a CDI event
           //alert('onmessage' + m.data);
           if(m.data.indexOf('sessionID":"' + onslyde.sessionID) > 0){
@@ -1056,6 +1049,7 @@
       },
 
       _onclose : function(m) {
+        slidfast.ws._send('::disconnect::');
         ws = null;
       },
 
@@ -1112,7 +1106,7 @@
         this.updateRemotes();
 //            slidfast.ui.slideTo(activeSlide);
 
-        this.connect('connect');
+        this.connect('::connect::');
       },
 
       connect : function(initString) {

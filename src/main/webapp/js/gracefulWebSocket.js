@@ -70,7 +70,7 @@
 
             var pollInterval;
             var openTimout;
-            var posturl = opts.fallbackSendURL + '/rest/attendees/vote?' + $.param( opts.fallbackPollParams );
+            var posturl = opts.fallbackSendURL + '/go/attendees/vote?' + $.param( opts.fallbackPollParams );
 
             // create WebSocket object
             var fws = {
@@ -138,7 +138,7 @@
 
                $.ajax({
                   type: opts.fallbackPollMethod,
-                  url: opts.fallbackPollURL + '/rest/attendees/json',
+                  url: opts.fallbackPollURL + '/go/attendees/json',
                   dataType: 'text',
                   data: getFallbackParams(),
                   success: pollSuccess,

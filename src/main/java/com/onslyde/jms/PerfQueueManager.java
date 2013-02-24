@@ -121,7 +121,7 @@ public class PerfQueueManager {
                 message.addRecipient(Message.RecipientType.BCC, bccAddress);
             }
             message.setSubject("Your loadreport is done!");
-            message.setText("Check it out. Here's your report: http://loadreport.wesleyhales.com/rest/performance/speedreport?uuid=" + uuid);
+            message.setText("Check it out. Here's your report: http://loadreport.wesleyhales.com/go/performance/speedreport?uuid=" + uuid);
             Transport transport = session.getTransport("smtps");
             transport.connect(host,from,pass);
             System.out.println("-------send mail");

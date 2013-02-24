@@ -40,9 +40,13 @@ public class ChatWebSocketHandler extends WebSocketHandler {
     public WebSocket doWebSocketConnect(HttpServletRequest request,
             String protocol) {
         syncSlidFast(slidFast);
+
+
         if(request.getParameter("session") != null){
             sessionID = Integer.parseInt(request.getParameter("session"));
         }
+        System.out.println("doWebSocketConnect----------" + sessionID);
+
         String attendeeIP = slidFast.getPresenterID() + "." + sessionID + "." + randomIPRange() + "." + randomIPRange();
 //        String attendeeIP = request.getRemoteAddr();
         return new ChatWebSocket(attendeeIP);
@@ -58,9 +62,9 @@ public class ChatWebSocketHandler extends WebSocketHandler {
                     //send out to all connected websockets
                     //System.out.println("-slidFast.getJsEvent()#1--------" + slidFast.getJsEvent());
                     if(slidFast.getJsEvent() != null){
-                        //System.out.println("-slidFast.getJsEvent()#2--------" + slidFast.getJsEvent());
+
                         webSocket.connection.sendMessage(slidFast.getJsEvent());
-                        //System.out.println("send message--------" + slidFast.getJsEvent());
+
                     }
                 }
             } catch (Exception x) {
@@ -89,6 +93,7 @@ public class ChatWebSocketHandler extends WebSocketHandler {
         private String attendeeIP;
 
         public ChatWebSocket(String attendeeIP) {
+            System.out.println("attendeeIP----------" + attendeeIP);
             this.attendeeIP = attendeeIP;
         }
 
@@ -105,6 +110,7 @@ public class ChatWebSocketHandler extends WebSocketHandler {
 
             //send current state to remotes
             //syncSlidFast(slidFast);
+            System.out.println("slidFast.getSessionID() -----= sessionID" + slidFast.getSessionID() + " " + sessionID);
             if(slidFast != null && slidFast.getActiveOptions().size() == 2) {
                 try {
                     //only send options to this connection
@@ -226,9 +232,26 @@ public class ChatWebSocketHandler extends WebSocketHandler {
 
                 data = ClientEvent.remoteMarkup(data,sessionID);
 //                System.out.println("-----------" + data);
-            }else if (data.contains("connect")){
+            }else if (data.contains("::connect::")){
                 try {
+                    syncSlidFast(slidFast);
+                    System.out.println("-start session----------" + sessionID);
+                    getSlidFast().startSession(sessionID);
                     getSlidFast().setPollcount(0);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }else if (data.contains("::disconnect::")){
+                try {
+                    syncSlidFast(slidFast);
+                    System.out.println("-disconnect session----------" + sessionID);
+                    for(int i : getSlidFast().getSessionID()){
+                        if(i == sessionID){
+                            System.out.println("-remove----------" + sessionID);
+                        getSlidFast().getSessionID().remove(i);
+                        }
+                    }
+
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
@@ -250,8 +273,9 @@ public class ChatWebSocketHandler extends WebSocketHandler {
     private void sendToAll(String data, WebSocket.Connection connection){
         try {
             for (ChatWebSocket webSocket : getWebsockets()) {
-                // send a message to the current client WebSocket.
-                webSocket.connection.sendMessage(data);
+//                if(data.contains(sessionID + "")){
+                    webSocket.connection.sendMessage(data);
+//                }
             }
         } catch (IOException x) {
             // Error was detected, close the ChatWebSocket client side

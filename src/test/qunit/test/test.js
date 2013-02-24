@@ -34,7 +34,7 @@ asyncTest('Request current member list', function() {
     expect(1);
 
     $.ajax({
-        url: "http://localhost/rest/members",
+        url: "http://localhost/go/members",
         dataType: "jsonp",
         jsonp: "jsonpcallback",
         success: function(data) {

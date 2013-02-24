@@ -18,13 +18,13 @@ import java.util.regex.Pattern;
  * <p>This filter wraps qualified requests for JSON content with that standard JSONP padding.  This makes these calls accessible
  * cross-domain using standard JSONP approaches.
  * </p>
- * <p>To qualify for wrapping the request must be made to the <i>/rest/*</i> path, and contain a query parameter call
+ * <p>To qualify for wrapping the request must be made to the <i>/go/*</i> path, and contain a query parameter call
  * <i>jsoncallback</> that defines the JSONP callback method to use with the response.
  * </p>
  * @author balunasj
  *
  */
-//@WebFilter("/rest/*")
+//@WebFilter("/go/*")
 public class JSONPRequestFilter implements Filter {
     //The callback method to use
     private static final String CALLBACK_METHOD = "jsonpcallback";

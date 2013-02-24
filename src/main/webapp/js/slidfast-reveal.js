@@ -604,7 +604,7 @@
 
            ip : function() {
                //dev
-               var ai = new slidfast.core.ajax('/rest/presenters/ip?id=2',function(text,url){
+               var ai = new slidfast.core.ajax('/go/presenters/ip?id=2',function(text,url){
                    ip = text;
                },false);
                ai.doGet();
@@ -621,7 +621,7 @@
                console.log('!websocket ' + websocket);
                if(!websocket){
 //               todo - use localstorage so we don't have to make future http requests for ip, but if ip changes we need to
-//               detect ws failure and refresh localstorage with new ip... //if(!localStorage['/rest/members/ip']){
+//               detect ws failure and refresh localstorage with new ip... //if(!localStorage['/go/members/ip']){
                   var location = 'ws://' + this.ip() + ':8081/?id=2';
                   ws = new WebSocket(location);
                }else{

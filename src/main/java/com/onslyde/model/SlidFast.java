@@ -48,7 +48,7 @@ public class SlidFast {
     private List<String> currentVotes;
     private String jsEvent;
     private int presenterID;
-    private int sessionID;
+    private List<Integer> sessionID;
 
     private int wscount = 0;
     private int pollcount = 0;
@@ -96,11 +96,11 @@ public class SlidFast {
         if(!sessionStarted){
             currentSession = sessionHome.findById(sessionID);
             currentSession.setStart(new Date());
-            sessionHome.persist(currentSession);
+            sessionHome.merge(currentSession);
             //todo hack to sync objects across threads for now
             sessionStarted = true;
             setPresenterID(currentSession.getUser().getId());
-            setSessionID(currentSession.getId());
+            getSessionID().add(currentSession.getId());
             slidFastEventSrc.fire(this);
             return true;
         }else{
@@ -165,7 +165,7 @@ public class SlidFast {
                 attendee = ips.get(attendeeIP);
                 merge = true;
             }
-
+//            System.out.println("'attendee.getId()''''''''''''''''" + attendee.getId());
             if(currentSlideGroup != null) {
                 for(SlideGroupOptions option : currentSlideGroup.getSlideGroupOptionses()){
                    if(option != null){
@@ -180,7 +180,7 @@ public class SlidFast {
                         }else{
                             attendeeHome.persist(attendee);
                         }
-
+//                        System.out.println("'sgv.getAttendee().getId()''''''''''''''''" + sgv.getAttendee().getId());
                         slideGroupVotesHome.persist(sgv);
                     }
                    }
@@ -252,11 +252,14 @@ public class SlidFast {
         this.presenterID = presenterID;
     }
 
-    public int getSessionID() {
+    public List<Integer> getSessionID() {
+        if(sessionID == null){
+            sessionID = new ArrayList<Integer>();
+        }
         return sessionID;
     }
 
-    public void setSessionID(int sessionID) {
+    public void setSessionID(List<Integer> sessionID) {
         this.sessionID = sessionID;
     }
 }

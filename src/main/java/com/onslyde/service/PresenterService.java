@@ -53,10 +53,10 @@ public class PresenterService {
         System.out.println("sessionID-------sessionID" + sessionID);
         if(addr == null){
 
-            if(slidFast.startSession(sessionID)){
+//            if(slidFast.startSession(sessionID)){
                 System.out.println("-getSlidFast().startSession()-------false");
                 //todo hack to sync objects across threads for now
-                slidFastEventSrc.fire(slidFast);
+
                 //System.out.println("hello-----");
                 try {
                     addr = InetAddress.getLocalHost().getHostAddress();
@@ -64,11 +64,14 @@ public class PresenterService {
                     log.severe("can't get IP address, falling back to local");
                     addr = "127.0.0.1";
                 }
-            }else{
+//            }else{
                 //todo - in startSession() this session has already been started
-            }
+//            }
         }
 
+
+
+        slidFastEventSrc.fire(slidFast);
 //        if(sessionID == null){
 //            //send message that ID is invalid
 //        }else{

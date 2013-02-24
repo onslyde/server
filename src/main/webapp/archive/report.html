@@ -132,7 +132,7 @@
             disableForm();
 
 
-                $.get("/rest/performance/go", { url: reportData.url, cached: reportData.cachedCheckbox, email: reportData.email},
+                $.get("/go/performance/go", { url: reportData.url, cached: reportData.cachedCheckbox, email: reportData.email},
                     function(data){
                     console.log('data',data);
                     if(data === "#fail"){

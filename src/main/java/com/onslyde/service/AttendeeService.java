@@ -41,7 +41,7 @@ public class AttendeeService {
     @GET
     @Path("/json")
     @Produces(MediaType.APPLICATION_JSON)
-    public String listAllMembersJSON() {
+    public String listAllMembersJSON(@QueryParam("sessionID") int sessionID) {
         //@SuppressWarnings("unchecked")
         //executing this every second on poll... nice :)
         String data = "";
@@ -50,7 +50,7 @@ public class AttendeeService {
         //System.out.println("!!!!!!!!!!!!!!!!poll " + optionList.size());
         if(optionList.size() == 2){
             //System.out.println("!!!!!!!!!!!!!!!!options " + optionList.get(0).toString() + optionList.get(1).toString());
-            data = ClientEvent.createEvent("updateOptions", optionList, slidFast.getSessionID());
+            data = ClientEvent.createEvent("updateOptions", optionList, sessionID);
         }
         return data;
     }
@@ -67,7 +67,7 @@ public class AttendeeService {
     @Path("/vote")
     @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
     @Produces(MediaType.APPLICATION_JSON)
-    public Response optionVote(@FormParam("user") String user, @FormParam("vote") String vote, @Context HttpServletRequest req) {
+    public Response optionVote(@FormParam("user") String user, @FormParam("sessionID") int sessionID, @FormParam("vote") String vote, @Context HttpServletRequest req) {
         slidFastEventSrc.fire(slidFast);
 
         //req.getRemoteAddr();
@@ -93,9 +93,9 @@ public class AttendeeService {
             slidFast.updateGroupVote(vote,ip);
 
             if(vote.equals("wtf") || vote.equals("nice")){
-                slidFast.setJsEvent(ClientEvent.clientProps(vote,slidFast.getSessionID()));
+                slidFast.setJsEvent(ClientEvent.clientProps(vote,sessionID));
             }else{
-                slidFast.setJsEvent(ClientEvent.clientVote(vote,slidFast.getSessionID()));
+                slidFast.setJsEvent(ClientEvent.clientVote(vote,sessionID));
             }
 
             slidFastEventSrc.fire(slidFast);

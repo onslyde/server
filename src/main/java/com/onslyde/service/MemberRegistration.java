@@ -29,7 +29,7 @@ public class MemberRegistration {
         em.persist(user);
         currentSession = new Session();
         currentSession.setSessionCode("beta");
-        currentSession.setSessionName("noname");
+        currentSession.setSessionName("beta");
         currentSession.setUser(user);
         currentSession.setCreated(new Date());
         em.persist(currentSession);

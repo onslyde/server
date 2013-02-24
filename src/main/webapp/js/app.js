@@ -5,7 +5,7 @@ function registerMember(memberData) {
     //$('span.success').remove();
 
     $.ajax({
-        url: 'rest/members',
+        url: 'go/members',
         contentType: "application/json",
         dataType: "json",
         type: "POST",
