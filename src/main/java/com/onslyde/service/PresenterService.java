@@ -54,7 +54,7 @@ public class PresenterService {
         if(addr == null){
 
 //            if(slidFast.startSession(sessionID)){
-                System.out.println("-getSlidFast().startSession()-------false");
+//                System.out.println("-getSlidFast().startSession()-------false");
                 //todo hack to sync objects across threads for now
 
                 //System.out.println("hello-----");

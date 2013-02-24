@@ -51,9 +51,9 @@ public class AttendeeService {
         if(slidFast.getActiveOptions().containsKey(sessionID)){
         optionList.addAll(slidFast.getActiveOptions().get(sessionID));
         }
-        System.out.println("!!!!!!!!!!!!!!!!poll " + sessionID);
+//        System.out.println("!!!!!!!!!!!!!!!!poll " + sessionID);
         if(optionList.size() == 2){
-            System.out.println("!!!!!!!!!!!!!!!!options " + optionList.get(0).toString() + optionList.get(1).toString());
+//            System.out.println("!!!!!!!!!!!!!!!!options " + optionList.get(0).toString() + optionList.get(1).toString());
             data = ClientEvent.createEvent("updateOptions", optionList, sessionID);
         }
         return data;
@@ -76,7 +76,7 @@ public class AttendeeService {
 
         //req.getRemoteAddr();
         //get ip and verify attendee
-        System.out.println("**************slidFast" + slidFast.getCurrentVotes().size() + "ip: " + ip + " vote:" + vote + " sessionID:" + sessionID);
+//        System.out.println("**************slidFast" + slidFast.getCurrentVotes().size() + "ip: " + ip + " vote:" + vote + " sessionID:" + sessionID);
         if(vote != null){
             if(ip == null && req.getSession().getAttribute("onslydeIP") == null){
                 //first subnet should be a user id for the presenter?
