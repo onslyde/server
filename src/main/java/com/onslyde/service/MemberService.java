@@ -5,6 +5,8 @@
 package com.onslyde.service;
 
 import com.onslyde.data.MemberRepository;
+import com.onslyde.domain.User;
+import com.onslyde.domain.UserHome;
 import com.onslyde.model.Member;
 
 import javax.ejb.Stateful;
@@ -43,6 +45,9 @@ public class MemberService {
     private Validator validator;
 
     @Inject
+    UserHome userHome;
+
+    @Inject
     private MemberRepository repository;
 
     @Inject
@@ -72,18 +77,18 @@ public class MemberService {
     @POST
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
-    public Response createMember(Member member) {
+    public Response createMember(User user) {
 
         Response.ResponseBuilder builder = null;
-
+        int sessionId;
         try {
             //Validates member using bean validation
-            validateMember(member);
+            validateMember(user);
 
-            registration.register(member);
+            sessionId = registration.register(user);
 
             //Create an "ok" response
-            builder = Response.ok();
+            builder = Response.ok().entity("{\"sessionId\":\"" + sessionId + "\"}");
         } catch (ConstraintViolationException ce) {
             //Handle bean validation issues
             builder = createViolationResponse(ce.getConstraintViolations());
@@ -110,20 +115,20 @@ public class MemberService {
      * <p>If the error is caused because an existing member with the same email is registered it throws a regular
      * validation exception so that it can be interpreted separately.</p>
      *
-     * @param member Member to be validated
+     * @param user Member to be validated
      * @throws ConstraintViolationException If Bean Validation errors exist
      * @throws ValidationException          If member with the same email already exists
      */
-    private void validateMember(Member member) throws ConstraintViolationException, ValidationException {
+    private void validateMember(User user) throws ConstraintViolationException, ValidationException {
         //Create a bean validator and check for issues.
-        Set<ConstraintViolation<Member>> violations = validator.validate(member);
+        Set<ConstraintViolation<User>> violations = validator.validate(user);
 
         if (!violations.isEmpty()) {
             throw new ConstraintViolationException(new HashSet<ConstraintViolation<?>>(violations));
         }
 
         //Check the uniqueness of the email address
-        if (emailAlreadyExists(member.getEmail())) {
+        if (emailAlreadyExists(user.getEmail())) {
             throw new ValidationException("Unique Email Violation");
         }
     }
@@ -155,12 +160,12 @@ public class MemberService {
      * @return True if the email already exists, and false otherwise
      */
     public boolean emailAlreadyExists(String email) {
-        Member member = null;
+        User user = null;
         try {
-            member = repository.findByEmail(email);
+            user = repository.findByEmail(email);
         } catch (NoResultException e) {
             // ignore
         }
-        return member != null;
+        return user != null;
     }
 }

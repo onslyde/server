@@ -604,7 +604,7 @@
 
            ip : function() {
                //dev
-               var ai = new slidfast.core.ajax('/rest/presenters/ip',function(text,url){
+               var ai = new slidfast.core.ajax('/rest/presenters/ip?id=2',function(text,url){
                    ip = text;
                },false);
                ai.doGet();
@@ -617,12 +617,12 @@
            connect : function(websocket,initString) {
 
                username = 'yomama';
-               //here we check to see if we're passing in our mock websocket object from polling clients (using gracefulWebSocket.js)
+               //check to see if we're passing in our mock websocket object from polling clients (using gracefulWebSocket.js)
                console.log('!websocket ' + websocket);
                if(!websocket){
 //               todo - use localstorage so we don't have to make future http requests for ip, but if ip changes we need to
 //               detect ws failure and refresh localstorage with new ip... //if(!localStorage['/rest/members/ip']){
-                  var location = 'ws://' + this.ip() + ':8081';
+                  var location = 'ws://' + this.ip() + ':8081/?id=2';
                   ws = new WebSocket(location);
                }else{
                   ws = websocket;

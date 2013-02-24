@@ -12,6 +12,7 @@ import javax.validation.Validator;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
+import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
@@ -44,18 +45,35 @@ public class PresenterService {
     @GET
     @Path("/ip")
     @Produces(MediaType.APPLICATION_JSON)
-    public String ip() {
+    public String ip(@QueryParam("session") int sessionID) {
+
+        //user signs up
+        //we generate session code and email it
+        //they use session code to init
+        System.out.println("sessionID-------sessionID" + sessionID);
         if(addr == null){
-            //todo hack to sync objects across threads for now
-            slidFastEventSrc.fire(slidFast);
-            //System.out.println("hello-----");
-            try {
-                addr = InetAddress.getLocalHost().getHostAddress();
-            } catch (UnknownHostException e) {
-                log.severe("can't get IP address, falling back to local");
-                addr = "127.0.0.1";
+
+            if(slidFast.startSession(sessionID)){
+                System.out.println("-getSlidFast().startSession()-------false");
+                //todo hack to sync objects across threads for now
+                slidFastEventSrc.fire(slidFast);
+                //System.out.println("hello-----");
+                try {
+                    addr = InetAddress.getLocalHost().getHostAddress();
+                } catch (UnknownHostException e) {
+                    log.severe("can't get IP address, falling back to local");
+                    addr = "127.0.0.1";
+                }
+            }else{
+                //todo - in startSession() this session has already been started
             }
         }
+
+//        if(sessionID == null){
+//            //send message that ID is invalid
+//        }else{
+//
+//        }
         //need to check for hosted mode
         return addr;
     }

@@ -1,11 +1,14 @@
 package com.onslyde.service;
 
+import com.onslyde.domain.Session;
+import com.onslyde.domain.User;
 import com.onslyde.model.Member;
 
 import javax.ejb.Stateless;
 import javax.enterprise.event.Event;
 import javax.inject.Inject;
 import javax.persistence.EntityManager;
+import java.util.Date;
 import java.util.logging.Logger;
 
 // The @Stateless annotation eliminates the need for manual transaction demarcation
@@ -18,12 +21,18 @@ public class MemberRegistration {
     @Inject
     private EntityManager em;
 
-    @Inject
-    private Event<Member> memberEventSrc;
+    private Session currentSession;
 
-    public void register(Member member) throws Exception {
-        log.info("Registering " + member.getName());
-        em.persist(member);
-        memberEventSrc.fire(member);
+    public int register(User user) throws Exception {
+        log.info("Registering " + user.getFullName());
+        user.setCreated(new Date());
+        em.persist(user);
+        currentSession = new Session();
+        currentSession.setSessionCode("beta");
+        currentSession.setSessionName("noname");
+        currentSession.setUser(user);
+        currentSession.setCreated(new Date());
+        em.persist(currentSession);
+        return currentSession.getId();
     }
 }

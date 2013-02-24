@@ -47,6 +47,7 @@ public class SlidFast {
     private String activeOption;
     private List<String> currentVotes;
     private String jsEvent;
+    private int presenterID;
 
     private int wscount = 0;
     private int pollcount = 0;
@@ -89,23 +90,22 @@ public class SlidFast {
     private SlideGroup currentSlideGroup;
     private boolean sessionStarted = false;
 
-    public boolean startSession(){
-        //should be based off presenters socket id or something
+    public boolean startSession(int sessionID){
+
         if(!sessionStarted){
-        sessionStarted = true;
-        int id;
-        currentSession = new Session();
-        currentSession.setSessionCode("html5");
-        currentSession.setSessionName("atlhtml5");
-        currentSession.setUser(userHome.findById(3));
-        currentSession.setCreated(new Date());
-        currentSession.setStart(new Date());
-        sessionHome.persist(currentSession);
-        //todo hack to sync objects across threads for now
-        slidFastEventSrc.fire(this);
-        //currentSession.setId(id);
+            currentSession = sessionHome.findById(sessionID);
+            currentSession.setStart(new Date());
+            sessionHome.persist(currentSession);
+            //todo hack to sync objects across threads for now
+            sessionStarted = true;
+            slidFastEventSrc.fire(this);
+            return true;
+        }else{
+            //todo - we need a session end trigger
+            //for now always start session
+            return true;
         }
-        return true;
+
     }
 
     public void addGroupOptions(List<String> options){
@@ -239,5 +239,13 @@ public class SlidFast {
 
     public void setPollcount(int pollcount) {
         this.pollcount = pollcount;
+    }
+
+    public int getPresenterID() {
+        return presenterID;
+    }
+
+    public void setPresenterID(int presenterID) {
+        this.presenterID = presenterID;
     }
 }

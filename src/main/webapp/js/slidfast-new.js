@@ -957,6 +957,100 @@
 
     };
 
+    var ip,ws;
+    var username;
+    var isopen = false;
+    //var _onopen,_onmessage,_onclose,_onerror;
+    slidfast.ws = slidfast.prototype = {
+
+      ip : function() {
+        //dev
+        var ai = new slidfast.core.ajax('/rest/presenters/ip',function(text,url){
+          ip = text;
+        },false);
+        ai.doGet();
+        return ip;
+
+        //prod
+        //return '107.22.176.73';
+      },
+
+      connect : function(websocket,initString) {
+
+        username = 'anonymous';
+        //here we check to see if we're passing in our mock websocket object from polling clients (using gracefulWebSocket.js)
+        console.log('!websocket ' + websocket);
+        if(!websocket){
+//               todo - use localstorage so we don't have to make future http requests for ip, but if ip changes we need to
+//               detect ws failure and refresh localstorage with new ip... //if(!localStorage['/rest/members/ip']){
+          var location = 'ws://' + this.ip() + ':8081';
+          ws = new WebSocket(location);
+        }else{
+          ws = websocket;
+        }
+        //ws = websocket;
+        //this.ws = ws;
+        ws.onopen = function() {
+          isopen = true;
+          //basic auth until we get something better
+          console.log('sent onopen' + username);
+          slidfast.ws._send('user:'+username);
+          if(initString){
+            slidfast.ws._send(initString);
+          }
+        };
+        ws.onmessage = this._onmessage;
+        ws.onclose = this._onclose;
+//              ws.onerror = this._onerror;
+
+        return ws;
+      },
+
+      _onopen : function() {
+        isopen = true;
+        //basic auth until we get something better
+        //console.log('sent onopen' + username);
+        slidfast.ws._send('user:'+username);
+      },
+
+      _onmessage : function(m) {
+        if (m.data) {
+          ////console.log(m.data);
+          //check to see if this message is a CDI event
+          //alert('onmessage' + m.data);
+          if(m.data.indexOf('cdievent') > 0){
+            try{
+              //$('log').innerHTML = m.data;
+//                           console.log(m.data);
+              //avoid use of eval...
+
+              var event = (m.data);
+              event = (new Function("return " + event))();
+              event.cdievent.fire();
+            }catch(e){
+              alert(e);
+            }
+          }else{
+
+          }
+        }
+      },
+
+      _onclose : function(m) {
+        ws = null;
+      },
+
+      _onerror : function(e) {
+        alert(e);
+      },
+
+      _send : function(message) {
+        //console.log('sent ');
+        ws.send(message);
+
+      }
+    };
+
     slidfast.html5e = slidfast.prototype = {
       /*jshint sub:true */
       supports_local_storage:function () {
