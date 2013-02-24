@@ -281,11 +281,12 @@ nav.primary > ul li a {
 
             <div id="about-page" class="slide">
                 <div id="from-slide">
+                    This is the onslyde remote. This content will update as you move through the slides.
                 </div>
                 <p>
-                    This talk is done :( But you can <a href="http://bit.ly/YLxhv5" target="_blank">view the video here</a>
+
                     <br/>
-                    <a href="https://twitter.com/wesleyhales" target="_blank">Follow @wesleyhales</a>
+                    <a href="https://twitter.com/onslyde" target="_blank">Follow @onslyde</a>
                 </p>
 
             </div>
@@ -370,7 +371,7 @@ nav.primary > ul li a {
                         vote = data.replace(('vote:'),'');
 //                        data += ' sessionID:' + window.onslydeSessionID + ' ';
                         data = {"vote": vote, "sessionID": window.onslydeSessionID};
-                        console.log('data',data)
+//                        console.log('data',data)
                         $.ajax({
                             async: false, // send synchronously
                             type: opts.fallbackSendMethod,
@@ -421,7 +422,7 @@ nav.primary > ul li a {
                     //alert(messageEvent);
                     fws.onmessage(messageEvent);
                 }
-
+                var counter = 0;
                 function poll() {
 
                     $.ajax({
@@ -436,8 +437,11 @@ nav.primary > ul li a {
                             $(fws).triggerHandler('error');
                         }
                     });
+                    counter++;
+                    if(counter === 3600){
+                        window.clearInterval(pollInterval);
+                    }
                 }
-
                 // simulate open event and start polling
                 openTimout = setTimeout(function () {
                     fws.readyState = OPEN;
@@ -445,7 +449,6 @@ nav.primary > ul li a {
                     $(fws).triggerHandler('open');
                     poll();
                     pollInterval = setInterval(poll, opts.fallbackPollInterval);
-
                 }, opts.fallbackOpenDelay);
 
                 // return socket impl

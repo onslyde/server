@@ -158,8 +158,8 @@ public class SlidFast {
             Attendee attendee;
             boolean merge = false;
             //manage the attendee object :(
-            System.out.println("'attendeeIP''''''''''''''''" + attendeeIP);
-            System.out.println("'ips.containsKey(attendeeIP)''''''''''''''''" + ips.containsKey(attendeeIP));
+//            System.out.println("'attendeeIP''''''''''''''''" + attendeeIP);
+//            System.out.println("'ips.containsKey(attendeeIP)''''''''''''''''" + ips.containsKey(attendeeIP));
 
             if(!ips.containsKey(attendeeIP)){
                 attendee = new Attendee();
@@ -172,7 +172,7 @@ public class SlidFast {
                 attendee = ips.get(attendeeIP);
                 merge = true;
             }
-            System.out.println("'attendee.getId()''''''''''''''''" + attendee.getId());
+//            System.out.println("'attendee.getId()''''''''''''''''" + attendee.getId());
             if(currentSlideGroup != null) {
                 for(SlideGroupOptions option : currentSlideGroup.getSlideGroupOptionses()){
                    if(option != null){
@@ -187,7 +187,7 @@ public class SlidFast {
 //                        }else{
 //                            attendeeHome.persist(attendee);
 //                        }
-                        System.out.println("'sgv.getAttendee().getId()''''''''''''''''" + sgv.getAttendee().getId());
+//                        System.out.println("'sgv.getAttendee().getId()''''''''''''''''" + sgv.getAttendee().getId());
                         slideGroupVotesHome.persist(sgv);
                     }
                    }

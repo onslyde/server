@@ -50,22 +50,29 @@ public class ChatWebSocketHandler extends WebSocketHandler {
     }
 
     public WebSocket doWebSocketConnect(HttpServletRequest request, String protocol) {
-
+        String attendeeIP;
         int sessionID = 0;
         //todo - DONT TRY TO ACCESS getSlidFast() in this method!
 
         if(request.getParameter("session") != null){
             sessionID = Integer.parseInt(request.getParameter("session"));
         }
-        System.out.println("doWebSocketConnect----------" + sessionID);
 
-        String attendeeIP = "777" + "." + sessionID + "." + randomIPRange() + "." + randomIPRange();
+        //System.out.println("doWebSocketConnect----------" + sessionID);
+        if(request.getParameter("attendeeIP") != null){
+            attendeeIP = request.getParameter("attendeeIP");
+        }else{
+            attendeeIP = "777" + "." + sessionID + "." + randomIPRange() + "." + randomIPRange();
+        }
 //        String attendeeIP = request.getRemoteAddr();
         ChatWebSocket cws = new ChatWebSocket(attendeeIP,sessionID);
+//        System.out.println("---attendeeIP,sessionID----" + attendeeIP + " " + sessionID);
         if(getSessions().containsKey(sessionID)){
+//            System.out.println("-------etSessions().containsKey" );
             getSessions().get(sessionID).add(cws);
         }else{
             List newList = new ArrayList();
+//            System.out.println("------else-");
             newList.add(cws);
             getSessions().put(sessionID,newList);
         }
@@ -75,12 +82,12 @@ public class ChatWebSocketHandler extends WebSocketHandler {
     public void observeItemEvent(@Observes SlidFast slidFast) {
 
         syncSlidFast(slidFast);
-        System.out.println("-slidFast.getJsEvent()-------" + slidFast.getJsEvent());
+        //System.out.println("-slidFast.getJsEvent()-------" + slidFast.getJsEvent());
         if(slidFast.getJsEvent() != null){
             try {
                 for (ChatWebSocket webSocket : getWebsockets()) {
                     //send out to all connected websockets
-                    //System.out.println("-slidFast.getJsEvent()#1--------" + slidFast.getJsEvent());
+                    ////System.out.println("-slidFast.getJsEvent()#1--------" + slidFast.getJsEvent());
 //                    if(slidFast.getJsEvent() != null){
 
                         webSocket.connection.sendMessage(slidFast.getJsEvent());
@@ -115,7 +122,7 @@ public class ChatWebSocketHandler extends WebSocketHandler {
 
         public ChatWebSocket(String attendeeIP, int sessionID) {
 //            syncSlidFast(slidFast);
-            System.out.println("attendeeIP----------" + attendeeIP);
+            //System.out.println("attendeeIP----------" + attendeeIP);
             this.attendeeIP = attendeeIP;
             this.sessionID = sessionID;
         }
@@ -133,7 +140,7 @@ public class ChatWebSocketHandler extends WebSocketHandler {
 
             //send current state to remotes
 //            syncSlidFast(slidFast);
-//            System.out.println("slidFast.getSessionID() -----= sessionID" + slidFast.getSessionID() + " " + sessionID);
+//            //System.out.println("slidFast.getSessionID() -----= sessionID" + slidFast.getSessionID() + " " + sessionID);
             if(slidFast != null && slidFast.getActiveOptions().size() == 2) {
                 try {
                     //only send options to this connection
@@ -142,7 +149,7 @@ public class ChatWebSocketHandler extends WebSocketHandler {
                     }
 
                 } catch (IOException e) {
-                    System.out.println("error1=========");
+                    //System.out.println("error1=========");
                     e.printStackTrace();
                 }
             }
@@ -151,7 +158,7 @@ public class ChatWebSocketHandler extends WebSocketHandler {
                 if(slidFast != null){
 
 //                    wscount++;
-    //                System.out.println("connect" + wscount);
+    //                //System.out.println("connect" + wscount);
 //                    slidFast.setWscount(wscount);
                     //todo - very inefficient... this only needs to go to presenter/slide deck
                     if(getSessions().containsKey(sessionID)){
@@ -164,7 +171,7 @@ public class ChatWebSocketHandler extends WebSocketHandler {
                 }
 
             } catch (IOException e) {
-                System.out.println("error2=========");
+                //System.out.println("error2=========");
                 e.printStackTrace();
             }
 
@@ -174,7 +181,7 @@ public class ChatWebSocketHandler extends WebSocketHandler {
         public void onMessage(String data) {
             // Loop for each instance of ChatWebSocket to send message server to
             // each client WebSockets.
-             //System.out.println("------data-" + data);
+             ////System.out.println("------data-" + data);
             //btw, switch on string coming in JDK 7...quicker to use if/else if for now
             if(data.equals("nextSlide")) {
                 data = ("{\"cdievent\":{\"fire\":function(){" +
@@ -204,7 +211,7 @@ public class ChatWebSocketHandler extends WebSocketHandler {
                                         "document.dispatchEvent(eventObj3);" +
                                         "}}}");
                 try {
-                   System.out.println("wtf))))) " + attendeeIP);
+                   //System.out.println("wtf))))) " + attendeeIP);
                    getSlidFast().updateGroupVote("wtf",attendeeIP);
                 } catch (Exception e) {
                     e.printStackTrace();
@@ -227,7 +234,7 @@ public class ChatWebSocketHandler extends WebSocketHandler {
 
                 try {
 //                    if(!getSlidFast().startSession()){
-////                        System.out.println("-getSlidFast().startSession()-------false");
+////                        //System.out.println("-getSlidFast().startSession()-------false");
 //                        getSlidFast().startSession();
 //                    }
                     getSlidFast().addGroupOptions(optionList);
@@ -236,7 +243,7 @@ public class ChatWebSocketHandler extends WebSocketHandler {
                 }
 
 //                try {
-////                    System.out.println("-slidFast.getCurrentVotes()-count-------" + getSlidFast().getCurrentVotes());
+////                    //System.out.println("-slidFast.getCurrentVotes()-count-------" + getSlidFast().getCurrentVotes());
 //                    getSlidFast().setActiveOptions(optionList);
 //                } catch (Exception e) {
 //                    e.printStackTrace();
@@ -264,11 +271,11 @@ public class ChatWebSocketHandler extends WebSocketHandler {
             }else if (data.contains(REMOTE_MARKUP)){
 
                 data = ClientEvent.remoteMarkup(data,sessionID);
-//                System.out.println("-----------" + data);
+//                //System.out.println("-----------" + data);
             }else if (data.contains("::connect::")){
                 try {
 //
-                    System.out.println("-start session----------" + sessionID);
+                    //System.out.println("-start session----------" + sessionID);
 //                    syncSlidFast(slidFast);
                     getSlidFast().startSession(sessionID);
                     getSlidFast().setPollcount(0);
@@ -278,14 +285,15 @@ public class ChatWebSocketHandler extends WebSocketHandler {
             }else if (data.contains("::disconnect::")){
                 try {
 //                    syncSlidFast(slidFast);
-                    System.out.println("-disconnect session----------" + sessionID);
+                    //System.out.println("-disconnect session----------" + sessionID);
                     for(int i : getSlidFast().getSessionID()){
                         if(i == sessionID){
-                            System.out.println("-remove----------" + sessionID);
+                            //System.out.println("-remove----------" + sessionID);
                         getSlidFast().getSessionID().remove(i);
                         }
                     }
                     if(sessions.containsKey(sessionID)){
+                        //System.out.println("-sessions.remove----------" + sessions.get(sessionID));
                         sessions.remove(sessionID);
                     }
 
@@ -294,7 +302,7 @@ public class ChatWebSocketHandler extends WebSocketHandler {
                 }
             }
 
-//            System.out.println("-----------" + data);
+//            //System.out.println("-----------" + data);
             //fan out
             sendToAll(data,this.connection,sessionID);
 
@@ -303,10 +311,10 @@ public class ChatWebSocketHandler extends WebSocketHandler {
         public void onClose(int closeCode, String message) {
             // Remove ChatWebSocket in the global list of ChatWebSocket
             // instance.
-//            if(getSessions().containsKey(sessionID)){
-                System.out.println("-remove attendee socket----------" + sessionID);
-//                sessions.get(sessionID).remove(this);
-//            }
+            if(getSessions().containsKey(sessionID)){
+                //System.out.println("-remove attendee socket----------" + sessionID);
+                sessions.get(sessionID).remove(this);
+            }
             getWebsockets().remove(this);
         }
     }

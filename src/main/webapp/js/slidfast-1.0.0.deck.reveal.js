@@ -987,13 +987,13 @@
 
       ip : function(sessionID) {
         //dev
-        console.log('window.onslydeSessionID',window.onslydeSessionID);
+//        console.log('window.onslydeSessionID',window.onslydeSessionID);
         var ai = new slidfast.core.ajax('/go/presenters/ip?session=' + window.onslydeSessionID,function(text,url){
           ip = text;
         },false);
         if(ip === null){
           ai.doGet();
-          console.log('ip req',ip);
+//          console.log('ip req',ip);
         }
 
         return ip;
@@ -1002,19 +1002,32 @@
         //return '107.22.176.73';
       },
 
+      getip : function(){
+        var aip;
+        var min = 255;
+        var max = 999;
+        if(!localStorage['attendeeIP']){
+           aip = (Math.floor(Math.random() * (max - min + 1)) + min) + '.' + (Math.floor(Math.random() * (max - min + 1)) + min) + '.' + (Math.floor(Math.random() * (max - min + 1)) + min) + '.' + (Math.floor(Math.random() * (max - min + 1)) + min);
+          localStorage['attendeeIP'] = aip;
+        }else{
+          aip = localStorage['attendeeIP'];
+        }
+        return aip;
+      },
+
       connect : function(websocket,initString,sessionID) {
 
         username = 'anonymous';
         //here we check to see if we're passing in our mock websocket object from polling clients (using gracefulWebSocket.js)
-        console.log('!websocket ' + websocket);
+        console.log('connecting now', websocket);
         if(!websocket){
 //               todo - use localstorage so we don't have to make future http requests for ip, but if ip changes we need to
 //               detect ws failure and refresh localstorage with new ip... //if(!localStorage['/go/members/ip']){
           if(!ip){
             ip = this.ip(window.onslydeSessionID);
           }
-          console.log('ip',ip,'window.onslydeSessionID',window.onslydeSessionID);
-          var location = 'ws://' + ip + ':8081/?session=' + window.onslydeSessionID;
+//          console.log('ip',ip,'window.onslydeSessionID',window.onslydeSessionID,this.getip());
+          var location = 'ws://' + ip + ':8081/?session=' + window.onslydeSessionID + '&attendeeIP=' + this.getip();
           ws = new WebSocket(location);
         }else{
           ws = websocket;
@@ -1040,7 +1053,7 @@
 
       _onmessage : function(m) {
         if (m.data) {
-          console.log(m.data);
+//          console.log(m.data);
           //check to see if this message is a CDI event
           //alert('onmessage' + m.data);
           if(m.data.indexOf('sessionID":"' + onslyde.sessionID) > 0){
@@ -1110,7 +1123,7 @@
         }, false);
 
         window.addEventListener('updateCount', function(e) {
-          slidfast.slides.updateCount(e.wsCount,e.pollCount);
+          slidfast.slides.updateDeck(e.wsCount,e.pollCount);
         }, false);
 
         this.checkOptions();
@@ -1130,11 +1143,12 @@
         }
       },
 
-      updateCount : function(wsc,pc) {
+      updateDeck : function(wsc,pc) {
         wscount = wsc;
         pollcount = pc;
         document.getElementById('wscount').innerHTML = wscount;
         document.getElementById('pollcount').innerHTML = pollcount;
+        document.getElementById('sessionID').innerHTML = csessionID;
       },
 
       wsCount : function() {

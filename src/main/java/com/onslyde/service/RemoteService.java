@@ -45,13 +45,15 @@ public class RemoteService {
 
     @GET
     @Produces(MediaType.APPLICATION_JSON)
-    public Response lookupMemberById(@PathParam("sid") int sid) {
+    public Response lookupMemberById(@PathParam("session") int session) {
 //        Session session = repository.findById(id);
+        if (session == 0) {
+            throw new WebApplicationException(Response.Status.NOT_FOUND);
+        }
+
         return Response.status(Response.Status.SEE_OTHER)
-                .header(HttpHeaders.LOCATION, "/remote.html?sid=" + sid)
+                .header(HttpHeaders.LOCATION, "/remote.html?session=" + session)
                 .build();
-//        if (session == null) {
-//            throw new WebApplicationException(Response.Status.NOT_FOUND);
-//        }
+
     }
 }

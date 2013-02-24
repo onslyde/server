@@ -51,9 +51,9 @@ public class AttendeeService {
         if(slidFast.getActiveOptions().containsKey(sessionID)){
         optionList.addAll(slidFast.getActiveOptions().get(sessionID));
         }
-        //System.out.println("!!!!!!!!!!!!!!!!poll " + optionList.size());
+        System.out.println("!!!!!!!!!!!!!!!!poll " + sessionID);
         if(optionList.size() == 2){
-            //System.out.println("!!!!!!!!!!!!!!!!options " + optionList.get(0).toString() + optionList.get(1).toString());
+            System.out.println("!!!!!!!!!!!!!!!!options " + optionList.get(0).toString() + optionList.get(1).toString());
             data = ClientEvent.createEvent("updateOptions", optionList, sessionID);
         }
         return data;

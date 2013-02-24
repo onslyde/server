@@ -50,7 +50,7 @@ public class PresenterService {
         //user signs up
         //we generate session code and email it
         //they use session code to init
-        System.out.println("sessionID-------sessionID" + sessionID);
+//        System.out.println("sessionID-------sessionID" + sessionID);
         if(addr == null){
 
 //            if(slidFast.startSession(sessionID)){
