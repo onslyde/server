@@ -48,6 +48,7 @@ public class SlidFast {
     private List<String> currentVotes;
     private String jsEvent;
     private int presenterID;
+    private int sessionID;
 
     private int wscount = 0;
     private int pollcount = 0;
@@ -98,6 +99,8 @@ public class SlidFast {
             sessionHome.persist(currentSession);
             //todo hack to sync objects across threads for now
             sessionStarted = true;
+            setPresenterID(currentSession.getUser().getId());
+            setSessionID(currentSession.getId());
             slidFastEventSrc.fire(this);
             return true;
         }else{
@@ -247,5 +250,13 @@ public class SlidFast {
 
     public void setPresenterID(int presenterID) {
         this.presenterID = presenterID;
+    }
+
+    public int getSessionID() {
+        return sessionID;
+    }
+
+    public void setSessionID(int sessionID) {
+        this.sessionID = sessionID;
     }
 }

@@ -28,10 +28,11 @@ import java.util.List;
  */
 public class ClientEvent {
 
-    public static String createEvent(String eventName, List options){
+    public static String createEvent(String eventName, List options, int sessionID){
         String eventOptions = "";
         if(options.size() >= 0){
-                 eventOptions = ("{\"cdievent\":{\"fire\":function(){" +
+                 eventOptions = ("{\"onslydeEvent\":{\"sessionID\":\"" + sessionID + "\"," +
+                  "\"fire\":function(){" +
                   "window.eventObjb = document.createEvent('Event');" +
                   "eventObjb.initEvent(\'updateOptions\', true, true);" +
                   "eventObjb.option1 = '" + options.get(0) + "';\n" +
@@ -42,8 +43,9 @@ public class ClientEvent {
         return eventOptions;
     }
 
-    public static String clientVote(String vote){
-       return ("{\"cdievent\":{\"fire\":function(){" +
+    public static String clientVote(String vote, int sessionID){
+       return ("{\"onslydeEvent\":{\"sessionID\":\"" + sessionID + "\"," +
+               "\"fire\":function(){" +
                     "window.eventObjc = document.createEvent('Event');" +
                     "eventObjc.initEvent(\'clientVote\', true, true);" +
                     "eventObjc.vote = '" + vote + "';\n" +
@@ -51,16 +53,18 @@ public class ClientEvent {
                     "}}}");
     }
 
-    public static String clientProps(String prop){
-        return ("{\"cdievent\":{\"fire\":function(){" +
+    public static String clientProps(String prop, int sessionID){
+        return ("{\"onslydeEvent\":{\"sessionID\":\"" + sessionID + "\"," +
+                "\"fire\":function(){" +
                 "window.eventObje = document.createEvent('Event');" +
                 "eventObje.initEvent(\'" + prop + "\', true, true);" +
                 "document.dispatchEvent(eventObje);" +
                 "}}}");
     }
 
-    public static String updateCount(int wscount, int pollcount){
-        return ("{\"cdievent\":{\"fire\":function(){" +
+    public static String updateCount(int wscount, int pollcount, int sessionID){
+        return ("{\"onslydeEvent\":{\"sessionID\":\"" + sessionID + "\"," +
+                "\"fire\":function(){" +
                 "window.eventObjf = document.createEvent('Event');" +
                 "eventObjf.initEvent(\'updateCount\', true, true);" +
                 "eventObjf.wsCount = '" + wscount + "';\n" +
@@ -69,8 +73,9 @@ public class ClientEvent {
                 "}}}");
     }
 
-    public static String remoteMarkup(String markup){
-        return ("{\"cdievent\":{\"fire\":function(){" +
+    public static String remoteMarkup(String markup, int sessionID){
+        return ("{\"onslydeEvent\":{\"sessionID\":\"" + sessionID + "\"," +
+                "\"fire\":function(){" +
                 "window.eventObjg = document.createEvent('Event');" +
                 "eventObjg.initEvent(\'remoteMarkup\', true, true);" +
                 "eventObjg.markup = '" + markup + "';\n" +

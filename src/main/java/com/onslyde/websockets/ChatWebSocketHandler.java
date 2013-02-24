@@ -35,11 +35,15 @@ public class ChatWebSocketHandler extends WebSocketHandler {
 
     private static SlidFast slidFast;
 
+    private int sessionID;
+
     public WebSocket doWebSocketConnect(HttpServletRequest request,
             String protocol) {
         syncSlidFast(slidFast);
-        System.out.println("-------doWebSocketConnect" + request.getParameter("session") + "---" + + slidFast.getPresenterID());
-        String attendeeIP = "777." + randomIPRange() + "." + randomIPRange() + "." + randomIPRange();
+        if(request.getParameter("session") != null){
+            sessionID = Integer.parseInt(request.getParameter("session"));
+        }
+        String attendeeIP = slidFast.getPresenterID() + "." + sessionID + "." + randomIPRange() + "." + randomIPRange();
 //        String attendeeIP = request.getRemoteAddr();
         return new ChatWebSocket(attendeeIP);
     }
@@ -104,7 +108,7 @@ public class ChatWebSocketHandler extends WebSocketHandler {
             if(slidFast != null && slidFast.getActiveOptions().size() == 2) {
                 try {
                     //only send options to this connection
-                    this.connection.sendMessage(ClientEvent.createEvent("updateOptions",slidFast.getActiveOptions()));
+                    this.connection.sendMessage(ClientEvent.createEvent("updateOptions",slidFast.getActiveOptions(),sessionID));
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
@@ -118,7 +122,7 @@ public class ChatWebSocketHandler extends WebSocketHandler {
 //                    slidFast.setWscount(wscount);
                     //todo - very inefficient... this only needs to go to presenter/slide deck
                     for (ChatWebSocket webSocket : getWebsockets()) {
-                        webSocket.connection.sendMessage(ClientEvent.updateCount(wscount, slidFast.getPollcount()));
+                        webSocket.connection.sendMessage(ClientEvent.updateCount(wscount, slidFast.getPollcount(),sessionID));
                     }
                 }
 
@@ -155,7 +159,8 @@ public class ChatWebSocketHandler extends WebSocketHandler {
                                         "document.dispatchEvent(eventObj2);" +
                                         "}}}");
             }else if (data.equals("vote:wtf")){
-                data = ("{\"cdievent\":{\"fire\":function(){" +
+                data = ("{\"onslydeEvent\":{\"sessionID\":\"" + sessionID + "\"," +
+                        "\"fire\":function(){" +
                                         "window.eventObj3 = document.createEvent('Event');" +
                                         "eventObj3.initEvent(\'wtf\', true, true);" +
                                         "document.dispatchEvent(eventObj3);" +
@@ -166,7 +171,8 @@ public class ChatWebSocketHandler extends WebSocketHandler {
                     e.printStackTrace();
                 }
             }else if (data.equals("vote:nice")){
-                data = ("{\"cdievent\":{\"fire\":function(){" +
+                data = ("{\"onslydeEvent\":{\"sessionID\":\"" + sessionID + "\"," +
+                        "\"fire\":function(){" +
                         "window.eventObj4 = document.createEvent('Event');" +
                         "eventObj4.initEvent(\'nice\', true, true);" +
                         "document.dispatchEvent(eventObj4);" +
@@ -197,7 +203,7 @@ public class ChatWebSocketHandler extends WebSocketHandler {
 //                    e.printStackTrace();
 //                }
 
-                data = ClientEvent.createEvent("updateOptions", optionList);
+                data = ClientEvent.createEvent("updateOptions", optionList,sessionID);
 
             }else if (data.contains(VOTE)){
 
@@ -214,11 +220,11 @@ public class ChatWebSocketHandler extends WebSocketHandler {
 //                } catch (Exception e) {
 //                    e.printStackTrace();
 //                }
-                data = ClientEvent.clientVote(vote);
+                data = ClientEvent.clientVote(vote,sessionID);
 
             }else if (data.contains(REMOTE_MARKUP)){
 
-                data = ClientEvent.remoteMarkup(data);
+                data = ClientEvent.remoteMarkup(data,sessionID);
 //                System.out.println("-----------" + data);
             }else if (data.contains("connect")){
                 try {

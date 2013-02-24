@@ -49,7 +49,8 @@
 
       hashNS = "",
 
-      sessionID = null;
+      onslyde = {deck:false, sessionID:0};
+
 
     slidfast.core = slidfast.prototype = {
       constructor:slidfast,
@@ -60,7 +61,7 @@
           if (options) {
             //setup all the options being passed in in the init
             defaultPageID = options.defaultPageID;
-            sessionID = options.sessionID;
+            onslyde = options.onslyde !== null ? options.onslyde : null;
             hashNS = options.hahsNS !== null ? options.hashNS : "#sf-";
             touchEnabled = options.touchEnabled;
             singlePageModel = options.singlePageModel;
@@ -109,8 +110,12 @@
           slidfast.core.cacheExternalImage();
         }
 
-        if(sessionID){
-          slidfast.slides.init(sessionID);
+        if(onslyde && onslyde.deck){
+          slidfast.slides.init(onslyde.sessionID);
+        }
+
+        if(onslyde && onslyde.sessionID){
+          window.onslydeSessionID = onslyde.sessionID;
         }
       },
 
@@ -130,7 +135,7 @@
           slidfast.core.locationChange();
         }, false);
 
-        if(options.sessionID){
+        if(options.onslyde.deck){
           //slide specific todo fix later
           document.addEventListener('keydown', function(e) {
             slidfast.slides.handleKeys(e);
@@ -1031,18 +1036,16 @@
 
       _onmessage : function(m) {
         if (m.data) {
-          ////console.log(m.data);
+//          console.log(m.data);
           //check to see if this message is a CDI event
           //alert('onmessage' + m.data);
-          if(m.data.indexOf('cdievent') > 0){
+          if(m.data.indexOf('sessionID":"' + onslyde.sessionID) > 0){
             try{
-              //$('log').innerHTML = m.data;
-//                           console.log(m.data);
               //avoid use of eval...
 
               var event = (m.data);
               event = (new Function("return " + event))();
-              event.cdievent.fire();
+              event.onslydeEvent.fire();
             }catch(e){
               console.log(e);
             }

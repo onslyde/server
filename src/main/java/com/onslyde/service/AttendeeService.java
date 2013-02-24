@@ -50,7 +50,7 @@ public class AttendeeService {
         //System.out.println("!!!!!!!!!!!!!!!!poll " + optionList.size());
         if(optionList.size() == 2){
             //System.out.println("!!!!!!!!!!!!!!!!options " + optionList.get(0).toString() + optionList.get(1).toString());
-            data = ClientEvent.createEvent("updateOptions", optionList);
+            data = ClientEvent.createEvent("updateOptions", optionList, slidFast.getSessionID());
         }
         return data;
     }
@@ -93,9 +93,9 @@ public class AttendeeService {
             slidFast.updateGroupVote(vote,ip);
 
             if(vote.equals("wtf") || vote.equals("nice")){
-                slidFast.setJsEvent(ClientEvent.clientProps(vote));
+                slidFast.setJsEvent(ClientEvent.clientProps(vote,slidFast.getSessionID()));
             }else{
-                slidFast.setJsEvent(ClientEvent.clientVote(vote));
+                slidFast.setJsEvent(ClientEvent.clientVote(vote,slidFast.getSessionID()));
             }
 
             slidFastEventSrc.fire(slidFast);

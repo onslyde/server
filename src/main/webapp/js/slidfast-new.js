@@ -963,9 +963,9 @@
     //var _onopen,_onmessage,_onclose,_onerror;
     slidfast.ws = slidfast.prototype = {
 
-      ip : function() {
+      ip : function(sessionID) {
         //dev
-        var ai = new slidfast.core.ajax('/rest/presenters/ip',function(text,url){
+        var ai = new slidfast.core.ajax('/rest/presenters/ip?session=' + sessionID,function(text,url){
           ip = text;
         },false);
         ai.doGet();
@@ -975,7 +975,7 @@
         //return '107.22.176.73';
       },
 
-      connect : function(websocket,initString) {
+      connect : function(websocket,initString,sessionID) {
 
         username = 'anonymous';
         //here we check to see if we're passing in our mock websocket object from polling clients (using gracefulWebSocket.js)
@@ -983,7 +983,7 @@
         if(!websocket){
 //               todo - use localstorage so we don't have to make future http requests for ip, but if ip changes we need to
 //               detect ws failure and refresh localstorage with new ip... //if(!localStorage['/rest/members/ip']){
-          var location = 'ws://' + this.ip() + ':8081';
+          var location = 'ws://' + this.ip(sessionID) + ':8081/?session=' + sessionID;
           ws = new WebSocket(location);
         }else{
           ws = websocket;
@@ -993,8 +993,9 @@
         ws.onopen = function() {
           isopen = true;
           //basic auth until we get something better
-          console.log('sent onopen' + username);
+//          console.log('sent onopen' + username);
           slidfast.ws._send('user:'+username);
+
           if(initString){
             slidfast.ws._send(initString);
           }
@@ -1015,20 +1016,18 @@
 
       _onmessage : function(m) {
         if (m.data) {
-          ////console.log(m.data);
+          console.log(m.data);
           //check to see if this message is a CDI event
           //alert('onmessage' + m.data);
-          if(m.data.indexOf('cdievent') > 0){
+          if(m.data.indexOf('sessionID":"' + sessionID) > 0){
             try{
-              //$('log').innerHTML = m.data;
-//                           console.log(m.data);
               //avoid use of eval...
 
               var event = (m.data);
               event = (new Function("return " + event))();
-              event.cdievent.fire();
+              event.onslydeEvent.fire();
             }catch(e){
-              alert(e);
+              console.log(e);
             }
           }else{
 
@@ -1041,10 +1040,10 @@
       },
 
       _onerror : function(e) {
-        alert(e);
+        console.log(e);
       },
 
-      _send : function(message) {
+      _send:function (message) {
         //console.log('sent ');
         ws.send(message);
 
