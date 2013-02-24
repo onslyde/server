@@ -20,7 +20,7 @@ import javax.ws.rs.core.Response;
 import java.util.List;
 import java.util.logging.Logger;
 
-@Path("/{sid:[0-9][0-9]*}")
+@Path("/{session:[0-9][0-9]*}")
 @RequestScoped
 public class RemoteService {
     @Inject
