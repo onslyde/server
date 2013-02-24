@@ -81,11 +81,11 @@ public class ChatWebSocketHandler extends WebSocketHandler {
                 for (ChatWebSocket webSocket : getWebsockets()) {
                     //send out to all connected websockets
                     //System.out.println("-slidFast.getJsEvent()#1--------" + slidFast.getJsEvent());
-                    if(slidFast.getJsEvent() != null){
+//                    if(slidFast.getJsEvent() != null){
 
                         webSocket.connection.sendMessage(slidFast.getJsEvent());
 
-                    }
+//                    }
                 }
             } catch (Exception x) {
                 //todo - do something

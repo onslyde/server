@@ -76,7 +76,7 @@ public class AttendeeService {
 
         //req.getRemoteAddr();
         //get ip and verify attendee
-//        System.out.println("**************slidFast" + slidFast.getCurrentVotes().size() + "ip: " + ip + " vote:" + vote);
+        System.out.println("**************slidFast" + slidFast.getCurrentVotes().size() + "ip: " + ip + " vote:" + vote + " sessionID:" + sessionID);
         if(vote != null){
             if(ip == null && req.getSession().getAttribute("onslydeIP") == null){
                 //first subnet should be a user id for the presenter?

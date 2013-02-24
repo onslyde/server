@@ -992,8 +992,8 @@
           ip = text;
         },false);
         if(ip === null){
-          console.log('ip req');
           ai.doGet();
+          console.log('ip req',ip);
         }
 
         return ip;
