@@ -995,10 +995,10 @@
           ai.doGet();
         }
 
-        //return ip;
+        return ip;
 
         //prod
-        return '107.22.176.73';
+        //return '107.22.176.73';
       },
 
       getip : function(){
