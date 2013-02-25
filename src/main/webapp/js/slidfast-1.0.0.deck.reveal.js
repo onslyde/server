@@ -988,18 +988,17 @@
       ip : function(sessionID) {
         //dev
 //        console.log('window.onslydeSessionID',window.onslydeSessionID);
-        var ai = new slidfast.core.ajax('/go/presenters/ip?session=' + window.onslydeSessionID,function(text,url){
+        var ai = new slidfast.core.ajax('http://onslyde.com/go/presenters/ip?session=' + window.onslydeSessionID,function(text,url){
           ip = text;
         },false);
         if(ip === null){
           ai.doGet();
-//          console.log('ip req',ip);
         }
 
-        return ip;
+        //return ip;
 
         //prod
-        //return '107.22.176.73';
+        return '107.22.176.73';
       },
 
       getip : function(){
@@ -1024,7 +1023,11 @@
 //               todo - use localstorage so we don't have to make future http requests for ip, but if ip changes we need to
 //               detect ws failure and refresh localstorage with new ip... //if(!localStorage['/go/members/ip']){
           if(!ip){
+            //dev
             ip = this.ip(window.onslydeSessionID);
+
+            //prod
+            //ip = '107.22.176.73';
           }
 //          console.log('ip',ip,'window.onslydeSessionID',window.onslydeSessionID,this.getip());
           var location = 'ws://' + ip + ':8081/?session=' + window.onslydeSessionID + '&attendeeIP=' + this.getip();
