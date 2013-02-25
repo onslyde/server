@@ -17,7 +17,7 @@ function registerMember(memberData) {
             $('#reg')[0].reset();
 
             //mark success on the registration form
-            $('#formMsgs').append($('<span class="alert alert-success">Thanks! Your session ID is ' + data.sessionId + '</span>'));
+            $('#formMsgs').append($('<legend><span class="alert alert-success">Success!!</span><br/>Make a note of this! Your session ID is <strong>' + data.sessionId + '</strong></legend>'));
 
             //updateMemberTable();
         },
