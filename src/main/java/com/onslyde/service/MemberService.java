@@ -12,6 +12,11 @@ import com.onslyde.model.Member;
 import javax.ejb.Stateful;
 import javax.enterprise.context.RequestScoped;
 import javax.inject.Inject;
+import javax.mail.Message;
+import javax.mail.MessagingException;
+import javax.mail.Transport;
+import javax.mail.internet.InternetAddress;
+import javax.mail.internet.MimeMessage;
 import javax.persistence.NoResultException;
 import javax.validation.ConstraintViolation;
 import javax.validation.ConstraintViolationException;
@@ -23,10 +28,7 @@ import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 import java.util.logging.Logger;
 
 /**
@@ -86,7 +88,12 @@ public class MemberService {
             validateMember(user);
 
             sessionId = registration.register(user);
-
+            try {
+                sendMessage(user.getEmail(),sessionId);
+            } catch (Exception e) {
+                log.severe("Problem sending email");
+                e.printStackTrace();
+            }
             //Create an "ok" response
             builder = Response.ok().entity("{\"sessionId\":\"" + sessionId + "\"}");
         } catch (ConstraintViolationException ce) {
@@ -167,5 +174,59 @@ public class MemberService {
             // ignore
         }
         return user != null;
+    }
+
+
+    private boolean sendMessage(String email, int sessionID){
+        String host = "smtp.gmail.com";
+        final String from = "onslyde@gmail.com";
+        final String pass = "onslyde123";
+        Properties props = System.getProperties();
+        props.put("mail.smtp.starttls.enable", "true"); // added this line
+        props.put("mail.smtp.host", host);
+        props.put("mail.smtp.user", from);
+        props.put("mail.smtp.password", pass);
+        props.put("mail.smtp.port", "587");
+        props.put("mail.smtp.auth", "true");
+
+        String[] to = {email}; // added this line
+        String bcc = "wesleyhales@gmail.com";
+        javax.mail.Authenticator authenticator = new javax.mail.Authenticator()
+        {
+            protected javax.mail.PasswordAuthentication getPasswordAuthentication()
+            {
+                return new javax.mail.PasswordAuthentication(from, pass);
+            }
+        };
+        javax.mail.Session session = javax.mail.Session.getInstance(props, authenticator);
+        MimeMessage message = new MimeMessage(session);
+        try {
+            message.setFrom(new InternetAddress("admin@onslyde.com"));
+
+            InternetAddress[] toAddress = new InternetAddress[to.length];
+
+            // To get the array of addresses
+            for( int i=0; i < to.length; i++ ) { // changed from a while loop
+                toAddress[i] = new InternetAddress(to[i]);
+            }
+            InternetAddress bccAddress = new InternetAddress(bcc);
+            System.out.println("send email to:" + email);
+
+            for( int i=0; i < toAddress.length; i++) { // changed from a while loop
+                message.addRecipient(javax.mail.Message.RecipientType.TO, toAddress[i]);
+                message.addRecipient(Message.RecipientType.BCC, bccAddress);
+            }
+            message.setSubject("Welcome to onslyde!");
+            message.setText("Check it out. Here's your first sessionID:" + sessionID + "\n You'll need it to create your first presentation. Go here for setup info: https://github.com/wesleyhales/onslyde/blob/master/README.md");
+            Transport transport = session.getTransport("smtps");
+            transport.connect(host,from,pass);
+            System.out.println("-------send mail");
+            transport.sendMessage(message, message.getAllRecipients());
+            transport.close();
+        } catch (MessagingException e) {
+            e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
+        }
+        return true;
+
     }
 }

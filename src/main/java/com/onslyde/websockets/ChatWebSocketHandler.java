@@ -140,18 +140,25 @@ public class ChatWebSocketHandler extends WebSocketHandler {
 
             //send current state to remotes
 //            syncSlidFast(slidFast);
-//            //System.out.println("slidFast.getSessionID() -----= sessionID" + slidFast.getSessionID() + " " + sessionID);
-            if(slidFast != null && slidFast.getActiveOptions().size() == 2) {
-                try {
-                    //only send options to this connection
+            try {
+                System.out.println("slidFast: " + slidFast);
+                if(slidFast != null){
+                    System.out.println("sessions in map: " + slidFast.getSessionID() + " users session:" + sessionID);
                     if(slidFast.getActiveOptions().containsKey(sessionID)){
-                        this.connection.sendMessage(ClientEvent.createEvent("updateOptions",slidFast.getActiveOptions().get(sessionID),sessionID));
-                    }
+                        List options = slidFast.getActiveOptions().get(sessionID);
+                        if(options.size() == 2) {
 
-                } catch (IOException e) {
-                    //System.out.println("error1=========");
-                    e.printStackTrace();
+                            System.out.println("options sent: " + options + " users session:" + sessionID);
+                                //only send options to this connection
+                                    this.connection.sendMessage(ClientEvent.createEvent("updateOptions",options,sessionID));
+
+
+                        }
+                    }
                 }
+            } catch (IOException e) {
+                    System.out.println("error1=========");
+                    e.printStackTrace();
             }
             //update count on deck
             try {
