@@ -987,8 +987,9 @@
 
       ip : function(sessionID) {
         //dev
-//        console.log('window.onslydeSessionID',window.onslydeSessionID);
-        var ai = new slidfast.core.ajax('http://onslyde.com/go/presenters/ip?session=' + window.onslydeSessionID,function(text,url){
+        var ai = new slidfast.core.ajax('/go/presenters/ip?session=' + window.onslydeSessionID,function(text,url){
+        //prod
+        //var ai = new slidfast.core.ajax('http://onslyde.com/go/presenters/ip?session=' + window.onslydeSessionID,function(text,url){
           ip = text;
         },false);
         if(ip === null){
