@@ -51,13 +51,14 @@
                 <div class="row-fluid">
                 <div class="span6">
                 <h1><img src="/images/logos.png" alt=""/></h1>
-                <p>Read this <a href="http://bit.ly/YLxhv5" target="_blank">blog post</a> to learn more about this project and for instructions on using it.</p>
+                <p>Check out the <a href="https://github.com/wesleyhales/onslyde/blob/master/README.md" target="_blank">docs</a> to get started and to learn more about onslyde.</p>
                 </div>
                 <div class="span6 offset6">
                     <form name="reg" id="reg" class="form-horizontal">
                         <fieldset class="control-group">
                             <legend>Sign up for the beta:</legend>
                             <div id="formMsgs"></div>
+                            <div id="forminputs">
                             <div>
                                 <label for="fullName">Name:</label>
                                 <input type="text" name="fullName" id="fullName" placeholder="Your Name" required autofocus/>
@@ -73,6 +74,7 @@
 
                             <div style="padding: 10px;" class="span5">
                                 <input type="submit" name="register" id="register" value="Signup!" class="btn btn-primary" style="float:right">
+                            </div>
                             </div>
                         </fieldset>
                     </form>
@@ -94,39 +96,20 @@
 ================================================== -->
 <!-- Placed at the end of the document so the pages load faster -->
 <script src="bootstrap/js/jquery.js"></script>
-<script src="bootstrap/js/bootstrap-transition.js"></script>
-<script src="bootstrap/js/bootstrap-alert.js"></script>
-<script src="bootstrap/js/bootstrap-modal.js"></script>
-<script src="bootstrap/js/bootstrap-dropdown.js"></script>
-<script src="bootstrap/js/bootstrap-scrollspy.js"></script>
-<script src="bootstrap/js/bootstrap-tab.js"></script>
-<script src="bootstrap/js/bootstrap-tooltip.js"></script>
-<script src="bootstrap/js/bootstrap-popover.js"></script>
-<script src="bootstrap/js/bootstrap-button.js"></script>
-<script src="bootstrap/js/bootstrap-collapse.js"></script>
-<script src="bootstrap/js/bootstrap-carousel.js"></script>
-<script src="bootstrap/js/bootstrap-typeahead.js"></script>
 
 <script type="text/javascript" src="js/app.js"></script>
 <script type="text/javascript">
 
     $( document ).ready( function() {
-
         //Register an event listener on the sumbit action
         $('#reg').submit(function(event) {
             event.preventDefault();
-
             var memberData = $(this).serializeObject();
-
             if( memberData.register ) {
               delete memberData.register;
             }
-
             registerMember(memberData);
         });
-
-
-
     });
 
     $.fn.serializeObject = function() {

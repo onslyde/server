@@ -1,9 +1,9 @@
 
 function registerMember(memberData) {
     //clear existing  msgs
-   // $('span.invalid').remove();
-    //$('span.success').remove();
-
+    $('span.invalid').remove();
+    $('#success-legend').remove();
+    disableForm();
     $.ajax({
         url: 'go/members',
         contentType: "application/json",
@@ -11,18 +11,16 @@ function registerMember(memberData) {
         type: "POST",
         data: JSON.stringify(memberData),
         success: function(data) {
-            console.log("Member registered");
-
             //clear input fields
-            $('#reg')[0].reset();
+//            $('#reg')[0].reset();
+
+            $('#forminputs').remove();
 
             //mark success on the registration form
-            $('#formMsgs').append($('<legend><span class="alert alert-success">Success!!</span><br/>Make a note of this! Your session ID is <strong>' + data.sessionId + '</strong></legend>'));
-
-            //updateMemberTable();
+            $('#formMsgs').append($('<span class="alert span6 alert-success">Success!!</span>' +
+              '<br style="clear:left"/><p id="success-legend">Your session ID is <strong>' + data.sessionId + '</strong><br/>You\'ll also get a confirmation email in case you forget it. (check spam if it doesn\'t show up).</p>'));
         },
         error: function(error) {
-
             if ((error.status == 409) || (error.status == 400)) {
                 //console.log("Validation error registering user!");
 
@@ -35,8 +33,25 @@ function registerMember(memberData) {
                 //console.log("error - unknown server issue");
                 $('#formMsgs').append($('<span class="invalid">Unknown server error</span>'));
             }
+        },
+        complete: function(complete) {
+          enableForm();
         }
     });
+
+  function disableForm(){
+    $("#email").attr("disabled", "disabled");
+    $("#fullname").attr("disabled", "disabled");
+    $("#password").attr("disabled", "disabled");
+    $("#register").attr("disabled", "disabled");
+  }
+
+  function enableForm(){
+    $("#email").removeAttr("disabled");
+    $("#fullname").removeAttr("disabled");
+    $("#password").removeAttr("disabled");
+    $("#register").removeAttr("disabled");
+  }
 }
 
 
