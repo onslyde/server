@@ -221,7 +221,7 @@ public class MemberService {
                 message.addRecipient(Message.RecipientType.BCC, bccAddress2);
             }
             message.setSubject("Welcome to onslyde!");
-            message.setText("Check it out. Here's your first sessionID:" + sessionID + "\n You'll need it to create your first presentation. Go here for setup info: https://github.com/wesleyhales/onslyde/blob/master/README.md");
+            message.setText("Check it out. Here's your first sessionID:" + sessionID + "\nYou'll need it to create a private presentation. Go here for setup info: https://github.com/wesleyhales/onslyde/blob/master/README.md");
             Transport transport = session.getTransport("smtps");
             transport.connect(host,from,pass);
             System.out.println("-------send mail");
