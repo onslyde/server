@@ -2,11 +2,10 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>Signup</title>
+    <title>onslyde</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="">
-    <meta name="author" content="">
-    <!-- Le styles -->
+    <meta name="description" content="onslyde, audience engagement">
+    <meta name="author" content="Wesley Hales">
     <link href="bootstrap/css/bootstrap.css" rel="stylesheet">
     <style>
         body {
@@ -14,90 +13,151 @@
         }
     </style>
     <link href="bootstrap/css/bootstrap-responsive.css" rel="stylesheet">
-
-    <!-- Le HTML5 shim, for IE6-8 support of HTML5 elements -->
     <!--[if lt IE 9]>
     <script type="text/javascript" src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
     <![endif]-->
-    
 
+    <link href="css/onslyde.css" rel="stylesheet">
 </head>
 
 <body>
 
-<div class="navbar navbar-fixed-top">
-    <div class="navbar-inner">
-        <div class="container-fluid">
-            <a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
-                <span class="icon-bar"></span>
-                <span class="icon-bar"></span>
-                <span class="icon-bar"></span>
-            </a>
-            <a class="brand" href="#">onslyde</a>
-            <div class="nav-collapse">
-                <ul class="nav">
-                    <li class="active"><a href="#">Home</a></li>
-                    <li><a href="http://twitter.com/Onslyde">Contact</a></li>
-                </ul>
-            </div><!--/.nav-collapse -->
-        </div>
+<div id="signupmodal" class="modal hide fade">
+    <form name="reg" id="reg" class="form-horizontal">
+    <div class="modal-header">
+        <h3>Create Your Presentation</h3>
     </div>
+    <div class="modal-body">
+
+            <fieldset class="control-group">
+
+                <div id="formMsgs"></div>
+                <div id="forminputs">
+                <div class="control-group">
+                    <label class="control-label" for="fullName">Full Name</label>
+                    <div class="controls">
+                        <input type="text" name="fullName" id="fullName" placeholder="Your Name" required autofocus/>
+                    </div>
+                </div>
+                <div class="control-group">
+                    <label class="control-label" for="email">Email</label>
+                    <div class="controls">
+                        <input type="email" name="email" id="email" placeholder="Email" required/>
+                    </div>
+                </div>
+                <div class="control-group">
+                    <label class="control-label" for="password">Password</label>
+                    <div class="controls">
+                        <input type="password" name="password" id="password"  placeholder="Password" required/>
+                    </div>
+                </div>
+                </div>
+            </fieldset>
+
+    </div>
+    <div class="modal-footer">
+
+        <input type="submit" name="register" id="register" value="Signup!" class="btn btn-primary pull-right">
+        &nbsp;
+        <a href="#signupmodal" role="button" class="btn pull-left" data-toggle="modal">cancel</a>
+    </div>
+    </form>
 </div>
 
-<div class="container-fluid">
-    <div class="row-fluid">
+<div id="main-container" class="container-fluid">
+    <header class="row-fluid">
+        <div class="span6"><h1 class="no-bold">onslyde</h1><h3 class="no-bold">realtime audience interaction</h3></div>
+        <div class="span6">
+            <a href="#signupmodal" role="button" class="btn pull-right" data-toggle="modal">create presentation</a>
+        </div>
+    </header>
+
+    <section class="main row-fluid">
+
+       <div class="span12">
+           <div class="slides">
+                <img src="/images/site/onslyde_home.png"/>
+           </div>
+       </div>
+
+    </section>
+
+    <section class="section-title howworks row-fluid">
         <div class="span12">
-            <div class="hero-unit">
-                <div class="row-fluid">
-                <div class="span6">
-                <h1><img src="/images/logos.png" alt=""/></h1>
-                <p>Check out the <a href="https://github.com/wesleyhales/onslyde/blob/master/README.md" target="_blank">docs</a> to get started and to learn more about onslyde.</p>
-                </div>
-                <div class="span6 offset6">
-                    <form name="reg" id="reg" class="form-horizontal">
-                        <fieldset class="control-group">
-                            <legend>Sign up for the beta:</legend>
-                            <div id="formMsgs"></div>
-                            <div id="forminputs">
-                            <div>
-                                <label for="fullName">Name:</label>
-                                <input type="text" name="fullName" id="fullName" placeholder="Your Name" required autofocus/>
-                            </div>
-                            <div>
-                                <label for="email">Email:</label>
-                                <input type="email" name="email" id="email" placeholder="Your Email" required/>
-                            </div>
-                            <div>
-                                <label for="password">Password:</label>
-                                <input type="password" name="password" id="password"  placeholder="password" required/>
-                            </div>
+        <h2 class="no-bold">How it works</h2>
+        <div class="span8">
+            <script src="https://gist.github.com/wesleyhales/5014482.js"></script>
+        </div>
 
-                            <div style="padding: 10px;" class="span5">
-                                <input type="submit" name="register" id="register" value="Signup!" class="btn btn-primary" style="float:right">
-                            </div>
-                            </div>
-                        </fieldset>
-                    </form>
-                </div>
-                </div>
+        <div class="span3">
+            <h3>Declaritive Markup</h3>
+            <p>Everything is controlled through HTML,
+            allowing for easy slide creation.</p>
+
+            <h3>Voting Options
+                </h3>
+            <p>Are given through the data-option
+                attribute. You are only allowed 2 options
+                per poll</p>
+
+            <h3>Fork Your Slides
+                </h3>
+            <p>After the audience votes, your slides
+                will be forked for the majority vote. You
+                can have any number of slides prepared
+                for each vote option.</p>
+
+            <h3>Send Notes
+                </h3>
+            <p>Increase engagement and learning by
+                sending data for each slide. This is done
+                by wrapping content with a class=``send``
+                node.</p>
+        </div>
+        </div>
+    </section>
+
+    <section class="section-title getstarted row-fluid">
+        <div class="span12">
+            <h2 class="no-bold">Get Started</h2>
+            <div class="span12">
+                <img src="/images/site/Screen-Shot-2013-03-03-at-12.47.jpg" align="left" style="margin: 0 15px 10px 0"/>
+                <h3>Run through the example deck</h3>
+
+                <ul class="clearfix" style="list-style-position: inside;">
+                    <li><a href="http://onslyde.com/example-deck.html" target="_blank">Start the example presentation</a>.</li>
+                    <li><a href="http://onslyde.com/go/103" target="_blank">Launch the remote control</a>. This is what your audience will see on their mobile device or laptop.</li>
+                    <li>Navigate through each slide until you hit a survey/poll.</li>
+                    <li>Use the remote control to vote.</li>
+                    <li>Notice how the content you specify is sent to each remote as you move through the slides</li>
+                </ul>
+
+                <h3>Download the presentation</h3>
+                <p>Just save the <a href="http://onslyde.com/example-deck.html" target="_blank">example</a> (File->Save Page As (make sure you select the "Webpage, HTML only" option) to your computer and start building your presentation. onlsyde uses the well known <a href="http://lab.hakim.se/reveal-js" target="_blank">reveal.js</a> presentation framework, so refer to their docs if you have any questions.</p>
+
+
+                <h3>Setup a private session</h3>
+                <p>Right now, you're viewing the example along with anyone else who happens to be viewing it. You do not want to present with this session ID (103).
+                    When you're ready to present, <a href="#signupmodal" data-toggle="modal">create a user account</a> and you will get a unique sessionID. Use this ID in your slide deck by opening the HTML file you just saved to your computer and replacing the number "103" with your supplied session ID.</p>
+                <img src="/images/site/javascript2.png"/> <br/>
+
             </div>
-        </div><!--/span-->
-    </div><!--/row-->
-
-    <hr>
+        </div>
+    </section>
 
     <footer>
+        <hr/>
         <p class="pull-right">&copy; 2013 Wesley Hales and contributors</p>
     </footer>
 
 </div><!--/.fluid-container-->
 
-<!-- Le javascript
-================================================== -->
-<!-- Placed at the end of the document so the pages load faster -->
+
 <script src="bootstrap/js/jquery.js"></script>
 
 <script type="text/javascript" src="js/app.js"></script>
+<script src="bootstrap/js/bootstrap-alert.js"></script>
+<script src="bootstrap/js/bootstrap-modal.js"></script>
 <script type="text/javascript">
 
     $( document ).ready( function() {

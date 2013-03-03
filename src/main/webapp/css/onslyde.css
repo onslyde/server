@@ -1,0 +1,80 @@
+body {
+    font-family: "DroidSansRegular","Helvetica Neue", Helvetica, Arial, sans-serif;
+    color: #777;
+}
+
+#main-container {
+    margin: 0 10% 0 10%;
+}
+
+.slides {
+    margin:0 auto;
+    float:none;
+    text-align:center;
+}
+
+.section-title {
+    margin: 40px 0 0 0;
+}
+
+.section-title h2{
+    margin: 0 0 10px 0;
+}
+
+.howworks h3 {
+    margin: 50px 0 0 0;
+}
+
+.no-bold {
+    font-family: "DroidSansRegular","Helvetica Neue", Helvetica, Arial, sans-serif;
+}
+
+h1,h2,h3,h4,h5{
+    font-family: "DroidSansBold","Helvetica Neue", Helvetica, Arial, sans-serif;
+}
+
+@font-face {
+    font-family: 'DroidSansRegular';
+    src: url('fonts/DroidSans-webfont.eot');
+    src: url('fonts/DroidSans-webfont.eot?#iefix') format('embedded-opentype'),
+    url('fonts/DroidSans-webfont.woff') format('woff'),
+    url('fonts/DroidSans-webfont.ttf') format('truetype'),
+    url('fonts/DroidSans-webfont.svg#DroidSansRegular') format('svg');
+    font-weight: normal;
+    font-style: normal;
+
+}
+
+@font-face {
+    font-family: 'DroidSansBold';
+    src: url('fonts/DroidSans-Bold-webfont.eot');
+    src: url('fonts/DroidSans-Bold-webfont.eot?#iefix') format('embedded-opentype'),
+    url('fonts/DroidSans-Bold-webfont.woff') format('woff'),
+    url('fonts/DroidSans-Bold-webfont.ttf') format('truetype'),
+    url('fonts/DroidSans-Bold-webfont.svg#DroidSansBold') format('svg');
+    font-weight: normal;
+    font-style: normal;
+
+}
+
+/* Large desktop */
+@media (min-width: 1200px) {
+}
+
+/* Portrait tablet to landscape and desktop */
+@media (min-width: 768px) and (max-width: 979px) {
+}
+
+/* Landscape phone to portrait tablet */
+@media (max-width: 767px) {
+    #main-container {
+        margin: 0;
+    }
+}
+
+/* Landscape phones and down */
+@media (max-width: 480px) {
+    #main-container {
+        margin: 0;
+    }
+}

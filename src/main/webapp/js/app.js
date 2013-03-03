@@ -5,7 +5,7 @@ function registerMember(memberData) {
     $('#success-legend').remove();
     disableForm();
     $.ajax({
-        url: 'go/members',
+        url: '/go/members',
         contentType: "application/json",
         dataType: "json",
         type: "POST",
