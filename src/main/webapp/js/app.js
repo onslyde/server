@@ -17,8 +17,13 @@ function registerMember(memberData) {
             $('#forminputs').remove();
 
             //mark success on the registration form
-            $('#formMsgs').append($('<span class="alert span6 alert-success">Success!!</span>' +
-              '<br style="clear:left"/><p id="success-legend">Your session ID is <strong>' + data.sessionId + '</strong><br/>You\'ll also get a confirmation email in case you forget it. (check spam if it doesn\'t show up).</p>'));
+            $('#signupmodal').toggleClass('success');
+            $('#signupmodal .modal-header').html('<h3>Success!!!</h3>');
+            $('#formMsgs').append($('<p id="success-legend"><br><span style="font-size: 32px;">Your session ID is: <strong class="alert alert-success" style="font-size: 32px;">' + data.sessionId + '</strong></span>' +
+              '<br style="clear:left"/><br/>' +
+              'Read the <a href="#getstarted" data-toggle="modal">Getting Started</a> section below for details on setting up.' +
+              '</p>'));
+            $('#signupmodal .modal-footer').html('<a href="#signupmodal" role="button" class="btn pull-right" data-toggle="modal">Continue</a>');
         },
         error: function(error) {
             if ((error.status == 409) || (error.status == 400)) {

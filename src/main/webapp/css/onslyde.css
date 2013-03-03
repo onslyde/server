@@ -22,7 +22,20 @@ body {
 }
 
 .howworks h3 {
-    margin: 50px 0 0 0;
+    margin: 20px 0 0 0;
+}
+
+.success {
+    color: #468847;
+    background-color: #dff0d8;
+    border-color: #d6e9c6;
+}
+
+#success-legend {
+ color: #000;
+}
+#signupmodal form{
+    margin:0;
 }
 
 .no-bold {
