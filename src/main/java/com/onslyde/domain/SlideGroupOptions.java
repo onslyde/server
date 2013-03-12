@@ -2,6 +2,8 @@ package com.onslyde.domain;
 
 // Generated Jun 15, 2012 8:41:06 AM by Hibernate Tools 3.4.0.CR1
 
+import org.codehaus.jackson.annotate.JsonIgnore;
+
 import java.util.HashSet;
 import java.util.Set;
 import javax.persistence.Column;
@@ -56,6 +58,7 @@ public class SlideGroupOptions implements java.io.Serializable {
 		this.id = id;
 	}
 
+    @JsonIgnore
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "slide_group_id", nullable = false)
 	public SlideGroup getSlideGroup() {
@@ -84,6 +87,7 @@ public class SlideGroupOptions implements java.io.Serializable {
 		this.value = value;
 	}
 
+    @JsonIgnore
 	@OneToMany(fetch = FetchType.LAZY, mappedBy = "slideGroupOptions")
 	public Set<SlideGroupVotes> getSlideGroupVoteses() {
 		return this.slideGroupVoteses;

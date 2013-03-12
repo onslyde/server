@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>onslyde</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="onslyde, audience engagement">
+    <meta name="author" content="Wesley Hales">
+    <link href="bootstrap/css/bootstrap.css" rel="stylesheet">
+    <style>
+        body {
+            padding-top: 60px; /* 60px to make the container go all the way to the bottom of the topbar */
+        }
+    </style>
+    <link href="bootstrap/css/bootstrap-responsive.css" rel="stylesheet">
+    <!--[if lt IE 9]>
+    <script type="text/javascript" src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+
+    <link href="css/onslyde.css" rel="stylesheet">
+</head>
+
+<body>
+
+<div id="main-container" class="container-fluid">
+    <header class="row-fluid">
+        <div class="span9"><h1 class="no-bold">onslyde</h1><h3 class="no-bold">realtime audience interaction</h3></div>
+        <div class="span3">
+            <a href="#signupmodal" role="button" class="btn btn-inverse pull-left" data-toggle="modal">create presentation</a>
+        </div>
+    </header>
+
+    <section class="main row-fluid">
+
+        <div class="span12">
+            <div ng-app="project">
+
+                <div ng-view></div>
+
+                <!-- CACHE FILE: list.html -->
+                <script type="text/ng-template" id="list.html">
+                    <input type="text" ng-model="endpointName" placeholder="Enter a usergrid endpoint here" ng-change="declareEndpoint()">
+                    <hr/>
+                    <table>
+                        <thead style="margin: 0 0 10px 0">
+                        <tr>
+                            <th><input type="text" ng-model="search" class="search-query" placeholder="Search"></th>
+                            <th></th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr ng-repeat="project in projects.slideGroups | filter:search | orderBy:'created'">
+                            <td ng-repeat="(k, v) in project">
+                                <a  href="#" target="_blank">{{k}}</a>
+
+                                <div ng-switch on="isDate(k)">
+                                    <div ng-switch-when="true">
+                                        <span>{{v | date:'M-dd-yyyy h:MM:ss'}}</span>
+                                    </div>
+                                    <!--http://jsfiddle.net/pkozlowski_opensource/bBtH3/2/-->
+                                    <div ng-switch-when="false">
+
+                                        <div ng-switch on="isDeep(v)">
+                                            <div ng-switch-when="true">
+                                                <div ng-repeat="(k2, v2) in v">
+                                                    <table>
+                                                        <tr>
+                                                            <td>{{k2}}</td>
+                                                            <td>
+                                                                <!--recursion duplicate - kill it-->
+                                                                <div ng-switch on="isDeep(v2)">
+                                                                    <div ng-switch-when="true">
+                                                                        <div ng-repeat="(k3, v3) in v2">
+                                                                            <table>
+                                                                                <tr>
+                                                                                    <td>{{k3}}</td>
+                                                                                    <td>{{v3}}</td>
+                                                                                </tr>
+                                                                            </table>
+                                                                        </div>
+                                                                    </div>
+                                                                    <div ng-switch-when="false">
+                                                                        <span>{{v2}}</span>
+                                                                    </div>
+                                                                </div>
+                                                                <!--end recursion dup-->
+
+                                                            </td>
+                                                        </tr>
+                                                    </table>
+                                                </div>
+                                            </div>
+                                            <div ng-switch-when="false">
+                                                <span>{{v}}</span>
+                                            </div>
+                                        </div>
+
+                                    </div>
+                                </div>
+                        </tr>
+                        </tbody>
+                    </table>
+                </script>
+
+            </div>
+        </div>
+
+    </section>
+
+    <footer>
+        <hr/>
+        <p class="pull-right">&copy; 2013 <a href="http://twitter.com/wesleyhales">Wesley Hales</a> and contributors</p>
+    </footer>
+
+</div><!--/.fluid-container-->
+<script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.0.4/angular.min.js"></script>
+<script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.0.4/angular-resource.min.js"></script>
+<script type="text/javascript">
+
+
+    angular.module('project', ['usergrid']).
+            config(function($routeProvider) {
+                $routeProvider.
+                        when('/', {controller:ListCtrl, templateUrl:'list.html'}).
+                        otherwise({redirectTo:'/'});
+            });
+
+    function ListCtrl($scope, Project) {
+        $scope.projects = refreshData();
+        var refreshInput;
+
+        $scope.declareEndpoint = function(e){
+            //simple debounce/throttle
+            if(!refreshInput){
+                refreshInput = setTimeout(function(){
+                    $scope.projects = refreshData();
+                    refreshInput = false;
+                },1000)
+            }
+
+        }
+
+        $scope.isDeep = function(item){
+            //can be better, just see if object for now
+//            console.log(Object.prototype.toString.call(item),item);
+            return (Object.prototype.toString.call(item) === "[object Array]" || Object.prototype.toString.call(item) === "[object Object]");
+        };
+
+        $scope.isDate = function(item){
+//            console.log(item)
+            return (item === "created");
+        };
+
+        var auth_token;
+        function refreshData(){
+
+            if(typeof(Storage)!=="undefined" && localStorage.getItem('token12')) {
+                auth_token = localStorage.getItem('token12');
+            }
+            return Project($scope.orgName,$scope.appName,$scope.endpointName).get({}, angular.noop,
+                    function(responseFail){
+//         console.log('responseSuccess----',responseFail.status,responseFail);
+                        if(responseFail.status === 401){
+                            //we reached the request limit, so use account login
+                            console.log('fail');
+
+                        }else{
+                            //login failed for some other reason, maybe stale token?
+                            localStorage.setItem('token12', undefined);
+                            if(responseFail.status !== 400){
+                                refreshData(); //try again
+                            }
+                        }
+
+                    }, function(responseSuccess) {
+
+                    });
+        }
+
+
+
+    }
+
+    angular.module('usergrid', ['ngResource']).
+    factory('Project', function($resource) {
+        return function(on,an,epn){
+            console.log('e: ', epn);
+            return $resource('/go/analytics/:endpointName',
+                    {
+                        endpointName:(epn || 103)
+                    },{
+                        getData: {method:'GET', isArray: false}
+                    });
+        }
+    });
+
+    var _gaq = _gaq || [];
+    _gaq.push(['_setAccount', 'UA-31854873-1']);
+    _gaq.push(['_setDomainName', 'onslyde.com']);
+    _gaq.push(['_trackPageview']);
+
+    (function() {
+        var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+        ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+        var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+    })();
+
+</script>
+</body>
+</html>

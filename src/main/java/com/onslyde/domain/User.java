@@ -28,7 +28,7 @@ public class User implements java.io.Serializable {
 	private String email;
 	private String password;
 	private Date created;
-	private Set<Session> sessions = new HashSet<Session>(0);
+//	private Set<Session> sessions = new HashSet<Session>(0);
 
 	public User() {
 	}
@@ -40,14 +40,6 @@ public class User implements java.io.Serializable {
 		this.created = created;
 	}
 
-	public User(String fullName, String email, String password, Date created,
-			Set<Session> sessions) {
-		this.fullName = fullName;
-		this.email = email;
-		this.password = password;
-		this.created = created;
-		this.sessions = sessions;
-	}
 
 	@Id
 	@GeneratedValue(strategy = IDENTITY)
@@ -97,13 +89,13 @@ public class User implements java.io.Serializable {
 		this.created = created;
 	}
 
-	@OneToMany(fetch = FetchType.LAZY, mappedBy = "user")
-	public Set<Session> getSessions() {
-		return this.sessions;
-	}
-
-	public void setSessions(Set<Session> sessions) {
-		this.sessions = sessions;
-	}
+//	@OneToMany(fetch = FetchType.EAGER, mappedBy = "user")
+//	public Set<Session> getSessions() {
+//		return this.sessions;
+//	}
+//
+//	public void setSessions(Set<Session> sessions) {
+//		this.sessions = sessions;
+//	}
 
 }

@@ -2,6 +2,8 @@ package com.onslyde.domain;
 
 // Generated Jun 15, 2012 8:41:06 AM by Hibernate Tools 3.4.0.CR1
 
+import org.codehaus.jackson.annotate.JsonIgnore;
+
 import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
@@ -106,6 +108,7 @@ public class Attendee implements java.io.Serializable {
 		this.created = created;
 	}
 
+    @JsonIgnore
 	@OneToMany(fetch = FetchType.LAZY, mappedBy = "attendee")
 	public Set<SlideGroupVotes> getSlideGroupVoteses() {
 		return this.slideGroupVoteses;

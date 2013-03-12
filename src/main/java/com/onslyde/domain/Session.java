@@ -69,7 +69,7 @@ public class Session implements java.io.Serializable {
 		this.id = id;
 	}
 
-	@ManyToOne(fetch = FetchType.LAZY)
+	@ManyToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name = "user_id", nullable = false)
 	public User getUser() {
 		return this.user;
@@ -127,7 +127,7 @@ public class Session implements java.io.Serializable {
 		this.created = created;
 	}
 
-	@OneToMany(fetch = FetchType.LAZY, mappedBy = "session")
+	@OneToMany(fetch = FetchType.EAGER, mappedBy = "session")
 	public Set<SlideGroup> getSlideGroups() {
 		return this.slideGroups;
 	}

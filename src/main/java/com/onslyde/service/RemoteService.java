@@ -2,7 +2,6 @@ package com.onslyde.service;
 
 import com.onslyde.data.MemberRepository;
 import com.onslyde.domain.Session;
-import com.onslyde.domain.Session_;
 import com.onslyde.model.SlidFast;
 import com.onslyde.util.ClientEvent;
 

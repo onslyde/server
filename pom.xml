@@ -127,6 +127,14 @@
             <scope>provided</scope>
         </dependency>
 
+        <dependency>
+            <groupId>org.jboss.resteasy</groupId>
+            <artifactId>resteasy-jackson-provider</artifactId>
+            <version>2.3.1.GA</version>
+            <scope>provided</scope>
+        </dependency>
+
+
         <!-- Import the JPA API, we use provided scope as the API is included in JBoss -->
         <dependency>
             <groupId>org.hibernate.javax.persistence</groupId>
