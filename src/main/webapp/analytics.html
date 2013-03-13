@@ -60,7 +60,7 @@
                     <ul>
                         <li><h2>Session ID: {{projects.id}}</h2></li>
                         <li><b>Name:</b> {{projects.sessionName}}</li>
-                        <li><b>Last Session Date:</b> {{projects.start | date:'M-dd-yyyy h:MM:ss'}}</li>
+                        <li><b>Last Session Date:</b> {{projects.start | date:'short'}}</li>
                         <li><b>Total Polls:</b> {{projects.slideGroups.length}}</li>
                     </ul>
 
@@ -69,7 +69,7 @@
                         <div ng-repeat="project in projects.slideGroups | filter:search | orderBy:'created'">
 
                             <ul>
-                                <li><h3>Poll Start:</b> {{project.created | date:'M-dd-yyyy h:MM:ss'}}</h3></li>
+                                <li><h3>Poll Start:</b> {{project.created | date:'short'}}</h3></li>
                                 <li><b>Poll Options:</b> <ul ng-repeat="option in project.slideGroupOptionses"><li>{{option.name}}</li></ul></li>
                                 <li><b>Total Attendee Votes:</b> {{project.slideGroupVoteses.length}}</li>
                                 <li><b>Total Positive Votes:</b> <span class="green">{{project.slideGroupVoteses | totalPositive}}</span></li>
@@ -86,7 +86,7 @@
                                         <tbody>
                                         <tr ng-repeat="vote in project.slideGroupVoteses | orderBy:'voteTime'">
                                             <td>{{vote.slideGroupOptions.name}}</td>
-                                            <td>{{vote.voteTime  | date:'M-dd-yyyy h:MM:ss'}}</td>
+                                            <td>{{vote.voteTime  | date:'short'}}</td>
                                             <td>{{vote.attendee.ip}}</td>
                                         </tr>
                                         </tbody>

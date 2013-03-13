@@ -1,5 +1,6 @@
 package com.onslyde.service;
 
+import com.onslyde.model.Mediator;
 import com.onslyde.model.SlidFast;
 import com.onslyde.util.ClientEvent;
 import org.eclipse.jetty.server.Request;
@@ -17,6 +18,7 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.logging.Logger;
 
 @Path("/attendees")
@@ -29,6 +31,9 @@ public class AttendeeService {
     private EntityManager em;
 
     @Inject
+    private Event<Mediator> mediatorEventSrc;
+
+    @Inject
     private Event<SlidFast> slidFastEventSrc;
 
     @Inject
@@ -36,6 +41,9 @@ public class AttendeeService {
 
     @Inject
     private SlidFast slidFast;
+
+    @Inject
+    private Mediator mediator;
 
     private String currentOptions;
 
@@ -46,16 +54,17 @@ public class AttendeeService {
         //@SuppressWarnings("unchecked")
         //executing this every second on poll... nice :)
         String data = "";
-        slidFastEventSrc.fire(slidFast);
+        mediatorEventSrc.fire(mediator);
         List optionList = new ArrayList();
-        if(slidFast.getActiveOptions().containsKey(sessionID)){
-        optionList.addAll(slidFast.getActiveOptions().get(sessionID));
+        if(mediator.getActiveOptions().containsKey(sessionID)){
+            optionList.addAll(mediator.getActiveOptions().get(sessionID));
         }
-//        System.out.println("!!!!!!!!!!!!!!!!poll " + sessionID);
+//        System.out.println("!!!!!!!!!!!!!!!!poll " + optionList.size() + " " + mediator.getActiveOptions().containsKey(sessionID));
         if(optionList.size() == 2){
 //            System.out.println("!!!!!!!!!!!!!!!!options " + optionList.get(0).toString() + optionList.get(1).toString());
             data = ClientEvent.createEvent("updateOptions", optionList, sessionID);
         }
+//        System.out.println("!!!!!!!!!!!!!!!!data " + data);
         return data;
     }
 
@@ -72,7 +81,7 @@ public class AttendeeService {
     @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
     @Produces(MediaType.APPLICATION_JSON)
     public Response optionVote(@FormParam("user") String user, @FormParam("sessionID") int sessionID, @FormParam("vote") String vote, @Context HttpServletRequest req) {
-        slidFastEventSrc.fire(slidFast);
+        mediatorEventSrc.fire(mediator);
 
         //req.getRemoteAddr();
         //get ip and verify attendee
@@ -83,10 +92,16 @@ public class AttendeeService {
                 ip = "777." + randomIPRange() + "." + randomIPRange() + "." + randomIPRange();
 //                System.out.println("**************random" + ip);
                 req.getSession().setAttribute("onslydeIP",ip);
-                int pollcount = slidFast.getPollcount();
-                pollcount++;
-                System.out.println("connect pollcount" + pollcount);
-                slidFast.setPollcount(pollcount);
+                Map pollcount = mediator.getPollCount();
+                if(!mediator.getPollCount().containsKey(sessionID)){
+                    mediator.getPollCount().put(sessionID,1);
+                }else{
+                    int pc = mediator.getPollCount().get(sessionID);
+                    pc++;
+                    mediator.getPollCount().put(sessionID,pc);
+                }
+//                System.out.println("connect pollcount" + pollcount);
+
             }else{
                 ip = req.getSession().getAttribute("onslydeIP").toString();
 //                System.out.println("**************else" + ip);
@@ -97,13 +112,13 @@ public class AttendeeService {
             slidFast.updateGroupVote(vote,ip);
 
             if(vote.equals("wtf") || vote.equals("nice")){
-                slidFast.setJsEvent(ClientEvent.clientProps(vote,sessionID));
+                mediator.setJsEvent(ClientEvent.clientProps(vote,sessionID));
             }else{
-                slidFast.setJsEvent(ClientEvent.clientVote(vote,sessionID));
+                mediator.setJsEvent(ClientEvent.clientVote(vote,sessionID));
             }
 
-            slidFastEventSrc.fire(slidFast);
-            slidFast.setJsEvent(null);
+            mediatorEventSrc.fire(mediator);
+            mediator.setJsEvent(null);
         }
         Response.ResponseBuilder builder = null;
 

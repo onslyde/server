@@ -3,6 +3,7 @@ var option2 = document.querySelector('#option2');
 var wtf = document.querySelector('#wtf');
 var nice = document.querySelector('#nice');
 var voteLabel = document.querySelector('#vote-label');
+var voted = false;
 //todo make this unique user for session management/voter registration
 //var ws = slidfast.ws.join('client:anonymous2');
 
@@ -19,7 +20,7 @@ option2.onclick = function(event) {
 };
 
 function sendVote(event,option){
-
+  voted = true;
   if(option){
     ws.send('vote:' + option);
   }
@@ -56,7 +57,7 @@ function disablePoll(){
 
 window.addEventListener('updateOptions', function(e) {
   //quick check to make sure we don't re-enable on polling clients
-  if(option1.value != e.option1){
+  if(!voted && e.option1 !== 'null' && e.option2 !== 'null'){
     option1.disabled = false;
     option2.disabled = false;
     wtf.disabled = false;

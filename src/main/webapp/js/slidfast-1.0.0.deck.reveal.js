@@ -1090,7 +1090,7 @@
       },
 
       _onerror : function(e) {
-        console.log(e);
+//        console.log(e);
       },
 
       _send:function (message) {
@@ -1136,6 +1136,13 @@
 
         window.addEventListener('updateCount', function(e) {
           slidfast.slides.updateDeck(e.wsCount,e.pollCount);
+        }, false);
+
+
+        window.addEventListener('unload', function(e) {
+          console.log('---alert');
+          this.connect('::disconnect::');
+          alert(e);
         }, false);
 
         this.checkOptions();
@@ -1291,7 +1298,7 @@
           currentVotes = {};
           totalVotes = 0;
 
-          this.sendMarkup()
+          this.sendMarkup();
 
         } else {
           //eop
@@ -1429,18 +1436,17 @@
       },
 
       updateRemotes : function() {
-        var activeOptionsString = 'activeOptions:' + activeOptions;
-        //console.log('===========' + activeOptions.length);
+        var activeOptionsString;
+
         if(activeOptions.length >= 1){
-          if(!ws){
-            //console.log('no conn');
-            slidfast.ws.connect(null,activeOptionsString);
-          }else{
-            //console.log('conn');
-            slidfast.ws._send(activeOptionsString);
-          }
+          activeOptionsString = 'activeOptions:' + activeOptions;
+        }else{
+          activeOptionsString = 'activeOptions:null,null';
         }
 
+        this.connect(activeOptionsString);
+        //clear options after sending
+        activeOptions = [];
       },
 
       optionVote : function(vote, activeSlide) {

@@ -26,13 +26,16 @@ import com.onslyde.service.MemberService;
 
 import javax.annotation.PostConstruct;
 import javax.ejb.Stateful;
+import javax.ejb.Stateless;
 import javax.enterprise.context.ApplicationScoped;
+import javax.enterprise.context.RequestScoped;
 import javax.enterprise.context.SessionScoped;
 import javax.enterprise.event.Event;
 import javax.inject.Inject;
 import javax.inject.Singleton;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import java.io.Serializable;
 import java.util.*;
 
 /**
@@ -40,20 +43,23 @@ import java.util.*;
  */
 
 //@Singleton
-@ApplicationScoped
-public class SlidFast {
+@Stateless
+public class SlidFast implements Serializable {
 
-    private Map<Integer,List<String>> activeOptions;
+//    private Map<Integer,List<String>> activeOptions;
     private String activeOption;
     private List<String> currentVotes;
-    private String jsEvent;
+//    private String jsEvent;
     private int presenterID;
-    private List<Integer> sessionID;
+//    private List<Integer> sessionID;
 
     private int wscount = 0;
     private int pollcount = 0;
 
     private Map<String,Attendee> ips = new HashMap<String, Attendee>();
+
+    @Inject
+    private Mediator mediator;
 
     @Inject
     private MemberService ms;
@@ -79,30 +85,28 @@ public class SlidFast {
     @Inject
     private Event<SlidFast> slidFastEventSrc;
 
-    @PostConstruct
-    public void initialize() {
-//        System.out.println("_____________postconstruct");
-        this.activeOption = "";
-        this.activeOptions = new HashMap<Integer, List<String>>();
-        this.currentVotes = new ArrayList<String>();
-    }
-
     private Session currentSession;
     private SlideGroup currentSlideGroup;
     private boolean sessionStarted = false;
 
+    @PostConstruct
+    public void initialize() {
+        System.out.println("_____________postconstruct slidfast");
+    }
+
+
     public boolean startSession(int sessionID){
 
         if(!sessionStarted){
-            System.out.println("session started!!!!!");
+            System.out.println("session started!!!!! sessionID:" + sessionID);
             currentSession = sessionHome.findById(sessionID);
             currentSession.setStart(new Date());
             sessionHome.merge(currentSession);
             //todo hack to sync objects across threads for now
 //            sessionStarted = true;
             setPresenterID(currentSession.getUser().getId());
-            if(!getSessionID().contains(currentSession.getId())){
-                getSessionID().add(currentSession.getId());
+            if(!mediator.getSessionID().contains(currentSession.getId())){
+                mediator.getSessionID().add(currentSession.getId());
             }
             slidFastEventSrc.fire(this);
             return true;
@@ -114,12 +118,18 @@ public class SlidFast {
 
     }
 
-    public void addGroupOptions(List<String> options){
+    public void addGroupOptions(List<String> options, int sessionID){
         if(options != null){
+            if(currentSession == null){
+                currentSession = sessionHome.findById(sessionID);
+            }
+
+//            System.out.println("----options compare : " + options.size() + " and " + mediator.getActiveOptions().get(currentSession.getId()) + " and " + currentSession.getId());
             String groupName = "";
             currentSlideGroup = new SlideGroup();
             currentSlideGroup.setSession(currentSession);
             currentSlideGroup.setGroupName(groupName);
+//            System.out.println("slide group created:" + new Date());
             currentSlideGroup.setCreated(new Date());
             //currentSlideGroup.set
             int sgid = sgHome.persist(currentSlideGroup);
@@ -146,7 +156,7 @@ public class SlidFast {
                 //if(sgOption != null){
                 sgHome.merge(currentSlideGroup);
                 //}
-                getActiveOptions().put(currentSession.getId(),options);
+                mediator.getActiveOptions().put(currentSession.getId(),options);
         }
         //sessionHome.persist(currentSession);
     }
@@ -180,6 +190,7 @@ public class SlidFast {
                         sgv.setAttendee(attendee);
                         sgv.setSlideGroup(currentSlideGroup);
                         sgv.setSlideGroupOptions(option);
+//                        System.out.println("set vote time:" + new Date());
                         sgv.setVoteTime(new Date());
                         //currentSlideGroup.getSlideGroupVoteses().add(sgv);
 //                        if(merge){
@@ -203,16 +214,7 @@ public class SlidFast {
     }
 
 
-    public Map<Integer, List<String>> getActiveOptions() {
-        if(activeOptions == null){
-            activeOptions = new HashMap<Integer, List<String>>();
-        }
-        return activeOptions;
-    }
 
-    public void setActiveOptions(Map<Integer, List<String>> activeOptions) {
-        this.activeOptions = activeOptions;
-    }
 
     public String getActiveOption() {
         return activeOption;
@@ -230,13 +232,13 @@ public class SlidFast {
         this.currentVotes = currentVotes;
     }
 
-    public String getJsEvent() {
-        return jsEvent;
-    }
-
-    public void setJsEvent(String jsEvent) {
-        this.jsEvent = jsEvent;
-    }
+//    public String getJsEvent() {
+//        return jsEvent;
+//    }
+//
+//    public void setJsEvent(String jsEvent) {
+//        this.jsEvent = jsEvent;
+//    }
 
     public int getWscount() {
         return wscount;
@@ -262,14 +264,5 @@ public class SlidFast {
         this.presenterID = presenterID;
     }
 
-    public List<Integer> getSessionID() {
-        if(sessionID == null){
-            sessionID = new ArrayList<Integer>();
-        }
-        return sessionID;
-    }
 
-    public void setSessionID(List<Integer> sessionID) {
-        this.sessionID = sessionID;
-    }
 }
