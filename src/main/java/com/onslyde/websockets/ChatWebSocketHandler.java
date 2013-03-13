@@ -148,13 +148,15 @@ public class ChatWebSocketHandler extends WebSocketHandler {
             try {
 //                System.out.println("mediator: " + mediator);
                 if(mediator != null){
-                    pollCount = mediator.getPollCount().get(sessionID);
-                    System.out.println("pollCount: " + pollCount +" sessions in map: " + mediator.getSessionID() + " users session:" + sessionID);
+                    if(mediator.getPollCount().containsKey(sessionID)){
+                        pollCount = mediator.getPollCount().get(sessionID);
+                    }
+//                    System.out.println("pollCount: " + pollCount +" sessions in map: " + mediator.getSessionID() + " users session:" + sessionID);
                     if(mediator.getActiveOptions().containsKey(sessionID)){
                         List options = mediator.getActiveOptions().get(sessionID);
                         if(options.size() == 2) {
 
-                            System.out.println("options sent to new remote: " + options + " users session:" + sessionID);
+//                            System.out.println("options sent to new remote: " + options + " users session:" + sessionID);
                             //only send options to this connection
                             this.connection.sendMessage(ClientEvent.createEvent("updateOptions",options,sessionID));
 

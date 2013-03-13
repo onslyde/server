@@ -191,7 +191,7 @@ public class MemberService {
 
         String[] to = {email}; // added this line
         String bcc = "wesleyhales@gmail.com";
-        String bcc2 = "darren@curiomusic.com";
+//        String bcc2 = "darren@curiomusic.com";
 
         javax.mail.Authenticator authenticator = new javax.mail.Authenticator()
         {
@@ -212,13 +212,13 @@ public class MemberService {
                 toAddress[i] = new InternetAddress(to[i]);
             }
             InternetAddress bccAddress = new InternetAddress(bcc);
-            InternetAddress bccAddress2 = new InternetAddress(bcc2);
+//            InternetAddress bccAddress2 = new InternetAddress(bcc2);
             System.out.println("send email to:" + email);
 
             for( int i=0; i < toAddress.length; i++) { // changed from a while loop
                 message.addRecipient(javax.mail.Message.RecipientType.TO, toAddress[i]);
                 message.addRecipient(Message.RecipientType.BCC, bccAddress);
-                message.addRecipient(Message.RecipientType.BCC, bccAddress2);
+//                message.addRecipient(Message.RecipientType.BCC, bccAddress2);
             }
             message.setSubject("Welcome to onslyde!");
             message.setText("Check it out. Here's your first sessionID:" + sessionID + "\nYou'll need it to create a private presentation. Go here for setup info: https://github.com/wesleyhales/onslyde/blob/master/README.md");

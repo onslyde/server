@@ -146,7 +146,7 @@ $.extend({
     }
 
     // create a new websocket or fallback
-    var ws = window.WebSocket ? new WebSocket(url + '?session=' + window.onslydeSessionID) : new FallbackSocket();
+    var ws = window.WebSocket ? new WebSocket(url + '?session=' + window.onslydeSessionID + '&attendeeIP=' + slidfast.ws.getip()) : new FallbackSocket();
     $(window).unload(function () { ws.close(); ws = null });
     return ws;
   }

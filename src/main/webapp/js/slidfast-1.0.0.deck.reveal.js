@@ -1049,7 +1049,7 @@
         ws.onopen = function() {
           isopen = true;
           //basic auth until we get something better
-//          console.log('sent onopen' + username);
+          console.log('sent initString ' + initString);
           slidfast.ws._send('user:'+username);
 
           if(initString){
@@ -1071,7 +1071,6 @@
           if(m.data.indexOf('sessionID":"' + onslyde.sessionID) > 0){
             try{
               //avoid use of eval...
-
               var event = (m.data);
               event = (new Function("return " + event))();
               event.onslydeEvent.fire();
@@ -1140,25 +1139,26 @@
 
 
         window.addEventListener('unload', function(e) {
-          console.log('---alert');
           this.connect('::disconnect::');
-          alert(e);
         }, false);
 
         this.checkOptions();
-        this.updateRemotes();
-//            slidfast.ui.slideTo(activeSlide);
 
         this.connect('::connect::');
+        setTimeout(function(){slidfast.slides.updateRemotes();},1000);
       },
 
       connect : function(initString) {
         //ws connect
 //        console.log('connect',initString);
-        if(!ws){
-          slidfast.ws.connect(null,initString,csessionID);
-        }else{
-          slidfast.ws._send(initString,csessionID);
+        try {
+          if (!ws) {
+            slidfast.ws.connect(null, initString, csessionID);
+          } else {
+            slidfast.ws._send(initString, csessionID);
+          }
+        } catch (e) {
+          console.log('error',e)
         }
       },
 
@@ -1229,7 +1229,7 @@
 
           if(activeSlide.getAttribute("data-option") === 'master' &&
             activeSlide.getAttribute("data-route") === null && totalVotes > 0) {
-            //console.log('decideroute');
+//            console.log('decideroute');
             this.decideRoute();
           }
 
@@ -1291,12 +1291,14 @@
 
           activeSlide = futureSlides.shift();
 
+          activeOptions = [];
           this.checkOptions();
           this.updateRemotes();
 
           //reset votes
           currentVotes = {};
           totalVotes = 0;
+
 
           this.sendMarkup();
 
@@ -1446,7 +1448,7 @@
 
         this.connect(activeOptionsString);
         //clear options after sending
-        activeOptions = [];
+//        activeOptions = [];
       },
 
       optionVote : function(vote, activeSlide) {
@@ -1462,7 +1464,6 @@
 
         }
         //}
-        ////console.log(vote + ' ' + currentVotes[vote]);
 
         for (var i = 0; i < activeOptions.length; i++) {
           if(currentVotes.hasOwnProperty(activeOptions[i]))

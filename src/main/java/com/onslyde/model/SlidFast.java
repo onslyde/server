@@ -120,43 +120,47 @@ public class SlidFast implements Serializable {
 
     public void addGroupOptions(List<String> options, int sessionID){
         if(options != null){
-            if(currentSession == null){
-                currentSession = sessionHome.findById(sessionID);
-            }
-
-//            System.out.println("----options compare : " + options.size() + " and " + mediator.getActiveOptions().get(currentSession.getId()) + " and " + currentSession.getId());
-            String groupName = "";
-            currentSlideGroup = new SlideGroup();
-            currentSlideGroup.setSession(currentSession);
-            currentSlideGroup.setGroupName(groupName);
-//            System.out.println("slide group created:" + new Date());
-            currentSlideGroup.setCreated(new Date());
-            //currentSlideGroup.set
-            int sgid = sgHome.persist(currentSlideGroup);
-
-            //SlideGroupOptions sgos = new SlideGroupOptions();
-
-            SlideGroupOptions sgOption = null;
-            List<String> alloptions = new ArrayList<String>();
-            alloptions.addAll(options);
-            alloptions.add("wtf");
-            alloptions.add("nice");
-                for(String option: alloptions){
-                    sgOption = new SlideGroupOptions();
-                    sgOption.setName(option);
-                    currentSlideGroup.getSlideGroupOptionses().add(sgOption);
-                    sgOption.setSlideGroup(sgHome.findById(sgid));
-                    //sgOption.setSlideGroupVoteses();
-                    sgoHome.persist(sgOption);
-                    //on the fly creation, need to set this up in the code
-                    groupName += option + ":";
+            //todo - this should be more unique as a presenter could actually use null as an option
+            //we don't want to persist non voting slides
+            if(!options.get(0).equals("null")){
+                if(currentSession == null){
+                    currentSession = sessionHome.findById(sessionID);
                 }
 
+    //            System.out.println("----options compare : " + options.size() + " and " + mediator.getActiveOptions().get(currentSession.getId()) + " and " + currentSession.getId());
+                String groupName = "";
+                currentSlideGroup = new SlideGroup();
+                currentSlideGroup.setSession(currentSession);
                 currentSlideGroup.setGroupName(groupName);
-                //if(sgOption != null){
-                sgHome.merge(currentSlideGroup);
-                //}
-                mediator.getActiveOptions().put(currentSession.getId(),options);
+    //            System.out.println("slide group created:" + new Date());
+                currentSlideGroup.setCreated(new Date());
+                //currentSlideGroup.set
+                int sgid = sgHome.persist(currentSlideGroup);
+
+                //SlideGroupOptions sgos = new SlideGroupOptions();
+
+                SlideGroupOptions sgOption = null;
+                List<String> alloptions = new ArrayList<String>();
+                alloptions.addAll(options);
+                alloptions.add("wtf");
+                alloptions.add("nice");
+                    for(String option: alloptions){
+                        sgOption = new SlideGroupOptions();
+                        sgOption.setName(option);
+                        currentSlideGroup.getSlideGroupOptionses().add(sgOption);
+                        sgOption.setSlideGroup(sgHome.findById(sgid));
+                        //sgOption.setSlideGroupVoteses();
+                        sgoHome.persist(sgOption);
+                        //on the fly creation, need to set this up in the code
+                        groupName += option + ":";
+                    }
+
+                    currentSlideGroup.setGroupName(groupName);
+                    //if(sgOption != null){
+                    sgHome.merge(currentSlideGroup);
+                    //}
+                    mediator.getActiveOptions().put(currentSession.getId(),options);
+                }
         }
         //sessionHome.persist(currentSession);
     }
