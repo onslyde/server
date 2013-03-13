@@ -11,6 +11,22 @@
         body {
             padding-top: 60px; /* 60px to make the container go all the way to the bottom of the topbar */
         }
+
+        ul {
+            list-style: none;
+        }
+
+        b {
+            font-family: "DroidSansBold","Helvetica Neue", Helvetica, Arial, sans-serif;
+        }
+
+        span.green {
+            color: rgb(46, 204, 46);
+        }
+
+        span.red {
+            color: red;
+        }
     </style>
     <link href="bootstrap/css/bootstrap-responsive.css" rel="stylesheet">
     <!--[if lt IE 9]>
@@ -26,7 +42,7 @@
     <header class="row-fluid">
         <div class="span9"><h1 class="no-bold">onslyde</h1><h3 class="no-bold">realtime audience interaction</h3></div>
         <div class="span3">
-            <a href="#signupmodal" role="button" class="btn btn-inverse pull-left" data-toggle="modal">create presentation</a>
+
         </div>
     </header>
 
@@ -39,67 +55,48 @@
 
                 <!-- CACHE FILE: list.html -->
                 <script type="text/ng-template" id="list.html">
-                    <input type="text" ng-model="endpointName" placeholder="Enter a usergrid endpoint here" ng-change="declareEndpoint()">
+                    <input type="text" ng-model="endpointName" placeholder="Enter a session ID here" ng-change="declareEndpoint()">
                     <hr/>
-                    <table>
-                        <thead style="margin: 0 0 10px 0">
-                        <tr>
-                            <th><input type="text" ng-model="search" class="search-query" placeholder="Search"></th>
-                            <th></th>
-                        </tr>
-                        </thead>
-                        <tbody>
-                        <tr ng-repeat="project in projects.slideGroups | filter:search | orderBy:'created'">
-                            <td ng-repeat="(k, v) in project">
-                                <a  href="#" target="_blank">{{k}}</a>
+                    <ul>
+                        <li><h2>Session ID: {{projects.id}}</h2></li>
+                        <li><b>Name:</b> {{projects.sessionName}}</li>
+                        <li><b>Last Session Date:</b> {{projects.start | date:'M-dd-yyyy h:MM:ss'}}</li>
+                        <li><b>Total Polls:</b> {{projects.slideGroups.length}}</li>
+                    </ul>
 
-                                <div ng-switch on="isDate(k)">
-                                    <div ng-switch-when="true">
-                                        <span>{{v | date:'M-dd-yyyy h:MM:ss'}}</span>
-                                    </div>
-                                    <!--http://jsfiddle.net/pkozlowski_opensource/bBtH3/2/-->
-                                    <div ng-switch-when="false">
+                        <hr/>
 
-                                        <div ng-switch on="isDeep(v)">
-                                            <div ng-switch-when="true">
-                                                <div ng-repeat="(k2, v2) in v">
-                                                    <table>
-                                                        <tr>
-                                                            <td>{{k2}}</td>
-                                                            <td>
-                                                                <!--recursion duplicate - kill it-->
-                                                                <div ng-switch on="isDeep(v2)">
-                                                                    <div ng-switch-when="true">
-                                                                        <div ng-repeat="(k3, v3) in v2">
-                                                                            <table>
-                                                                                <tr>
-                                                                                    <td>{{k3}}</td>
-                                                                                    <td>{{v3}}</td>
-                                                                                </tr>
-                                                                            </table>
-                                                                        </div>
-                                                                    </div>
-                                                                    <div ng-switch-when="false">
-                                                                        <span>{{v2}}</span>
-                                                                    </div>
-                                                                </div>
-                                                                <!--end recursion dup-->
+                        <div ng-repeat="project in projects.slideGroups | filter:search | orderBy:'created'">
 
-                                                            </td>
-                                                        </tr>
-                                                    </table>
-                                                </div>
-                                            </div>
-                                            <div ng-switch-when="false">
-                                                <span>{{v}}</span>
-                                            </div>
-                                        </div>
+                            <ul>
+                                <li><h3>Poll Start:</b> {{project.created | date:'M-dd-yyyy h:MM:ss'}}</h3></li>
+                                <li><b>Poll Options:</b> <ul ng-repeat="option in project.slideGroupOptionses"><li>{{option.name}}</li></ul></li>
+                                <li><b>Total Attendee Votes:</b> {{project.slideGroupVoteses.length}}</li>
+                                <li><b>Total Positive Votes:</b> <span class="green">{{project.slideGroupVoteses | totalPositive}}</span></li>
+                                <li><b>Total Negative Votes:</b> <span class="red">{{project.slideGroupVoteses | totalNegative}}</span></li>
+                                <li><b>Attendee Votes:</b>
+                                    <table class="table table-striped table-condensed table-hover">
+                                        <thead>
+                                        <tr>
+                                            <th class="id">Vote</th>
+                                            <th class="name">Vote Time</th>
+                                            <th class="description">Attendee ID</th>
+                                        </tr>
+                                        </thead>
+                                        <tbody>
+                                        <tr ng-repeat="vote in project.slideGroupVoteses | orderBy:'voteTime'">
+                                            <td>{{vote.slideGroupOptions.name}}</td>
+                                            <td>{{vote.voteTime  | date:'M-dd-yyyy h:MM:ss'}}</td>
+                                            <td>{{vote.attendee.ip}}</td>
+                                        </tr>
+                                        </tbody>
+                                    </table>
+                                </li>
+                            </ul>
 
-                                    </div>
-                                </div>
-                        </tr>
-                        </tbody>
-                    </table>
+
+                        </div>
+
                 </script>
 
             </div>
@@ -113,17 +110,56 @@
     </footer>
 
 </div><!--/.fluid-container-->
-<script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.0.4/angular.min.js"></script>
+<script src="http://code.jquery.com/jquery-1.8.3.min.js"></script>
+<script src="http://code.angularjs.org/1.1.0/angular.min.js"></script>
 <script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.0.4/angular-resource.min.js"></script>
 <script type="text/javascript">
 
 
-    angular.module('project', ['usergrid']).
-            config(function($routeProvider) {
-                $routeProvider.
-                        when('/', {controller:ListCtrl, templateUrl:'list.html'}).
-                        otherwise({redirectTo:'/'});
-            });
+    angular.module('myfilters2',[]).filter('totalNegative', function(){
+
+        return function(items) {
+            var total = 0, i = 0;
+
+            for (i = 0; i < items.length; i++){
+                if(items[i].slideGroupOptions.name === 'wtf'){
+                    total += 1;
+                }
+            }
+            return total;
+        }
+    });
+
+    angular.module('myfilters',['myfilters2']).filter('totalPositive', function(){
+
+        return function(items) {
+            var total = 0, i = 0;
+            for (i = 0; i < items.length; i++){
+                if(items[i].slideGroupOptions.name === 'nice'){
+                    total += 1;
+                }
+            }
+            return total;
+        }
+    });
+
+    angular.module('myfilters3',['myfilters']).filter('ngGridFilter', function(){
+        console.log('filter');
+
+        return function(items) {
+//            $scope.myData = items;
+            return {data:items};
+        }
+    });
+
+    angular.module('project', ['usergrid','myfilters3']).
+    config(function($routeProvider) {
+        $routeProvider.
+                when('/', {controller:ListCtrl, templateUrl:'list.html'}).
+                otherwise({redirectTo:'/'});
+    });
+
+
 
     function ListCtrl($scope, Project) {
         $scope.projects = refreshData();
@@ -151,12 +187,10 @@
             return (item === "created");
         };
 
+
         var auth_token;
         function refreshData(){
 
-            if(typeof(Storage)!=="undefined" && localStorage.getItem('token12')) {
-                auth_token = localStorage.getItem('token12');
-            }
             return Project($scope.orgName,$scope.appName,$scope.endpointName).get({}, angular.noop,
                     function(responseFail){
 //         console.log('responseSuccess----',responseFail.status,responseFail);
@@ -166,10 +200,7 @@
 
                         }else{
                             //login failed for some other reason, maybe stale token?
-                            localStorage.setItem('token12', undefined);
-                            if(responseFail.status !== 400){
-                                refreshData(); //try again
-                            }
+
                         }
 
                     }, function(responseSuccess) {
@@ -181,13 +212,26 @@
 
     }
 
+
+//    angular.filter("total", function(field) {
+//        return function(items) {
+//            var total = 0, i = 0;
+//            for (i = 0; i < items.length; i++) total += items[i][field];
+//            return total;
+//        }
+//    });
+
+
+
+
+
     angular.module('usergrid', ['ngResource']).
     factory('Project', function($resource) {
         return function(on,an,epn){
             console.log('e: ', epn);
             return $resource('/go/analytics/:endpointName',
                     {
-                        endpointName:(epn || 103)
+                        endpointName:(epn || '')
                     },{
                         getData: {method:'GET', isArray: false}
                     });
