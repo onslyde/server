@@ -57,7 +57,8 @@ public class AttendeeService {
         mediatorEventSrc.fire(mediator);
         List optionList = new ArrayList();
         if(mediator.getActiveOptions().containsKey(sessionID)){
-            optionList.addAll(mediator.getActiveOptions().get(sessionID));
+            Mediator.SessionTracker st = mediator.getActiveOptions().get(sessionID);
+            optionList.addAll(st.getActiveOptions());
         }
 //        System.out.println("!!!!!!!!!!!!!!!!poll " + optionList.size() + " " + mediator.getActiveOptions().containsKey(sessionID));
         if(optionList.size() == 2){
@@ -109,7 +110,7 @@ public class AttendeeService {
 
             //System.out.println("**************slidFast" + ip);
 
-            slidFast.updateGroupVote(vote,ip);
+            slidFast.updateGroupVote(vote,ip,sessionID);
 
             if(vote.equals("wtf") || vote.equals("nice")){
                 mediator.setJsEvent(ClientEvent.clientProps(vote,sessionID));

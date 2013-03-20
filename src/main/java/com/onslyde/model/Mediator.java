@@ -11,27 +11,51 @@ import java.util.Map;
 public class Mediator {
 
     //active options use the sessionID as the key and store currently activated remote options
-    private Map<Integer,List<String>> activeOptions;
+    private static Map<Integer,SessionTracker> activeOptions;
     private String jsEvent;
     private List<Integer> sessionID;
     private Map<Integer,Integer> pollCount;
 
+    public static class SessionTracker {
+
+        public SessionTracker(List<String> activeOptions, int activeSlideGroupID) {
+            this.activeOptions = activeOptions;
+            this.activeSlideGroupID = activeSlideGroupID;
+        }
+
+        private List<String> activeOptions;
+        private int activeSlideGroupID;
+
+        public int getActiveSlideGroupID() {
+            return activeSlideGroupID;
+        }
+
+        public void setActiveSlideGroupID(int activeSlideGroupID) {
+            this.activeSlideGroupID = activeSlideGroupID;
+        }
+
+        public List<String> getActiveOptions() {
+            return activeOptions;
+        }
+
+        public void setActiveOptions(List<String> activeOptions) {
+            this.activeOptions = activeOptions;
+        }
+
+    }
 
     @PostConstruct
     public void initialize() {
         System.out.println("_____________postconstruct mediator");
-        this.activeOptions = new HashMap<Integer, List<String>>();
+        this.activeOptions = new HashMap<Integer, SessionTracker>();
     }
 
-    public Map<Integer, List<String>> getActiveOptions() {
-        if(activeOptions == null){
-            activeOptions = new HashMap<Integer, List<String>>();
-        }
+    public static synchronized Map<Integer, SessionTracker> getActiveOptions() {
         return activeOptions;
     }
 
-    public void setActiveOptions(Map<Integer, List<String>> activeOptions) {
-        this.activeOptions = activeOptions;
+    public static synchronized void setActiveOptions(Map<Integer, SessionTracker> activeOptions) {
+        Mediator.activeOptions = activeOptions;
     }
 
     public String getJsEvent() {

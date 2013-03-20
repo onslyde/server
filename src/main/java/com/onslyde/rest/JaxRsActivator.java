@@ -4,6 +4,12 @@
 */
 package com.onslyde.rest;
 
+import com.onslyde.model.Mediator;
+import com.onslyde.model.SlidFast;
+
+import javax.annotation.PostConstruct;
+import javax.enterprise.event.Event;
+import javax.inject.Inject;
 import javax.ws.rs.ApplicationPath;
 import javax.ws.rs.core.Application;
 
@@ -19,4 +25,23 @@ import javax.ws.rs.core.Application;
 @ApplicationPath("/go")
 public class JaxRsActivator extends Application {
    /* class body intentionally left blank */
+
+    @Inject
+    private SlidFast slidFast;
+
+    @Inject
+    private Event<SlidFast> slidFastEventSrc;
+
+    @Inject
+    private Mediator mediator;
+
+    @Inject Event<Mediator> mediatorEventSrc;
+
+   @PostConstruct
+   public void initialize() {
+       slidFastEventSrc.fire(slidFast);
+       mediatorEventSrc.fire(mediator);
+
+       System.out.println("_____________postconstruct slidfast and mediator in rest");
+   }
 }

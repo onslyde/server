@@ -1138,9 +1138,10 @@
         }, false);
 
 
-        window.addEventListener('unload', function(e) {
-          this.connect('::disconnect::');
-        }, false);
+//        window.addEventListener('unload', function(e) {
+//          this.connect('::disconnect::');
+//        }, false);
+
 
         this.checkOptions();
 

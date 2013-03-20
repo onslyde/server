@@ -58,27 +58,29 @@ function disablePoll(){
 
 window.addEventListener('updateOptions', function(e) {
   //quick check to make sure we don't re-enable on polling clients and disabling on null options
-  if(e.option1 !== 'null' && e.option2 !== 'null'){
-    if((option1.value != e.option1 && option2.value != e.option2)){
-      option1.disabled = false;
-      option2.disabled = false;
-      wtf.disabled = false;
-      nice.disabled = false;
-      option1.value = e.option1;
-      option2.value = e.option2;
-      wtf.value = 'Thumbs Down!';
-      nice.value = 'Nice!';
-      //voteLabel.style.opacity = 1;
-      option1.style.opacity = 1;
-      option2.style.opacity = 1;
-      wtf.style.opacity = 1;
-      nice.style.opacity = 1;
-      voteLabel.innerHTML = 'Vote!';
-      voted = false;
+    if(e.option1 !== undefined && e.option1 !== 'null' && e.option2 !== 'null'){
+      if((option1.value != e.option1 && option2.value != e.option2)){
+        option1.disabled = false;
+        option2.disabled = false;
+        wtf.disabled = false;
+        nice.disabled = false;
+        option1.value = e.option1;
+        option2.value = e.option2;
+        wtf.value = 'Thumbs Down!';
+        nice.value = 'Nice!';
+        //voteLabel.style.opacity = 1;
+        option1.style.opacity = 1;
+        option2.style.opacity = 1;
+        wtf.style.opacity = 1;
+        nice.style.opacity = 1;
+        voteLabel.innerHTML = 'Vote!';
+        voted = false;
+      }
+    }else{
+      disablePoll();
     }
-  }else{
-    disablePoll();
-  }
+
+
 }, false);
 
 window.addEventListener('remoteMarkup', function(e) {

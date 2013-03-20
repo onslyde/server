@@ -85,8 +85,8 @@ public class SlidFast implements Serializable {
     @Inject
     private Event<SlidFast> slidFastEventSrc;
 
-    private Session currentSession;
-    private SlideGroup currentSlideGroup;
+//    private Session currentSession;
+//    private SlideGroup currentSlideGroup;
     private boolean sessionStarted = false;
 
     @PostConstruct
@@ -96,9 +96,10 @@ public class SlidFast implements Serializable {
 
 
     public boolean startSession(int sessionID){
-
+        Session currentSession;
         if(!sessionStarted){
             System.out.println("session started!!!!! sessionID:" + sessionID);
+            //todo - catch session not found
             currentSession = sessionHome.findById(sessionID);
             currentSession.setStart(new Date());
             sessionHome.merge(currentSession);
@@ -108,6 +109,14 @@ public class SlidFast implements Serializable {
             if(!mediator.getSessionID().contains(currentSession.getId())){
                 mediator.getSessionID().add(currentSession.getId());
             }
+//            }else{
+//                //clear out any existing session tracker
+//                List<String> options = new ArrayList<String>();
+//                options.add("null");
+//                options.add("null");
+//                mediator.getActiveOptions().put(currentSession.getId(), new Mediator.SessionTracker(options,));
+//
+//            }
             slidFastEventSrc.fire(this);
             return true;
         }else{
@@ -119,6 +128,10 @@ public class SlidFast implements Serializable {
     }
 
     public void addGroupOptions(List<String> options, int sessionID){
+        Session currentSession;
+        SlideGroup currentSlideGroup;
+        currentSession = sessionHome.findById(sessionID);
+        int sgid = 0;
         if(options != null){
             //todo - this should be more unique as a presenter could actually use null as an option
             //we don't want to persist non voting slides
@@ -135,7 +148,7 @@ public class SlidFast implements Serializable {
     //            System.out.println("slide group created:" + new Date());
                 currentSlideGroup.setCreated(new Date());
                 //currentSlideGroup.set
-                int sgid = sgHome.persist(currentSlideGroup);
+                sgid = sgHome.persist(currentSlideGroup);
 
                 //SlideGroupOptions sgos = new SlideGroupOptions();
 
@@ -159,14 +172,24 @@ public class SlidFast implements Serializable {
                     //if(sgOption != null){
                     sgHome.merge(currentSlideGroup);
                     //}
-                    mediator.getActiveOptions().put(currentSession.getId(),options);
+
+
                 }
+            if(mediator.getActiveOptions().containsKey(currentSession.getId())){
+                Mediator.SessionTracker st = mediator.getActiveOptions().get(currentSession.getId());
+                st.setActiveOptions(options);
+                st.setActiveSlideGroupID(sgid);
+            }else{
+                mediator.getActiveOptions().put(currentSession.getId(),new Mediator.SessionTracker(options,sgid));
+            }
         }
         //sessionHome.persist(currentSession);
     }
 
-    public void updateGroupVote(String vote, String attendeeIP){
-
+    public void updateGroupVote(String vote, String attendeeIP, int sessionID){
+        Session currentSession;
+        currentSession = sessionHome.findById(sessionID);
+        SlideGroup currentSlideGroup = null;
         if(vote != null && !vote.isEmpty()){
             SlideGroupVotes sgv = new SlideGroupVotes();
             Attendee attendee;
@@ -187,6 +210,17 @@ public class SlidFast implements Serializable {
                 merge = true;
             }
 //            System.out.println("'attendee.getId()''''''''''''''''" + attendee.getId());
+
+            //get the currentSlideGroupID from the sessionTracker
+            try {
+                if(mediator.getActiveOptions().containsKey(currentSession.getId())){
+                    Mediator.SessionTracker st = mediator.getActiveOptions().get(currentSession.getId());
+                    currentSlideGroup = sgHome.findById(st.getActiveSlideGroupID());
+                }
+            } catch (Exception e) {
+                e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
+            }
+
             if(currentSlideGroup != null) {
                 for(SlideGroupOptions option : currentSlideGroup.getSlideGroupOptionses()){
                    if(option != null){
