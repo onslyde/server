@@ -38,6 +38,7 @@ public class ChatWebSocketHandler extends WebSocketHandler {
     private static Mediator mediator;
 
     private Map<Integer,List<ChatWebSocket>> sessions;
+    private Map<Integer,ChatWebSocket> psessions;
 
     private Map<Integer,List<ChatWebSocket>> getSessions() {
         if(sessions == null){
@@ -65,6 +66,7 @@ public class ChatWebSocketHandler extends WebSocketHandler {
         }else{
             attendeeIP = "777" + "." + sessionID + "." + randomIPRange() + "." + randomIPRange();
         }
+        //todo - define a presenter websocket so we know when to fanout
 //        String attendeeIP = request.getRemoteAddr();
         ChatWebSocket cws = new ChatWebSocket(attendeeIP,sessionID);
 
@@ -151,7 +153,7 @@ public class ChatWebSocketHandler extends WebSocketHandler {
                     if(mediator.getPollCount().containsKey(sessionID)){
                         pollCount = mediator.getPollCount().get(sessionID);
                     }
-                    System.out.println("_____sessions in map: " + mediator.getSessionID() + " users session:" + sessionID);
+                    System.out.println("_____sessions in map: " + mediator.getSessionID() + " users session: " + sessionID + " size for session: " + sessions.get(sessionID).size());
                     if(mediator.getActiveOptions().containsKey(sessionID)){
                         Mediator.SessionTracker st = mediator.getActiveOptions().get(sessionID);
 
@@ -236,6 +238,8 @@ public class ChatWebSocketHandler extends WebSocketHandler {
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
+                sendToPresenter(data,this.connection,sessionID);
+
             }else if (data.equals("vote:nice")){
                 data = ("{\"onslydeEvent\":{\"sessionID\":\"" + sessionID + "\"," +
                         "\"fire\":function(){" +
@@ -248,6 +252,8 @@ public class ChatWebSocketHandler extends WebSocketHandler {
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
+                sendToPresenter(data,this.connection,sessionID);
+
             }else if (data.contains(ACTIVE_OPTIONS)){
                 String options = data.substring(ACTIVE_OPTIONS.length(), data.length());
                 List<String> optionList = Arrays.asList(options.split("\\s*,\\s*"));
@@ -263,6 +269,7 @@ public class ChatWebSocketHandler extends WebSocketHandler {
                 }
 
                 data = ClientEvent.createEvent("updateOptions", optionList,sessionID);
+                sendToAll(data, this.connection, sessionID);
 
             }else if (data.contains(VOTE)){
 
@@ -275,10 +282,12 @@ public class ChatWebSocketHandler extends WebSocketHandler {
                 }
 
                 data = ClientEvent.clientVote(vote,sessionID);
+                sendToPresenter(data, this.connection, sessionID);
 
             }else if (data.contains(REMOTE_MARKUP)){
 
                 data = ClientEvent.remoteMarkup(data,sessionID);
+                sendToAll(data,this.connection,sessionID);
 //                //System.out.println("-----------" + data);
             }else if (data.contains("::connect::")){
                 try {
@@ -290,6 +299,8 @@ public class ChatWebSocketHandler extends WebSocketHandler {
 //                    }
                     getSlidFast().startSession(sessionID);
                     getSlidFast().setPollcount(0);
+                    getPsessions().put(sessionID,this);
+
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
@@ -315,7 +326,7 @@ public class ChatWebSocketHandler extends WebSocketHandler {
 
 //            //System.out.println("-----------" + data);
             //fan out
-            sendToAll(data,this.connection,sessionID);
+
 //            }
 
         }
@@ -326,6 +337,15 @@ public class ChatWebSocketHandler extends WebSocketHandler {
             if(getSessions().containsKey(sessionID)){
                 System.out.println("-remove attendee socket----------" + sessionID);
                 sessions.get(sessionID).remove(this);
+                if(sessions.get(sessionID).size() == 0){
+                    System.out.println("-remove session ID from memory----------" + sessionID);
+                    sessions.remove(sessionID);
+                    Iterator<Integer> i = mediator.getSessionID().iterator();
+                    while (i.hasNext()) {
+                        Integer s = i.next();
+                        i.remove();
+                    }
+                }
             }
             getWebsockets().remove(this);
         }
@@ -339,6 +359,19 @@ public class ChatWebSocketHandler extends WebSocketHandler {
             for (ChatWebSocket webSocket : channelSessions) {
                     webSocket.connection.sendMessage(data);
             }
+        } catch (IOException x) {
+            // Error was detected, close the ChatWebSocket client side
+            connection.disconnect();
+        }
+    }
+
+    private void sendToPresenter(String data, WebSocket.Connection connection,int sessionID){
+        try {
+
+            if(psessions.containsKey(sessionID)){
+                psessions.get(sessionID).connection.sendMessage(data);
+            }
+
         } catch (IOException x) {
             // Error was detected, close the ChatWebSocket client side
             connection.disconnect();
@@ -372,4 +405,14 @@ public class ChatWebSocketHandler extends WebSocketHandler {
         slidFast = slidFast2;
     }
 
+    public Map<Integer, ChatWebSocket> getPsessions() {
+        if(psessions == null){
+            psessions = new HashMap<Integer, ChatWebSocket>();
+        }
+        return psessions;
+    }
+
+    public void setPsessions(Map<Integer, ChatWebSocket> psessions) {
+        this.psessions = psessions;
+    }
 }

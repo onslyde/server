@@ -4,7 +4,10 @@ import org.eclipse.jetty.websocket.WebSocket;
 import org.eclipse.jetty.websocket.WebSocketClient;
 import org.eclipse.jetty.websocket.WebSocketClientFactory;
 
+import java.io.IOException;
 import java.net.URI;
+import java.util.Timer;
+import java.util.TimerTask;
 import java.util.concurrent.TimeUnit;
 
 
@@ -25,13 +28,13 @@ public class RemoteLoadClient {
 
         final long startTime = System.currentTimeMillis();
         final long endTime;
-    for (int i =33;i<43;i++){
+    for (int i =1;i<500;i++){
           try {
 
 
 
           final int marker = i;
-          WebSocket.Connection connection = client.open(new URI("ws://192.168.1.2:8081?session=1" + i), new WebSocket.OnTextMessage()
+          final WebSocket.Connection connection = client.open(new URI("ws://192.168.1.2:8081?session=139"), new WebSocket.OnTextMessage()
            {
              public void onOpen(Connection connection)
              {
@@ -51,12 +54,23 @@ public class RemoteLoadClient {
                // handle incoming message
              }
            }).get(5, TimeUnit.SECONDS);
-              for (int j =0;j<50;j++){
+//              for (int j =0;j<1;j++){
+//                     Timer timer = new Timer();
+//                  timer.schedule(new TimerTask() {
+//                      public void run()  {
+//                          // do stuff
+//                          //System.out.println("TimerTask running poll1: " + incomingMsgs);
+                          try {
+                              connection.sendMessage("vote:test1");
+                          } catch (IOException e) {
+                              e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
+                          }
+//
+//                      }
+//                  }, 2000, 120000);
 
-                  connection.sendMessage("vote:nice");
-                  connection.sendMessage("vote:wtf");
 
-              }
+//              }
 
 
 

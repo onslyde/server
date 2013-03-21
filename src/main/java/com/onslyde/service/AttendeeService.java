@@ -60,12 +60,10 @@ public class AttendeeService {
             Mediator.SessionTracker st = mediator.getActiveOptions().get(sessionID);
             optionList.addAll(st.getActiveOptions());
         }
-//        System.out.println("!!!!!!!!!!!!!!!!poll " + optionList.size() + " " + mediator.getActiveOptions().containsKey(sessionID));
+
         if(optionList.size() == 2){
-//            System.out.println("!!!!!!!!!!!!!!!!options " + optionList.get(0).toString() + optionList.get(1).toString());
             data = ClientEvent.createEvent("updateOptions", optionList, sessionID);
         }
-//        System.out.println("!!!!!!!!!!!!!!!!data " + data);
         return data;
     }
 
