@@ -134,7 +134,7 @@ public class SlidFast implements Serializable {
         int sgid = 0;
         if(options != null){
             //todo - this should be more unique as a presenter could actually use null as an option
-            //we don't want to persist non voting slides
+            //we don't want to persist non voting slides as group options
             if(!options.get(0).equals("null")){
                 if(currentSession == null){
                     currentSession = sessionHome.findById(sessionID);
@@ -184,6 +184,10 @@ public class SlidFast implements Serializable {
             }
         }
         //sessionHome.persist(currentSession);
+    }
+
+    public void updateSlideVote(){
+
     }
 
     public void updateGroupVote(String vote, String attendeeIP, int sessionID){

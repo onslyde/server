@@ -1438,13 +1438,13 @@
         activeOptions = [];
       },
 
-      updateRemotes : function() {
+      updateRemotes : function(slideIndex) {
         var activeOptionsString;
 
         if(activeOptions.length >= 1){
           activeOptionsString = 'activeOptions:' + activeOptions;
         }else{
-          activeOptionsString = 'activeOptions:null,null';
+          activeOptionsString = 'activeOptions:null,null,' + slideIndex;
         }
 
         this.connect(activeOptionsString);
