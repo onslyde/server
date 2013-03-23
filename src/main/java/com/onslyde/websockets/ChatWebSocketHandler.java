@@ -257,7 +257,7 @@ public class ChatWebSocketHandler extends WebSocketHandler {
             }else if (data.contains(ACTIVE_OPTIONS)){
                 String options = data.substring(ACTIVE_OPTIONS.length(), data.length());
                 List<String> optionList = Arrays.asList(options.split("\\s*,\\s*"));
-                System.out.println("=======optionList.size()=" + optionList.size() + " " + optionList.get(2));
+//                System.out.println("=======optionList.size()=" + optionList.size() + " " + optionList.get(2));
                 if(optionList.size() == 3){
                     try {
                         getSlidFast().addGroupOptions(optionList,sessionID);
