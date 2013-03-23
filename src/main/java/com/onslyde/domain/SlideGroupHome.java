@@ -11,6 +11,7 @@ import javax.inject.Inject;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Root;
+import java.util.List;
 import java.util.logging.Logger;
 
 /**
@@ -75,7 +76,7 @@ public class SlideGroupHome {
         }
     }
 
-    public SlideGroup findLatestBySessionId(Integer id) {
+    public void removeBySessionId(Session id) {
         log.fine("getting SlideGroup instance with session id: " + id);
         CriteriaBuilder cb = entityManager.getCriteriaBuilder();
         CriteriaQuery<SlideGroup> criteria = cb.createQuery(SlideGroup.class);
@@ -84,9 +85,15 @@ public class SlideGroupHome {
         // Swap criteria statements if you would like to try out type-safe criteria queries, a new
         // feature in JPA 2.0
         // criteria.select(member).orderBy(cb.asc(member.get(Member_.name)));
+
         criteria.select(slideGroup).
-                where(cb.equal(slideGroup.get("session_id"), id));
-        return entityManager.createQuery(criteria).getSingleResult();
+                where(cb.equal(slideGroup.get("session"), id));
+        List<SlideGroup> sgList = entityManager.createQuery(criteria).getResultList();
+
+        for(SlideGroup sg : sgList){
+            entityManager.remove(sg);
+        }
+
 
 //        try {
 //            SlideGroup instance = entityManager.find(SlideGroup.class, id);

@@ -110,6 +110,7 @@ public class SlidFast implements Serializable {
             System.out.println("session started!!!!! sessionID:" + sessionID);
             //todo - catch session not found
             currentSession = sessionHome.findById(sessionID);
+
             currentSession.setStart(new Date());
             sessionHome.merge(currentSession);
             //todo hack to sync objects across threads for now
@@ -144,12 +145,6 @@ public class SlidFast implements Serializable {
         int sgid = 0;
         int sid = 0;
         if(options != null){
-            //todo - this should be more unique as a presenter could actually use null as an option
-            //we don't want to persist non voting slides as group options
-//            if(!options.get(0).equals("null")){
-//                if(currentSession == null){
-//                    currentSession = sessionHome.findById(sessionID);
-//                }
 
     //            System.out.println("----options compare : " + options.size() + " and " + mediator.getActiveOptions().get(currentSession.getId()) + " and " + currentSession.getId());
                 String groupName = "";
@@ -224,10 +219,6 @@ public class SlidFast implements Serializable {
             }
 //        }
         //sessionHome.persist(currentSession);
-    }
-
-    public void updateSlideVote(){
-
     }
 
     public void updateGroupVote(String vote, String attendeeIP, int sessionID){

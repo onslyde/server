@@ -2,6 +2,8 @@ package com.onslyde.domain;
 
 // Generated Jun 15, 2012 8:41:06 AM by Hibernate Tools 3.4.0.CR1
 
+import org.codehaus.jackson.annotate.JsonIgnore;
+
 import javax.persistence.*;
 
 import static javax.persistence.GenerationType.IDENTITY;
@@ -54,6 +56,7 @@ public class Slide implements java.io.Serializable {
 		this.id = id;
 	}
 
+    @JsonIgnore
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "slide_group_id", nullable = false)
 	public SlideGroup getSlideGroup() {
