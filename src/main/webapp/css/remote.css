@@ -232,3 +232,23 @@ nav.primary > ul li a {
 #from-slide img {
     width: 100%;
 }
+
+#roulette {
+    background-color: red;
+    position: absolute;
+    top:0;
+    bottom:0;
+    right:0;
+    left:0;
+    vertical-align: middle;
+    text-align: center;
+    display: none;
+    z-index:10;
+}
+
+#roulette p {
+    margin: 40% 0 0 0;
+    font-size: 4em;
+    font-weight: bold;
+    line-height: 1em;
+}

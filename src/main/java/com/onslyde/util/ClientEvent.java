@@ -83,4 +83,15 @@ public class ClientEvent {
                 "}}}");
     }
 
+    public static String roulette(int sessionID, boolean winner){
+        return ("{\"onslydeEvent\":{\"sessionID\":\"" + sessionID + "\"," +
+                "\"fire\":function(){" +
+                "window.eventObjh = document.createEvent('Event');" +
+                "eventObjh.initEvent(\'roulette\', true, true);" +
+                "eventObjh.roulette = true;\n" +
+                "eventObjh.winner = " + winner + ";\n" +
+                "document.dispatchEvent(eventObjh);" +
+                "}}}");
+    }
+
 }

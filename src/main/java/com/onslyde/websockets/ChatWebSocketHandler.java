@@ -120,6 +120,7 @@ public class ChatWebSocketHandler extends WebSocketHandler {
         private Connection connection;
         private String ACTIVE_OPTIONS = "activeOptions:";
         private String REMOTE_MARKUP = "remoteMarkup";
+        private String ROULETTE = "roulette";
         private String VOTE = "vote:";
         private String SEPARATOR = ":";
 
@@ -285,6 +286,30 @@ public class ChatWebSocketHandler extends WebSocketHandler {
 
                 data = ClientEvent.remoteMarkup(data,sessionID);
                 sendToAll(data,this.connection,sessionID);
+//                //System.out.println("-----------" + data);
+            }else if (data.contains(ROULETTE)){
+
+                data = ClientEvent.roulette(sessionID,false);
+
+                sendToAll(data,this.connection,sessionID);
+
+                List<ChatWebSocket> channelSessions = new ArrayList<ChatWebSocket>();
+                //we don't want the presenter socket
+                for(ChatWebSocket cws : getSessions().get(sessionID)){
+                    if(cws != psessions.get(sessionID)){
+                        channelSessions.add(cws);
+                    }
+                }
+
+                Random random = new Random();
+                ChatWebSocket winner = channelSessions.get(random.nextInt(channelSessions.size()));
+
+                try {
+                    winner.connection.sendMessage(ClientEvent.roulette(sessionID,true));
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+
 //                //System.out.println("-----------" + data);
             }else if (data.contains("::connect::")){
                 try {

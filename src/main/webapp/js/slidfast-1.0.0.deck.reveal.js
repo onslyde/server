@@ -1476,6 +1476,10 @@
 //        activeOptions = [];
       },
 
+      roulette : function() {
+        this.connect("roulette");
+      },
+
       optionVote : function(vote, activeSlide) {
         //given vote for a default slide
         var index;
