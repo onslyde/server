@@ -1099,14 +1099,24 @@
       }
     };
 
-    var activeGroup, activeSlide, activeOption, csessionID;
-    var pastOptions = [], activeOptions = [];
-    var futureSlides = [], pastSlides = [];
-    var futureGroups = [], pastGroups = [];
-    var guids = [],wscount,pollcount;
-    var groupSlideIndex = 0;
-    var currentVotes = {};
-    var totalVotes = 0;
+    var activeGroup,
+      activeSlide,
+      activeOption,
+      csessionID,
+      pastOptions = [],
+      activeOptions = [],
+      futureSlides = [],
+      pastSlides = [],
+      futureGroups = [],
+      pastGroups = [],
+      guids = [],
+      wscount,
+      pollcount,
+      groupSlideIndex = 0,
+      groupIndex = 0,
+      currentVotes = {},
+      totalVotes = 0;
+
     slidfast.slides = slidfast.prototype = {
 
       init : function(sessionID) {
@@ -1141,7 +1151,6 @@
 //        window.addEventListener('unload', function(e) {
 //          this.connect('::disconnect::');
 //        }, false);
-
 
         this.checkOptions();
 
@@ -1238,7 +1247,7 @@
           activeSlide = futureSlides.shift();
 //               slidfast.ui.slideTo(activeSlide);
           groupSlideIndex++;
-
+          this.updateRemotes();
           this.sendMarkup();
 
         } else {
@@ -1248,12 +1257,18 @@
       },
 
       prevSlide : function() {
-        //console.log('prevSlide' + pastSlides.length + ' ' + groupSlideIndex);
-        if (pastSlides.length > 0 && groupSlideIndex > 0) {
+
+        if (pastSlides.length > 0 && groupSlideIndex >= 0) {
           futureSlides.unshift(activeSlide);
           activeSlide = pastSlides.pop();
 //               slidfast.ui.slideTo(activeSlide);
           groupSlideIndex--;
+//          console.log('prevSlide' + pastSlides.length + ' ' + groupSlideIndex);
+//          console.log('nextSlide' + futureSlides.length + ' ' + groupSlideIndex);
+
+          this.updateRemotes();
+          this.sendMarkup();
+
         } else {
 //               this.prevGroup();
         }
@@ -1269,6 +1284,7 @@
           //console.log('baseCanvas ', placeHolder.querySelectorAll('.chartimage').length);
           //fix this bullshit please, something is wrong with activeGRoup/Slide when backtracking
           if(activeGroup.querySelectorAll('section')[0].querySelectorAll('.chartimage').length === 0){
+//            console.log('create image');
             var baseImage = new Image();
             baseImage.src = baseCanvas.toDataURL();
             //baseImage.id = placeHolder.id;
@@ -1283,6 +1299,10 @@
 
           groupSlideIndex = 0;
           pastGroups.push(activeGroup);
+//          console.log(groupIndex,pastGroups.length);
+
+          groupIndex =  pastGroups.length;
+
           activeGroup.style.display = 'none';
           activeGroup = futureGroups.shift();
           activeGroup.style.display = '';
@@ -1325,9 +1345,12 @@
         //console.log('prevGroup ' + pastGroups.length);
         if (pastGroups.length > 0) {
           futureGroups.unshift(activeGroup);
+
           activeGroup.style.display = 'none';
           activeGroup = pastGroups.pop();
           activeGroup.style.display = '';
+
+          groupIndex = pastGroups.length;
           //
           //pastSlides = toArray(this.groupSlides(activeGroup));
           //pastSlides.reverse();
@@ -1354,7 +1377,8 @@
           groupSlideIndex = 0;
 
           activeSlide = pastSlides.pop();
-          var groupOptions = this.groupOptions(activeGroup);
+
+//          var groupOptions = this.groupOptions(activeGroup);
           this.checkOptions();
           this.updateRemotes();
           //console.log('---groupOptions ' + groupOptions);
@@ -1438,15 +1462,15 @@
         activeOptions = [];
       },
 
-      updateRemotes : function(slideIndex) {
+      updateRemotes : function() {
         var activeOptionsString;
 
         if(activeOptions.length >= 1){
-          activeOptionsString = 'activeOptions:' + activeOptions;
+          activeOptionsString = 'activeOptions:' + activeOptions + ',' + groupIndex + ':' + groupSlideIndex;
         }else{
-          activeOptionsString = 'activeOptions:null,null,' + slideIndex;
+          activeOptionsString = 'activeOptions:null,null,' + groupIndex + ':' + groupSlideIndex;
         }
-
+        console.log(activeOptionsString);
         this.connect(activeOptionsString);
         //clear options after sending
 //        activeOptions = [];

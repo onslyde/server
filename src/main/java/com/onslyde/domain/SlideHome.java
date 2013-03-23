@@ -22,7 +22,7 @@ public class SlideHome {
 	@PersistenceContext
 	private EntityManager entityManager;
 
-	public void persist(Slide transientInstance) {
+	public int persist(Slide transientInstance) {
 		log.fine("persisting Slide instance");
 		try {
 			entityManager.persist(transientInstance);
@@ -31,6 +31,7 @@ public class SlideHome {
 			log.severe("persist failed" + re);
 			throw re;
 		}
+        return transientInstance.getId();
 	}
 
 	public void remove(Slide persistentInstance) {

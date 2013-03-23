@@ -2,8 +2,6 @@ package com.onslyde.domain;
 
 // Generated Jun 15, 2012 8:41:06 AM by Hibernate Tools 3.4.0.CR1
 
-import org.codehaus.jackson.annotate.JsonIgnore;
-
 import javax.persistence.*;
 
 import static javax.persistence.GenerationType.IDENTITY;
@@ -19,9 +17,9 @@ import java.util.Set;
 public class Slide implements java.io.Serializable {
 
 	private Integer id;
-    private Session session;
+	private SlideGroup slideGroup;
 	private String name;
-	private int slideIndex;
+	private String slideIndex;
     private Set<SlideVotes> slideVoteses = new HashSet<SlideVotes>(
             0);
     private Set<SlideOptions> slideOptionses = new HashSet<SlideOptions>(
@@ -30,15 +28,15 @@ public class Slide implements java.io.Serializable {
 	public Slide() {
 	}
 
-	public Slide(Session session, int slideIndex) {
-        this.session = session;
+	public Slide(SlideGroup slideGroup, String slideIndex) {
+		this.slideGroup = slideGroup;
 		this.slideIndex = slideIndex;
 	}
 
-	public Slide(Session session, String name, int slideIndex,
+	public Slide(SlideGroup slideGroup, String name, String slideIndex,
                  Set<SlideVotes> slideVoteses,
                  Set<SlideOptions> slideOptionses) {
-        this.session = session;
+        this.slideGroup = slideGroup;
 		this.name = name;
 		this.slideIndex = slideIndex;
         this.slideVoteses = slideVoteses;
@@ -56,18 +54,15 @@ public class Slide implements java.io.Serializable {
 		this.id = id;
 	}
 
-    @JsonIgnore
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "session_id", nullable = false)
-    public Session getSession() {
-        return this.session;
-    }
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name = "slide_group_id", nullable = false)
+	public SlideGroup getSlideGroup() {
+		return this.slideGroup;
+	}
 
-    public void setSession(Session session) {
-        this.session = session;
-    }
-
-
+	public void setSlideGroup(SlideGroup slideGroup) {
+		this.slideGroup = slideGroup;
+	}
 
 	@Column(name = "name")
 	public String getName() {
@@ -79,11 +74,11 @@ public class Slide implements java.io.Serializable {
 	}
 
 	@Column(name = "slide_index", nullable = false)
-	public int getSlideIndex() {
+	public String getSlideIndex() {
 		return this.slideIndex;
 	}
 
-	public void setSlideIndex(int slideIndex) {
+	public void setSlideIndex(String slideIndex) {
 		this.slideIndex = slideIndex;
 	}
 

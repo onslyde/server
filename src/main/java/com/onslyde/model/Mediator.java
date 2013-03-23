@@ -18,13 +18,15 @@ public class Mediator {
 
     public static class SessionTracker {
 
-        public SessionTracker(List<String> activeOptions, int activeSlideGroupID) {
+        public SessionTracker(List<String> activeOptions, int activeSlideGroupID, int activeSlide) {
             this.activeOptions = activeOptions;
             this.activeSlideGroupID = activeSlideGroupID;
+            this.activeSlide = activeSlide;
         }
 
         private List<String> activeOptions;
         private int activeSlideGroupID;
+        private int activeSlide;
 
         public int getActiveSlideGroupID() {
             return activeSlideGroupID;
@@ -42,6 +44,13 @@ public class Mediator {
             this.activeOptions = activeOptions;
         }
 
+        public int getActiveSlide() {
+            return activeSlide;
+        }
+
+        public void setActiveSlide(int activeSlide) {
+            this.activeSlide = activeSlide;
+        }
     }
 
     @PostConstruct

@@ -257,24 +257,17 @@ public class ChatWebSocketHandler extends WebSocketHandler {
             }else if (data.contains(ACTIVE_OPTIONS)){
                 String options = data.substring(ACTIVE_OPTIONS.length(), data.length());
                 List<String> optionList = Arrays.asList(options.split("\\s*,\\s*"));
-                System.out.println("=======optionList.size()=" + optionList.size());
-                if(optionList.size() == 2){
+                System.out.println("=======optionList.size()=" + optionList.size() + " " + optionList.get(2));
+                if(optionList.size() == 3){
+                    try {
+                        getSlidFast().addGroupOptions(optionList,sessionID);
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
 
+                    data = ClientEvent.createEvent("updateOptions", optionList,sessionID);
+                    sendToAll(data, this.connection, sessionID);
                 }
-
-                try {
-//                    System.out.println("-options " + options + " data " + data);
-//                    if(getSlidFast() == null){
-//                        syncMediator(mediator);
-//                    }
-                    getSlidFast().addGroupOptions(optionList,sessionID);
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-
-                data = ClientEvent.createEvent("updateOptions", optionList,sessionID);
-                sendToAll(data, this.connection, sessionID);
-
             }else if (data.contains(VOTE)){
 
                 String vote = data.substring(VOTE.length(), data.length());

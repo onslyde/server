@@ -32,7 +32,7 @@ public class SlideGroup implements java.io.Serializable {
 	private Session session;
 	private String groupName;
 	private Date created;
-//	private Set<Slide> slides = new HashSet<Slide>(0);
+	private Set<Slide> slides = new HashSet<Slide>(0);
 	private Set<SlideGroupVotes> slideGroupVoteses = new HashSet<SlideGroupVotes>(
 			0);
 	private Set<SlideGroupOptions> slideGroupOptionses = new HashSet<SlideGroupOptions>(
@@ -48,12 +48,12 @@ public class SlideGroup implements java.io.Serializable {
 	}
 
 	public SlideGroup(Session session, String groupName, Date created,
-			Set<SlideGroupVotes> slideGroupVoteses,
+			Set<Slide> slides, Set<SlideGroupVotes> slideGroupVoteses,
 			Set<SlideGroupOptions> slideGroupOptionses) {
 		this.session = session;
 		this.groupName = groupName;
 		this.created = created;
-//		this.slides = slides;
+		this.slides = slides;
 		this.slideGroupVoteses = slideGroupVoteses;
 		this.slideGroupOptionses = slideGroupOptionses;
 	}
@@ -99,7 +99,14 @@ public class SlideGroup implements java.io.Serializable {
 		this.created = created;
 	}
 
+	@OneToMany(fetch = FetchType.EAGER, mappedBy = "slideGroup")
+	public Set<Slide> getSlides() {
+		return this.slides;
+	}
 
+	public void setSlides(Set<Slide> slides) {
+		this.slides = slides;
+	}
 
 	@OneToMany(fetch = FetchType.EAGER, mappedBy = "slideGroup")
 	public Set<SlideGroupVotes> getSlideGroupVoteses() {

@@ -77,10 +77,19 @@ public class SlidFast implements Serializable {
     private SlideGroupVotesHome slideGroupVotesHome;
 
     @Inject
+    private SlideVotesHome slideVotesHome;
+
+    @Inject
     private SlideGroupHome sgHome;
 
     @Inject
+    private SlideHome sHome;
+
+    @Inject
     private SlideGroupOptionsHome sgoHome;
+
+    @Inject
+    private SlideOptionsHome soHome;
 
     @Inject
     private Event<SlidFast> slidFastEventSrc;
@@ -130,15 +139,17 @@ public class SlidFast implements Serializable {
     public void addGroupOptions(List<String> options, int sessionID){
         Session currentSession;
         SlideGroup currentSlideGroup;
+        Slide currentSlide;
         currentSession = sessionHome.findById(sessionID);
         int sgid = 0;
+        int sid = 0;
         if(options != null){
             //todo - this should be more unique as a presenter could actually use null as an option
             //we don't want to persist non voting slides as group options
-            if(!options.get(0).equals("null")){
-                if(currentSession == null){
-                    currentSession = sessionHome.findById(sessionID);
-                }
+//            if(!options.get(0).equals("null")){
+//                if(currentSession == null){
+//                    currentSession = sessionHome.findById(sessionID);
+//                }
 
     //            System.out.println("----options compare : " + options.size() + " and " + mediator.getActiveOptions().get(currentSession.getId()) + " and " + currentSession.getId());
                 String groupName = "";
@@ -150,14 +161,25 @@ public class SlidFast implements Serializable {
                 //currentSlideGroup.set
                 sgid = sgHome.persist(currentSlideGroup);
 
+
+                currentSlide = new Slide();
+                currentSlide.setSlideIndex(options.get(2));
+                currentSlide.setSlideGroup(currentSlideGroup);
+                sid = sHome.persist(currentSlide);
                 //SlideGroupOptions sgos = new SlideGroupOptions();
 
                 SlideGroupOptions sgOption = null;
+                SlideOptions sOption = null;
+
                 List<String> alloptions = new ArrayList<String>();
-                alloptions.addAll(options);
+                alloptions.add(options.get(0));
+                alloptions.add(options.get(1));
                 alloptions.add("wtf");
                 alloptions.add("nice");
+                if(!options.get(0).equals("null")){
                     for(String option: alloptions){
+
+
                         sgOption = new SlideGroupOptions();
                         sgOption.setName(option);
                         currentSlideGroup.getSlideGroupOptionses().add(sgOption);
@@ -166,7 +188,24 @@ public class SlidFast implements Serializable {
                         sgoHome.persist(sgOption);
                         //on the fly creation, need to set this up in the code
                         groupName += option + ":";
+
                     }
+                }else{
+                    //not a voting option but persist the thumbs up and down
+                    sOption = new SlideOptions();
+                    sOption.setName("wtf");
+                    currentSlide.getSlideOptionses().add(sOption);
+                    sOption.setSlide(sHome.findById(sid));
+                    soHome.persist(sOption);
+
+                    sOption = new SlideOptions();
+                    sOption.setName("nice");
+                    currentSlide.getSlideOptionses().add(sOption);
+                    sOption.setSlide(sHome.findById(sid));
+                    soHome.persist(sOption);
+
+                    groupName += "slide";
+                }
 
                     currentSlideGroup.setGroupName(groupName);
                     //if(sgOption != null){
@@ -179,10 +218,11 @@ public class SlidFast implements Serializable {
                 Mediator.SessionTracker st = mediator.getActiveOptions().get(currentSession.getId());
                 st.setActiveOptions(options);
                 st.setActiveSlideGroupID(sgid);
+                st.setActiveSlide(sid);
             }else{
-                mediator.getActiveOptions().put(currentSession.getId(),new Mediator.SessionTracker(options,sgid));
+                mediator.getActiveOptions().put(currentSession.getId(),new Mediator.SessionTracker(options,sgid,sid));
             }
-        }
+//        }
         //sessionHome.persist(currentSession);
     }
 
@@ -194,8 +234,10 @@ public class SlidFast implements Serializable {
         Session currentSession;
         currentSession = sessionHome.findById(sessionID);
         SlideGroup currentSlideGroup = null;
+        Slide currentSlide = null;
         if(vote != null && !vote.isEmpty()){
             SlideGroupVotes sgv = new SlideGroupVotes();
+            SlideVotes sv = new SlideVotes();
             Attendee attendee;
             boolean merge = false;
             //manage the attendee object :(
@@ -220,30 +262,46 @@ public class SlidFast implements Serializable {
                 if(mediator.getActiveOptions().containsKey(currentSession.getId())){
                     Mediator.SessionTracker st = mediator.getActiveOptions().get(currentSession.getId());
                     currentSlideGroup = sgHome.findById(st.getActiveSlideGroupID());
+                    currentSlide = sHome.findById(st.getActiveSlide());
                 }
             } catch (Exception e) {
                 e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
             }
 
             if(currentSlideGroup != null) {
-                for(SlideGroupOptions option : currentSlideGroup.getSlideGroupOptionses()){
-                   if(option != null){
-                    if(option.getName().equals(vote)){
-                        sgv.setAttendee(attendee);
-                        sgv.setSlideGroup(currentSlideGroup);
-                        sgv.setSlideGroupOptions(option);
-//                        System.out.println("set vote time:" + new Date());
-                        sgv.setVoteTime(new Date());
-                        //currentSlideGroup.getSlideGroupVoteses().add(sgv);
-//                        if(merge){
-//                            attendeeHome.merge(attendee);
-//                        }else{
-//                            attendeeHome.persist(attendee);
-//                        }
-//                        System.out.println("'sgv.getAttendee().getId()''''''''''''''''" + sgv.getAttendee().getId());
-                        slideGroupVotesHome.persist(sgv);
+                if(currentSlideGroup.getSlideGroupOptionses().isEmpty()){
+
+                    for(SlideOptions option : currentSlide.getSlideOptionses()){
+                        if(option != null){
+                            if(option.getName().equals(vote)){
+                                sv.setAttendee(attendee);
+                                sv.setSlide(currentSlide);
+                                sv.setSlideOptions(option);
+                                sv.setVoteTime(new Date());
+                                slideVotesHome.persist(sv);
+                            }
+                        }
                     }
-                   }
+                }else{
+                    for(SlideGroupOptions option : currentSlideGroup.getSlideGroupOptionses()){
+                       if(option != null){
+                        if(option.getName().equals(vote)){
+                            sgv.setAttendee(attendee);
+                            sgv.setSlideGroup(currentSlideGroup);
+                            sgv.setSlideGroupOptions(option);
+    //                        System.out.println("set vote time:" + new Date());
+                            sgv.setVoteTime(new Date());
+                            //currentSlideGroup.getSlideGroupVoteses().add(sgv);
+    //                        if(merge){
+    //                            attendeeHome.merge(attendee);
+    //                        }else{
+    //                            attendeeHome.persist(attendee);
+    //                        }
+    //                        System.out.println("'sgv.getAttendee().getId()''''''''''''''''" + sgv.getAttendee().getId());
+                            slideGroupVotesHome.persist(sgv);
+                        }
+                       }
+                    }
                 }
 
                 //currentSession.getSlideGroups().add(currentSlideGroup);
