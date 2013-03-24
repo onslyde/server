@@ -1049,7 +1049,7 @@
         ws.onopen = function() {
           isopen = true;
           //basic auth until we get something better
-          console.log('sent initString ' + initString);
+//          console.log('sent initString ' + initString);
           slidfast.ws._send('user:'+username);
 
           if(initString){
@@ -1470,7 +1470,7 @@
         }else{
           activeOptionsString = 'activeOptions:null,null,' + groupIndex + ':' + groupSlideIndex;
         }
-        console.log(activeOptionsString);
+//        console.log(activeOptionsString);
         this.connect(activeOptionsString);
         //clear options after sending
 //        activeOptions = [];
