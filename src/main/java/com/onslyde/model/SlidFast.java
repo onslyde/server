@@ -137,6 +137,13 @@ public class SlidFast implements Serializable {
 
     }
 
+    public void broadcastMarkup(String markup, int sessionID){
+        if(mediator.getActiveOptions().containsKey(sessionID)){
+            Mediator.SessionTracker st = mediator.getActiveOptions().get(sessionID);
+            st.setActiveMarkup(markup);
+        }
+    }
+
     public void addGroupOptions(List<String> options, int sessionID){
         Session currentSession;
         SlideGroup currentSlideGroup;

@@ -285,6 +285,11 @@ public class ChatWebSocketHandler extends WebSocketHandler {
             }else if (data.contains(REMOTE_MARKUP)){
 
                 data = ClientEvent.remoteMarkup(data,sessionID);
+                try {
+                    getSlidFast().broadcastMarkup(data,sessionID);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
                 sendToAll(data,this.connection,sessionID);
 //                //System.out.println("-----------" + data);
             }else if (data.contains(ROULETTE)){

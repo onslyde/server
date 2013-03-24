@@ -27,6 +27,7 @@ public class Mediator {
         private List<String> activeOptions;
         private int activeSlideGroupID;
         private int activeSlide;
+        private String activeMarkup = "";
 
         public int getActiveSlideGroupID() {
             return activeSlideGroupID;
@@ -50,6 +51,14 @@ public class Mediator {
 
         public void setActiveSlide(int activeSlide) {
             this.activeSlide = activeSlide;
+        }
+
+        public String getActiveMarkup() {
+            return activeMarkup;
+        }
+
+        public void setActiveMarkup(String activeMarkup) {
+            this.activeMarkup = activeMarkup;
         }
     }
 

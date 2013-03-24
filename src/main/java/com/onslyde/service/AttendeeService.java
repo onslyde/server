@@ -47,6 +47,8 @@ public class AttendeeService {
 
     private String currentOptions;
 
+    private List optionList = new ArrayList();
+
     @GET
     @Path("/json")
     @Produces(MediaType.APPLICATION_JSON)
@@ -55,15 +57,32 @@ public class AttendeeService {
         //executing this every second on poll... nice :)
         String data = "";
         mediatorEventSrc.fire(mediator);
-        List optionList = new ArrayList();
-        if(mediator.getActiveOptions().containsKey(sessionID)){
-            Mediator.SessionTracker st = mediator.getActiveOptions().get(sessionID);
-            optionList.addAll(st.getActiveOptions());
+
+        String activeMarkup = "";
+
+        try {
+            if(mediator.getActiveOptions().containsKey(sessionID)){
+                Mediator.SessionTracker st = mediator.getActiveOptions().get(sessionID);
+
+
+                if(st.getActiveOptions().size() > 0 && !st.getActiveOptions().get(0).equals("null")){
+                    optionList.add(st.getActiveOptions().get(0));
+                    optionList.add(st.getActiveOptions().get(1));
+                    data = ClientEvent.createEvent("updateOptions", optionList, sessionID);
+                }else{
+                    data = st.getActiveMarkup();
+                }
+
+            }
+
+
+
+        } catch (Exception e) {
+            log.severe("problem with polling remote++++++");
+            e.printStackTrace();
         }
 
-        if(optionList.size() == 2){
-            data = ClientEvent.createEvent("updateOptions", optionList, sessionID);
-        }
+
         return data;
     }
 
