@@ -159,7 +159,7 @@ public class ChatWebSocketHandler extends WebSocketHandler {
                         Mediator.SessionTracker st = mediator.getActiveOptions().get(sessionID);
 
                         List options = st.getActiveOptions();
-                        if(options.size() == 2) {
+                        if(options.size() == 3) {
 
 //                            System.out.println("options sent to new remote: " + options + " users session:" + sessionID);
                             //only send options to this connection
