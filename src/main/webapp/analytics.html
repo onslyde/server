@@ -33,6 +33,7 @@
     <script type="text/javascript" src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
     <![endif]-->
 
+    <script src="js/libs/Chart.min.js"></script>
     <link href="css/onslyde.css" rel="stylesheet">
 </head>
 
@@ -46,6 +47,10 @@
         </div>
     </header>
 
+
+
+
+
     <section class="main row-fluid">
 
         <div class="span12">
@@ -55,7 +60,7 @@
 
                 <!-- CACHE FILE: list.html -->
                 <script type="text/ng-template" id="list.html">
-                    <input type="text" ng-model="endpointName" placeholder="Enter your session ID here" ng-change="declareEndpoint()"> (use 167 to view example data from <a href="http://onslyde.com/example-deck.html">the demo</a>)
+                    <input type="text" ng-model="endpointName" placeholder="Enter your session ID here" ng-change="declareEndpoint(endpointName)"> (use 167 to view example data from <a href="http://onslyde.com/example-deck.html">the demo</a>)
                     <hr/>
                     <ul>
                         <li><h2>Session ID: {{projects.id}}</h2></li>
@@ -130,9 +135,10 @@
 
 </div><!--/.fluid-container-->
 <script src="http://code.jquery.com/jquery-1.8.3.min.js"></script>
-<script src="http://code.angularjs.org/1.1.0/angular.min.js"></script>
-<script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.0.4/angular-resource.min.js"></script>
+<script src="/js/angular-1.1.5/angular.js"></script>
+<script src="/js/angular-1.1.5/angular-resource.js"></script>
 <script type="text/javascript">
+
 
 
     angular.module('myfilters2',[]).filter('totalNegative', function(){
@@ -171,7 +177,7 @@
         }
     });
 
-    angular.module('project', ['usergrid','myfilters3']).
+    angular.module('project', ['myfilters3']).
     config(function($routeProvider) {
         $routeProvider.
                 when('/', {controller:ListCtrl, templateUrl:'list.html'}).
@@ -180,20 +186,78 @@
 
 
 
-    function ListCtrl($scope, Project) {
-        $scope.projects = refreshData();
-        var refreshInput;
 
+
+    function ListCtrl($scope,$http) {
+
+        var lineChartData = {
+            labels : [],
+            datasets : [
+                {
+                    fillColor : "rgba(220,220,220,0.5)",
+                    strokeColor : "rgba(220,220,220,1)",
+                    pointColor : "rgba(220,220,220,1)",
+                    pointStrokeColor : "#fff",
+                    data : []
+                },
+                {
+                    fillColor : "rgba(151,187,205,0.5)",
+                    strokeColor : "rgba(151,187,205,1)",
+                    pointColor : "rgba(151,187,205,1)",
+                    pointStrokeColor : "#fff",
+                    data : []
+                }
+            ]
+
+        }
+
+        $scope.refreshData = function(epn,callback){
+            epn = (epn || 178)
+            $http.get('/go/analytics/' + epn).
+                    success(function (data, status, headers, config) {
+                        callback(data);
+                    }).
+                    error(function (data, status, headers, config) {
+                        console.error(data, status, headers, config);
+                    });
+        }
+
+        var refreshInput;
         $scope.declareEndpoint = function(e){
             //simple debounce/throttle
             if(!refreshInput){
                 refreshInput = setTimeout(function(){
-                    $scope.projects = refreshData();
-                    refreshInput = false;
+
+                    $scope.$apply(function(){
+
+                        $scope.refreshData($scope.endpointName,function(data){
+                            $scope.projects = data;
+
+                            //build chart
+                            angular.forEach($scope.projects.slideGroups, function(value, key){
+
+                                if(value['created']){
+                                    var date = new Date(value.created);
+                                    date = date.toLocaleString();
+                                    lineChartData.labels.push(date)
+                                }
+
+                                lineChartData.datasets[0].data.push(1)
+                                lineChartData.datasets[1].data.push(2)
+                            })
+//                            var myLine = new Chart(document.getElementById("canvas").getContext("2d")).Line(lineChartData);
+
+
+                        })
+                        refreshInput = false;
+                    })
                 },1000)
             }
 
         }
+
+        //init
+        $scope.declareEndpoint();
 
         $scope.isDeep = function(item){
             //can be better, just see if object for now
@@ -208,28 +272,12 @@
 
 
         var auth_token;
-        function refreshData(){
-
-            return Project($scope.orgName,$scope.appName,$scope.endpointName).get({}, angular.noop,
-                    function(responseFail){
-//         console.log('responseSuccess----',responseFail.status,responseFail);
-                        if(responseFail.status === 401){
-                            //we reached the request limit, so use account login
-                            console.log('fail');
-
-                        }else{
-                            //login failed for some other reason, maybe stale token?
-
-                        }
-
-                    }, function(responseSuccess) {
-
-                    });
-        }
 
 
 
     }
+
+    ListCtrl.$inject = ['$scope', '$http'];
 
 
 //    angular.filter("total", function(field) {
@@ -244,29 +292,16 @@
 
 
 
-    angular.module('usergrid', ['ngResource']).
-    factory('Project', function($resource) {
-        return function(on,an,epn){
-            console.log('e: ', epn);
-            return $resource('/go/analytics/:endpointName',
-                    {
-                        endpointName:(epn || '')
-                    },{
-                        getData: {method:'GET', isArray: false}
-                    });
-        }
-    });
-
-    var _gaq = _gaq || [];
-    _gaq.push(['_setAccount', 'UA-31854873-1']);
-    _gaq.push(['_setDomainName', 'onslyde.com']);
-    _gaq.push(['_trackPageview']);
-
-    (function() {
-        var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
-        ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
-        var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
-    })();
+//    var _gaq = _gaq || [];
+//    _gaq.push(['_setAccount', 'UA-31854873-1']);
+//    _gaq.push(['_setDomainName', 'onslyde.com']);
+//    _gaq.push(['_trackPageview']);
+//
+//    (function() {
+//        var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+//        ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+//        var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+//    })();
 
 </script>
 </body>

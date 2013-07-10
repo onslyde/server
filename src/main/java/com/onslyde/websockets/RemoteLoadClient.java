@@ -28,13 +28,13 @@ public class RemoteLoadClient {
 
         final long startTime = System.currentTimeMillis();
         final long endTime;
-    for (int i =1;i<500;i++){
+    for (int i =1;i<205;i++){
           try {
 
 
 
           final int marker = i;
-          final WebSocket.Connection connection = client.open(new URI("ws://192.168.1.2:8081?session=139"), new WebSocket.OnTextMessage()
+          final WebSocket.Connection connection = client.open(new URI("ws://192.168.6.196:8081?session=175"), new WebSocket.OnTextMessage()
            {
              public void onOpen(Connection connection)
              {
@@ -61,7 +61,7 @@ public class RemoteLoadClient {
 //                          // do stuff
 //                          //System.out.println("TimerTask running poll1: " + incomingMsgs);
                           try {
-                              connection.sendMessage("vote:test1");
+                              connection.sendMessage("vote:Nope!");
                           } catch (IOException e) {
                               e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
                           }
