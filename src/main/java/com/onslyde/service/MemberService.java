@@ -178,15 +178,15 @@ public class MemberService {
 
 
     private boolean sendMessage(String email, int sessionID){
-        String host = "smtp.gmail.com";
-        final String from = "onslyde@gmail.com";
-        final String pass = "onslyde123";
+        String host = "smtpout.secureserver.net";
+        final String from = "help@onslyde.com";
+        final String pass = "hello123";
         Properties props = System.getProperties();
         props.put("mail.smtp.starttls.enable", "true"); // added this line
         props.put("mail.smtp.host", host);
         props.put("mail.smtp.user", from);
         props.put("mail.smtp.password", pass);
-        props.put("mail.smtp.port", "587");
+        props.put("mail.smtp.port", "465");
         props.put("mail.smtp.auth", "true");
 
         String[] to = {email}; // added this line
@@ -203,7 +203,7 @@ public class MemberService {
         javax.mail.Session session = javax.mail.Session.getInstance(props, authenticator);
         MimeMessage message = new MimeMessage(session);
         try {
-            message.setFrom(new InternetAddress("admin@onslyde.com"));
+            message.setFrom(new InternetAddress("help@onslyde.com"));
 
             InternetAddress[] toAddress = new InternetAddress[to.length];
 
