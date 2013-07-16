@@ -16,7 +16,11 @@ body {
 .section-title {
     margin: 40px 0 0 0;
 }
-
+.section-title.howworks,
+.section-title.getstarted
+{
+    margin: 20px 0 0 0;
+}
 .section-title h2{
     margin: 0 0 10px 0;
 }
@@ -36,6 +40,10 @@ body {
 }
 #signupmodal form{
     margin:0;
+}
+
+.email-signup {
+
 }
 
 .no-bold {
@@ -91,3 +99,4 @@ h1,h2,h3,h4,h5{
         margin: 0;
     }
 }
+
