@@ -1,11 +1,16 @@
 package com.onslyde.model;
 
+import com.onslyde.websockets.ExampleEchoServer;
+import com.onslyde.websockets.OnslydeWebSocketHandler;
+import org.eclipse.jetty.websocket.api.Session;
+
 import javax.annotation.PostConstruct;
 import javax.enterprise.context.ApplicationScoped;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.ConcurrentLinkedQueue;
 
 @ApplicationScoped
 public class Mediator {
@@ -15,6 +20,11 @@ public class Mediator {
     private String jsEvent;
     private List<Integer> sessionID;
     private Map<Integer,Integer> pollCount;
+
+    //each session IS is the key to a List of IP addresses and their respective connection
+    private Map<Integer, Map<String,Session>> sessions;
+    private Map<Integer, Map<String,Session>> psessions;
+    private static ConcurrentLinkedQueue<Session> websockets = new ConcurrentLinkedQueue<Session>();
 
     public static class SessionTracker {
 
@@ -65,6 +75,7 @@ public class Mediator {
     @PostConstruct
     public void initialize() {
         System.out.println("_____________postconstruct mediator");
+
         this.activeOptions = new HashMap<Integer, SessionTracker>();
     }
 
@@ -104,5 +115,35 @@ public class Mediator {
 
     public void setPollCount(Map<Integer, Integer> pollCount) {
         this.pollCount = pollCount;
+    }
+
+    public Map<Integer, Map<String,Session>> getSessions() {
+        if (sessions == null) {
+            sessions = new HashMap<Integer, Map<String,Session>>();
+        }
+        return sessions;
+    }
+
+    public void setSessions(Map<Integer, Map<String,Session>> sessions) {
+        this.sessions = sessions;
+    }
+
+    public Map<Integer, Map<String,Session>> getPsessions() {
+        if (psessions == null) {
+            psessions = new HashMap<Integer, Map<String,Session>>();
+        }
+        return psessions;
+    }
+
+    public void setPsessions(Map<Integer, Map<String,Session>> psessions) {
+        this.psessions = psessions;
+    }
+
+    public ConcurrentLinkedQueue<Session> getWebsockets() {
+        return websockets;
+    }
+
+    public void setWebsockets(ConcurrentLinkedQueue<Session> websockets) {
+        Mediator.websockets = websockets;
     }
 }

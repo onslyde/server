@@ -6,6 +6,7 @@ package com.onslyde.rest;
 
 import com.onslyde.model.Mediator;
 import com.onslyde.model.SlidFast;
+import com.onslyde.websockets.ExampleEchoServer;
 
 import javax.annotation.PostConstruct;
 import javax.enterprise.event.Event;
@@ -41,7 +42,6 @@ public class JaxRsActivator extends Application {
    public void initialize() {
        slidFastEventSrc.fire(slidFast);
        mediatorEventSrc.fire(mediator);
-
        System.out.println("_____________postconstruct slidfast and mediator in rest");
    }
 }

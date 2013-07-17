@@ -35,7 +35,7 @@
         <version.org.jboss.as.arquillian.container>7.1.1.Final</version.org.jboss.as.arquillian.container>
         <version.junit>4.10</version.junit>
 
-        <jettyVersion>8.1.0.RC2</jettyVersion>
+        <jettyVersion>9.0.4.v20130625</jettyVersion>
     </properties>
 
     <repositories>
@@ -235,12 +235,85 @@
             <artifactId>jetty-util</artifactId>
             <version>${jettyVersion}</version>
         </dependency>
-
         <dependency>
             <groupId>org.eclipse.jetty</groupId>
-            <artifactId>jetty-websocket</artifactId>
+            <artifactId>jetty-webapp</artifactId>
             <version>${jettyVersion}</version>
         </dependency>
+        <dependency>
+            <groupId>org.eclipse.jetty</groupId>
+            <artifactId>jetty-servlet</artifactId>
+            <version>${jettyVersion}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.eclipse.jetty</groupId>
+            <artifactId>jetty-servlets</artifactId>
+            <version>${jettyVersion}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.eclipse.jetty.websocket</groupId>
+            <artifactId>websocket-api</artifactId>
+            <version>${jettyVersion}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.eclipse.jetty.websocket</groupId>
+            <artifactId>websocket-core</artifactId>
+            <version>9.0.0.M2</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.eclipse.jetty.websocket</groupId>
+            <artifactId>websocket-client</artifactId>
+            <version>${jettyVersion}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.eclipse.jetty.websocket</groupId>
+            <artifactId>websocket-common</artifactId>
+            <version>${jettyVersion}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.eclipse.jetty.websocket</groupId>
+            <artifactId>websocket-server</artifactId>
+            <version>${jettyVersion}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.eclipse.jetty.websocket</groupId>
+            <artifactId>websocket-servlet</artifactId>
+            <version>${jettyVersion}</version>
+        </dependency>
+
+        <!--<dependency>-->
+            <!--<groupId>org.eclipse.jetty</groupId>-->
+            <!--<artifactId>jetty-websocket</artifactId>-->
+            <!--<version>${jettyVersion}</version>-->
+        <!--</dependency>-->
+
+        <!--<dependency>-->
+            <!--<groupId>org.eclipse.jetty.spdy</groupId>-->
+            <!--<artifactId>spdy-jetty</artifactId>-->
+            <!--<version>${jettyVersion}</version>-->
+        <!--</dependency>-->
+        <dependency>
+            <groupId>org.eclipse.jetty.spdy</groupId>
+            <artifactId>spdy-core</artifactId>
+            <version>${jettyVersion}</version>
+        </dependency>
+        <!--<dependency>-->
+            <!--<groupId>org.eclipse.jetty.spdy</groupId>-->
+            <!--<artifactId>spdy-jetty-http</artifactId>-->
+            <!--<version>${jettyVersion}</version>-->
+        <!--</dependency>-->
+        <!--<dependency>-->
+            <!--<groupId>org.eclipse.jetty.npn</groupId>-->
+            <!--<artifactId>npn-api</artifactId>-->
+            <!--<version>${jettyVersion}</version>-->
+            <!--<scope>provided</scope>-->
+        <!--</dependency>-->
 
         <dependency>
             <groupId>javax.mail</groupId>

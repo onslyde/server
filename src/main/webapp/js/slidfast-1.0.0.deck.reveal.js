@@ -1064,6 +1064,7 @@
       },
 
       _onmessage : function(m) {
+//        console.log(m.data);
         if (m.data) {
 //          console.log(m.data);
           //check to see if this message is a CDI event
