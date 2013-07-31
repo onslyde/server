@@ -55,7 +55,7 @@ public class RemoteLoadClientSocket {
             Future<Void> fut;
             for (int i =1;i<100;i++){
             fut = session.getRemote().sendStringByFuture("vote:test1" + index);
-            fut.get(2,TimeUnit.SECONDS);
+            fut.get(1,TimeUnit.SECONDS);
             }// wait for send to complete.
 
 //            fut = session.getRemote().sendStringByFuture("Thanks for the conversation.");
