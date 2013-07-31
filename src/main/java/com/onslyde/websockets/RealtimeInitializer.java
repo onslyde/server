@@ -20,7 +20,7 @@ public class RealtimeInitializer {
 
     public void onStartup(@Observes @Initialized ServletContext ctx)
     {
-        System.out.println("Initialized web application at context path " + ctx.getContextPath());
+//        System.out.println("Initialized web application at context path " + ctx.getContextPath());
 
 
 //
@@ -54,7 +54,7 @@ public class RealtimeInitializer {
                 // Set the connectors
                 server.setConnectors(new Connector[] { http });
 
-                System.out.println("-----------jetty start");
+//                System.out.println("-----------jetty start");
 //                context.setContextPath("/echo");
                 context.setHandler(wsHandler);
                 server.setHandler(context);

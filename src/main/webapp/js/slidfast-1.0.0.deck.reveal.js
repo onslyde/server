@@ -1019,7 +1019,7 @@
 
         var createRandom = function(){
           return Math.floor(Math.random() * (max - min + 1)) + min;
-        }
+        };
         var aip;
         var min = 255;
         var max = 999;
