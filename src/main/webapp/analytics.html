@@ -60,7 +60,10 @@
 
                 <!-- CACHE FILE: list.html -->
                 <script type="text/ng-template" id="list.html">
+
                     <input type="text" ng-model="endpointName" placeholder="Enter your session ID here" ng-change="declareEndpoint(endpointName)"> (use 167 to view example data from <a href="http://onslyde.com/example-deck.html">the demo</a>)
+
+
                     <hr/>
                     <ul>
                         <li><h2>Session ID: {{projects.id}}</h2></li>
@@ -68,6 +71,7 @@
                         <li><b>Last Session Date:</b> {{projects.start | date:'medium'}}</li>
                         <li><b>Total Polls:</b> {{projects.slideGroups.length}}</li>
                     </ul>
+                    <canvas id="elapsed" height="550" width="1500"></canvas>
 
                         <hr/>
 
@@ -233,19 +237,48 @@
                         $scope.refreshData($scope.endpointName,function(data){
                             $scope.projects = data;
 
+                            var options = {
+                                option1:{label:'',data:[]},
+                                option2:{label:'',data:[]},
+                                option3:{label:'',data:[]},
+                                option4:{label:'',data:[]}
+                            };
+
                             //build chart
                             angular.forEach($scope.projects.slideGroups, function(value, key){
 
-                                if(value['created']){
-                                    var date = new Date(value.created);
-                                    date = date.toLocaleString();
-                                    lineChartData.labels.push(date)
-                                }
 
-                                lineChartData.datasets[0].data.push(1)
-                                lineChartData.datasets[1].data.push(2)
+
+
+
+                                if(value.slideGroupVoteses.length > 0){
+//                                    if(value['created']){
+//                                        var date = new Date(value.created);
+//                                        date = date.toLocaleString();
+//                                        lineChartData.labels.push(date)
+//                                    }
+
+                                    angular.forEach(value.slideGroupVoteses, function(value, key){
+
+                                        if(options.option1.label === ''){
+                                            options.option1.label = value.slideGroupOptions.name
+                                            options.option1.data.push(1)
+                                        }else if(options.option1.label === value.slideGroupOptions.name){
+                                            var lastValue = options.option1.data[options.option1.data.length-1];
+                                            options.option1.data.push(lastValue+1)
+                                        }else{
+                                            options.option1.data.push(0)
+                                        }
+
+                                        var date = new Date(value.voteTime);
+                                        date = date.toLocaleString();
+                                        lineChartData.labels.push(date);
+                                    })
+                                }
+                                console.log(options.option1.data)
+                                lineChartData.datasets[0].data = options.option1.data;
                             })
-//                            var myLine = new Chart(document.getElementById("canvas").getContext("2d")).Line(lineChartData);
+                            var myLine = new Chart(document.getElementById("elapsed").getContext("2d")).Line(lineChartData);
 
 
                         })
