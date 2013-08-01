@@ -450,7 +450,7 @@
                                     for(var i = 0; i < positive.length; i++){
                                         combined.push([positive[i][0],positive[i][1] - negative[i][1]])
                                     }
-                                    console.log(mynewchart)
+
                                     mynewchart.chart.renderTo = 'chart' + value.id
                                     setTimeout(function(){
                                         var optionchart = new Highcharts.Chart(mynewchart);
