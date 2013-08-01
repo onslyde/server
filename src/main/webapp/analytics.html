@@ -79,14 +79,26 @@
 
                         <div ng-repeat="project in projects.slideGroups | filter:search | orderBy:'created'">
 
-                            <ul>
-                                <li><h3>Poll Start:</b> {{project.created | date:'medium'}}</h3></li>
+                            <ul ng-if="project.slideGroupVoteses.length > 0">
+                                <li><h3>Poll Start: {{project.created | date:'medium'}}</h3></li>
                                 <li><b>Poll Options:</b> <ul ng-repeat="option in project.slideGroupOptionses"><li>{{option.name}}</li></ul></li>
                                 <li><b>Total Attendee Votes:</b> {{project.slideGroupVoteses.length}}</li>
                                 <li><b>Total Positive Votes:</b> <span class="green">{{project.slideGroupVoteses | totalPositive}}</span></li>
                                 <li><b>Total Negative Votes:</b> <span class="red">{{project.slideGroupVoteses | totalNegative}}</span></li>
-                                <li><div id="chart{{project.id}}"></div></li>
-                                <li><b>Attendee Votes:</b>
+                                <li>
+
+                                </li>
+                             </ul>
+
+                            <ul ng-if="project.slides[0].slideVoteses.length > 0">
+                                <li><h3>Slide Start: {{project.created | date:'medium'}}</h3></li>
+                                <li><h3>Slide Index {{project.slides[0].slideIndex}}</h3></li>
+                            </ul>
+
+                            <div id="chart{{project.id}}"></div>
+
+                            <ul ng-if="project.slideGroupVoteses.length > 0">
+                                <li><b>Poll Votes: ({{project.slideGroupVoteses.length}} Total)</b>
                                     <table class="table table-striped table-condensed table-hover">
                                         <thead>
                                         <tr>
@@ -102,9 +114,14 @@
                                             <td>{{vote.attendee.ip}}</td>
                                         </tr>
                                         </tbody>
-                                    </table>
+                                    </table></li>
+                            </ul>
+
+
+                             <ul ng-if="project.slides[0].slideVoteses.length > 0">
+                                <li>
                                     <div ng-repeat="slide in project.slides">
-                                        <b>Slide Votes (without poll)</b> Slide Index: {{slide.slideIndex}}
+                                        <b>Slide Votes: ({{project.slides[0].slideVoteses.length}} Total)</b>
                                         <table class="table table-striped table-condensed table-hover">
                                             <thead>
                                             <tr>
@@ -391,7 +408,7 @@
 
                                             if(twooptions[i].label === value.slideOptions.name){
                                                 twooptions[i].data.push([voteTime,lastValue+1])
-                                                console.log(voteTime,lastValue)
+//                                                console.log(voteTime,lastValue)
                                             }else{
                                                 twooptions[i].data.push([voteTime,lastValue])
                                             }
@@ -413,7 +430,7 @@
 
                                         mynewchart.series[i].data = twooptions[i].data;
                                     }
-                                    console.log(mynewchart,value.id)
+
                                     mynewchart.chart.renderTo = 'chart' + value.id
                                     setTimeout(function(){
                                         var optionchart = new Highcharts.Chart(mynewchart);
@@ -447,7 +464,7 @@
 
                                             if(options[i].label === value.slideGroupOptions.name){
                                                 options[i].data.push([voteTime,lastValue+1])
-                                                console.log(voteTime,lastValue)
+
                                             }else{
                                                 options[i].data.push([voteTime,lastValue])
                                             }
@@ -469,7 +486,7 @@
 
                                         mynewchart.series[i].data = options[i].data;
                                     }
-                                    console.log(mynewchart,value.id)
+
                                     mynewchart.chart.renderTo = 'chart' + value.id
                                     setTimeout(function(){
                                         var optionchart = new Highcharts.Chart(mynewchart);
