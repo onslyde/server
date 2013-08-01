@@ -114,7 +114,8 @@
                                             <td>{{vote.attendee.ip}}</td>
                                         </tr>
                                         </tbody>
-                                    </table></li>
+                                    </table>
+                                </li>
                             </ul>
 
 
@@ -242,7 +243,8 @@
         });
         var emptychart = {
             chart: {
-                renderTo: 'chart'
+                renderTo: 'chart',
+                defaultSeriesType: 'line'
             },
             "plotOptions": {
                 "line": {
@@ -251,7 +253,7 @@
                     "marker": {
                         "enabled": false
                     },
-                    "threshold": null,
+                    "threshold": 0,
                     "shadow": false
                 }
             },
@@ -270,7 +272,7 @@
                             fontSize: '10px'
                         },
                         align: 'left',
-                        step: '3'
+                        step: '2'
                     }
                 }
             ],
@@ -278,9 +280,7 @@
                 {
                     title: {
                         text: 'Count'
-                    },
-
-                    min: 0
+                    }
                 }
             ],
             tooltip: {
@@ -338,7 +338,7 @@
         };
 
         $scope.refreshData = function(epn,callback){
-            epn = (epn || 178)
+            epn = (epn || 175)
             $http.get('/go/analytics/' + epn).
                     success(function (data, status, headers, config) {
                         callback(data);
@@ -418,12 +418,16 @@
 
                                     var mynewchart = angular.copy(emptychart)
                                     mynewchart.series.pop();
-                                    mynewchart.series.pop();
+                                    mynewchart.plotOptions.line.lineWidth = 5;
+                                    mynewchart.series[0].dashStyle = 'Dot';
+                                    mynewchart.series[1].dashStyle = 'Dot';
+                                    mynewchart.series[2].type = 'spline';
+                                    mynewchart.series[2].name = 'Combined';
+                                    mynewchart.series[2].negativeColor = '#AA4643';
 
-//                                    console.log(options.length)
+
                                     for(var i=0;i<twooptions.length;i++){
                                         twooptions[i].data.splice(0,1)
-//                                        console.log(options[i].data)
                                         if(!mynewchart.series[i].name){
                                             mynewchart.series[i].name = twooptions[i].label;
                                         }
@@ -431,6 +435,22 @@
                                         mynewchart.series[i].data = twooptions[i].data;
                                     }
 
+                                    var positive,negative;
+
+                                    if(mynewchart.series[0].name === 'nice'){
+                                        positive = mynewchart.series[0].data;
+                                        negative = mynewchart.series[1].data;
+                                    }else{
+                                        positive = mynewchart.series[1].data;
+                                        negative = mynewchart.series[0].data;
+                                    }
+
+                                    var combined = mynewchart.series[2].data;
+
+                                    for(var i = 0; i < positive.length; i++){
+                                        combined.push([positive[i][0],positive[i][1] - negative[i][1]])
+                                    }
+                                    console.log(mynewchart)
                                     mynewchart.chart.renderTo = 'chart' + value.id
                                     setTimeout(function(){
                                         var optionchart = new Highcharts.Chart(mynewchart);
