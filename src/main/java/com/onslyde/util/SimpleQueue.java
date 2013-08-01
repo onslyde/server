@@ -1,11 +1,6 @@
 package com.onslyde.util;
 
 import javax.enterprise.context.Dependent;
-import javax.inject.Singleton;
-import javax.ejb.Stateful;
-import javax.enterprise.context.ApplicationScoped;
-import javax.enterprise.context.RequestScoped;
-import javax.ws.rs.Path;
 import java.io.Serializable;
 import java.util.LinkedList;
 

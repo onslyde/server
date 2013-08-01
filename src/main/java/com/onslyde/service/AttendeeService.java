@@ -3,9 +3,7 @@ package com.onslyde.service;
 import com.onslyde.model.Mediator;
 import com.onslyde.model.SlidFast;
 import com.onslyde.util.ClientEvent;
-import org.eclipse.jetty.server.Request;
 
-import javax.ejb.Stateful;
 import javax.enterprise.context.RequestScoped;
 import javax.enterprise.event.Event;
 import javax.inject.Inject;

@@ -6,7 +6,6 @@ package com.onslyde.rest;
 
 import com.onslyde.model.Mediator;
 import com.onslyde.model.SlidFast;
-import com.onslyde.websockets.ExampleEchoServer;
 
 import javax.annotation.PostConstruct;
 import javax.enterprise.event.Event;

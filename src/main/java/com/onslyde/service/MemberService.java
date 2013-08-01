@@ -7,7 +7,6 @@ package com.onslyde.service;
 import com.onslyde.data.MemberRepository;
 import com.onslyde.domain.User;
 import com.onslyde.domain.UserHome;
-import com.onslyde.model.Member;
 
 import javax.ejb.Stateful;
 import javax.enterprise.context.RequestScoped;

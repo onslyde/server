@@ -5,18 +5,12 @@ import com.onslyde.model.SlidFast;
 import com.onslyde.util.ClientEvent;
 import org.eclipse.jetty.io.Connection;
 import org.eclipse.jetty.websocket.api.Session;
-import org.eclipse.jetty.websocket.api.WebSocketListener;
 import org.eclipse.jetty.websocket.api.annotations.*;
-import org.eclipse.jetty.websocket.server.WebSocketHandler;
-import org.eclipse.jetty.websocket.servlet.WebSocketServletFactory;
 
-import javax.enterprise.context.ApplicationScoped;
 import javax.enterprise.event.Observes;
 import javax.inject.Inject;
 import java.io.IOException;
 import java.util.*;
-import java.util.concurrent.ConcurrentLinkedQueue;
-import java.util.concurrent.TimeUnit;
 import java.util.logging.Logger;
 
 @WebSocket
@@ -45,24 +39,21 @@ public class OnslydeWebSocketHandler
 
     public void observeItemEvent(@Observes Mediator mediator) {
         syncMediator(mediator);
+        //this method serves as a sync between embedded Jetty and the CDI conttext (threads)
+        //we fire this event from multiple locations in the CDI beans and this WebSocket is managed by that
+        //...sad but that's the hack
 
         if (mediator.getJsEvent() != null) {
             try {
-                System.out.println("------observeItemEvent2--" + mediator.getSessions().values().size());
-//                for (Session session : mediator.getWebsockets()) {
-//                    session.getRemote().sendStringByFuture(mediator.getJsEvent());
-//                }
                 for(Map<String,Session> sessions : mediator.getSessions().values()){
-                    System.out.println("------observeItemEvent3--" + sessions.values().size());
                     for(Session session : sessions.values()){
-                        System.out.println("------observe values--" + session);
                         session.getRemote().sendStringByFuture(mediator.getJsEvent());
                     }
                 }
 
 
             } catch (Exception x) {
-                System.out.println("------needs cleanup-");
+                System.out.println("------need better solution for socket management!!!-");
                 x.printStackTrace();
 
             }
@@ -83,10 +74,9 @@ public class OnslydeWebSocketHandler
 
         //when a user connects, we add his ws connection to a sessionID map
         if (mediator.getSessions().containsKey(sessionID)) {
-            //try to disconnect stale session on browser refresh
 
+            //try to disconnect stale session on browser refresh before replacing with new
             if(mediator.getSessions().get(sessionID).get(attendeeIP) != null){
-                System.out.println("*****contains attendeeIP: " + attendeeIP);
                 try {
                     mediator.getSessions().get(sessionID).get(attendeeIP).disconnect();
                 } catch (IOException e) {
@@ -163,7 +153,7 @@ public class OnslydeWebSocketHandler
         if (request.get("session") != null)
             sessionID = Integer.parseInt(((String[]) request.get("session"))[0]);
 
-        System.out.println("----attendeeIP: " + attendeeIP);
+//        System.out.println("----attendeeIP: " + attendeeIP);
         System.out.println("=====sessionID: " + sessionID);
 
 
@@ -295,10 +285,14 @@ public class OnslydeWebSocketHandler
 
                 if(mediator.getPsessions().containsKey(sessionID) &&
                         mediator.getPsessions().get(sessionID).containsKey(attendeeIP)) {
-//                    replace with new session
+
+                    //Insert presenter into existing sessionID
+//                    replace with new ws session
                     mediator.getPsessions().get(sessionID).put(attendeeIP,session);
 
                 } else {
+                    //start a new session for presenter and purge all existing ws connections
+
                     getSlidFast().startSession(sessionID);
                     getSlidFast().setPollcount(0);
                     Map<String,Session> presenterData = new HashMap<String,Session>();
@@ -387,7 +381,8 @@ public class OnslydeWebSocketHandler
     @OnWebSocketClose
     public void onWebSocketClose(int statusCode, String reason)
     {
-
+          //need to utilize this to cleanup mediator
+        //but haven't figured out how to detect closing websocket ID/session
     }
 
     @OnWebSocketError

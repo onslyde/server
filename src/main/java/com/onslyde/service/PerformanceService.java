@@ -1,37 +1,21 @@
 package com.onslyde.service;
 
 
-import com.onslyde.jms.PerfJMSClient;
 import com.onslyde.jms.PerfQueueManager;
-import com.onslyde.util.ClientEvent;
-import com.onslyde.util.SimpleQueue;
-import org.hornetq.jms.client.HornetQMapMessage;
 
-import javax.annotation.PostConstruct;
-import javax.annotation.Resource;
-import javax.ejb.Stateful;
-import javax.enterprise.context.ApplicationScoped;
 import javax.enterprise.context.RequestScoped;
-import javax.enterprise.context.SessionScoped;
 import javax.inject.Inject;
-import javax.inject.Singleton;
-import javax.jms.*;
-import javax.jms.Queue;
-import javax.naming.Context;
-import javax.naming.InitialContext;
-import javax.naming.NamingException;
-import javax.persistence.Cacheable;
-import javax.servlet.http.HttpServletRequest;
-import javax.ws.rs.*;
-
+import javax.ws.rs.GET;
+import javax.ws.rs.Path;
+import javax.ws.rs.Produces;
+import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import java.io.*;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLConnection;
-import java.net.URLDecoder;
-import java.util.*;
+import java.util.UUID;
 
 @Path("/performance")
 @RequestScoped

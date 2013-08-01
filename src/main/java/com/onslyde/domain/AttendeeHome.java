@@ -3,13 +3,9 @@ package com.onslyde.domain;
 // Generated Jun 15, 2012 8:41:06 AM by Hibernate Tools 3.4.0.CR1
 
 import javax.ejb.Stateless;
-
+import javax.inject.Inject;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
-import javax.inject.Inject;
-import java.util.logging.Logger;
-
-import javax.inject.Inject;
 import java.util.logging.Logger;
 
 /**

@@ -2,10 +2,8 @@ package com.onslyde.service;
 
 import com.onslyde.domain.Session;
 import com.onslyde.domain.User;
-import com.onslyde.model.Member;
 
 import javax.ejb.Stateless;
-import javax.enterprise.event.Event;
 import javax.inject.Inject;
 import javax.persistence.EntityManager;
 import java.util.Date;

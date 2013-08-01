@@ -1,7 +1,5 @@
 package com.onslyde.model;
 
-import com.onslyde.websockets.ExampleEchoServer;
-import com.onslyde.websockets.OnslydeWebSocketHandler;
 import org.eclipse.jetty.websocket.api.Session;
 
 import javax.annotation.PostConstruct;
@@ -14,6 +12,9 @@ import java.util.concurrent.ConcurrentLinkedQueue;
 
 @ApplicationScoped
 public class Mediator {
+
+    //this class is used to store in memory session/presentation information
+    //keeps track of sessionID and all audience members, etc..
 
     //active options use the sessionID as the key and store currently activated remote options
     private static Map<Integer,SessionTracker> activeOptions;

@@ -11,7 +11,7 @@ import javax.enterprise.event.Observes;
 import javax.servlet.ServletContext;
 
 @ApplicationScoped
-public class RealtimeInitializer {
+public class JettyEmbedded {
 
 
     Server server = new Server(8081);
@@ -77,7 +77,7 @@ public class RealtimeInitializer {
         @Override
         public void configure(WebSocketServletFactory factory)
         {
-            factory.setCreator(new EchoCreator());
+            factory.setCreator(new OnslydeSocketCreator());
         }
     }
 
