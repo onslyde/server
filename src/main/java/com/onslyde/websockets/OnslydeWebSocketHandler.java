@@ -1,7 +1,7 @@
 package com.onslyde.websockets;
 
 import com.onslyde.model.Mediator;
-import com.onslyde.model.SlidFast;
+import com.onslyde.model.SessionManager;
 import com.onslyde.util.ClientEvent;
 import org.eclipse.jetty.io.Connection;
 import org.eclipse.jetty.websocket.api.Session;
@@ -17,7 +17,7 @@ import java.util.logging.Logger;
 public class OnslydeWebSocketHandler
 {
     @Inject
-    private static SlidFast slidFast;
+    private static SessionManager sessionManager;
 
     @Inject
     private static Mediator mediator;
@@ -125,7 +125,7 @@ public class OnslydeWebSocketHandler
         }
         //update count on deck
         try {
-            if (getSlidFast() != null) {
+            if (getSessionManager() != null) {
 
                 //todo - very inefficient... this only needs to go to presenter/slide deck
                 if (mediator.getSessions().containsKey(sessionID)) {
@@ -186,7 +186,7 @@ public class OnslydeWebSocketHandler
                     "}}}");
             try {
                 //System.out.println("wtf))))) " + attendeeIP);
-                getSlidFast().updateGroupVote("wtf", attendeeIP, sessionID);
+                getSessionManager().updateGroupVote("wtf", attendeeIP, sessionID);
             } catch (Exception e) {
                 e.printStackTrace();
             }
@@ -200,7 +200,7 @@ public class OnslydeWebSocketHandler
                     "document.dispatchEvent(eventObj4);" +
                     "}}}");
             try {
-                getSlidFast().updateGroupVote("nice", attendeeIP, sessionID);
+                getSessionManager().updateGroupVote("nice", attendeeIP, sessionID);
             } catch (Exception e) {
                 e.printStackTrace();
             }
@@ -212,7 +212,7 @@ public class OnslydeWebSocketHandler
 //                System.out.println("=======optionList.size()=" + optionList.size() + " " + optionList.get(2));
             if (optionList.size() == 3) {
                 try {
-                    getSlidFast().addGroupOptions(optionList, sessionID);
+                    getSessionManager().addGroupOptions(optionList, sessionID);
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
@@ -229,7 +229,7 @@ public class OnslydeWebSocketHandler
             String vote = data.substring(VOTE.length(), data.length());
 
             try {
-                getSlidFast().updateGroupVote(vote, attendeeIP, sessionID);
+                getSessionManager().updateGroupVote(vote, attendeeIP, sessionID);
             } catch (Exception e) {
                 e.printStackTrace();
             }
@@ -241,7 +241,7 @@ public class OnslydeWebSocketHandler
 
             data = ClientEvent.remoteMarkup(data, sessionID);
             try {
-                getSlidFast().broadcastMarkup(data, sessionID);
+                getSessionManager().broadcastMarkup(data, sessionID);
             } catch (Exception e) {
                 e.printStackTrace();
             }
@@ -293,8 +293,8 @@ public class OnslydeWebSocketHandler
                 } else {
                     //start a new session for presenter and purge all existing ws connections
 
-                    getSlidFast().startSession(sessionID);
-                    getSlidFast().setPollcount(0);
+                    getSessionManager().startSession(sessionID);
+                    getSessionManager().setPollcount(0);
                     Map<String,Session> presenterData = new HashMap<String,Session>();
                     presenterData.put(attendeeIP,session);
                     //todo - prevent session takeover
@@ -399,19 +399,19 @@ public class OnslydeWebSocketHandler
         return mediator;
     }
 
-    public static synchronized SlidFast getSlidFast() {
-        if(slidFast == null){
-            syncSlidFast(slidFast);
+    public static synchronized SessionManager getSessionManager() {
+        if(sessionManager == null){
+            syncSlidFast(sessionManager);
         }
-        return slidFast;// == null ? new SlidFast() : slidFast;
+        return sessionManager;// == null ? new SlidFast() : slidFast;
     }
 
-    public static synchronized void syncSlidFast(SlidFast slidFast2) {
-        slidFast = slidFast2;
+    public static synchronized void syncSlidFast(SessionManager sessionManager2) {
+        sessionManager = sessionManager2;
     }
 
-    public void observeItemEvent(@Observes SlidFast slidFast) {
-        syncSlidFast(slidFast);
+    public void observeItemEvent(@Observes SessionManager sessionManager) {
+        syncSlidFast(sessionManager);
     }
 
     

@@ -1,7 +1,7 @@
 package com.onslyde.service;
 
 import com.onslyde.domain.SessionHome;
-import com.onslyde.model.SlidFast;
+import com.onslyde.model.SessionManager;
 
 import javax.ejb.Stateful;
 import javax.enterprise.event.Event;
@@ -29,13 +29,13 @@ public class PresenterService {
     private EntityManager em;
 
     @Inject
-    private Event<SlidFast> slidFastEventSrc;
+    private Event<SessionManager> slidFastEventSrc;
 
     @Inject
     private Validator validator;
 
     @Inject
-    private SlidFast slidFast;
+    private SessionManager sessionManager;
 
     @Inject
     private SessionHome sessionHome;
@@ -71,7 +71,7 @@ public class PresenterService {
 
 
 
-         slidFastEventSrc.fire(slidFast);
+         slidFastEventSrc.fire(sessionManager);
 //        if(sessionID == null){
 //            //send message that ID is invalid
 //        }else{

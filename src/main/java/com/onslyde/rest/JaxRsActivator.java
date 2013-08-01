@@ -5,7 +5,7 @@
 package com.onslyde.rest;
 
 import com.onslyde.model.Mediator;
-import com.onslyde.model.SlidFast;
+import com.onslyde.model.SessionManager;
 
 import javax.annotation.PostConstruct;
 import javax.enterprise.event.Event;
@@ -27,10 +27,10 @@ public class JaxRsActivator extends Application {
    /* class body intentionally left blank */
 
     @Inject
-    private SlidFast slidFast;
+    private SessionManager sessionManager;
 
     @Inject
-    private Event<SlidFast> slidFastEventSrc;
+    private Event<SessionManager> slidFastEventSrc;
 
     @Inject
     private Mediator mediator;
@@ -39,7 +39,7 @@ public class JaxRsActivator extends Application {
 
    @PostConstruct
    public void initialize() {
-       slidFastEventSrc.fire(slidFast);
+       slidFastEventSrc.fire(sessionManager);
        mediatorEventSrc.fire(mediator);
        System.out.println("_____________postconstruct slidfast and mediator in rest");
    }

@@ -1,7 +1,7 @@
 package com.onslyde.service;
 
 import com.onslyde.model.Mediator;
-import com.onslyde.model.SlidFast;
+import com.onslyde.model.SessionManager;
 import com.onslyde.util.ClientEvent;
 
 import javax.enterprise.context.RequestScoped;
@@ -32,13 +32,13 @@ public class AttendeeService {
     private Event<Mediator> mediatorEventSrc;
 
     @Inject
-    private Event<SlidFast> slidFastEventSrc;
+    private Event<SessionManager> slidFastEventSrc;
 
     @Inject
     private Validator validator;
 
     @Inject
-    private SlidFast slidFast;
+    private SessionManager sessionManager;
 
     @Inject
     private Mediator mediator;
@@ -125,7 +125,7 @@ public class AttendeeService {
 
             //System.out.println("**************slidFast" + ip);
 
-            slidFast.updateGroupVote(vote,ip,sessionID);
+            sessionManager.updateGroupVote(vote,ip,sessionID);
 
             if(vote.equals("wtf") || vote.equals("nice")){
                 mediator.setJsEvent(ClientEvent.clientProps(vote,sessionID));

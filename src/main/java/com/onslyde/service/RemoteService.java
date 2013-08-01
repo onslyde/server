@@ -1,7 +1,7 @@
 package com.onslyde.service;
 
 import com.onslyde.data.MemberRepository;
-import com.onslyde.model.SlidFast;
+import com.onslyde.model.SessionManager;
 
 import javax.enterprise.context.RequestScoped;
 import javax.enterprise.event.Event;
@@ -24,13 +24,13 @@ public class RemoteService {
     private EntityManager em;
 
     @Inject
-    private Event<SlidFast> slidFastEventSrc;
+    private Event<SessionManager> slidFastEventSrc;
 
     @Inject
     private Validator validator;
 
     @Inject
-    private SlidFast slidFast;
+    private SessionManager sessionManager;
 
     private String currentOptions;
 

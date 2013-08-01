@@ -37,7 +37,7 @@ import java.util.*;
 
 //@Singleton
 @Stateless
-public class SlidFast implements Serializable {
+public class SessionManager implements Serializable {
 
 //    private Map<Integer,List<String>> activeOptions;
     private String activeOption;
@@ -85,7 +85,7 @@ public class SlidFast implements Serializable {
     private SlideOptionsHome soHome;
 
     @Inject
-    private Event<SlidFast> slidFastEventSrc;
+    private Event<SessionManager> slidFastEventSrc;
 
 //    private Session currentSession;
 //    private SlideGroup currentSlideGroup;
@@ -93,7 +93,7 @@ public class SlidFast implements Serializable {
 
     @PostConstruct
     public void initialize() {
-        System.out.println("_____________postconstruct slidfast");
+        System.out.println("_____________postconstruct sessionManager");
     }
 
 
