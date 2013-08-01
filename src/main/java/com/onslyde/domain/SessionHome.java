@@ -6,6 +6,9 @@ import javax.ejb.Stateless;
 import javax.inject.Inject;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Root;
 import java.util.logging.Logger;
 
 /**
@@ -59,9 +62,15 @@ public class SessionHome {
 	public Session findById(Integer id) {
 		log.fine("getting Session instance with id: " + id);
 		try {
-			Session instance = entityManager.find(Session.class, id);
-			log.fine("get successful");
-			return instance;
+
+            CriteriaBuilder cb = entityManager.getCriteriaBuilder();
+            CriteriaQuery<Session> criteria = cb.createQuery(Session.class);
+            Root<Session> session = criteria.from(Session.class);
+            criteria.select(session).where(cb.equal(session.get("id"), id));
+            log.fine("get successful");
+            return entityManager.createQuery(criteria).getSingleResult();
+
+
 		} catch (RuntimeException re) {
 			log.severe("get failed" + re);
 			throw re;

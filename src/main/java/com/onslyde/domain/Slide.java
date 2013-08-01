@@ -85,6 +85,7 @@ public class Slide implements java.io.Serializable {
 	}
 
     @OneToMany(fetch = FetchType.EAGER, mappedBy = "slide")
+    @OrderBy("voteTime ASC")
     public Set<SlideVotes> getSlideVoteses() {
         return this.slideVoteses;
     }

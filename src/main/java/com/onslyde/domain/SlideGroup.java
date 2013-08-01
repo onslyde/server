@@ -99,6 +99,7 @@ public class SlideGroup implements java.io.Serializable {
 	}
 
 	@OneToMany(fetch = FetchType.EAGER, mappedBy = "slideGroup")
+    @OrderBy("voteTime ASC")
 	public Set<SlideGroupVotes> getSlideGroupVoteses() {
 		return this.slideGroupVoteses;
 	}
