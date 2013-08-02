@@ -387,9 +387,9 @@ public class OnslydeWebSocketHandler
     @OnWebSocketClose
     public void onWebSocketClose(int statusCode, String reason)
     {
-        System.out.println("-this.sessionID----------" + this.sessionID + " sesseion " + this.session);
+//        System.out.println("-this.sessionID----------" + this.sessionID + " sesseion " + this.session);
         if(mediator.getSessions().containsKey(this.sessionID)){
-            System.out.println("-remove attendee socket----------" + sessionID + " sesseion " + this.session);
+//            System.out.println("-remove attendee socket----------" + sessionID + " sesseion " + this.session);
             Map session = mediator.getSessions().get(sessionID);
 
             if(session.containsKey(attendeeIP)){
@@ -406,11 +406,11 @@ public class OnslydeWebSocketHandler
 //                }
 //            }
         }
-        System.out.println("---onclose" + mediator.getWebsockets().size());
-        System.out.println("---onclose" + mediator.getWebsockets().contains(this));
+//        System.out.println("---onclose" + mediator.getWebsockets().size());
+//        System.out.println("---onclose" + mediator.getWebsockets().contains(this));
 
         mediator.getWebsockets().remove(this);
-        System.out.println("---onclose" + mediator.getWebsockets().size());
+//        System.out.println("---onclose" + mediator.getWebsockets().size());
 
     }
 
