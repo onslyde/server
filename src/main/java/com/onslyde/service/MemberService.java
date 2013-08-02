@@ -179,7 +179,7 @@ public class MemberService {
     private boolean sendMessage(String email, int sessionID){
         String host = "smtpout.secureserver.net";
         final String from = "help@onslyde.com";
-        final String pass = "hello123";
+        final String pass = "*****";
         Properties props = System.getProperties();
         props.put("mail.smtp.starttls.enable", "true"); // added this line
         props.put("mail.smtp.host", host);

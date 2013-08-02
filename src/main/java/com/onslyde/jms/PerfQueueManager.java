@@ -79,7 +79,7 @@ public class PerfQueueManager {
     private boolean sendMessage(String email, String uuid){
         String host = "smtp.gmail.com";
         final String from = "onslyde@gmail.com";
-        final String pass = "emailuser";
+        final String pass = "********";
         Properties props = System.getProperties();
         props.put("mail.smtp.starttls.enable", "true"); // added this line
         props.put("mail.smtp.host", host);
