@@ -61,7 +61,7 @@ public class RemoteLoadClientSocket {
 //            fut = session.getRemote().sendStringByFuture("Thanks for the conversation.");
 //            fut.get(2,TimeUnit.SECONDS); // wait for send to complete.
 
-            session.close(StatusCode.NORMAL,"I'm done");
+//            session.close(StatusCode.NORMAL,"I'm done");
         }
         catch (Throwable t)
         {

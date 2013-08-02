@@ -6,16 +6,21 @@ import com.onslyde.util.ClientEvent;
 import org.eclipse.jetty.io.Connection;
 import org.eclipse.jetty.websocket.api.Session;
 import org.eclipse.jetty.websocket.api.annotations.*;
+import org.eclipse.jetty.websocket.server.WebSocketServerConnection;
 
 import javax.enterprise.event.Observes;
 import javax.inject.Inject;
 import java.io.IOException;
 import java.util.*;
+import java.util.concurrent.ConcurrentLinkedQueue;
 import java.util.logging.Logger;
 
 @WebSocket
 public class OnslydeWebSocketHandler
 {
+
+    protected Session session;
+
     @Inject
     private static SessionManager sessionManager;
 
@@ -25,8 +30,8 @@ public class OnslydeWebSocketHandler
     @Inject
     private Logger log;
 
+    //wss: http://amilamanoj.blogspot.com/2013/06/secure-websockets-with-jetty.html
 
-    private Session session;
     private Connection connection;
     private String ACTIVE_OPTIONS = "activeOptions:";
     private String REMOTE_MARKUP = "remoteMarkup";
@@ -46,8 +51,8 @@ public class OnslydeWebSocketHandler
         if (mediator.getJsEvent() != null) {
             try {
                 for(Map<String,Session> sessions : mediator.getSessions().values()){
-                    for(Session session : sessions.values()){
-                        session.getRemote().sendStringByFuture(mediator.getJsEvent());
+                    for(Session owsh : sessions.values()){
+                        owsh.getRemote().sendStringByFuture(mediator.getJsEvent());
                     }
                 }
 
@@ -63,7 +68,8 @@ public class OnslydeWebSocketHandler
     @OnWebSocketConnect
     public void onWebSocketConnect(Session session)
     {
-        session.setIdleTimeout(1000000);
+        this.session = session;
+        this.session.setIdleTimeout(1000000);
         Map request = session.getUpgradeRequest().getParameterMap();
 
         if (request.get("attendeeIP") != null)
@@ -76,27 +82,28 @@ public class OnslydeWebSocketHandler
         if (mediator.getSessions().containsKey(sessionID)) {
 
             //try to disconnect stale session on browser refresh before replacing with new
-            if(mediator.getSessions().get(sessionID).get(attendeeIP) != null){
-                try {
-                    mediator.getSessions().get(sessionID).get(attendeeIP).disconnect();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-            }
+//            if(mediator.getSessions().get(sessionID).get(attendeeIP) != null){
+//                try {
+//                    mediator.getSessions().get(sessionID).get(attendeeIP).disconnect();
+//                } catch (IOException e) {
+//                    e.printStackTrace();
+//                }
+//            }
 
             //get the map and put new value (dropping the old)
-            mediator.getSessions().get(sessionID).put(attendeeIP, session);
+            mediator.getSessions().get(sessionID).put(attendeeIP, this.session);
+
 
         } else {
             Map<String,Session> sessionMap = new HashMap<String,Session>();
-            sessionMap.put(attendeeIP, session);
+            sessionMap.put(attendeeIP, this.session);
             mediator.getSessions().put(sessionID, sessionMap);
         }
 
         //todo - remove this
         // I'm adding all sockets for broadcast from polling clients
         // so at this point we are managing 2 lists of the same thing
-        mediator.getWebsockets().add(session);
+        mediator.getWebsockets().add(this);
 
 //        System.out.println("----attendeeIP 1: " + attendeeIP);
 
@@ -115,7 +122,7 @@ public class OnslydeWebSocketHandler
                     List options = st.getActiveOptions();
                     if (options.size() == 3) {
                         //only send options to this connection
-                        session.getRemote().sendStringByFuture(ClientEvent.createEvent("updateOptions", options, sessionID));
+                        this.session.getRemote().sendStringByFuture(ClientEvent.createEvent("updateOptions", options, sessionID));
                     }
                 }
             }
@@ -130,7 +137,7 @@ public class OnslydeWebSocketHandler
                 //todo - very inefficient... this only needs to go to presenter/slide deck
                 if (mediator.getSessions().containsKey(sessionID)) {
                     int wscount  = mediator.getSessions().get(sessionID).size();
-                    session.getRemote().sendStringByFuture(ClientEvent.updateCount(wscount, pollCount, sessionID));
+                    this.session.getRemote().sendStringByFuture(ClientEvent.updateCount(wscount, pollCount, sessionID));
                 }
 
             }
@@ -145,7 +152,7 @@ public class OnslydeWebSocketHandler
     public void onWebSocketText(Session session, String data)
     {
 
-        Map request = session.getUpgradeRequest().getParameterMap();
+        Map request = this.session.getUpgradeRequest().getParameterMap();
 
         if (request.get("attendeeIP") != null)
             attendeeIP = ((String[]) request.get("attendeeIP"))[0];
@@ -190,7 +197,7 @@ public class OnslydeWebSocketHandler
             } catch (Exception e) {
                 e.printStackTrace();
             }
-            sendToPresenter(data, session, sessionID);
+            sendToPresenter(data, this.session, sessionID);
 
         } else if (data.equals("vote:nice")) {
             data = ("{\"onslydeEvent\":{\"sessionID\":\"" + sessionID + "\"," +
@@ -204,7 +211,7 @@ public class OnslydeWebSocketHandler
             } catch (Exception e) {
                 e.printStackTrace();
             }
-            sendToPresenter(data, session, sessionID);
+            sendToPresenter(data, this.session, sessionID);
 
         } else if (data.contains(ACTIVE_OPTIONS)) {
             String options = data.substring(ACTIVE_OPTIONS.length(), data.length());
@@ -219,7 +226,7 @@ public class OnslydeWebSocketHandler
 
                 data = ClientEvent.createEvent("updateOptions", optionList, sessionID);
                 try {
-                    sendToAll(data, session, sessionID);
+                    sendToAll(data, this.session, sessionID);
                 } catch (IOException e) {
                     e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
                 }
@@ -235,7 +242,7 @@ public class OnslydeWebSocketHandler
             }
 
             data = ClientEvent.clientVote(vote, sessionID);
-            sendToPresenter(data, session, sessionID);
+            sendToPresenter(data, this.session, sessionID);
 
         } else if (data.contains(REMOTE_MARKUP)) {
 
@@ -246,7 +253,7 @@ public class OnslydeWebSocketHandler
                 e.printStackTrace();
             }
             try {
-                sendToAll(data, session, sessionID);
+                sendToAll(data, this.session, sessionID);
             } catch (IOException e) {
                 e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
             }
@@ -256,7 +263,7 @@ public class OnslydeWebSocketHandler
             data = ClientEvent.roulette(sessionID, false);
 
             try {
-                sendToAll(data, session, sessionID);
+                sendToAll(data, this.session, sessionID);
             } catch (IOException e) {
                 e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
             }
@@ -283,20 +290,20 @@ public class OnslydeWebSocketHandler
         } else if (data.contains("::connect::")) {
             try {
 
-                if(mediator.getPsessions().containsKey(sessionID) &&
-                        mediator.getPsessions().get(sessionID).containsKey(attendeeIP)) {
+//                if(mediator.getPsessions().containsKey(sessionID) &&
+//                        mediator.getPsessions().get(sessionID).containsKey(attendeeIP)) {
 
                     //Insert presenter into existing sessionID
 //                    replace with new ws session
-                    mediator.getPsessions().get(sessionID).put(attendeeIP,session);
+//                    mediator.getPsessions().get(sessionID).put(attendeeIP,this);
 
-                } else {
+//                } else {
                     //start a new session for presenter and purge all existing ws connections
 
                     getSessionManager().startSession(sessionID);
                     getSessionManager().setPollcount(0);
                     Map<String,Session> presenterData = new HashMap<String,Session>();
-                    presenterData.put(attendeeIP,session);
+                    presenterData.put(attendeeIP,this.session);
                     //todo - prevent session takeover
                     //needs auth
                     mediator.getPsessions().put(sessionID, presenterData);
@@ -306,14 +313,14 @@ public class OnslydeWebSocketHandler
                     //disconnect is actually coming from :()
                     //clear out the session management map
 
-                    Iterator<String> it = mediator.getSessions().get(sessionID).keySet().iterator();
-                    while (it.hasNext()) {
-                        String ips = it.next();
-                        if(!ips.equals(attendeeIP)) {
-                            it.remove();
-                        }
-                    }
-                }
+//                    Iterator<String> it = mediator.getSessions().get(sessionID).keySet().iterator();
+//                    while (it.hasNext()) {
+//                        String ips = it.next();
+//                        if(!ips.equals(attendeeIP)) {
+//                            it.remove();
+//                        }
+//                    }
+//                }
 
             } catch (Exception e) {
                 e.printStackTrace();
@@ -342,8 +349,8 @@ public class OnslydeWebSocketHandler
         try {
             //only send data to specified sessionID
             Collection<Session> channelSessions = mediator.getSessions().get(sessionID).values();
-            for (Session webSocket : channelSessions) {
-                webSocket.getRemote().sendStringByFuture(data);
+            for (Session owsh : channelSessions) {
+                owsh.getRemote().sendStringByFuture(data);
             }
         } catch (Exception x) {
             // Error was detected, close the ChatWebSocket client side
@@ -358,7 +365,6 @@ public class OnslydeWebSocketHandler
 
     private void sendToPresenter(String data, Session connection, int sessionID) {
         try {
-
             if (mediator.getPsessions().containsKey(sessionID)) {
                 Collection<Session> presenterSessions = mediator.getPsessions().get(sessionID).values();
                 for (Session webSocket : presenterSessions) {
@@ -381,8 +387,31 @@ public class OnslydeWebSocketHandler
     @OnWebSocketClose
     public void onWebSocketClose(int statusCode, String reason)
     {
-          //need to utilize this to cleanup mediator
-        //but haven't figured out how to detect closing websocket ID/session
+        System.out.println("-this.sessionID----------" + this.sessionID + " sesseion " + this.session);
+        if(mediator.getSessions().containsKey(this.sessionID)){
+            System.out.println("-remove attendee socket----------" + sessionID + " sesseion " + this.session);
+            Map session = mediator.getSessions().get(sessionID);
+
+            if(session.containsKey(attendeeIP)){
+                session.remove(attendeeIP);
+            }
+
+//            if(mediator.getSessions().get(sessionID).size() == 0){
+//                System.out.println("-remove session ID from memory----------" + sessionID);
+//                mediator.getSessions().remove(sessionID);
+//                Iterator<Integer> i = mediator.getSessionID().iterator();
+//                while (i.hasNext()) {
+//                    Integer s = i.next();
+//                    i.remove();
+//                }
+//            }
+        }
+        System.out.println("---onclose" + mediator.getWebsockets().size());
+        System.out.println("---onclose" + mediator.getWebsockets().contains(this));
+
+        mediator.getWebsockets().remove(this);
+        System.out.println("---onclose" + mediator.getWebsockets().size());
+
     }
 
     @OnWebSocketError

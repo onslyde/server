@@ -1,5 +1,6 @@
 package com.onslyde.model;
 
+import com.onslyde.websockets.OnslydeWebSocketHandler;
 import org.eclipse.jetty.websocket.api.Session;
 
 import javax.annotation.PostConstruct;
@@ -25,7 +26,7 @@ public class Mediator {
     //each session IS is the key to a List of IP addresses and their respective connection
     private Map<Integer, Map<String,Session>> sessions;
     private Map<Integer, Map<String,Session>> psessions;
-    private static ConcurrentLinkedQueue<Session> websockets = new ConcurrentLinkedQueue<Session>();
+    private static ConcurrentLinkedQueue<OnslydeWebSocketHandler> websockets = new ConcurrentLinkedQueue<OnslydeWebSocketHandler>();
 
     public static class SessionTracker {
 
@@ -140,11 +141,11 @@ public class Mediator {
         this.psessions = psessions;
     }
 
-    public ConcurrentLinkedQueue<Session> getWebsockets() {
+    public ConcurrentLinkedQueue<OnslydeWebSocketHandler> getWebsockets() {
         return websockets;
     }
 
-    public void setWebsockets(ConcurrentLinkedQueue<Session> websockets) {
+    public void setWebsockets(ConcurrentLinkedQueue<OnslydeWebSocketHandler> websockets) {
         Mediator.websockets = websockets;
     }
 }
