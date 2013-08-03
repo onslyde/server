@@ -1159,6 +1159,8 @@
         setTimeout(function(){slidfast.slides.updateRemotes();},1000);
       },
 
+      sessionID: function(){return window.onslydeSessionID;},
+
       connect : function(initString) {
         //ws connect
 //        console.log('connect',initString);

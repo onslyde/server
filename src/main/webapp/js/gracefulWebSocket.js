@@ -8,7 +8,7 @@
 var ws;
 window.addEventListener('load', function (e) {
   // in fallback mode: connect returns a dummy object implementing the WebSocket interface
-  ws = $.gracefulWebSocket('ws://'+ slidfast.ws.ip(window.onslydeSessionID) + ':8081'); // the ws-protocol will automatically be changed to http
+  ws = $.gracefulWebSocket('ws://'+ slidfast.ws.ip(slidfast.ws.sessionID()) + ':8081'); // the ws-protocol will automatically be changed to http
   ws = slidfast.ws.connect(ws);
 }, false);
 
@@ -60,7 +60,7 @@ $.extend({
 
           vote = data.replace(('vote:'),'');
 //                        data += ' sessionID:' + window.onslydeSessionID + ' ';
-          data = {"vote": vote, "sessionID": window.onslydeSessionID};
+          data = {"vote": vote, "sessionID": slidfast.ws.sessionID()};
 //                        console.log('data',data)
           $.ajax({
             async: false, // send synchronously
@@ -99,7 +99,7 @@ $.extend({
         fws.currentRequest = new Date().getTime();
 
         // extend default params with plugin options
-        return $.extend(opts.fallbackPollParams, {"previousRequest": fws.previousRequest, "currentRequest": fws.currentRequest, "sessionID": window.onslydeSessionID});
+        return $.extend(opts.fallbackPollParams, {"previousRequest": fws.previousRequest, "currentRequest": fws.currentRequest, "sessionID": slidfast.ws.sessionID()});
       }
 
       /**
@@ -144,9 +144,9 @@ $.extend({
       // return socket impl
       return fws;
     }
-
+    console.log(slidfast.ws.sessionID())
     // create a new websocket or fallback
-    var ws = window.WebSocket ? new WebSocket(url + '?session=' + window.onslydeSessionID + '&attendeeIP=' + slidfast.ws.getip()) : new FallbackSocket();
+    var ws = window.WebSocket ? new WebSocket(url + '?session=' + slidfast.ws.sessionID() + '&attendeeIP=' + slidfast.ws.getip()) : new FallbackSocket();
     $(window).unload(function () { ws.close(); ws = null });
     return ws;
   }

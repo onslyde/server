@@ -4,6 +4,7 @@ cp -rf \
 /Users/wesleyhales/dev/onslyde/src/main/webapp/css \
 /Users/wesleyhales/dev/onslyde/src/main/webapp/index.html \
 /Users/wesleyhales/dev/onslyde/src/main/webapp/remote.html \
+/Users/wesleyhales/dev/onslyde/src/main/webapp/panel-remote.html \
 /Users/wesleyhales/dev/onslyde/src/main/webapp/example-deck.html \
 /Users/wesleyhales/dev/onslyde/src/main/webapp/example-panel.html \
 /Users/wesleyhales/dev/onslyde/src/main/webapp/example-deck-orig.html \

@@ -14,8 +14,9 @@
         return new onslyde.core.init();
       },
 
-      panel = {sessionID: 0, mode: 'default'};
-
+      panel = {sessionID: 0, mode: 'default'},
+      panelRemote = {sessionID: 0, mode: 'default'},
+      sessionID = 0;
 
     onslyde.core = onslyde.prototype = {
       constructor: onslyde,
@@ -27,6 +28,7 @@
 
             //setup all the options being passed in in the init
             panel = options.panel !== null ? options.panel : null;
+            panelRemote = options.panelRemote !== null ? options.panelRemote : null;
           }
         } catch (e) {
           //alert('Problem with init. Check your options: ' + e);
@@ -35,7 +37,12 @@
         onslyde.core.hideURLBar();
 
         if (panel && panel.sessionID) {
+          sessionID = panel.sessionID;
           onslyde.panel.init();
+        }
+
+        if (panelRemote && panelRemote.sessionID) {
+          sessionID = panelRemote.sessionID;
         }
 
       },
@@ -102,14 +109,14 @@
     var isopen = false;
     onslyde.ws = onslyde.prototype = {
 
-      ip: function (sessionID) {
+      ip: function (thisSessionID) {
         //todo come up with better approach :)
         //there are 3 environments in which this call must be made:
         //(1) running just HTML locally
         //(2) running the ws server and HTML locally
         //(3) prod where ip needs to be hard coded since we get ec2 private IP on this call
 
-        var ai = new onslyde.core.ajax('/go/presenters/ip?session=' + panel.sessionID, function (text, url) {
+        var ai = new onslyde.core.ajax('/go/presenters/ip?session=' + thisSessionID, function (text, url) {
           if (location.host === 'onslyde.com') {
             //(3) - set proper IP if in prod
             //todo - even though we set the IP and don't use data from server, this http request bootstraps an internal piece on each connect
@@ -149,27 +156,31 @@
         return aip;
       },
 
-      connect: function (websocket, initString, sessionID) {
+      sessionID: function(){return sessionID;},
+
+      connect: function (websocket, initString, thisSessionID) {
 
         username = 'anonymous';
         //here we check to see if we're passing in our mock websocket object from polling clients (using gracefulWebSocket.js)
         console.log('connecting now', websocket);
+        //if websocket doesn't exist, create one from spec
         if (!websocket) {
           if (!ip) {
-            ip = this.ip(panel.sessionID);
+            ip = this.ip(thisSessionID);
           }
-          var location = 'ws://' + ip + ':8081/?session=' + panel.sessionID + '&attendeeIP=' + this.getip();
+          var location = 'ws://' + ip + ':8081/?session=' + thisSessionID + '&attendeeIP=' + this.getip();
           ws = new WebSocket(location);
         } else {
+          //we sent end a mock object from jquery polling
           ws = websocket;
         }
 
         ws.onopen = function () {
           isopen = true;
-
+           console.log('onopen',initString,typeof initString !== 'undefined')
           onslyde.ws._send('user:' + username);
 
-          if (initString) {
+          if (typeof initString !== 'undefined') {
             onslyde.ws._send(initString);
           }
         };
@@ -182,7 +193,7 @@
       _onmessage: function (m) {
         if (m.data) {
 
-          if (m.data.indexOf('sessionID":"' + panel.sessionID) > 0) {
+          if (m.data.indexOf('sessionID":"' + sessionID) > 0) {
             try {
               //avoid use of eval...
               var event = (m.data);
@@ -225,7 +236,7 @@
 
     onslyde.panel = onslyde.prototype = {
 
-      init : function(sessionID) {
+      init : function(thisSession) {
 
         window.addEventListener('clientVote', function (e) {
           onslyde.panel.optionVote(e.vote, activeSlide);
@@ -235,8 +246,18 @@
           onslyde.panel.updateDeck(e.wsCount,e.pollCount);
         }, false);
 
+        //start timer
+        var timerHolder = document.getElementById('timer');
+        var startsecond = 0;
+        setInterval(function(){
+          timerHolder.innerHTML = (new Date());
+        },1000);
+
+
         this.connect('::connect::');
         setTimeout(function(){onslyde.panel.updateRemotes();},1000);
+
+        document.getElementById('sessionID').innerHTML = sessionID;
       },
 
       connect : function(initString) {
@@ -244,9 +265,9 @@
 //        console.log('connect',initString);
         try {
           if (!ws) {
-            onslyde.ws.connect(null, initString, csessionID);
+            onslyde.ws.connect(null, initString, sessionID);
           } else {
-            onslyde.ws._send(initString, csessionID);
+            onslyde.ws._send(initString, sessionID);
           }
         } catch (e) {
           console.log('error',e);
@@ -256,8 +277,7 @@
       updateDeck : function(wsc,pc) {
         wscount = wsc;
         pollcount = pc;
-        document.getElementById('totalCount').innerHTML = (wsc + pc);
-        document.getElementById('sessionID').innerHTML = panel.sessionID;
+        document.getElementById('totalCount').innerHTML = (parseInt(wsc,10) + parseInt(pc,10));
       },
 
       wsCount : function() {

@@ -1032,6 +1032,8 @@
         return aip;
       },
 
+      sessionID: function(){return window.onslydeSessionID;},
+
       connect: function (websocket, initString, sessionID) {
 
         username = 'anonymous';
