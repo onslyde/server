@@ -242,6 +242,19 @@ public class OnslydeWebSocketHandler
 
             data = ClientEvent.clientVote(vote, sessionID);
             sendToPresenter(data, this.session, sessionID);
+        } else if (data.contains("speak:")) {
+
+            String name = data.substring("speak:".length(), data.length());
+
+            data = ("{\"onslydeEvent\":{\"sessionID\":\"" + sessionID + "\"," +
+                    "\"fire\":function(){" +
+                    "window.eventObji = document.createEvent('Event');" +
+                    "eventObji.initEvent(\'speak\', true, true);" +
+                    "eventObji.name = '" + name + "';\n" +
+                    "document.dispatchEvent(eventObji);" +
+                    "}}}");
+
+            sendToPresenter(data, this.session, sessionID);
 
         } else if (data.contains(REMOTE_MARKUP)) {
 

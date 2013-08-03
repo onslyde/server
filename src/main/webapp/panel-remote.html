@@ -34,15 +34,15 @@
     <nav class="primary">
         <ul>
             <li>
-                <input id="option1" class="button" type="submit" value="" />
-                <input id="option2" class="button" type="submit" value="" />
-                <input id="nice" class="button" type="submit" value="Nice!" />
-                <input id="wtf" class="button" type="submit" value="Thumbs Down!"/>
+                <input id="nice" class="button" type="submit" value="Agree" />
+                <input id="wtf" class="button" type="submit" value="Disagree"/>
+                <input id="speak" class="button" type="submit" value="I want to speak!" />
             </li>
 
         </ul>
     </nav>
-
+    <button id="authorize-button" style="visibility: hidden">Authorize</button>
+    <div id="usercontent"></div>
     <div id="slide-group-container">
 
         <div id="front" class="normal">
@@ -65,7 +65,7 @@
 
 </div>
 <script type="text/javascript" src="http://code.jquery.com/jquery-1.7.1.min.js" ></script>
-<script type="text/javascript" src="js/remote.js?v=2" ></script>
+<script type="text/javascript" src="js/panel-remote.js?v=2" ></script>
 <script type="text/javascript" src="js/onslyde-1.0.0.panel.js?v=1" ></script>
 <script type="text/javascript">
 
@@ -78,6 +78,7 @@
     window.slidfast = onslyde;
 </script>
 <script type="text/javascript" src="js/gracefulWebSocket.js" ></script>
-
+<script type="text/javascript" src="js/gplus-oauth.js" ></script>
+<script src="https://apis.google.com/js/client.js?onload=handleClientLoad"></script>
 </body>
 </html>

@@ -246,6 +246,10 @@
           onslyde.panel.updateDeck(e.wsCount,e.pollCount);
         }, false);
 
+        window.addEventListener('speak', function(e) {
+          onslyde.panel.queueSpeaker(e.name);
+        }, false);
+
         //start timer
         var timerHolder = document.getElementById('timer');
         var startsecond = 0;
@@ -278,6 +282,10 @@
         wscount = wsc;
         pollcount = pc;
         document.getElementById('totalCount').innerHTML = (parseInt(wsc,10) + parseInt(pc,10));
+      },
+
+      queueSpeaker : function(name) {
+        document.getElementById('spekerQueue').innerHTML = name;
       },
 
       wsCount : function() {
