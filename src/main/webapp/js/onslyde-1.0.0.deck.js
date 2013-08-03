@@ -1150,6 +1150,8 @@
           slidfast.slides.updateDeck(e.wsCount,e.pollCount);
         }, false);
 
+        document.getElementById('sessionID').innerHTML = csessionID;
+
         this.checkOptions();
 
         if(onslyde.mode === 'default'){
@@ -1179,7 +1181,6 @@
         pollcount = pc;
         document.getElementById('wscount').innerHTML = wscount;
         document.getElementById('pollcount').innerHTML = pollcount;
-        document.getElementById('sessionID').innerHTML = csessionID;
       },
 
       wsCount : function() {
