@@ -19,7 +19,7 @@ public class OnslydeSocketCreator implements WebSocketCreator
     @Override
     public Object createWebSocket(UpgradeRequest req, UpgradeResponse resp)
     {
-        return onslydeSocket;
+        return new OnslydeWebSocketHandler();
     }
 
 }

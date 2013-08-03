@@ -182,7 +182,7 @@
       _onmessage: function (m) {
         if (m.data) {
 
-          if (m.data.indexOf('sessionID":"' + onslyde.sessionID) > 0) {
+          if (m.data.indexOf('sessionID":"' + panel.sessionID) > 0) {
             try {
               //avoid use of eval...
               var event = (m.data);
@@ -235,7 +235,6 @@
           onslyde.panel.updateDeck(e.wsCount,e.pollCount);
         }, false);
 
-
         this.connect('::connect::');
         setTimeout(function(){onslyde.panel.updateRemotes();},1000);
       },
@@ -257,9 +256,8 @@
       updateDeck : function(wsc,pc) {
         wscount = wsc;
         pollcount = pc;
-        document.getElementById('wscount').innerHTML = wscount;
-        document.getElementById('pollcount').innerHTML = pollcount;
-        document.getElementById('sessionID').innerHTML = csessionID;
+        document.getElementById('totalCount').innerHTML = (wsc + pc);
+        document.getElementById('sessionID').innerHTML = panel.sessionID;
       },
 
       wsCount : function() {

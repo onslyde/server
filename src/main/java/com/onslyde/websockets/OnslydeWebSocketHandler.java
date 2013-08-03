@@ -41,6 +41,7 @@ public class OnslydeWebSocketHandler
 
     String attendeeIP = "111.111.111.111";
     int sessionID = 0;
+    private int pollCount = 0;
 
     public void observeItemEvent(@Observes Mediator mediator) {
         syncMediator(mediator);
@@ -107,7 +108,7 @@ public class OnslydeWebSocketHandler
 
 //        System.out.println("----attendeeIP 1: " + attendeeIP);
 
-        int pollCount = 0;
+
 
         try {
             if (mediator != null) {
@@ -133,11 +134,9 @@ public class OnslydeWebSocketHandler
         //update count on deck
         try {
             if (getSessionManager() != null) {
-
-                //todo - very inefficient... this only needs to go to presenter/slide deck
-                if (mediator.getSessions().containsKey(sessionID)) {
+                if (mediator.getPsessions().containsKey(sessionID)) {
                     int wscount  = mediator.getSessions().get(sessionID).size();
-                    this.session.getRemote().sendStringByFuture(ClientEvent.updateCount(wscount, pollCount, sessionID));
+                    sendToPresenter(ClientEvent.updateCount(wscount, pollCount, sessionID),null,sessionID);
                 }
 
             }
@@ -373,23 +372,16 @@ public class OnslydeWebSocketHandler
             }
 
         } catch (Exception x) {
-            // Error was detected, close the ChatWebSocket client side
-            try {
-                connection.disconnect();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
+            x.printStackTrace();
         }
     }
-
-
 
     @OnWebSocketClose
     public void onWebSocketClose(int statusCode, String reason)
     {
 //        System.out.println("-this.sessionID----------" + this.sessionID + " sesseion " + this.session);
-        if(mediator.getSessions().containsKey(this.sessionID)){
-//            System.out.println("-remove attendee socket----------" + sessionID + " sesseion " + this.session);
+        if(mediator.getSessions().containsKey(sessionID)){
+            System.out.println("-remove attendee socket--" + attendeeIP + "--------" + sessionID + " sesseion " + this.session);
             Map session = mediator.getSessions().get(sessionID);
 
             if(session.containsKey(attendeeIP)){
@@ -410,6 +402,14 @@ public class OnslydeWebSocketHandler
 //        System.out.println("---onclose" + mediator.getWebsockets().contains(this));
 
         mediator.getWebsockets().remove(this);
+
+        if(mediator.getPsessions().containsKey(this.sessionID)){
+            if(mediator.getPsessions().get(this.sessionID).containsKey(this.attendeeIP)){
+                System.out.println("-remove presenter socket--" + this.attendeeIP + "--------" + sessionID + " sesseion " + this.session);
+                mediator.getPsessions().get(this.sessionID).remove(this.attendeeIP);
+            }
+
+        }
 //        System.out.println("---onclose" + mediator.getWebsockets().size());
 
     }
