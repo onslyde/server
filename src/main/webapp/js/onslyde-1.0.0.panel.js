@@ -128,7 +128,9 @@
 
         }, false);
 
-        if (ip === null && location.protocol !== "file:") {
+        //added one more exception for running node server on port 8001 :)
+        //todo - this needs to be refactored with a whitelist for all 4 environments.
+        if (ip === null && location.protocol !== "file:" && location.host !== 'localhost:8001') {
           //(3) and (2) make sure we make the ajax request
           ai.doGet();
         } else {
@@ -232,12 +234,15 @@
       groupSlideIndex = 0,
       groupIndex = 0,
       currentVotes = {},
-      totalVotes = 0;
+      totalVotes = 0,
+      speakerList = [],
+      currentSpeaker;
 
     onslyde.panel = onslyde.prototype = {
 
       init : function(thisSession) {
 
+        //-----------begin event listeners
         window.addEventListener('clientVote', function (e) {
           onslyde.panel.optionVote(e.vote, activeSlide);
         }, false);
@@ -247,8 +252,33 @@
         }, false);
 
         window.addEventListener('speak', function(e) {
-          onslyde.panel.queueSpeaker(e.name);
+          var speaker = JSON.parse(e.name);
+          onslyde.panel.queueSpeaker(speaker);
         }, false);
+
+        window.addEventListener('clearRoute', function(e) {
+          slidfast.slides.clearRoute();
+        }, false);
+
+        window.addEventListener('wtf', function(e) {
+          var wtf = document.getElementById("wtf");
+          wtf.innerHTML = "Thumbs Down!";
+          if(wtf){
+            wtf.className = "show-wtf transition";
+            setTimeout(function(){wtf.className = "hide-wtf transition"},800)
+          }
+        }, false);
+
+        window.addEventListener('nice', function(e) {
+          var nice = document.getElementById("nice");
+          nice.innerHTML = "Nice!";
+          if(nice){
+            nice.className = "show-nice nice transition";
+            setTimeout(function(){nice.className = "hide-nice transition"},800)
+          }
+        }, false);
+        //-----------end event listeners
+
 
         //start timer
         var timerHolder = document.getElementById('timer');
@@ -284,8 +314,53 @@
         document.getElementById('totalCount').innerHTML = (parseInt(wsc,10) + parseInt(pc,10));
       },
 
-      queueSpeaker : function(name) {
-        document.getElementById('spekerQueue').innerHTML = name;
+      queueSpeaker : function(speaker) {
+        speakerList.push(speaker);
+        console.log('speakerList',speakerList);
+        var image = document.createElement('img');
+        image.src = speaker.pic;
+        image.onclick = function(){onslyde.panel.upNextSpeaker(speaker);};
+        document.getElementById('speakerQueue').appendChild(image);
+      },
+
+      upNextSpeaker : function(speaker) {
+        var image = document.createElement('img');
+        image.src = speaker.pic;
+        image.onclick = function(){onslyde.panel.speakerLive(speaker);};
+        document.getElementById('upNext').appendChild(image);
+        this.removeSpeaker(speaker.email);
+      },
+
+      speakerLive : function(speaker) {
+        var image = document.createElement('img');
+        image.src = speaker.pic;
+        document.getElementById('currentSpeaker').innerHTML = '';
+        document.getElementById('currentSpeaker').appendChild(image);
+        //should we automatically move the next in the list to "up next"
+        //for now just remove.
+        document.getElementById('upNext').innerHTML = '';
+      },
+
+      removeSpeaker : function(email) {
+        //removes speaker from queue
+        for(var i=0;i < speakerList.length;i++){
+          if(speakerList[i].email === email){
+            speakerList.splice(i,1);
+            console.log('removed speaker: ', email);
+          }
+        }
+        console.log('speakerList after remove',speakerList);
+        //todo - rebuild list - improve this
+        document.getElementById('speakerQueue').innerHTML = '';
+
+        for(var j=0;j < speakerList.length;j++){
+          var image = document.createElement('img');
+          image.src = speakerList[j].pic;
+          console.log(speakerList[j])
+          image.onclick = function(){onslyde.panel.upNextSpeaker(speakerList[j]);};
+          document.getElementById('speakerQueue').appendChild(image);
+        }
+
       },
 
       wsCount : function() {
