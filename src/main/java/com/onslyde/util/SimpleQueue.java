@@ -4,13 +4,6 @@ import javax.enterprise.context.Dependent;
 import java.io.Serializable;
 import java.util.LinkedList;
 
-/**
- * Created with IntelliJ IDEA.
- * User: wesleyhales
- * Date: 8/8/12
- * Time: 8:59 PM
- * To change this template use File | Settings | File Templates.
- */
 @Dependent
 public class SimpleQueue<E> implements Serializable {
 

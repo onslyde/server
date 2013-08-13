@@ -1,7 +1,3 @@
-/**
- * onslyde, Audience engagement
- * Copyright 2012, Hales Consulting, Inc., and individual contributors
-*/
 package com.onslyde.util;
 
 import javax.servlet.*;
