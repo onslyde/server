@@ -268,8 +268,8 @@
         }, false);
 
         window.addEventListener('speak', function(e) {
-          var speaker = JSON.parse(e.name);
-          onslyde.panel.queueSpeaker(speaker);
+          var speaker = JSON.parse(e.attendee);
+          onslyde.panel.queueSpeaker(speaker, e.ip);
         }, false);
 
         window.addEventListener('clearRoute', function(e) {
@@ -330,24 +330,24 @@
         document.getElementById('totalCount').innerHTML = (parseInt(wsc,10) + parseInt(pc,10));
       },
 
-      queueSpeaker : function(speaker) {
+      queueSpeaker : function(speaker,ip) {
         speakerList.push(speaker);
         console.log('speakerList',speakerList);
         var image = document.createElement('img');
         image.src = speaker.pic;
-        image.onclick = function(){onslyde.panel.upNextSpeaker(speaker);};
+        image.onclick = function(){onslyde.panel.upNextSpeaker(speaker,ip);};
         document.getElementById('speakerQueue').appendChild(image);
       },
 
-      upNextSpeaker : function(speaker) {
+      upNextSpeaker : function(speaker,ip) {
         var image = document.createElement('img');
         image.src = speaker.pic;
-        image.onclick = function(){onslyde.panel.speakerLive(speaker);};
+        image.onclick = function(){onslyde.panel.speakerLive(speaker,ip);};
         document.getElementById('upNext').appendChild(image);
         this.removeSpeaker(speaker.email);
       },
 
-      speakerLive : function(speaker) {
+      speakerLive : function(speaker,ip) {
         var image = document.createElement('img');
         image.src = speaker.pic;
         document.getElementById('currentSpeaker').innerHTML = '';
@@ -355,6 +355,10 @@
         //should we automatically move the next in the list to "up next"
         //for now just remove.
         document.getElementById('upNext').innerHTML = '';
+
+        //activate new poll for new speaker
+        var activeOptionsString = 'activeOptions:null,null,' + speaker.name + "," + ip;
+        this.connect(activeOptionsString);
       },
 
       removeSpeaker : function(email) {

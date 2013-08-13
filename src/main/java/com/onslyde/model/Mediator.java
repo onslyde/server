@@ -45,7 +45,10 @@ public class Mediator {
 
     //each session IS is the key to a List of IP addresses and their respective connection
     private Map<Integer, Map<String,Session>> sessions;
+    //presenter sessions across the app
     private Map<Integer, Map<String,Session>> psessions;
+
+
     private static ConcurrentLinkedQueue<OnslydeWebSocketHandler> websockets = new ConcurrentLinkedQueue<OnslydeWebSocketHandler>();
 
     public static class SessionTracker {
@@ -60,6 +63,7 @@ public class Mediator {
         private int activeSlideGroupID;
         private int activeSlide;
         private String activeMarkup = "";
+        private Map<String,Session> queuedParticipants;
 
         public int getActiveSlideGroupID() {
             return activeSlideGroupID;
@@ -91,6 +95,14 @@ public class Mediator {
 
         public void setActiveMarkup(String activeMarkup) {
             this.activeMarkup = activeMarkup;
+        }
+
+        public Map<String, Session> getQueuedParticipants() {
+            return queuedParticipants;
+        }
+
+        public void setQueuedParticipants(Map<String, Session> queuedParticipants) {
+            this.queuedParticipants = queuedParticipants;
         }
     }
 

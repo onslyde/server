@@ -93,4 +93,16 @@ public class ClientEvent {
                 "}}}");
     }
 
+    public static String speak(int sessionID, String attendeeIP, String attendee, int position){
+        return ("{\"onslydeEvent\":{\"sessionID\":\"" + sessionID + "\"," +
+                "\"fire\":function(){" +
+                "window.eventObji = document.createEvent('Event');" +
+                "eventObji.initEvent(\'speak\', true, true);" +
+                "eventObji.attendee = '" + attendee + "';\n" +
+                "eventObji.ip = '" + attendeeIP + "';\n" +
+                "eventObji.position = '" + position + "';\n" +
+                "document.dispatchEvent(eventObji);" +
+                "}}}");
+    }
+
 }

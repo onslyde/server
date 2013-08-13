@@ -12,7 +12,6 @@ speak.onclick = function(event) {
   console.log('---', userObject)
   _gaq.push(['_trackEvent', 'onslyde-option1', 'vote']);
   console.log('option1.value',speak.value);
-//  return sendVote(event,speak.value);
   ws.send('speak:' + JSON.stringify(userObject));
 };
 
@@ -56,7 +55,7 @@ window.addEventListener('updateOptions', function(e) {
       speak.disabled = false;
       wtf.disabled = false;
       nice.disabled = false;
-      speak.value = 'I want to speak!';
+//      speak.value = 'I want to speak!';
       wtf.value = 'Thumbs Down!';
       nice.value = 'Nice!';
       //voteLabel.style.opacity = 1;
@@ -70,6 +69,16 @@ window.addEventListener('updateOptions', function(e) {
 //    disablePoll();
 //  }
 
+
+}, false);
+
+//callback for pressing the speak button (managed server side)
+window.addEventListener('speak', function(e) {
+  if(e.position === '777'){
+    speak.value = 'Thanks for speaking!';
+  }else{
+    speak.value = 'You are queued #' + e.position;
+  }
 
 }, false);
 

@@ -137,10 +137,8 @@ public class OnslydeWebSocketHandler
                 }
                 System.out.println("_____sessions in map: " + mediator.getSessionID() + " users session: " + sessionID + " size for session: " + mediator.getSessions().get(sessionID).size() + "---" + mediator.getSessions().get(sessionID).get(attendeeIP));
 
-                if (mediator.getActiveOptions().containsKey(sessionID)) {
-
-                    Mediator.SessionTracker st = mediator.getActiveOptions().get(sessionID);
-                    List options = st.getActiveOptions();
+                if (getSessionTracker(sessionID) != null) {
+                    List options = getSessionTracker(sessionID).getActiveOptions();
                     if (options.size() == 3) {
                         //only send options to this connection
                         this.session.getRemote().sendStringByFuture(ClientEvent.createEvent("updateOptions", options, sessionID));
@@ -179,7 +177,7 @@ public class OnslydeWebSocketHandler
         if (request.get("session") != null)
             sessionID = Integer.parseInt(((String[]) request.get("session"))[0]);
 
-//        System.out.println("----attendeeIP: " + attendeeIP);
+        System.out.println("----attendeeIP: " + attendeeIP);
         System.out.println("=====sessionID: " + sessionID);
 
 
@@ -235,8 +233,30 @@ public class OnslydeWebSocketHandler
         } else if (data.contains(ACTIVE_OPTIONS)) {
             String options = data.substring(ACTIVE_OPTIONS.length(), data.length());
             List<String> optionList = Arrays.asList(options.split("\\s*,\\s*"));
-//                System.out.println("=======optionList.size()=" + optionList.size() + " " + optionList.get(2));
+                System.out.println("=======optionList.size()=" + optionList.size() + " " + optionList.get(2));
+            String liveAttendee = "";
+            if (optionList.size() == 4) {
+                //hack for the panels, notify those that want to speak their position, etc...
+                // :P  get the attendee IP who is going live
+                liveAttendee = optionList.get(3);
+                //save the list as orginal 3 items
+                optionList = optionList.subList(0,2);
+
+                if(getSessionTracker(sessionID).getQueuedParticipants().containsKey(liveAttendee)){
+                    Session thanks = getSessionTracker(sessionID).getQueuedParticipants().get(liveAttendee);
+                    thanks.getRemote().sendStringByFuture(ClientEvent.speak(sessionID, attendeeIP, "", 777));
+
+                    getSessionTracker(sessionID).getQueuedParticipants().remove(liveAttendee);
+                    Collection<Session> participantSessions = getSessionTracker(sessionID).getQueuedParticipants().values();
+                    int count = 0;
+                    for (Session sessions : participantSessions) {
+                        sessions.getRemote().sendStringByFuture(ClientEvent.speak(sessionID, attendeeIP, "", count++));
+                    }
+                }
+            }
+
             if (optionList.size() == 3) {
+
                 try {
                     getSessionManager().addGroupOptions(optionList, sessionID);
                 } catch (Exception e) {
@@ -266,15 +286,20 @@ public class OnslydeWebSocketHandler
 
             String name = data.substring("speak:".length(), data.length());
 
-            data = ("{\"onslydeEvent\":{\"sessionID\":\"" + sessionID + "\"," +
-                    "\"fire\":function(){" +
-                    "window.eventObji = document.createEvent('Event');" +
-                    "eventObji.initEvent(\'speak\', true, true);" +
-                    "eventObji.name = '" + name + "';\n" +
-                    "document.dispatchEvent(eventObji);" +
-                    "}}}");
+            data = ClientEvent.speak(sessionID, attendeeIP, name, 0);
 
             sendToPresenter(data, this.session, sessionID);
+            //send notification to remote
+            Mediator.SessionTracker st = getSessionTracker(sessionID);
+            if (st != null) {
+                if(st.getQueuedParticipants() == null){
+                   st.setQueuedParticipants(new HashMap<String,Session>());
+                }
+                st.getQueuedParticipants().put(attendeeIP,this.session);
+                //use the same speak event and send back to remote... handle as confirm
+                this.session.getRemote().sendStringByFuture(ClientEvent.speak(sessionID, attendeeIP, name, getSessionTracker(sessionID).getQueuedParticipants().size()));
+            }
+
 
         } else if (data.contains(REMOTE_MARKUP)) {
 
@@ -385,12 +410,14 @@ public class OnslydeWebSocketHandler
                 owsh.getRemote().sendStringByFuture(data);
             }
         } catch (Exception x) {
-            // Error was detected, close the ChatWebSocket client side
-            try {
-                connection.disconnect();
-            } catch (IOException e) {
-                e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
-            }
+            System.out.println("--- problem sending to all");
+            x.printStackTrace();
+            //not sure if we want to diconnect yet
+//            try {
+//                connection.disconnect();
+//            } catch (IOException e) {
+//                e.printStackTrace();
+//            }
 
         }
     }
@@ -474,6 +501,14 @@ public class OnslydeWebSocketHandler
 
     public void observeItemEvent(@Observes SessionManager sessionManager) {
         syncSlidFast(sessionManager);
+    }
+
+    private Mediator.SessionTracker getSessionTracker(int sessionID){
+        Mediator.SessionTracker st = null;
+        if (mediator.getActiveOptions().containsKey(sessionID)) {
+            st = mediator.getActiveOptions().get(sessionID);
+        }
+        return st;
     }
 
     
