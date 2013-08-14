@@ -67,10 +67,12 @@ public class AttendeeService {
 
     private List optionList = new ArrayList();
 
+    private String ip = null;
+
     @GET
     @Path("/json")
     @Produces(MediaType.APPLICATION_JSON)
-    public String listAllMembersJSON(@QueryParam("sessionID") int sessionID) {
+    public String listAllMembersJSON(@QueryParam("sessionID") int sessionID,@Context HttpServletRequest req) {
         //@SuppressWarnings("unchecked")
         //executing this every second on poll... nice :)
         String data = "";
@@ -79,6 +81,28 @@ public class AttendeeService {
         String activeMarkup = "";
 
         try {
+
+            if(ip == null && req.getSession().getAttribute("attendeeIP") == null){
+                //first subnet should be a user id for the presenter?
+                ip = "777." + randomIPRange() + "." + randomIPRange() + "." + randomIPRange();
+                req.getSession().setAttribute("attendeeIP",ip);
+                Map<Integer,Integer> pollcount = mediator.getPollCount();
+
+                if(!pollcount.containsKey(sessionID)){
+                    pollcount.put(sessionID,1);
+                }else{
+                    int pc = pollcount.get(sessionID);
+                    pc++;
+                    pollcount.put(sessionID,pc);
+                }
+
+            }else{
+                ip = req.getSession().getAttribute("attendeeIP").toString();
+            }
+
+
+
+            //send active options or markup
             if(mediator.getActiveOptions().containsKey(sessionID)){
                 Mediator.SessionTracker st = mediator.getActiveOptions().get(sessionID);
 
@@ -110,33 +134,16 @@ public class AttendeeService {
         return min + (int)(Math.random() * ((max - min) + 1)) + "";
     }
 
-    private String ip = null;
+
 
     @POST
     @Path("/vote")
     @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
     @Produces(MediaType.APPLICATION_JSON)
-    public Response optionVote(@FormParam("user") String user, @FormParam("sessionID") int sessionID, @FormParam("vote") String vote, @Context HttpServletRequest req) {
+    public Response optionVote(@FormParam("user") String user, @FormParam("sessionID") int sessionID, @FormParam("vote") String vote) {
         mediatorEventSrc.fire(mediator);
 
         if(vote != null){
-            if(ip == null && req.getSession().getAttribute("onslydeIP") == null){
-                //first subnet should be a user id for the presenter?
-                ip = "777." + randomIPRange() + "." + randomIPRange() + "." + randomIPRange();
-                req.getSession().setAttribute("onslydeIP",ip);
-                Map<Integer,Integer> pollcount = mediator.getPollCount();
-
-                if(!pollcount.containsKey(sessionID)){
-                    pollcount.put(sessionID,1);
-                }else{
-                    int pc = pollcount.get(sessionID);
-                    pc++;
-                    pollcount.put(sessionID,pc);
-                }
-
-            }else{
-                ip = req.getSession().getAttribute("onslydeIP").toString();
-            }
 
             sessionManager.updateGroupVote(vote,ip,sessionID);
 

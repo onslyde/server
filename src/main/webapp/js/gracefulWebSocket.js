@@ -112,7 +112,11 @@ $.extend({
         fws.currentRequest = new Date().getTime();
 
         // extend default params with plugin options
-        return $.extend(opts.fallbackPollParams, {"previousRequest": fws.previousRequest, "currentRequest": fws.currentRequest, "sessionID": slidfast.ws.sessionID()});
+        return $.extend(opts.fallbackPollParams, {
+          "previousRequest": fws.previousRequest,
+          "currentRequest": fws.currentRequest,
+          "sessionID": slidfast.ws.sessionID(),
+          "attendeeIP" : localStorage['onslyde.attendeeIP']});
       }
 
       /**

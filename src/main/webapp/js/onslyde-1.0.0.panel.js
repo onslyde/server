@@ -189,7 +189,10 @@
           var location = 'ws://' + ip + ':8081/?session=' + thisSessionID + '&attendeeIP=' + this.getip();
           ws = new WebSocket(location);
         } else {
-          //we sent end a mock object from jquery polling
+          //we sent in a mock object from jquery polling
+          //still need to setup ip in localStorage
+          this.getip();
+
           ws = websocket;
         }
 
