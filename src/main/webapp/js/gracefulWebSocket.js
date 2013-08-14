@@ -46,7 +46,7 @@ $.extend({
 
       var pollInterval;
       var openTimout;
-      var posturl = opts.fallbackSendURL + '/go/attendees/vote';
+      var posturl = '';
 
       // create WebSocket object
       var fws = {
@@ -58,9 +58,22 @@ $.extend({
           var success = true;
           //replace colon from namespaced websocket data
 
-          vote = data.replace(('vote:'),'');
+          //todo - peak option for polling
+          var vote = '';
+
+          if(data.indexOf('speak:') === 0){
+            vote = data.replace(('speak:'),'');
+            posturl = opts.fallbackSendURL + '/go/attendees/speak';
+            data = {"speak": vote, "sessionID": slidfast.ws.sessionID(), "attendeeIP": localStorage['onslyde.attendeeIP']};
+          }else{
+            vote = data.replace(('vote:'),'');
+            posturl = opts.fallbackSendURL + '/go/attendees/vote';
+            data = {"vote": vote, "sessionID": slidfast.ws.sessionID()};
+          }
+
+
 //                        data += ' sessionID:' + window.onslydeSessionID + ' ';
-          data = {"vote": vote, "sessionID": slidfast.ws.sessionID()};
+
 //                        console.log('data',data)
           $.ajax({
             async: false, // send synchronously

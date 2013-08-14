@@ -119,31 +119,24 @@ public class AttendeeService {
     public Response optionVote(@FormParam("user") String user, @FormParam("sessionID") int sessionID, @FormParam("vote") String vote, @Context HttpServletRequest req) {
         mediatorEventSrc.fire(mediator);
 
-        //req.getRemoteAddr();
-        //get ip and verify attendee
-//        System.out.println("**************slidFast" + slidFast.getCurrentVotes().size() + "ip: " + ip + " vote:" + vote + " sessionID:" + sessionID);
         if(vote != null){
             if(ip == null && req.getSession().getAttribute("onslydeIP") == null){
                 //first subnet should be a user id for the presenter?
                 ip = "777." + randomIPRange() + "." + randomIPRange() + "." + randomIPRange();
-//                System.out.println("**************random" + ip);
                 req.getSession().setAttribute("onslydeIP",ip);
-                Map pollcount = mediator.getPollCount();
-                if(!mediator.getPollCount().containsKey(sessionID)){
-                    mediator.getPollCount().put(sessionID,1);
+                Map<Integer,Integer> pollcount = mediator.getPollCount();
+
+                if(!pollcount.containsKey(sessionID)){
+                    pollcount.put(sessionID,1);
                 }else{
-                    int pc = mediator.getPollCount().get(sessionID);
+                    int pc = pollcount.get(sessionID);
                     pc++;
-                    mediator.getPollCount().put(sessionID,pc);
+                    pollcount.put(sessionID,pc);
                 }
-//                System.out.println("connect pollcount" + pollcount);
 
             }else{
                 ip = req.getSession().getAttribute("onslydeIP").toString();
-//                System.out.println("**************else" + ip);
             }
-
-            //System.out.println("**************slidFast" + ip);
 
             sessionManager.updateGroupVote(vote,ip,sessionID);
 
@@ -153,6 +146,27 @@ public class AttendeeService {
                 mediator.setJsEvent(ClientEvent.clientVote(vote,sessionID));
             }
 
+            mediatorEventSrc.fire(mediator);
+            mediator.setJsEvent(null);
+        }
+        Response.ResponseBuilder builder = null;
+
+        builder = Response.ok();
+
+        return builder.build();
+    }
+
+
+    @POST
+    @Path("/speak")
+    @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response optionSpeak(@FormParam("attendeeIP") String attendeeIP, @FormParam("sessionID") int sessionID, @FormParam("speak") String speak, @Context HttpServletRequest req) {
+        mediatorEventSrc.fire(mediator);
+        System.out.println("-----" + sessionID + " " + attendeeIP + " " + speak);
+        if(speak != null){
+
+            mediator.setJsEvent(ClientEvent.speak(sessionID, attendeeIP, speak, 0));
             mediatorEventSrc.fire(mediator);
             mediator.setJsEvent(null);
         }

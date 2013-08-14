@@ -71,12 +71,13 @@ public class OnslydeWebSocketHandler
 
         if (mediator.getJsEvent() != null) {
             try {
-                for(Map<String,Session> sessions : mediator.getSessions().values()){
-                    for(Session owsh : sessions.values()){
+                //only send to presenter for session
+                System.out.println("----sync current sessionID for remote: "+ sessionID);
+                if(mediator.getPsessions().containsKey(sessionID)){
+                    for(Session owsh :  mediator.getPsessions().get(sessionID).values()){
                         owsh.getRemote().sendStringByFuture(mediator.getJsEvent());
                     }
                 }
-
 
             } catch (Exception x) {
                 System.out.println("------need better solution for socket management!!!-");
