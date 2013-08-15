@@ -69,12 +69,12 @@ public class OnslydeWebSocketHandler
         //we fire this event from multiple locations in the CDI beans and this WebSocket is managed by that
         //...sad but that's the hack
 
-        if (mediator.getJsEvent() != null) {
+        if (mediator.getJsEvent() != null && mediator.getCurrentSessionID() != 0) {
             try {
                 //only send to presenter for session
-                System.out.println("----sync current sessionID for remote: "+ sessionID);
-                if(mediator.getPsessions().containsKey(sessionID)){
-                    for(Session owsh :  mediator.getPsessions().get(sessionID).values()){
+                System.out.println("----sync current sessionID for remote: "+ mediator.getCurrentSessionID());
+                if(mediator.getPsessions().containsKey(mediator.getCurrentSessionID())){
+                    for(Session owsh :  mediator.getPsessions().get(mediator.getCurrentSessionID()).values()){
                         owsh.getRemote().sendStringByFuture(mediator.getJsEvent());
                     }
                 }
@@ -242,7 +242,7 @@ public class OnslydeWebSocketHandler
                 liveAttendee = optionList.get(3);
                 //save the list as orginal 3 items
                 optionList = optionList.subList(0,2);
-
+                System.out.println("====" + getSessionTracker(sessionID) + "=" + sessionID);
                 if(getSessionTracker(sessionID).getQueuedParticipants().containsKey(liveAttendee)){
                     Session thanks = getSessionTracker(sessionID).getQueuedParticipants().get(liveAttendee);
                     thanks.getRemote().sendStringByFuture(ClientEvent.speak(sessionID, attendeeIP, "", 777));

@@ -72,7 +72,7 @@ public class AttendeeService {
     @GET
     @Path("/json")
     @Produces(MediaType.APPLICATION_JSON)
-    public String listAllMembersJSON(@QueryParam("sessionID") int sessionID,@Context HttpServletRequest req) {
+    public String listAllMembersJSON(@QueryParam("sessionID") int sessionID, @QueryParam("attendeeIP") String attendeeIP,@Context HttpServletRequest req) {
         //@SuppressWarnings("unchecked")
         //executing this every second on poll... nice :)
         String data = "";
@@ -82,12 +82,13 @@ public class AttendeeService {
 
         try {
 
-            if(ip == null && req.getSession().getAttribute("attendeeIP") == null){
-                //first subnet should be a user id for the presenter?
-                ip = "777." + randomIPRange() + "." + randomIPRange() + "." + randomIPRange();
-                req.getSession().setAttribute("attendeeIP",ip);
-                Map<Integer,Integer> pollcount = mediator.getPollCount();
+            if(attendeeIP != null){
 
+                req.getSession().setAttribute("attendeeIP",attendeeIP);
+                ip = attendeeIP;
+
+                //increment poll count
+                Map<Integer,Integer> pollcount = mediator.getPollCount();
                 if(!pollcount.containsKey(sessionID)){
                     pollcount.put(sessionID,1);
                 }else{
@@ -97,7 +98,7 @@ public class AttendeeService {
                 }
 
             }else{
-                ip = req.getSession().getAttribute("attendeeIP").toString();
+                ip = "777." + randomIPRange() + "." + randomIPRange() + "." + randomIPRange();
             }
 
 
@@ -152,9 +153,10 @@ public class AttendeeService {
             }else{
                 mediator.setJsEvent(ClientEvent.clientVote(vote,sessionID));
             }
-
+            mediator.setCurrentSessionID(sessionID);
             mediatorEventSrc.fire(mediator);
             mediator.setJsEvent(null);
+            mediator.setCurrentSessionID(0);
         }
         Response.ResponseBuilder builder = null;
 
@@ -174,8 +176,10 @@ public class AttendeeService {
         if(speak != null){
 
             mediator.setJsEvent(ClientEvent.speak(sessionID, attendeeIP, speak, 0));
+            mediator.setCurrentSessionID(sessionID);
             mediatorEventSrc.fire(mediator);
             mediator.setJsEvent(null);
+            mediator.setCurrentSessionID(0);
         }
         Response.ResponseBuilder builder = null;
 

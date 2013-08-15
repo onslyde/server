@@ -40,6 +40,7 @@ public class Mediator {
     //active options use the sessionID as the key and store currently activated remote options
     private static Map<Integer,SessionTracker> activeOptions;
     private String jsEvent;
+    private int currentSessionID;
     private List<Integer> sessionID;
     private Map<Integer,Integer> pollCount;
 
@@ -127,6 +128,14 @@ public class Mediator {
 
     public void setJsEvent(String jsEvent) {
         this.jsEvent = jsEvent;
+    }
+
+    public int getCurrentSessionID() {
+        return currentSessionID;
+    }
+
+    public void setCurrentSessionID(int currentSessionID) {
+        this.currentSessionID = currentSessionID;
     }
 
     public List<Integer> getSessionID() {
