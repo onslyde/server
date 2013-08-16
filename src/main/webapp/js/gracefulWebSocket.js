@@ -124,8 +124,11 @@ $.extend({
        */
       function pollSuccess(data) {
 
+
         // trigger onmessage
         var messageEvent = {"data" : data};
+
+        console.log('---data-',messageEvent)
         //alert(messageEvent);
         fws.onmessage(messageEvent);
       }
@@ -135,12 +138,13 @@ $.extend({
         $.ajax({
           type: opts.fallbackPollMethod,
           url: opts.fallbackPollURL + '/go/attendees/json',
-          dataType: 'text',
+          dataType: 'jsonp',
           data: getFallbackParams(),
           success: pollSuccess,
           async: false,
           timeout: 30000,
           error: function (xhr) {
+            console.log('ajax error')
             $(fws).triggerHandler('error');
           }
         });

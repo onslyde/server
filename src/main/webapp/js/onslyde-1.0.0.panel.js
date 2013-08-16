@@ -213,8 +213,11 @@
 
       _onmessage: function (m) {
         if (m.data) {
-
-          if (m.data.indexOf('sessionID":"' + sessionID) > 0) {
+          if(typeof m.data === 'object'){
+            if(m.data.onslydeEvent.sessionID > 0){
+              m.data.onslydeEvent.fire();
+            }
+          }else if (m.data.indexOf('sessionID":"' + onslyde.sessionID) > 0) {
             try {
               //avoid use of eval...
               var event = (m.data);

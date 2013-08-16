@@ -72,7 +72,7 @@ public class AttendeeService {
     @GET
     @Path("/json")
     @Produces(MediaType.APPLICATION_JSON)
-    public String listAllMembersJSON(@QueryParam("sessionID") int sessionID, @QueryParam("attendeeIP") String attendeeIP,@Context HttpServletRequest req) {
+    public String listAllMembersJSON(@QueryParam("sessionID") int sessionID, @QueryParam("attendeeIP") String attendeeIP, @QueryParam("attendeeIP") boolean tracked, @Context HttpServletRequest req) {
         //@SuppressWarnings("unchecked")
         //executing this every second on poll... nice :)
         String data = "";
@@ -82,43 +82,45 @@ public class AttendeeService {
 
         try {
 
-            if(attendeeIP != null){
+            if(ip == null){
+                req.setAttribute("tracked","true");
 
-                req.getSession().setAttribute("attendeeIP",attendeeIP);
-                ip = attendeeIP;
-
-                //increment poll count
-                Map<Integer,Integer> pollcount = mediator.getPollCount();
-                if(!pollcount.containsKey(sessionID)){
-                    pollcount.put(sessionID,1);
+                if(attendeeIP == null) {
+                    ip = "777." + randomIPRange() + "." + randomIPRange() + "." + randomIPRange();
+                    System.out.println("---2-" + ip);
                 }else{
-                    int pc = pollcount.get(sessionID);
-                    pc++;
-                    pollcount.put(sessionID,pc);
+                    ip = attendeeIP;
                 }
 
-            }else{
-                ip = "777." + randomIPRange() + "." + randomIPRange() + "." + randomIPRange();
+                //increment poll count
+                if(!tracked){
+                    Map<Integer,Integer> pollcount = mediator.getPollCount();
+                    if(!pollcount.containsKey(sessionID)){
+                        pollcount.put(sessionID,1);
+                    }else{
+                        int pc = pollcount.get(sessionID);
+                        pc++;
+                        pollcount.put(sessionID,pc);
+                    }
+                }
             }
 
-
-
             //send active options or markup
+            System.out.println("---3-" + mediator.getActiveOptions().containsKey(sessionID) + " " + sessionID);
             if(mediator.getActiveOptions().containsKey(sessionID)){
                 Mediator.SessionTracker st = mediator.getActiveOptions().get(sessionID);
-
 
                 if(st.getActiveOptions().size() > 0 && !st.getActiveOptions().get(0).equals("null")){
                     optionList.add(st.getActiveOptions().get(0));
                     optionList.add(st.getActiveOptions().get(1));
                     data = ClientEvent.createEvent("updateOptions", optionList, sessionID);
+                    System.out.println("---4-" + data);
                 }else{
                     data = st.getActiveMarkup();
+                    System.out.println("---5-" + data);
                 }
 
             }
-
-
 
         } catch (Exception e) {
             log.severe("problem with polling remote++++++");
