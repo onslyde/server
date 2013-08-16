@@ -83,7 +83,6 @@ public class AttendeeService {
         try {
 
             if(ip == null){
-                req.setAttribute("tracked","true");
 
                 if(attendeeIP == null) {
                     ip = "777." + randomIPRange() + "." + randomIPRange() + "." + randomIPRange();

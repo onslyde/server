@@ -105,7 +105,7 @@ $.extend({
         currentRequest: null
       };
 
-      function getFallbackParams() {
+      function getFallbackParams(tracked) {
 
         // update timestamp of previous and current poll request
         fws.previousRequest = fws.currentRequest;
@@ -116,7 +116,8 @@ $.extend({
           "previousRequest": fws.previousRequest,
           "currentRequest": fws.currentRequest,
           "sessionID": slidfast.ws.sessionID(),
-          "attendeeIP" : localStorage['onslyde.attendeeIP']});
+          "attendeeIP" : localStorage['onslyde.attendeeIP'],
+          "tracked" : tracked});
       }
 
       /**
@@ -133,13 +134,15 @@ $.extend({
         fws.onmessage(messageEvent);
       }
       var counter = 0;
-      function poll() {
-
+      function poll(tracked) {
+        if(tracked !== false){
+          tracked = true;
+        }
         $.ajax({
           type: opts.fallbackPollMethod,
           url: opts.fallbackPollURL + '/go/attendees/json',
           dataType: 'jsonp',
-          data: getFallbackParams(),
+          data: getFallbackParams(tracked),
           success: pollSuccess,
           async: false,
           timeout: 30000,
@@ -158,7 +161,7 @@ $.extend({
         fws.readyState = OPEN;
         //fws.currentRequest = new Date().getTime();
         $(fws).triggerHandler('open');
-        poll();
+        poll(false);
         pollInterval = setInterval(poll, opts.fallbackPollInterval);
       }, opts.fallbackOpenDelay);
 
