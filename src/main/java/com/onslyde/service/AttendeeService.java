@@ -23,6 +23,7 @@ package com.onslyde.service;
 import com.onslyde.model.Mediator;
 import com.onslyde.model.SessionManager;
 import com.onslyde.util.ClientEvent;
+import org.eclipse.jetty.websocket.api.Session;
 
 import javax.enterprise.context.RequestScoped;
 import javax.enterprise.event.Event;
@@ -162,18 +163,32 @@ public class AttendeeService {
     public Response optionSpeak(@FormParam("attendeeIP") String attendeeIP, @FormParam("sessionID") int sessionID, @FormParam("speak") String speak, @Context HttpServletRequest req) {
         mediatorEventSrc.fire(mediator);
         System.out.println("-----" + sessionID + " " + attendeeIP + " " + speak);
+        String data = "";
         if(speak != null){
 
             mediator.setJsEvent(ClientEvent.speak(sessionID, attendeeIP, speak, 0));
             mediator.setCurrentSessionID(sessionID);
             mediatorEventSrc.fire(mediator);
+
+            Mediator.SessionTracker st = mediator.getActiveOptions().get(sessionID);
+            if (st != null) {
+                if(st.getQueuedParticipants() == null){
+                    st.setQueuedParticipants(new HashMap<String,Session>());
+                }
+                st.getQueuedParticipants().put(attendeeIP,null);
+                //use the same speak event and send back to remote... handle as confirm
+                data = ClientEvent.speak(sessionID, attendeeIP, speak, mediator.getActiveOptions().get(sessionID).getQueuedParticipants().size());
+            }
+
             mediator.setJsEvent(null);
             mediator.setCurrentSessionID(0);
         }
-        Response.ResponseBuilder builder = null;
+//        Response.ResponseBuilder builder = null;
 
-        builder = Response.ok();
+//        builder = Response.ok();
 
-        return builder.build();
+//        builder = Response.ok();
+
+        return Response.ok(data, MediaType.APPLICATION_JSON).build();
     }
 }

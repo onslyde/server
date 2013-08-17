@@ -71,16 +71,12 @@ $.extend({
             data = {"vote": vote, "sessionID": slidfast.ws.sessionID()};
           }
 
-
-//                        data += ' sessionID:' + window.onslydeSessionID + ' ';
-
-//                        console.log('data',data)
           $.ajax({
             async: false, // send synchronously
             type: opts.fallbackSendMethod,
             url: posturl,
             data: data,
-            dataType: 'text',
+            dataType: 'json',
             contentType : "application/x-www-form-urlencoded; charset=utf-8",
             success: pollSuccess,
             error: function (xhr) {
@@ -125,6 +121,7 @@ $.extend({
        */
       function pollSuccess(data) {
         // trigger onmessage
+        console.log('------====data' , data);
         var messageEvent = {"data" : data};
 
         //alert(messageEvent);

@@ -212,6 +212,7 @@
       },
 
       _onmessage: function (m) {
+        console.log(m)
         if (m.data) {
           if(typeof m.data === 'object'){
             if(m.data.onslydeEvent.sessionID > 0){

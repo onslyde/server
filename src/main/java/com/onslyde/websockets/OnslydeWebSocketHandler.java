@@ -251,11 +251,13 @@ public class OnslydeWebSocketHandler
                     Collection<Session> participantSessions = getSessionTracker(sessionID).getQueuedParticipants().values();
                     int count = 0;
                     for (Session sessions : participantSessions) {
-                        sessions.getRemote().sendStringByFuture(ClientEvent.speak(sessionID, attendeeIP, "", count++));
+                        if(sessions != null){
+                            sessions.getRemote().sendStringByFuture(ClientEvent.speak(sessionID, attendeeIP, "", count++));
+                        }
                     }
                 }
             }
-
+            //basic continue with normal 3 options
             if (optionList.size() == 3) {
 
                 try {
@@ -298,6 +300,7 @@ public class OnslydeWebSocketHandler
                 }
                 st.getQueuedParticipants().put(attendeeIP,this.session);
                 //use the same speak event and send back to remote... handle as confirm
+                //you are queued as #xx
                 this.session.getRemote().sendStringByFuture(ClientEvent.speak(sessionID, attendeeIP, name, getSessionTracker(sessionID).getQueuedParticipants().size()));
             }
 
