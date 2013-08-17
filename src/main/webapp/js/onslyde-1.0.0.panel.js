@@ -217,7 +217,7 @@
             if(m.data.onslydeEvent.sessionID > 0){
               m.data.onslydeEvent.fire();
             }
-          }else if (m.data.indexOf('sessionID":"' + panel.sessionID) > 0) {
+          }else if (m.data.indexOf('sessionID":"' + sessionID) > 0) {
             try {
               //avoid use of eval...
               var event = (m.data);
