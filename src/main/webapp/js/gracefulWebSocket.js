@@ -124,19 +124,18 @@ $.extend({
        * @param {Object} data
        */
       function pollSuccess(data) {
-
-
         // trigger onmessage
         var messageEvent = {"data" : data};
 
-        console.log('---data-',messageEvent)
         //alert(messageEvent);
         fws.onmessage(messageEvent);
       }
+
       var counter = 0;
       function poll(tracked) {
-        if(tracked !== false){
-          tracked = true;
+        console.log('+++',tracked)
+        if(tracked !== 'start'){
+          tracked = 'active';
         }
         $.ajax({
           type: opts.fallbackPollMethod,
@@ -161,7 +160,7 @@ $.extend({
         fws.readyState = OPEN;
         //fws.currentRequest = new Date().getTime();
         $(fws).triggerHandler('open');
-        poll(false);
+        poll('start');
         pollInterval = setInterval(poll, opts.fallbackPollInterval);
       }, opts.fallbackOpenDelay);
 
@@ -171,7 +170,11 @@ $.extend({
     console.log(slidfast.ws.sessionID())
     // create a new websocket or fallback
     var ws = window.WebSocket ? new WebSocket(url + '?session=' + slidfast.ws.sessionID() + '&attendeeIP=' + slidfast.ws.getip()) : new FallbackSocket();
-    $(window).unload(function () { ws.close(); ws = null });
+    $(window).unload(function () {
+      //close ws connection
+      ws.close();
+      ws = null;
+    });
     return ws;
   }
 });

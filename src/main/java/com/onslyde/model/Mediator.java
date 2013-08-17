@@ -25,10 +25,7 @@ import org.eclipse.jetty.websocket.api.Session;
 
 import javax.annotation.PostConstruct;
 import javax.enterprise.context.ApplicationScoped;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.concurrent.ConcurrentLinkedQueue;
 
 @ApplicationScoped
@@ -42,7 +39,7 @@ public class Mediator {
     private String jsEvent;
     private int currentSessionID;
     private List<Integer> sessionID;
-    private Map<Integer,Integer> pollCount;
+    private Map<Integer,HashSet<String>> pollCount;
 
     //each session IS is the key to a List of IP addresses and their respective connection
     private Map<Integer, Map<String,Session>> sessions;
@@ -149,14 +146,14 @@ public class Mediator {
         this.sessionID = sessionID;
     }
 
-    public Map<Integer, Integer> getPollCount() {
+    public Map<Integer, HashSet<String>> getPollCount() {
         if(pollCount == null){
-            pollCount = new HashMap<Integer, Integer>();
+            pollCount = new HashMap<Integer, HashSet<String>>();
         }
         return pollCount;
     }
 
-    public void setPollCount(Map<Integer, Integer> pollCount) {
+    public void setPollCount(Map<Integer, HashSet<String>> pollCount) {
         this.pollCount = pollCount;
     }
 

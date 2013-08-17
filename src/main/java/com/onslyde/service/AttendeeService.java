@@ -34,9 +34,7 @@ import javax.ws.rs.*;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.logging.Logger;
 
 @Path("/attendees")
@@ -72,7 +70,7 @@ public class AttendeeService {
     @GET
     @Path("/json")
     @Produces(MediaType.APPLICATION_JSON)
-    public String listAllMembersJSON(@QueryParam("sessionID") int sessionID, @QueryParam("attendeeIP") String attendeeIP, @QueryParam("attendeeIP") boolean tracked, @Context HttpServletRequest req) {
+    public String listAllMembersJSON(@QueryParam("sessionID") int sessionID, @QueryParam("attendeeIP") String attendeeIP, @QueryParam("tracked") String tracked, @Context HttpServletRequest req) {
         //@SuppressWarnings("unchecked")
         //executing this every second on poll... nice :)
         String data = "";
@@ -82,30 +80,22 @@ public class AttendeeService {
 
         try {
 
-            if(ip == null){
-
-                if(attendeeIP == null) {
-                    ip = "777." + randomIPRange() + "." + randomIPRange() + "." + randomIPRange();
-                    System.out.println("---2-" + ip);
+            //increment poll count
+            //todo - remove duped code
+            if(tracked.equals("start")){
+                Map<Integer,HashSet<String>> pollcount = mediator.getPollCount();
+                if(!pollcount.containsKey(sessionID)){
+                    HashSet<String> ips = new HashSet<String>();
+                    ips.add(attendeeIP);
+                    pollcount.put(sessionID,ips);
                 }else{
-                    ip = attendeeIP;
-                }
-
-                //increment poll count
-                if(!tracked){
-                    Map<Integer,Integer> pollcount = mediator.getPollCount();
-                    if(!pollcount.containsKey(sessionID)){
-                        pollcount.put(sessionID,1);
-                    }else{
-                        int pc = pollcount.get(sessionID);
-                        pc++;
-                        pollcount.put(sessionID,pc);
-                    }
+                    HashSet<String> ips = pollcount.get(sessionID);
+                    ips.add(attendeeIP);
+                    pollcount.put(sessionID,ips);
                 }
             }
 
             //send active options or markup
-            System.out.println("---3-" + mediator.getActiveOptions().containsKey(sessionID) + " " + sessionID);
             if(mediator.getActiveOptions().containsKey(sessionID)){
                 Mediator.SessionTracker st = mediator.getActiveOptions().get(sessionID);
 
@@ -113,10 +103,8 @@ public class AttendeeService {
                     optionList.add(st.getActiveOptions().get(0));
                     optionList.add(st.getActiveOptions().get(1));
                     data = ClientEvent.createEvent("updateOptions", optionList, sessionID);
-                    System.out.println("---4-" + data);
                 }else{
                     data = st.getActiveMarkup();
-                    System.out.println("---5-" + data);
                 }
 
             }

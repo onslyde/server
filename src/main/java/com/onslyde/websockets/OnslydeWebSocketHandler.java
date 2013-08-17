@@ -134,7 +134,7 @@ public class OnslydeWebSocketHandler
         try {
             if (mediator != null) {
                 if (mediator.getPollCount().containsKey(sessionID)) {
-                    pollCount = mediator.getPollCount().get(sessionID);
+                    pollCount = mediator.getPollCount().get(sessionID).size();
                 }
                 System.out.println("_____sessions in map: " + mediator.getSessionID() + " users session: " + sessionID + " size for session: " + mediator.getSessions().get(sessionID).size() + "---" + mediator.getSessions().get(sessionID).get(attendeeIP));
 
