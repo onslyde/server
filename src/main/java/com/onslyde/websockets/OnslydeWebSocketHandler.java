@@ -241,7 +241,7 @@ public class OnslydeWebSocketHandler
                 // :P  get the attendee IP who is going live
                 liveAttendee = optionList.get(3);
                 //save the list as orginal 3 items
-                optionList = optionList.subList(0,2);
+                optionList = optionList.subList(0,3);
                 System.out.println("====" + getSessionTracker(sessionID) + "=" + sessionID);
                 if(getSessionTracker(sessionID).getQueuedParticipants().containsKey(liveAttendee)){
                     Session thanks = getSessionTracker(sessionID).getQueuedParticipants().get(liveAttendee);
@@ -262,8 +262,12 @@ public class OnslydeWebSocketHandler
                             sessions.getRemote().sendStringByFuture(ClientEvent.speak(sessionID, attendeeIP, "", count++));
                         }
                     }
+                }else{
+                    //he's already been removed and this is just reset for polling clients
+                    getSessionTracker(sessionID).setActiveData("{\"attendeeIP\":\"\",\"position\":\"\"}");
                 }
             }
+            System.out.println("=======optionList.size2()=" + optionList.size());
             //basic continue with normal 3 options
             if (optionList.size() == 3) {
 

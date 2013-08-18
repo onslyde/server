@@ -6,29 +6,25 @@ var voted;
 //todo make this unique user for session management/voter registration
 //var ws = slidfast.ws.join('client:anonymous2');
 
-//disablePoll();
+disablePoll();
 
 speak.onclick = function(event) {
-  console.log('---', userObject)
   _gaq.push(['_trackEvent', 'onslyde-option1', 'vote']);
-  console.log('option1.value',speak.value);
   ws.send('speak:' + JSON.stringify(userObject));
-};
 
-function sendVote(event,option){
-  voted = true;
-  if(option){
-    ws.send('vote:' + option);
-  }
-  return false;
-}
+};
 
 wtf.onclick = function(event) {
   _gaq.push(['_trackEvent', 'onslyde-wtf', 'vote']);
   ws.send('vote:wtf');
   wtf.disabled = true;
   wtf.style.opacity = .4;
-  wtf.value = "you only get one per vote :)"
+  wtf.value = "vote again in 30 seconds";
+  setTimeout(function(){
+    wtf.disabled = false;
+    wtf.style.opacity = 1;
+    wtf.value = 'Thumbs down!'
+  },30000);
   return false;
 };
 
@@ -37,39 +33,42 @@ nice.onclick = function(event) {
   ws.send('vote:nice');
   nice.disabled = true;
   nice.style.opacity = .4;
-  nice.value = "you only get one per vote :)"
+  nice.value = "vote again in 30 seconds";
+  setTimeout(function(){
+    nice.disabled = false;
+    nice.style.opacity = 1;
+    nice.value = 'Thumbs up!'
+  },30000);
   return false;
 };
 
 function disablePoll(){
+  wtf.disabled = true;
+  wtf.disabled = true;
+  nice.style.opacity = .4;
+  nice.style.opacity = .4;
+
   speak.disabled = true;
   speak.style.opacity = .4;
-  //voteLabel.style.opacity = .4;
   voteLabel.innerHTML = 'Waiting...';
 }
 
+function enablePoll(){
+  speak.disabled = false;
+  wtf.disabled = false;
+  nice.disabled = false;
+  wtf.value = 'Thumbs Down!';
+  nice.value = 'Nice!';
+  speak.style.opacity = 1;
+  wtf.style.opacity = 1;
+  nice.style.opacity = 1;
+  voteLabel.innerHTML = 'Vote!';
+  voted = false;
+}
+
 window.addEventListener('updateOptions', function(e) {
-  //quick check to make sure we don't re-enable on polling clients and disabling on null options
-//  if(e.speak !== undefined && e.speak !== 'null'){
-//    if((speak.value != e.speak)){
-      speak.disabled = false;
-      wtf.disabled = false;
-      nice.disabled = false;
-//      speak.value = 'I want to speak!';
-      wtf.value = 'Thumbs Down!';
-      nice.value = 'Nice!';
-      //voteLabel.style.opacity = 1;
-      speak.style.opacity = 1;
-      wtf.style.opacity = 1;
-      nice.style.opacity = 1;
-      voteLabel.innerHTML = 'Vote!';
-      voted = false;
-//    }
-//  }else{
-//    disablePoll();
-//  }
-
-
+  console.log('updateOptions',e);
+  enablePoll();
 }, false);
 
 //callback for pressing the speak button (managed server side)
@@ -83,7 +82,7 @@ window.addEventListener('speak', function(e) {
 }, false);
 
 window.addEventListener('remoteMarkup', function(e) {
-  console.log('e', typeof e.markup);
+//  console.log('e', typeof e.markup);
 
   if(e.markup !== ''){
     var markup = jQuery.parseJSON(e.markup);
@@ -98,13 +97,15 @@ window.addEventListener('remoteMarkup', function(e) {
   if(typeof e.data !== 'object' && e.data !== ''){
 
     var data = jQuery.parseJSON(e.data);
-    console.log('data.position', data.position);
+//    console.log('data.position', data.position);
     if(data !== '' && localStorage['onslyde.attendeeIP'] === data.attendeeIP){
       if(data.position === 777){
         speak.value = 'Thanks for speaking!';
       }else{
         speak.value = 'You are queued to speak';
       }
+    }else{
+      speak.value = 'I want to speak';
     }
   }
 

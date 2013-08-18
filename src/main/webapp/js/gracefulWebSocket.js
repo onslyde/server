@@ -120,7 +120,7 @@ $.extend({
        */
       function pollSuccess(data) {
         // trigger onmessage
-        console.log('------====data' , data);
+
         var messageEvent = {"data" : data};
 
         //alert(messageEvent);
@@ -129,7 +129,7 @@ $.extend({
 
       var counter = 0;
       function poll(tracked) {
-        console.log('+++',tracked)
+
         if(tracked !== 'start'){
           tracked = 'active';
         }
@@ -164,7 +164,7 @@ $.extend({
       // return socket impl
       return fws;
     }
-    console.log(slidfast.ws.sessionID())
+
     // create a new websocket or fallback
     var ws = window.WebSocket ? new WebSocket(url + '?session=' + slidfast.ws.sessionID() + '&attendeeIP=' + slidfast.ws.getip()) : new FallbackSocket();
     $(window).unload(function () {

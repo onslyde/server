@@ -99,8 +99,11 @@ public class AttendeeService {
             //send active options or markup
             if(mediator.getActiveOptions().containsKey(sessionID)){
                 Mediator.SessionTracker st = mediator.getActiveOptions().get(sessionID);
+                //for presentations and panels
+                //every new poll presents 2 new options, but the next slide will show null options
+                //the second OR option below is just keeping track of option IDs
 
-                if(st.getActiveOptions().size() > 0 && !st.getActiveOptions().get(0).equals("null")){
+                if(tracked.equals("start") || (st.getActiveOptions().size() > 0 && !st.getActiveOptions().get(0).equals("null")) || (st.getLastActiveSlide() != st.getActiveSlide())){
                     optionList.add(st.getActiveOptions().get(0));
                     optionList.add(st.getActiveOptions().get(1));
                     data = ClientEvent.createEvent("updateOptions", optionList, sessionID);
@@ -108,6 +111,7 @@ public class AttendeeService {
                     data = ClientEvent.remoteMarkup(st.getActiveMarkup(),st.getActiveData(),sessionID);
                 }
 
+                st.setLastActiveSlide(st.getActiveSlide());
             }
 
         } catch (Exception e) {

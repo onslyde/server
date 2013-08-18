@@ -63,6 +63,7 @@ public class Mediator {
         private String activeMarkup = "";
         private String activeData = "";
         private Map<String,Session> queuedParticipants;
+        private int lastActiveSlide;
 
         public int getActiveSlideGroupID() {
             return activeSlideGroupID;
@@ -110,6 +111,14 @@ public class Mediator {
 
         public void setActiveData(String activeData) {
             this.activeData = activeData;
+        }
+
+        public int getLastActiveSlide() {
+            return lastActiveSlide;
+        }
+
+        public void setLastActiveSlide(int lastActiveSlide) {
+            this.lastActiveSlide = lastActiveSlide;
         }
     }
 

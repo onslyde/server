@@ -198,7 +198,7 @@
 
         ws.onopen = function () {
           isopen = true;
-           console.log('onopen',initString,typeof initString !== 'undefined')
+//           console.log('onopen',initString,typeof initString !== 'undefined')
           onslyde.ws._send('user:' + username);
 
           if (typeof initString !== 'undefined') {
@@ -212,11 +212,10 @@
       },
 
       _onmessage: function (m) {
-        console.log('---onmessage:', m.data);
+//        console.log('---onmessage:', m.data);
         if (m.data) {
           if(typeof m.data === 'object'){
             if(m.data.onslydeEvent.sessionID !== 0){
-              console.log('fire', JSON.stringify(m.data.onslydeEvent))
               m.data.onslydeEvent.fire();
             }
           }else if (m.data.indexOf('sessionID":"' + sessionID) > 0) {
@@ -346,7 +345,6 @@
       },
 
       queueSpeaker : function(speaker,ip) {
-        console.log('speakerList',speakerList);
         var image = document.createElement('img');
         image.src = speaker.pic;
         image.onclick = function(){onslyde.panel.upNextSpeaker(speaker,ip);};
@@ -364,7 +362,10 @@
       speakerLive : function(speaker,ip) {
         var image = document.createElement('img');
         image.src = speaker.pic;
-        image.onclick = function(){onslyde.panel.removeSpeakerFromLive(speaker.email);};
+        image.onclick = function(){
+          onslyde.panel.removeSpeakerFromLive(speaker.email);
+          onslyde.panel.connect('activeOptions:null,null,waiting,' + ip);
+        };
         document.getElementById('currentSpeaker').innerHTML = '';
         document.getElementById('currentSpeaker').appendChild(image);
         //should we automatically move the next in the list to "up next"
@@ -386,7 +387,7 @@
             console.log('removed speaker: ', email);
           }
         }
-        console.log('speakerList after remove',speakerList);
+//        console.log('speakerList after remove',speakerList);
         //todo - rebuild list - improve this
         document.getElementById('speakerQueue').innerHTML = '';
 
