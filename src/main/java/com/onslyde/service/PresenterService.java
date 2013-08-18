@@ -98,7 +98,7 @@ public class PresenterService {
 //
 //        }
         //need to check for hosted mode
-        return addr;
+        return "127.0.0.1";
     }
 
 }

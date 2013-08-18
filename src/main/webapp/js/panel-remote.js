@@ -77,14 +77,35 @@ window.addEventListener('speak', function(e) {
   if(e.position === '777'){
     speak.value = 'Thanks for speaking!';
   }else{
-    speak.value = 'You are queued #' + e.position;
+    speak.value = 'You are queued to speak';
   }
 
 }, false);
 
 window.addEventListener('remoteMarkup', function(e) {
-  var markup = jQuery.parseJSON(e.markup);
-  document.getElementById('from-slide').innerHTML = decodeURIComponent(markup.remoteMarkup);
+  console.log('e', typeof e.data);
+
+  if(e.markup !== ''){
+//    var markup = jQuery.parseJSON(e.markup);
+    try {
+      document.getElementById('from-slide').innerHTML = decodeURIComponent(e.markup.remoteMarkup);
+    } catch (e) {
+    }
+  }
+
+  if(typeof e.data === 'object'){
+//    var data = jQuery.parseJSON(e.data);
+    console.log('----123',e.data,localStorage['onslyde.attendeeIP'], e.data.attendeeIP)
+    if(e.data !== '' && localStorage['onslyde.attendeeIP'] === e.data.attendeeIP){
+     speak.value = 'You are queued to speak';
+    }
+  }else{
+    var data = jQuery.parseJSON(e.data);
+    if(data !== '' && localStorage['onslyde.attendeeIP'] === data.attendeeIP){
+      speak.value = 'You are queued to speak';
+    }
+  }
+
 }, false);
 
 

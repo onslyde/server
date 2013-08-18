@@ -61,6 +61,7 @@ public class Mediator {
         private int activeSlideGroupID;
         private int activeSlide;
         private String activeMarkup = "";
+        private String activeData = "";
         private Map<String,Session> queuedParticipants;
 
         public int getActiveSlideGroupID() {
@@ -101,6 +102,14 @@ public class Mediator {
 
         public void setQueuedParticipants(Map<String, Session> queuedParticipants) {
             this.queuedParticipants = queuedParticipants;
+        }
+
+        public String getActiveData() {
+            return activeData;
+        }
+
+        public void setActiveData(String activeData) {
+            this.activeData = activeData;
         }
     }
 

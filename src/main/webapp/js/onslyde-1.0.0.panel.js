@@ -212,10 +212,11 @@
       },
 
       _onmessage: function (m) {
-        console.log(m)
+        console.log('---onmessage:', m.data);
         if (m.data) {
           if(typeof m.data === 'object'){
-            if(m.data.onslydeEvent.sessionID > 0){
+            if(m.data.onslydeEvent.sessionID !== 0){
+              console.log('fire', JSON.stringify(m.data.onslydeEvent))
               m.data.onslydeEvent.fire();
             }
           }else if (m.data.indexOf('sessionID":"' + sessionID) > 0) {
@@ -366,6 +367,7 @@
         //activate new poll for new speaker
         var activeOptionsString = 'activeOptions:null,null,' + speaker.name + "," + ip;
         this.connect(activeOptionsString);
+        this.sendMarkup('<b>yo yo</b>');
       },
 
       removeSpeaker : function(email) {
@@ -398,17 +400,14 @@
         return pollcount;
       },
 
-      sendMarkup : function() {
+      sendMarkup : function(markup) {
         // see if there's anything on the new slide to send to remotes EXPERIMENTAL
-        if(activeSlide !== 'undefined'){
-          for(var i = 0; i < activeSlide.querySelectorAll('.send').length;i++) {
+
             //send to remotes
-            var outerHtml = activeSlide.querySelectorAll('.send')[i].outerHTML;
-            outerHtml = outerHtml.replace(/'/g, "&#39;");
+            var outerHtml = markup.replace(/'/g, "&#39;");
             var remoteMarkup = JSON.stringify({remoteMarkup : encodeURIComponent(outerHtml)});
             this.connect(remoteMarkup);
-          }
-        }
+
       },
 
       updateRemotes: function () {

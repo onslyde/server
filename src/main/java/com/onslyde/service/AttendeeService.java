@@ -105,7 +105,7 @@ public class AttendeeService {
                     optionList.add(st.getActiveOptions().get(1));
                     data = ClientEvent.createEvent("updateOptions", optionList, sessionID);
                 }else{
-                    data = st.getActiveMarkup();
+                    data = ClientEvent.remoteMarkup(st.getActiveMarkup(),st.getActiveData(),sessionID);
                 }
 
             }
@@ -177,7 +177,8 @@ public class AttendeeService {
                 }
                 st.getQueuedParticipants().put(attendeeIP,null);
                 //use the same speak event and send back to remote... handle as confirm
-                data = ClientEvent.speak(sessionID, attendeeIP, speak, mediator.getActiveOptions().get(sessionID).getQueuedParticipants().size());
+                st.setActiveData("{\"attendeeIP\":\"" + attendeeIP + "\",\"position\":\"" + mediator.getActiveOptions().get(sessionID).getQueuedParticipants().size() + "\"}");
+
             }
 
             mediator.setJsEvent(null);
@@ -189,6 +190,6 @@ public class AttendeeService {
 
 //        builder = Response.ok();
 
-        return Response.ok(data, MediaType.APPLICATION_JSON).build();
+        return Response.ok("", MediaType.APPLICATION_JSON).build();
     }
 }

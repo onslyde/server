@@ -245,7 +245,10 @@ public class OnslydeWebSocketHandler
                 System.out.println("====" + getSessionTracker(sessionID) + "=" + sessionID);
                 if(getSessionTracker(sessionID).getQueuedParticipants().containsKey(liveAttendee)){
                     Session thanks = getSessionTracker(sessionID).getQueuedParticipants().get(liveAttendee);
-                    thanks.getRemote().sendStringByFuture(ClientEvent.speak(sessionID, attendeeIP, "", 777));
+                    //polling clients get a null session, so must check
+                    if(thanks != null){
+                        thanks.getRemote().sendStringByFuture(ClientEvent.speak(sessionID, attendeeIP, "", 777));
+                    }
 
                     getSessionTracker(sessionID).getQueuedParticipants().remove(liveAttendee);
                     Collection<Session> participantSessions = getSessionTracker(sessionID).getQueuedParticipants().values();
@@ -307,14 +310,15 @@ public class OnslydeWebSocketHandler
 
         } else if (data.contains(REMOTE_MARKUP)) {
 
-            data = ClientEvent.remoteMarkup(data, sessionID);
             try {
+                //not formatting data here for polling clients
+                //need to add one more thing for status in AttendeeService
                 getSessionManager().broadcastMarkup(data, sessionID);
             } catch (Exception e) {
                 e.printStackTrace();
             }
             try {
-                sendToAll(data, this.session, sessionID);
+                sendToAll(ClientEvent.remoteMarkup(data,"",sessionID), this.session, sessionID);
             } catch (IOException e) {
                 e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
             }

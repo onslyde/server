@@ -53,7 +53,7 @@ $.extend({
         // ready state
         readyState: CONNECTING,
         bufferedAmount: 0,
-        send: function (data) {
+        send: function (senddata) {
 //                        console.log(data);
           var success = true;
           //replace colon from namespaced websocket data
@@ -61,22 +61,22 @@ $.extend({
           //todo - peak option for polling
           var vote = '';
 
-          if(data.indexOf('speak:') === 0){
-            vote = data.replace(('speak:'),'');
+          if(senddata.indexOf('speak:') === 0){
+            vote = senddata.replace(('speak:'),'');
             posturl = opts.fallbackSendURL + '/go/attendees/speak';
-            data = {"speak": vote, "sessionID": slidfast.ws.sessionID(), "attendeeIP": localStorage['onslyde.attendeeIP']};
+            senddata = {"speak": vote, "sessionID": slidfast.ws.sessionID(), "attendeeIP": localStorage['onslyde.attendeeIP']};
           }else{
-            vote = data.replace(('vote:'),'');
+            vote = senddata.replace(('vote:'),'');
             posturl = opts.fallbackSendURL + '/go/attendees/vote';
-            data = {"vote": vote, "sessionID": slidfast.ws.sessionID()};
+            senddata = {"vote": vote, "sessionID": slidfast.ws.sessionID()};
           }
 
           $.ajax({
             async: false, // send synchronously
             type: opts.fallbackSendMethod,
             url: posturl,
-            data: data,
-            dataType: 'json',
+            data: senddata,
+            dataType: 'text',
             contentType : "application/x-www-form-urlencoded; charset=utf-8",
             success: pollSuccess,
             error: function (xhr) {
@@ -84,7 +84,6 @@ $.extend({
               $(fws).triggerHandler('error');
             }
           });
-          //alert(posturl);
           return success;
         },
         close: function () {
@@ -134,16 +133,17 @@ $.extend({
         if(tracked !== 'start'){
           tracked = 'active';
         }
+
         $.ajax({
           type: opts.fallbackPollMethod,
           url: opts.fallbackPollURL + '/go/attendees/json',
-          dataType: 'jsonp',
+          dataType: 'text',
           data: getFallbackParams(tracked),
           success: pollSuccess,
           async: false,
           timeout: 30000,
-          error: function (xhr) {
-            console.log('ajax error')
+          error: function (a,b,c) {
+            console.log('ajax error',a,b,c)
             $(fws).triggerHandler('error');
           }
         });

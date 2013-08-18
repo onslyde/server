@@ -72,12 +72,13 @@ public class ClientEvent {
                 "}}}");
     }
 
-    public static String remoteMarkup(String markup, int sessionID){
+    public static String remoteMarkup(String markup, String data, int sessionID){
         return ("{\"onslydeEvent\":{\"sessionID\":\"" + sessionID + "\"," +
                 "\"fire\":function(){" +
                 "window.eventObjg = document.createEvent('Event');" +
                 "eventObjg.initEvent(\'remoteMarkup\', true, true);" +
                 "eventObjg.markup = '" + markup + "';\n" +
+                "eventObjg.data = '" + data + "';\n" +
                 "document.dispatchEvent(eventObjg);" +
                 "}}}");
     }
