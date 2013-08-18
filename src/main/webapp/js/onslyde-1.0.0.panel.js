@@ -364,7 +364,7 @@
         image.src = speaker.pic;
         image.onclick = function(){
           onslyde.panel.removeSpeakerFromLive(speaker.email);
-          onslyde.panel.connect('activeOptions:null,null,waiting,' + ip);
+//          onslyde.panel.connect('activeOptions:null,null,waiting,' + ip);
         };
         document.getElementById('currentSpeaker').innerHTML = '';
         document.getElementById('currentSpeaker').appendChild(image);

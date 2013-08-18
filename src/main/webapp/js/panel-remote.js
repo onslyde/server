@@ -14,13 +14,17 @@ speak.onclick = function(event) {
 
 };
 
+var niceTimeout,
+  wtfTimeout;
+
 wtf.onclick = function(event) {
   _gaq.push(['_trackEvent', 'onslyde-wtf', 'vote']);
   ws.send('vote:wtf');
   wtf.disabled = true;
   wtf.style.opacity = .4;
   wtf.value = "vote again in 30 seconds";
-  setTimeout(function(){
+  clearTimeout(wtfTimeout);
+  wtfTimeout = setTimeout(function(){
     wtf.disabled = false;
     wtf.style.opacity = 1;
     wtf.value = 'Thumbs down!'
@@ -34,7 +38,8 @@ nice.onclick = function(event) {
   nice.disabled = true;
   nice.style.opacity = .4;
   nice.value = "vote again in 30 seconds";
-  setTimeout(function(){
+  clearTimeout(niceTimeout);
+  niceTimeout = setTimeout(function(){
     nice.disabled = false;
     nice.style.opacity = 1;
     nice.value = 'Thumbs up!'
