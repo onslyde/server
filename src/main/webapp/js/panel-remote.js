@@ -83,26 +83,28 @@ window.addEventListener('speak', function(e) {
 }, false);
 
 window.addEventListener('remoteMarkup', function(e) {
-  console.log('e', typeof e.data);
+  console.log('e', typeof e.markup);
 
   if(e.markup !== ''){
-//    var markup = jQuery.parseJSON(e.markup);
+    var markup = jQuery.parseJSON(e.markup);
     try {
-      document.getElementById('from-slide').innerHTML = decodeURIComponent(e.markup.remoteMarkup);
+      document.getElementById('from-slide').innerHTML = decodeURIComponent(markup.remoteMarkup);
     } catch (e) {
     }
   }
 
-  if(typeof e.data === 'object'){
-//    var data = jQuery.parseJSON(e.data);
-    console.log('----123',e.data,localStorage['onslyde.attendeeIP'], e.data.attendeeIP)
-    if(e.data !== '' && localStorage['onslyde.attendeeIP'] === e.data.attendeeIP){
-     speak.value = 'You are queued to speak';
-    }
-  }else{
+  //checking for type of object due to the way this response comes back from polling vs. ws clients
+  //this code is also duped as a filler for polling clients ... todo unify
+  if(typeof e.data !== 'object' && e.data !== ''){
+
     var data = jQuery.parseJSON(e.data);
+    console.log('data.position', data.position);
     if(data !== '' && localStorage['onslyde.attendeeIP'] === data.attendeeIP){
-      speak.value = 'You are queued to speak';
+      if(data.position === 777){
+        speak.value = 'Thanks for speaking!';
+      }else{
+        speak.value = 'You are queued to speak';
+      }
     }
   }
 

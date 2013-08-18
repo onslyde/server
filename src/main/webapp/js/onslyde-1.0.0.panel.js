@@ -277,7 +277,14 @@
 
         window.addEventListener('speak', function(e) {
           var speaker = JSON.parse(e.attendee);
-          onslyde.panel.queueSpeaker(speaker, e.ip);
+          try {
+            if (speaker.name !== '') {
+              speakerList.push({'speaker':speaker,'ip':e.ip});
+              onslyde.panel.queueSpeaker(speaker, e.ip);
+            }
+          } catch (e) {
+            console.log('problem queueing speaker:',e);
+          }
         }, false);
 
         window.addEventListener('clearRoute', function(e) {
@@ -339,7 +346,6 @@
       },
 
       queueSpeaker : function(speaker,ip) {
-        speakerList.push(speaker);
         console.log('speakerList',speakerList);
         var image = document.createElement('img');
         image.src = speaker.pic;
@@ -352,12 +358,13 @@
         image.src = speaker.pic;
         image.onclick = function(){onslyde.panel.speakerLive(speaker,ip);};
         document.getElementById('upNext').appendChild(image);
-        this.removeSpeaker(speaker.email);
+        this.removeSpeakerFromList(speaker.email);
       },
 
       speakerLive : function(speaker,ip) {
         var image = document.createElement('img');
         image.src = speaker.pic;
+        image.onclick = function(){onslyde.panel.removeSpeakerFromLive(speaker.email);};
         document.getElementById('currentSpeaker').innerHTML = '';
         document.getElementById('currentSpeaker').appendChild(image);
         //should we automatically move the next in the list to "up next"
@@ -367,13 +374,14 @@
         //activate new poll for new speaker
         var activeOptionsString = 'activeOptions:null,null,' + speaker.name + "," + ip;
         this.connect(activeOptionsString);
-        this.sendMarkup('<b>yo yo</b>');
+
+        this.sendMarkup('<b>Currently Speaking:</b> '  + speaker.name);
       },
 
-      removeSpeaker : function(email) {
+      removeSpeakerFromList : function(email) {
         //removes speaker from queue
         for(var i=0;i < speakerList.length;i++){
-          if(speakerList[i].email === email){
+          if(speakerList[i].speaker.email === email){
             speakerList.splice(i,1);
             console.log('removed speaker: ', email);
           }
@@ -383,13 +391,14 @@
         document.getElementById('speakerQueue').innerHTML = '';
 
         for(var j=0;j < speakerList.length;j++){
-          var image = document.createElement('img');
-          image.src = speakerList[j].pic;
-          console.log(speakerList[j])
-          image.onclick = function(){onslyde.panel.upNextSpeaker(speakerList[j]);};
-          document.getElementById('speakerQueue').appendChild(image);
+          this.queueSpeaker(speakerList[j].speaker,speakerList[j].ip);
         }
 
+      },
+
+      removeSpeakerFromLive : function() {
+        document.getElementById('currentSpeaker').innerHTML = '';
+        this.sendMarkup('<b></b>');
       },
 
       wsCount : function() {

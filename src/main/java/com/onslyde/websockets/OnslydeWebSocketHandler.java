@@ -246,8 +246,12 @@ public class OnslydeWebSocketHandler
                 if(getSessionTracker(sessionID).getQueuedParticipants().containsKey(liveAttendee)){
                     Session thanks = getSessionTracker(sessionID).getQueuedParticipants().get(liveAttendee);
                     //polling clients get a null session, so must check
+                    //using 777 as a stopgap for start/end of talk
                     if(thanks != null){
                         thanks.getRemote().sendStringByFuture(ClientEvent.speak(sessionID, attendeeIP, "", 777));
+                    }else{
+                        //populate for polling clients to let them know who is speaking
+                        getSessionTracker(sessionID).setActiveData("{\"attendeeIP\":\"" + liveAttendee + "\",\"position\":777}");
                     }
 
                     getSessionTracker(sessionID).getQueuedParticipants().remove(liveAttendee);
