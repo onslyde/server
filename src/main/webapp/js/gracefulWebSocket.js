@@ -68,7 +68,7 @@ $.extend({
           }else{
             vote = senddata.replace(('vote:'),'');
             posturl = opts.fallbackSendURL + '/go/attendees/vote';
-            senddata = {"vote": vote, "sessionID": slidfast.ws.sessionID()};
+            senddata = {"vote": vote, "sessionID": slidfast.ws.sessionID(), "attendeeIP": localStorage['onslyde.attendeeIP']};
           }
 
           $.ajax({
