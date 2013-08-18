@@ -259,7 +259,8 @@
       currentVotes = {},
       totalVotes = 0,
       speakerList = [],
-      currentSpeaker;
+      currentSpeaker,
+      currentVotes = {good:0,bad:0};
 
     onslyde.panel = onslyde.prototype = {
 
@@ -292,6 +293,8 @@
 
         window.addEventListener('wtf', function(e) {
           var wtf = document.getElementById("wtf");
+          currentVotes.bad++
+          onslyde.panel.drawSentimentChart();
           wtf.innerHTML = "Thumbs Down!";
           if(wtf){
             wtf.className = "show-wtf transition";
@@ -301,6 +304,8 @@
 
         window.addEventListener('nice', function(e) {
           var nice = document.getElementById("nice");
+          currentVotes.good++
+          onslyde.panel.drawSentimentChart();
           nice.innerHTML = "Nice!";
           if(nice){
             nice.className = "show-nice nice transition";
@@ -373,7 +378,13 @@
         document.getElementById('upNext').innerHTML = '';
 
         //activate new poll for new speaker
+        //server side
         var activeOptionsString = 'activeOptions:null,null,' + speaker.name + "," + ip;
+
+        //client side
+        currentVotes.good = 0;
+        currentVotes.bad = 0;
+
         this.connect(activeOptionsString);
 
         this.sendMarkup('<b>Currently Speaking:</b> '  + speaker.name);
@@ -400,6 +411,11 @@
       removeSpeakerFromLive : function() {
         document.getElementById('currentSpeaker').innerHTML = '';
         this.sendMarkup('<b></b>');
+      },
+
+      drawSentimentChart : function() {
+         console.log("good votes: " + currentVotes.good + " bad votes: " + currentVotes.bad);
+         document.getElementById('sentiment-chart').style.width = (currentVotes.good / currentVotes.bad) + '%';
       },
 
       wsCount : function() {
