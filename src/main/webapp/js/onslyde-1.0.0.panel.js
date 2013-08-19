@@ -256,7 +256,6 @@
       pollcount,
       groupSlideIndex = 0,
       groupIndex = 0,
-      currentVotes = {},
       totalVotes = 0,
       speakerList = [],
       currentSpeaker,
@@ -362,31 +361,37 @@
         document.getElementById('totalCount').innerHTML = (parseInt(wsc,10) + parseInt(pc,10));
       },
 
-      queueSpeaker : function(speaker,ip) {
-        var image = document.createElement('img');
+      createSpeakerNode : function(speaker,ip,fn) {
+        var fragment = document.createDocumentFragment();
+        fragment.appendChild(document.getElementById('speaker-template').cloneNode(true));
+        var image = fragment.querySelector('img');
         image.src = speaker.pic;
-        image.onclick = function(){onslyde.panel.upNextSpeaker(speaker,ip);};
-        document.getElementById('speakerQueue').appendChild(image);
+        image.onclick = function(){fn(speaker,ip);};
+        fragment.querySelector('.name').innerHTML = speaker.name;
+        fragment.querySelector('.org').innerHTML = 'test org';
+        return fragment;
+      },
+
+      queueSpeaker : function(speaker,ip) {
+        //passing in speaker data along with necessary onclick function for moderators
+        document.getElementById('speakerQueue').appendChild(onslyde.panel.createSpeakerNode(speaker,ip,onslyde.panel.upNextSpeaker));
+        //update count
+        document.getElementById('queuedSpeakers').innerHTML = speakerList.length;
       },
 
       upNextSpeaker : function(speaker,ip) {
-        var image = document.createElement('img');
-        image.src = speaker.pic;
-        image.onclick = function(){onslyde.panel.speakerLive(speaker,ip);};
-        document.getElementById('upNext').appendChild(image);
-        this.removeSpeakerFromList(speaker.email);
+        //passing in speaker data along with necessary onclick function for moderators
+        document.getElementById('upNext').appendChild(onslyde.panel.createSpeakerNode(speaker,ip,onslyde.panel.speakerLive));
+        //remove from list
+        onslyde.panel.removeSpeakerFromList(speaker.email);
+        //adjust UI
+        document.getElementById('queuedSpeakers').innerHTML = speakerList.length;
       },
 
       speakerLive : function(speaker,ip) {
-        var image = document.createElement('img');
-        image.src = speaker.pic;
-        image.onclick = function(){
-          onslyde.panel.removeSpeakerFromLive(speaker.email);
-//          onslyde.panel.connect('activeOptions:null,null,waiting,' + ip);
-        };
         document.getElementById('currentSpeaker').innerHTML = '';
-        document.getElementById('currentSpeaker').appendChild(image);
-        //should we automatically move the next in the list to "up next"
+        document.getElementById('currentSpeaker').appendChild(onslyde.panel.createSpeakerNode(speaker,ip,onslyde.panel.removeSpeakerFromLive));
+        //should we automatically move the next in the list to "up next" ?
         //for now just remove.
         document.getElementById('upNext').innerHTML = '';
 
@@ -397,10 +402,10 @@
         //client side
         currentVotes.good = 0;
         currentVotes.bad = 0;
-        this.drawSentimentChart();
+        onslyde.panel.drawSentimentChart();
 
-        this.connect(activeOptionsString);
-        this.sendMarkup('<b>Currently Speaking:</b> '  + speaker.name);
+        onslyde.panel.connect(activeOptionsString);
+        onslyde.panel.sendMarkup('<b>Currently Speaking:</b> '  + speaker.name);
       },
 
       removeSpeakerFromList : function(email) {
@@ -416,7 +421,7 @@
         document.getElementById('speakerQueue').innerHTML = '';
 
         for(var j=0;j < speakerList.length;j++){
-          this.queueSpeaker(speakerList[j].speaker,speakerList[j].ip);
+          onslyde.panel.queueSpeaker(speakerList[j].speaker,speakerList[j].ip);
         }
 
       },
@@ -424,9 +429,9 @@
       removeSpeakerFromLive : function() {
         currentVotes.good = 0;
         currentVotes.bad = 0;
-        this.drawSentimentChart();
+        onslyde.panel.drawSentimentChart();
         document.getElementById('currentSpeaker').innerHTML = '';
-        this.sendMarkup('<b>Panel Discussion</b>');
+        onslyde.panel.sendMarkup('<b>Panel Discussion</b>');
       },
 
       drawSentimentChart : function() {
