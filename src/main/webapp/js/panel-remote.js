@@ -80,6 +80,10 @@ window.addEventListener('updateOptions', function(e) {
 window.addEventListener('speak', function(e) {
   if(e.position === '777'){
     speak.value = 'Thanks for speaking!';
+    setTimeout(function(){
+      speak.value = 'I want to speak';
+    },20000);
+
   }else{
     speak.value = 'You are queued to speak';
   }

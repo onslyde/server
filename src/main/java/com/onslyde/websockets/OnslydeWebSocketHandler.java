@@ -249,10 +249,10 @@ public class OnslydeWebSocketHandler
                     //using 777 as a stopgap for start/end of talk
                     if(thanks != null){
                         thanks.getRemote().sendStringByFuture(ClientEvent.speak(sessionID, attendeeIP, "", 777));
-                    }else{
-                        //populate for polling clients to let them know who is speaking
-                        getSessionTracker(sessionID).setActiveData("{\"attendeeIP\":\"" + liveAttendee + "\",\"position\":777}");
                     }
+
+                    //populate for polling clients to let them know who is speaking
+                    getSessionTracker(sessionID).setActiveData("{\"attendeeIP\":\"" + liveAttendee + "\",\"position\":777}");
 
                     getSessionTracker(sessionID).getQueuedParticipants().remove(liveAttendee);
                     Collection<Session> participantSessions = getSessionTracker(sessionID).getQueuedParticipants().values();

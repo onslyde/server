@@ -318,13 +318,26 @@
         //start timer
         var timerHolder = document.getElementById('timer');
         var startsecond = 0;
+        var eventDate = new Date();
+
         setInterval(function(){
-          timerHolder.innerHTML = (new Date());
+          var now = new Date();
+
+          var diff = (now-eventDate);
+
+          var currentHours = Math.floor(diff / 3600000);
+          var currentMinutes = Math.floor((diff % 3600000) / 60000);
+          var currentSeconds = Math.floor(((diff % 3600000) % 60000) / 1000);
+          currentHours = (currentHours < 10 ? "0" : "") + currentHours;
+          currentMinutes = (currentMinutes < 10 ? "0" : "") + currentMinutes;
+          currentSeconds = (currentSeconds < 10 ? "0" : "") + currentSeconds;
+          timerHolder.innerHTML = currentHours + ':' + currentMinutes + ":" + currentSeconds;
         },1000);
 
 
         this.connect('::connect::');
         setTimeout(function(){onslyde.panel.updateRemotes();},1000);
+        this.drawSentimentChart();
 
         document.getElementById('sessionID').innerHTML = sessionID;
       },
@@ -384,9 +397,9 @@
         //client side
         currentVotes.good = 0;
         currentVotes.bad = 0;
+        this.drawSentimentChart();
 
         this.connect(activeOptionsString);
-
         this.sendMarkup('<b>Currently Speaking:</b> '  + speaker.name);
       },
 
@@ -409,13 +422,26 @@
       },
 
       removeSpeakerFromLive : function() {
+        currentVotes.good = 0;
+        currentVotes.bad = 0;
+        this.drawSentimentChart();
         document.getElementById('currentSpeaker').innerHTML = '';
-        this.sendMarkup('<b></b>');
+        this.sendMarkup('<b>Panel Discussion</b>');
       },
 
       drawSentimentChart : function() {
-         console.log("good votes: " + currentVotes.good + " bad votes: " + currentVotes.bad);
-         document.getElementById('sentiment-chart').style.width = (currentVotes.good / currentVotes.bad) + '%';
+        if(currentVotes.good === 0 && currentVotes.bad === 0){
+          //reset chart
+          document.getElementById('sentiment-chart-good').style.width = '5%';
+          document.getElementById('sentiment-chart-bad').style.width = '5%';
+        }else{
+           var goodVotes = (currentVotes.good / (currentVotes.good + currentVotes.bad));
+           var badVotes = (currentVotes.bad / (currentVotes.good + currentVotes.bad));
+           document.getElementById('sentiment-chart-good').style.width = (goodVotes * 100) + '%';
+           document.getElementById('sentiment-chart-good').style.marginLeft = (badVotes * 100) + '%';
+           document.getElementById('sentiment-chart-bad').style.width =  (badVotes * 100) + '%';
+//           document.getElementById('sentiment-chart-bad').style.marginRight = (badVotes * 100) + '%';
+         }
       },
 
       wsCount : function() {
