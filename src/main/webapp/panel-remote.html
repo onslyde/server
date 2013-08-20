@@ -10,6 +10,7 @@
 <!-- controls the appearance of the status bar in full-screen mode -->
 <meta name="apple-mobile-web-app-status-bar-style" content="black"/>
 
+<link href="http://fonts.googleapis.com/css?family=Lato:300,400,700,900" rel="stylesheet" type="text/css">
 <link href="css/panel-remote.css?v=1" media="screen" rel="stylesheet" type="text/css" />
 
 </head>
@@ -21,15 +22,18 @@
     <nav class="primary">
         <ul>
             <li>
-                <input id="nice" class="button" type="submit" value="Agree" />
-                <input id="wtf" class="button" type="submit" value="Disagree"/>
+                <input id="agree" class="button" type="submit" value="Agree" />
+                <input id="disagree" class="button" type="submit" value="Disagree"/>
                 <input id="speak" class="button" type="submit" value="I want to speak!" />
             </li>
 
         </ul>
     </nav>
-    <button id="authorize-button" style="visibility: hidden">Authorize</button>
-    <div id="usercontent"></div>
+    <div class="auth-holder">
+        <button id="authorize-button" style="visibility: hidden">Authorize</button>
+        <div id="usercontent"></div>
+    </div>
+
     <div id="slide-group-container">
 
         <div id="front" class="normal">

@@ -1,6 +1,6 @@
 var speak = document.querySelector('#speak');
-var wtf = document.querySelector('#wtf');
-var nice = document.querySelector('#nice');
+var wtf = document.querySelector('#disagree');
+var nice = document.querySelector('#agree');
 var voteLabel = document.querySelector('#vote-label');
 var voted;
 //todo make this unique user for session management/voter registration
