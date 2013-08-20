@@ -35,7 +35,7 @@ h2, h3 {
     z-index: 1;
     text-transform: uppercase;
     font-size: 1.8em;
-    padding: 0 0 0 30px;
+    padding: 5px 0 5px 30px;
     color: #343434;
 }
 
@@ -101,7 +101,7 @@ h2, h3 {
 }
 
 #currentSpeaker #speaker-template > img{
-    display:none;
+    /*display:none;*/
 }
 
 .panel {
@@ -131,7 +131,7 @@ h2, h3 {
 }
 
 .panel-list > li > img {
-    width: 75px;
+    width: 100px;
     float:left;
     margin: 0 10px 0 0;
 }
@@ -201,26 +201,79 @@ h2, h3 {
 /*===================== sentiment chart*/
 
 .sentiment-container {
-    width:250px;
+    width:100%;
     position:relative;
-    height:100px;
-    margin: 146px 0 0 0;
+    height:150px;
+    margin: 100px 0 0 0;
 }
 
-.sentiment-bar {
+.sentiment-bar1 {
+    position:absolute;
+    top:0;
+    bottom:0;
+    right:50%;
+    left:0;
+    padding: 0 3px 0 0;
+    border-right: 2px solid #777;
+}
+
+.sentiment-bar2 {
     position:absolute;
     top:0;
     bottom:0;
     right:0;
+    left:50%;
+    padding: 0 0 0 3px;
+    border-left: 2px solid #777;
+}
+
+.sentiment-bar2 #sentiment-chart-good {
+    background-color:#3daa93;
+    height:100px;
+    float:left;
+    position: relative;
+}
+
+.sentiment-bar2 #sentiment-chart-good #goodCount {
+    position: absolute;
+    padding: 3px 5px 0 0;
+    top:0;
+    right:0;
+    color: #fff;
+    font-size: 1rem;
+    font-family: 'Lato-Bold';
+}
+
+.sentiment-bar1 #sentiment-chart-bad {
+    background-color:#343434;
+    height:100px;
+    float:right;
+    position: relative;
+}
+
+.sentiment-bar1 #sentiment-chart-bad #badCount {
+    position: absolute;
+    padding: 3px 0 0 5px;
+    top:0;
     left:0;
+    color: #fff;
+    font-size: 1rem;
+    font-family: 'Lato-Bold';
 }
 
-.sentiment-bar #sentiment-chart-good {
-    background-color:#00f11f;
-    height:100px;
+.bad-label {
+    color: #343434;
+    font-family: 'Lato-Bold';
+    font-size: 1rem;
+    width:100%;
+    text-align:right;
+    margin: 0 0 3px 0;
 }
 
-.sentiment-bar #sentiment-chart-bad {
-    background-color:#f1000c;
-    height:100px;
+.good-label {
+    color: #3daa93;
+    font-family: 'Lato-Bold';
+    font-size: 1rem;
+    width:100%;
+    margin: 0 0 3px 0;
 }

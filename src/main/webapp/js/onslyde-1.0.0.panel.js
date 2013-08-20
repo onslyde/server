@@ -430,8 +430,10 @@
         currentVotes.good = 0;
         currentVotes.bad = 0;
         onslyde.panel.drawSentimentChart();
-        document.getElementById('currentSpeaker').innerHTML = '';
+        document.getElementById('currentSpeaker').innerHTML = 'Discussion';
         onslyde.panel.sendMarkup('<b>Panel Discussion</b>');
+        var activeOptionsString = 'activeOptions:null,null,Discussion';
+        onslyde.panel.connect(activeOptionsString);
       },
 
       drawSentimentChart : function() {
@@ -443,10 +445,11 @@
            var goodVotes = (currentVotes.good / (currentVotes.good + currentVotes.bad));
            var badVotes = (currentVotes.bad / (currentVotes.good + currentVotes.bad));
            document.getElementById('sentiment-chart-good').style.width = (goodVotes * 100) + '%';
-           document.getElementById('sentiment-chart-good').style.marginLeft = (badVotes * 100) + '%';
            document.getElementById('sentiment-chart-bad').style.width =  (badVotes * 100) + '%';
 //           document.getElementById('sentiment-chart-bad').style.marginRight = (badVotes * 100) + '%';
          }
+        document.getElementById('goodCount').innerHTML = currentVotes.good;
+        document.getElementById('badCount').innerHTML = currentVotes.bad;
       },
 
       wsCount : function() {

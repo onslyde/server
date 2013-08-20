@@ -379,11 +379,15 @@ public class OnslydeWebSocketHandler
                     presenterData.put(attendeeIP,this.session);
                     //todo - prevent session takeover
                     //needs auth
-                    mediator.getPsessions().put(sessionID, presenterData);
+                    if(mediator.getPsessions().containsKey(sessionID)){
+                        //simple fix to allow mirroring
+                        mediator.getPsessions().get(sessionID).put(attendeeIP,this.session);
+                    }else{
+                        mediator.getPsessions().put(sessionID, presenterData);
+                    }
+
 
                     //this is fugly....disconnect any existing sessions
-                    //todo - doing this because I can't get the websocket disconnect handler to pickup who the
-                    //disconnect is actually coming from :()
                     //clear out the session management map
 
 //                    Iterator<String> it = mediator.getSessions().get(sessionID).keySet().iterator();
@@ -495,6 +499,7 @@ public class OnslydeWebSocketHandler
     {
        System.out.println("---WEBSOCKET error: " + cause);
     }
+
 
     public static synchronized void syncMediator(Mediator mediator2) {
         mediator = mediator2;
