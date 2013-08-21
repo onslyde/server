@@ -11,7 +11,7 @@ disablePoll();
 speak.onclick = function(event) {
   _gaq.push(['_trackEvent', 'onslyde-option1', 'vote']);
   ws.send('speak:' + JSON.stringify(userObject));
-
+  speak.disabled = true;
 };
 
 var agreeTimeout,
@@ -27,7 +27,7 @@ disagree.onclick = function(event) {
   disagreeTimeout = setTimeout(function(){
     disagree.disabled = false;
     disagree.style.opacity = 1;
-    disagree.value = 'Thumbs down!'
+    disagree.value = 'Disagree';
   },30000);
   return false;
 };
@@ -42,7 +42,7 @@ agree.onclick = function(event) {
   agreeTimeout = setTimeout(function(){
     agree.disabled = false;
     agree.style.opacity = 1;
-    agree.value = 'Thumbs up!'
+    agree.value = 'Agree';
   },30000);
   return false;
 };
@@ -62,8 +62,8 @@ function enablePoll(){
   speak.disabled = false;
   disagree.disabled = false;
   agree.disabled = false;
-  disagree.value = 'Thumbs Down!';
-  agree.value = 'agree!';
+  disagree.value = 'Disagree';
+  agree.value = 'Agree';
   speak.style.opacity = 1;
   disagree.style.opacity = 1;
   agree.style.opacity = 1;
@@ -72,23 +72,25 @@ function enablePoll(){
 }
 
 window.addEventListener('updateOptions', function(e) {
-  console.log('updateOptions',e);
   enablePoll();
 }, false);
 
 //callback for pressing the speak button (managed server side)
 window.addEventListener('speak', function(e) {
+  handleSpeakEvent(e);
+}, false);
+
+function handleSpeakEvent(e){
   if(e.position === '777'){
     speak.value = 'Thanks for speaking!';
     setTimeout(function(){
       speak.value = 'I want to speak';
+      speak.disabled = false;
     },20000);
-
   }else{
     speak.value = 'You are queued to speak';
   }
-
-}, false);
+}
 
 window.addEventListener('remoteMarkup', function(e) {
 //  console.log('e', typeof e.markup);
@@ -108,11 +110,7 @@ window.addEventListener('remoteMarkup', function(e) {
     var data = jQuery.parseJSON(e.data);
 //    console.log('data.position', data.position);
     if(data !== '' && localStorage['onslyde.attendeeIP'] === data.attendeeIP){
-      if(data.position === 777){
-        speak.value = 'Thanks for speaking!';
-      }else{
-        speak.value = 'You are queued to speak';
-      }
+      handleSpeakEvent(data);
     }else{
       speak.value = 'I want to speak';
     }
