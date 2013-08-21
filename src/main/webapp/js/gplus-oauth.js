@@ -40,14 +40,14 @@ function makeApiCall() {
       'userId': 'me'
     });
     request.execute(function(resp) {
-      var heading = document.createElement('h4');
-      var image = document.createElement('img');
-      image.src = resp.image.url;
-      heading.appendChild(image);
-      heading.appendChild(document.createTextNode(resp.displayName));
+//      var heading = document.createElement('h4');
+//      var image = document.createElement('img');
+//      image.src = resp.image.url;
+//      heading.appendChild(image);
+//      heading.appendChild(document.createTextNode(resp.displayName));
       userObject.name = resp.displayName;
       userObject.pic = resp.image.url;
-      document.getElementById('usercontent').appendChild(heading);
+//      document.getElementById('usercontent').appendChild(heading);
     });
   });
   gapi.client.load('oauth2', 'v2', function() {

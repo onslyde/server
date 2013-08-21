@@ -193,7 +193,7 @@ nav.primary > ul li a {
 	background: linear-gradient(top,  rgba(255,255,255,1) 0%,rgba(246,246,246,1) 47%,rgba(237,237,237,1) 100%); /* W3C */
 }
 
-#wtf {
+#disagree {
     padding: 15px 0;
     width: 95%;
     font-size: 1.2em;
@@ -212,7 +212,7 @@ nav.primary > ul li a {
     padding:  0 0 0 18px;
 }
 
-#nice,
+#agree,
 #speak {
     padding: 15px 0;
     width: 95%;

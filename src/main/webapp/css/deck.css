@@ -3,8 +3,8 @@
     width: 95%;
 }
 
-.hide-wtf,
-.hide-nice {
+.hide-disagree,
+.hide-agree {
     opacity:0;
     width:1px;
     height: 1px;
@@ -19,8 +19,8 @@
     z-index: 12;
 }
 
-.show-wtf,
-.show-nice {
+.show-disagree,
+.show-agree {
     opacity: 1;
     /*width: 50%;*/
     height: 10%;
@@ -37,7 +37,7 @@
     z-index: 12;
 }
 
-.nice {
+.agree {
     background-color: green;
 }
 

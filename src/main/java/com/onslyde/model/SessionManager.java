@@ -168,8 +168,8 @@ public class SessionManager implements Serializable {
                 List<String> alloptions = new ArrayList<String>();
                 alloptions.add(options.get(0));
                 alloptions.add(options.get(1));
-                alloptions.add("wtf");
-                alloptions.add("nice");
+                alloptions.add("disagree");
+                alloptions.add("agree");
                 if(!options.get(0).equals("null")){
                     for(String option: alloptions){
 
@@ -187,13 +187,13 @@ public class SessionManager implements Serializable {
                 }else{
                     //not a voting option but persist the thumbs up and down
                     sOption = new SlideOptions();
-                    sOption.setName("wtf");
+                    sOption.setName("disagree");
                     currentSlide.getSlideOptionses().add(sOption);
                     sOption.setSlide(sHome.findById(sid));
                     soHome.persist(sOption);
 
                     sOption = new SlideOptions();
-                    sOption.setName("nice");
+                    sOption.setName("agree");
                     currentSlide.getSlideOptionses().add(sOption);
                     sOption.setSlide(sHome.findById(sid));
                     soHome.persist(sOption);
@@ -220,7 +220,7 @@ public class SessionManager implements Serializable {
         //sessionHome.persist(currentSession);
     }
 
-    public void updateGroupVote(String vote, String attendeeIP, int sessionID){
+    public void updateGroupVote(String vote, String attendeeIP, String name, String email, int sessionID){
         Session currentSession;
         currentSession = sessionHome.findById(sessionID);
         SlideGroup currentSlideGroup = null;
@@ -236,7 +236,8 @@ public class SessionManager implements Serializable {
 
             if(!ips.containsKey(attendeeIP)){
                 attendee = new Attendee();
-                attendee.setName("unknown");
+                attendee.setName(name);
+                attendee.setEmail(email);
                 attendee.setIp(attendeeIP);
                 attendee.setCreated(new Date());
                 attendeeHome.persist(attendee);

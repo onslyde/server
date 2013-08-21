@@ -59,16 +59,36 @@ $.extend({
           //replace colon from namespaced websocket data
 
           //todo - peak option for polling
-          var vote = '';
+          var vote = '',
+            attendeeIP = localStorage['onslyde.attendeeIP'];
 
           if(senddata.indexOf('speak:') === 0){
             vote = senddata.replace(('speak:'),'');
             posturl = opts.fallbackSendURL + '/go/attendees/speak';
-            senddata = {"speak": vote, "sessionID": slidfast.ws.sessionID(), "attendeeIP": localStorage['onslyde.attendeeIP']};
+            senddata = {"speak": vote, "sessionID": slidfast.ws.sessionID(), "attendeeIP": attendeeIP};
           }else{
-            vote = senddata.replace(('vote:'),'');
+            if(senddata.indexOf('vote:') === 0){
+              vote = senddata.replace(('vote:'),'');
+            } else if(senddata.indexOf('props:') === 0){
+              vote = senddata.replace(('props:'),'');
+            }
+
+            if(vote.split(',').length > 0){
+              //we know/assume there will be 3 items in the array,
+              //with the vote data being the first
+              console.log(vote.split(',')[0])
+             vote = vote.split(',')[0];
+            }
+
+            if(!window['userObject'] || typeof userObject === 'undefined'){
+              var userObject = {
+                name:'unknown',
+                email:'unknown'
+              }
+            }
+
             posturl = opts.fallbackSendURL + '/go/attendees/vote';
-            senddata = {"vote": vote, "sessionID": slidfast.ws.sessionID(), "attendeeIP": localStorage['onslyde.attendeeIP']};
+            senddata = {"vote": vote, "sessionID": slidfast.ws.sessionID(), "attendeeIP": attendeeIP, "username": userObject.name, "email": userObject.email};
           }
 
           $.ajax({

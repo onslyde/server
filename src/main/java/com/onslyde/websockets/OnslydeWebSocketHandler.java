@@ -57,11 +57,14 @@ public class OnslydeWebSocketHandler
     private String REMOTE_MARKUP = "remoteMarkup";
     private String ROULETTE = "roulette";
     private String VOTE = "vote:";
+    private String PROPS = "props:";
     private String SEPARATOR = ":";
 
     String attendeeIP = "111.111.111.111";
     int sessionID = 0;
     private int pollCount = 0;
+    private String name = "";
+    private String email = "";
 
     public void observeItemEvent(@Observes Mediator mediator) {
         syncMediator(mediator);
@@ -92,6 +95,7 @@ public class OnslydeWebSocketHandler
     {
         this.session = session;
         this.session.setIdleTimeout(1000000);
+
         Map request = session.getUpgradeRequest().getParameterMap();
 
         if (request.get("attendeeIP") != null)
@@ -178,54 +182,31 @@ public class OnslydeWebSocketHandler
         if (request.get("session") != null)
             sessionID = Integer.parseInt(((String[]) request.get("session"))[0]);
 
-        System.out.println("----attendeeIP: " + attendeeIP);
-        System.out.println("=====sessionID: " + sessionID);
 
+        if (data.contains(PROPS)) {
 
-        if (data.equals("nextSlide")) {
-            data = ("{\"cdievent\":{\"fire\":function(){" +
-                    "window.eventObja = document.createEvent('Event');" +
-                    "eventObja.initEvent(\'slideEvent\', true, true);" +
-                    "eventObja.action = 'next';\n" +
-                    "document.dispatchEvent(eventObja);" +
-                    "}}}");
-        } else if (data.equals("previousSlide")) {
-            data = ("{\"cdievent\":{\"fire\":function(){" +
-                    "window.eventObj1 = document.createEvent('Event');" +
-                    "eventObj1.initEvent(\'slideEvent\', true, true);" +
-                    "eventObj1.action = 'previous';\n" +
-                    "document.dispatchEvent(eventObj1);" +
-                    "}}}");
-        } else if (data.equals("clearRoute")) {
-            data = ("{\"cdievent\":{\"fire\":function(){" +
-                    "window.eventObj2 = document.createEvent('Event');" +
-                    "eventObj2.initEvent(\'clearRoute\', true, true);" +
-                    "document.dispatchEvent(eventObj2);" +
-                    "}}}");
-        } else if (data.equals("vote:wtf")) {
-            data = ("{\"onslydeEvent\":{\"sessionID\":\"" + sessionID + "\"," +
-                    "\"fire\":function(){" +
-                    "window.eventObj3 = document.createEvent('Event');" +
-                    "eventObj3.initEvent(\'wtf\', true, true);" +
-                    "document.dispatchEvent(eventObj3);" +
-                    "}}}");
+            String vote = data.substring(PROPS.length(), data.length());
+            List<String> optionList = null;
+
+            //check to see if we're appending name and email
             try {
-                //System.out.println("wtf))))) " + attendeeIP);
-                getSessionManager().updateGroupVote("wtf", attendeeIP, sessionID);
+                optionList = Arrays.asList(vote.split("\\s*,\\s*"));
             } catch (Exception e) {
                 e.printStackTrace();
             }
-            sendToPresenter(data, this.session, sessionID);
 
-        } else if (data.equals("vote:nice")) {
-            data = ("{\"onslydeEvent\":{\"sessionID\":\"" + sessionID + "\"," +
-                    "\"fire\":function(){" +
-                    "window.eventObj4 = document.createEvent('Event');" +
-                    "eventObj4.initEvent(\'nice\', true, true);" +
-                    "document.dispatchEvent(eventObj4);" +
-                    "}}}");
+            vote = optionList.get(0);
+
+            if(optionList != null && optionList.size() > 1){
+                //parse name and email
+                name = optionList.get(1);
+                email = optionList.get(2);
+            }
+
+            data = ClientEvent.clientProps(vote, sessionID);
+
             try {
-                getSessionManager().updateGroupVote("nice", attendeeIP, sessionID);
+                getSessionManager().updateGroupVote(vote, attendeeIP, name, email, sessionID);
             } catch (Exception e) {
                 e.printStackTrace();
             }
@@ -289,7 +270,7 @@ public class OnslydeWebSocketHandler
             String vote = data.substring(VOTE.length(), data.length());
 
             try {
-                getSessionManager().updateGroupVote(vote, attendeeIP, sessionID);
+                getSessionManager().updateGroupVote(vote, attendeeIP, name, email, sessionID);
             } catch (Exception e) {
                 e.printStackTrace();
             }
@@ -418,6 +399,27 @@ public class OnslydeWebSocketHandler
                 e.printStackTrace();
             }
         }
+        //        if (data.equals("nextSlide")) {
+//            data = ("{\"cdievent\":{\"fire\":function(){" +
+//                    "window.eventObja = document.createEvent('Event');" +
+//                    "eventObja.initEvent(\'slideEvent\', true, true);" +
+//                    "eventObja.action = 'next';\n" +
+//                    "document.dispatchEvent(eventObja);" +
+//                    "}}}");
+//        } else if (data.equals("previousSlide")) {
+//            data = ("{\"cdievent\":{\"fire\":function(){" +
+//                    "window.eventObj1 = document.createEvent('Event');" +
+//                    "eventObj1.initEvent(\'slideEvent\', true, true);" +
+//                    "eventObj1.action = 'previous';\n" +
+//                    "document.dispatchEvent(eventObj1);" +
+//                    "}}}");
+//        } else if (data.equals("clearRoute")) {
+//            data = ("{\"cdievent\":{\"fire\":function(){" +
+//                    "window.eventObj2 = document.createEvent('Event');" +
+//                    "eventObj2.initEvent(\'clearRoute\', true, true);" +
+//                    "document.dispatchEvent(eventObj2);" +
+//                    "}}}");
+//        } else
 
     }
 

@@ -290,25 +290,25 @@
           slidfast.slides.clearRoute();
         }, false);
 
-        window.addEventListener('wtf', function(e) {
-          var wtf = document.getElementById("wtf");
+        window.addEventListener('disagree', function(e) {
+          var disagree = document.getElementById("disagree");
           currentVotes.bad++
           onslyde.panel.drawSentimentChart();
-          wtf.innerHTML = "Thumbs Down!";
-          if(wtf){
-            wtf.className = "show-wtf transition";
-            setTimeout(function(){wtf.className = "hide-wtf transition"},800)
+          disagree.innerHTML = "Thumbs Down!";
+          if(disagree){
+            disagree.className = "show-disagree transition";
+            setTimeout(function(){disagree.className = "hide-disagree transition"},800)
           }
         }, false);
 
-        window.addEventListener('nice', function(e) {
-          var nice = document.getElementById("nice");
+        window.addEventListener('agree', function(e) {
+          var agree = document.getElementById("agree");
           currentVotes.good++
           onslyde.panel.drawSentimentChart();
-          nice.innerHTML = "Nice!";
-          if(nice){
-            nice.className = "show-nice nice transition";
-            setTimeout(function(){nice.className = "hide-nice transition"},800)
+          agree.innerHTML = "agree!";
+          if(agree){
+            agree.className = "show-agree agree transition";
+            setTimeout(function(){agree.className = "hide-agree transition"},800)
           }
         }, false);
         //-----------end event listeners
@@ -509,8 +509,8 @@
             totalVotes += currentVotes[activeOptions[i]];
         }
 
-        barChart.vote(vote);
-        barChart.redraw();
+//        barChart.vote(vote);
+//        barChart.redraw();
       },
 
       handleKeys: function (event) {

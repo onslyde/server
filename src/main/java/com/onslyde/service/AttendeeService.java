@@ -135,14 +135,14 @@ public class AttendeeService {
     @Path("/vote")
     @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
     @Produces(MediaType.APPLICATION_JSON)
-    public Response optionVote(@FormParam("attendeeIP") String attendeeIP, @FormParam("user") String user, @FormParam("sessionID") int sessionID, @FormParam("vote") String vote) {
+    public Response optionVote(@FormParam("attendeeIP") String attendeeIP, @FormParam("username") String username, @FormParam("email") String email, @FormParam("sessionID") int sessionID, @FormParam("vote") String vote) {
         mediatorEventSrc.fire(mediator);
-
+         System.out.println("-----vote" + vote);
         if(vote != null){
 
-            sessionManager.updateGroupVote(vote,attendeeIP,sessionID);
+            sessionManager.updateGroupVote(vote,attendeeIP,username,email,sessionID);
 
-            if(vote.equals("wtf") || vote.equals("nice")){
+            if(vote.equals("disagree") || vote.equals("agree")){
                 mediator.setJsEvent(ClientEvent.clientProps(vote,sessionID));
             }else{
                 mediator.setJsEvent(ClientEvent.clientVote(vote,sessionID));

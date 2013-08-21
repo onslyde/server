@@ -4,22 +4,22 @@ window.addEventListener('clearRoute', function(e) {
    slidfast.slides.clearRoute();
 }, false);
 
-window.addEventListener('wtf', function(e) {
-   var wtf = document.querySelector("#wtf");
-   wtf.innerHTML = "Thumbs Down!";
-   if(wtf){
-      wtf.className = "show-wtf transition";
-      setTimeout(function(){wtf.className = "hide-wtf transition"},800)
+window.addEventListener('disagree', function(e) {
+   var disagree = document.querySelector("#disagree");
+   disagree.innerHTML = "Thumbs Down!";
+   if(disagree){
+      disagree.className = "show-disagree transition";
+      setTimeout(function(){disagree.className = "hide-disagree transition"},800)
    }
 }, false);
 
-window.addEventListener('nice', function(e) {
-//    console.log('nice');
-    var nice = document.querySelector("#nice");
-    nice.innerHTML = "Nice!";
-    if(nice){
-        nice.className = "show-nice nice transition";
-        setTimeout(function(){nice.className = "hide-nice transition"},800)
+window.addEventListener('agree', function(e) {
+//    console.log('agree');
+    var agree = document.querySelector("#agree");
+    agree.innerHTML = "agree!";
+    if(agree){
+        agree.className = "show-agree agree transition";
+        setTimeout(function(){agree.className = "hide-agree transition"},800)
     }
 }, false);
 
@@ -42,7 +42,7 @@ var barChart = (function($) {
       numVotes: 6
     },
     {
-      name: 'WTF!',
+      name: 'disagree!',
       numVotes: 2
     }
   ];

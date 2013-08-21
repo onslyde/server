@@ -1,6 +1,6 @@
 var speak = document.querySelector('#speak');
-var wtf = document.querySelector('#disagree');
-var nice = document.querySelector('#agree');
+var disagree = document.querySelector('#disagree');
+var agree = document.querySelector('#agree');
 var voteLabel = document.querySelector('#vote-label');
 var voted;
 //todo make this unique user for session management/voter registration
@@ -14,44 +14,44 @@ speak.onclick = function(event) {
 
 };
 
-var niceTimeout,
-  wtfTimeout;
+var agreeTimeout,
+  disagreeTimeout;
 
-wtf.onclick = function(event) {
-  _gaq.push(['_trackEvent', 'onslyde-wtf', 'vote']);
-  ws.send('vote:wtf');
-  wtf.disabled = true;
-  wtf.style.opacity = .4;
-  wtf.value = "vote again in 30 seconds";
-  clearTimeout(wtfTimeout);
-  wtfTimeout = setTimeout(function(){
-    wtf.disabled = false;
-    wtf.style.opacity = 1;
-    wtf.value = 'Thumbs down!'
+disagree.onclick = function(event) {
+  _gaq.push(['_trackEvent', 'onslyde-disagree', 'vote']);
+  ws.send('props:disagree,' + userObject.name + "," + userObject.email);
+  disagree.disabled = true;
+  disagree.style.opacity = .4;
+  disagree.value = "vote again in 30 seconds";
+  clearTimeout(disagreeTimeout);
+  disagreeTimeout = setTimeout(function(){
+    disagree.disabled = false;
+    disagree.style.opacity = 1;
+    disagree.value = 'Thumbs down!'
   },30000);
   return false;
 };
 
-nice.onclick = function(event) {
-  _gaq.push(['_trackEvent', 'onslyde-nice', 'vote']);
-  ws.send('vote:nice');
-  nice.disabled = true;
-  nice.style.opacity = .4;
-  nice.value = "vote again in 30 seconds";
-  clearTimeout(niceTimeout);
-  niceTimeout = setTimeout(function(){
-    nice.disabled = false;
-    nice.style.opacity = 1;
-    nice.value = 'Thumbs up!'
+agree.onclick = function(event) {
+  _gaq.push(['_trackEvent', 'onslyde-agree', 'vote']);
+  ws.send('props:agree,' + userObject.name + "," + userObject.email);
+  agree.disabled = true;
+  agree.style.opacity = .4;
+  agree.value = "vote again in 30 seconds";
+  clearTimeout(agreeTimeout);
+  agreeTimeout = setTimeout(function(){
+    agree.disabled = false;
+    agree.style.opacity = 1;
+    agree.value = 'Thumbs up!'
   },30000);
   return false;
 };
 
 function disablePoll(){
-  wtf.disabled = true;
-  wtf.disabled = true;
-  nice.style.opacity = .4;
-  nice.style.opacity = .4;
+  disagree.disabled = true;
+  disagree.disabled = true;
+  agree.style.opacity = .4;
+  agree.style.opacity = .4;
 
   speak.disabled = true;
   speak.style.opacity = .4;
@@ -60,13 +60,13 @@ function disablePoll(){
 
 function enablePoll(){
   speak.disabled = false;
-  wtf.disabled = false;
-  nice.disabled = false;
-  wtf.value = 'Thumbs Down!';
-  nice.value = 'Nice!';
+  disagree.disabled = false;
+  agree.disabled = false;
+  disagree.value = 'Thumbs Down!';
+  agree.value = 'agree!';
   speak.style.opacity = 1;
-  wtf.style.opacity = 1;
-  nice.style.opacity = 1;
+  disagree.style.opacity = 1;
+  agree.style.opacity = 1;
   voteLabel.innerHTML = 'Vote!';
   voted = false;
 }
