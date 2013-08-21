@@ -186,7 +186,7 @@ $.extend({
     }
 
     // create a new websocket or fallback
-    var ws = window.WebSocket ? new WebSocket(url + '?session=' + slidfast.ws.sessionID() + '&attendeeIP=' + slidfast.ws.getip()) : new FallbackSocket();
+    var ws = ("WebSocket" in window && WebSocket.CLOSED > 2) ? new WebSocket(url + '?session=' + slidfast.ws.sessionID() + '&attendeeIP=' + slidfast.ws.getip()) : new FallbackSocket();
     $(window).unload(function () {
       //close ws connection
       ws.close();
