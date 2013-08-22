@@ -47,6 +47,7 @@ function makeApiCall() {
 //      heading.appendChild(document.createTextNode(resp.displayName));
       userObject.name = resp.displayName;
       userObject.pic = resp.image.url;
+      document.querySelector('#speak').value = 'I want to speak';
 //      document.getElementById('usercontent').appendChild(heading);
     });
   });

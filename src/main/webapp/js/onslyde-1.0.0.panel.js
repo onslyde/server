@@ -167,7 +167,12 @@
         var max = 999;
         if (!localStorage['onslyde.attendeeIP']) {
           aip = createRandom() + '.' + createRandom() + '.' + createRandom() + '.' + createRandom();
+          //if in private browsing mode this will fail
+          try{
           localStorage['onslyde.attendeeIP'] = aip;
+          }catch(e){
+
+          }
         } else {
           aip = localStorage['onslyde.attendeeIP'];
         }

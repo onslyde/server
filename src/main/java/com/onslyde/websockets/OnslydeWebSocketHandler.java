@@ -240,7 +240,11 @@ public class OnslydeWebSocketHandler
                     int count = 0;
                     for (Session sessions : participantSessions) {
                         if(sessions != null){
-                            sessions.getRemote().sendStringByFuture(ClientEvent.speak(sessionID, attendeeIP, "", count++));
+                            try {
+                                sessions.getRemote().sendStringByFuture(ClientEvent.speak(sessionID, attendeeIP, "", count++));
+                            } catch (Exception e) {
+                                System.err.println("-- Problem sending speak complete confirm to remote.");
+                            }
                         }
                     }
                 }else{

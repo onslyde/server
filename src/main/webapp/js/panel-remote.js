@@ -10,7 +10,12 @@ disablePoll();
 
 speak.onclick = function(event) {
   _gaq.push(['_trackEvent', 'onslyde-speak', 'vote']);
-  speak.value = 'You are queued to speak';
+  if(userObject.name === ''){
+    speak.onclick = handleAuthClick;
+  }else{
+    speak.value = 'You are queued to speak';
+  }
+
   ws.send('speak:' + JSON.stringify(userObject));
   speak.disabled = true;
 };

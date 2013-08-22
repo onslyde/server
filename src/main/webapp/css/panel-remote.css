@@ -181,13 +181,15 @@ nav.primary > ul li a {
     color: #fff;
     padding: 20px 0;
     width: 100%;
-    font-size: 1.5rem;
+    font-size: 1.3rem;
+    font-weight: 700;
     border: 0;
     border-bottom: 1px solid #fff;
     margin:0;
     background-color:#252525;
     text-transform: uppercase;
     -webkit-appearance: none;
+    border-radius: 0;
 }
 
 #speak {
