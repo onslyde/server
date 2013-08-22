@@ -13,11 +13,12 @@ speak.onclick = function(event) {
   if(userObject.name === ''){
     speak.onclick = handleAuthClick;
   }else{
+    ws.send('speak:' + JSON.stringify(userObject));
+    speak.disabled = true;
     speak.value = 'You are queued to speak';
   }
 
-  ws.send('speak:' + JSON.stringify(userObject));
-  speak.disabled = true;
+
 };
 
 var agreeTimeout,
