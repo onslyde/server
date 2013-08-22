@@ -233,7 +233,7 @@ public class OnslydeWebSocketHandler
                     }
 
                     //populate for polling clients to let them know who is speaking
-                    getSessionTracker(sessionID).setActiveData("{\"attendeeIP\":\"" + liveAttendee + "\",\"position\":777}");
+                    getSessionTracker(sessionID).setActiveData("{\"attendeeIP\":\"" + liveAttendee + "\",\"position\":\"777\"}");
 
                     getSessionTracker(sessionID).getQueuedParticipants().remove(liveAttendee);
                     Collection<Session> participantSessions = getSessionTracker(sessionID).getQueuedParticipants().values();

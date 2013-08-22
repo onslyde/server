@@ -63,7 +63,9 @@ public class Mediator {
         private String activeMarkup = "";
         private String activeData = "";
         private Map<String,Session> queuedParticipants;
+        //holders so we can compare on long polling
         private int lastActiveSlide;
+        private String lastActiveMarkup;
 
         public int getActiveSlideGroupID() {
             return activeSlideGroupID;
@@ -119,6 +121,17 @@ public class Mediator {
 
         public void setLastActiveSlide(int lastActiveSlide) {
             this.lastActiveSlide = lastActiveSlide;
+        }
+
+        public String getLastActiveMarkup() {
+            if(lastActiveMarkup == null){
+                lastActiveMarkup = "1";
+            }
+            return lastActiveMarkup;
+        }
+
+        public void setLastActiveMarkup(String lastActiveMarkup) {
+            this.lastActiveMarkup = lastActiveMarkup;
         }
     }
 

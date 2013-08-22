@@ -29,7 +29,7 @@ $.extend({
       fallbackPollInterval: 3000,	// number of ms between poll requests
       fallbackPollParams: {}		// optional params to pass with poll requests
     };
-
+    console.log('----',url)
     // Override defaults with user properties
     var opts = $.extend({}, this.defaults, options);
 
@@ -142,7 +142,7 @@ $.extend({
         // trigger onmessage
 
         var messageEvent = {"data" : data};
-
+         console.log('data-',messageEvent)
         //alert(messageEvent);
         fws.onmessage(messageEvent);
       }
@@ -161,7 +161,7 @@ $.extend({
           data: getFallbackParams(tracked),
           success: pollSuccess,
           async: false,
-          timeout: 30000,
+          timeout: 8000,
           error: function (a,b,c) {
             console.log('ajax error',a,b,c)
             $(fws).triggerHandler('error');

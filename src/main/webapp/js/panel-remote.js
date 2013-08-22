@@ -9,7 +9,8 @@ var voted;
 disablePoll();
 
 speak.onclick = function(event) {
-  _gaq.push(['_trackEvent', 'onslyde-option1', 'vote']);
+  _gaq.push(['_trackEvent', 'onslyde-speak', 'vote']);
+  speak.value = 'You are queued to speak';
   ws.send('speak:' + JSON.stringify(userObject));
   speak.disabled = true;
 };
@@ -72,6 +73,7 @@ function enablePoll(){
 }
 
 window.addEventListener('updateOptions', function(e) {
+  console.log('---updateOptions')
   enablePoll();
 }, false);
 
@@ -80,15 +82,19 @@ window.addEventListener('speak', function(e) {
   handleSpeakEvent(e);
 }, false);
 
+var resetTimeout;
+
 function handleSpeakEvent(e){
-  if(e.position === '777'){
+
+  console.log('resetTimeout',resetTimeout,e)
+  if(e.position === '777' && (typeof resetTimeout === 'undefined')){
     speak.value = 'Thanks for speaking!';
-    setTimeout(function(){
+    resetTimeout = setTimeout(function(){
       speak.value = 'I want to speak';
       speak.disabled = false;
     },20000);
   }else{
-    speak.value = 'You are queued to speak';
+
   }
 }
 
@@ -108,7 +114,7 @@ window.addEventListener('remoteMarkup', function(e) {
   if(typeof e.data !== 'object' && e.data !== ''){
 
     var data = jQuery.parseJSON(e.data);
-//    console.log('data.position', data.position);
+    console.log('data.position', data.position,localStorage['onslyde.attendeeIP'], localStorage['onslyde.attendeeIP'] === data.attendeeIP);
     if(data !== '' && localStorage['onslyde.attendeeIP'] === data.attendeeIP){
       handleSpeakEvent(data);
     }else{
