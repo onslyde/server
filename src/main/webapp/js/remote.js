@@ -84,7 +84,7 @@ window.addEventListener('updateOptions', function(e) {
 }, false);
 
 window.addEventListener('remoteMarkup', function(e) {
-  var markup = jQuery.parseJSON(e.markup);
+  var markup = JSON.parse(e.markup);
   document.getElementById('from-slide').innerHTML = decodeURIComponent(markup.remoteMarkup);
 }, false);
 
