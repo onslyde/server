@@ -108,7 +108,7 @@ window.addEventListener('remoteMarkup', function(e) {
 //  console.log('e', typeof e.markup);
 
   if(e.markup !== ''){
-    var markup = jQuery.parseJSON(e.markup);
+    var markup = JSON.parse(e.markup);
     try {
       document.getElementById('from-slide').innerHTML = decodeURIComponent(markup.remoteMarkup);
     } catch (e) {
@@ -119,7 +119,7 @@ window.addEventListener('remoteMarkup', function(e) {
   //this code is also duped as a filler for polling clients ... todo unify
   if(typeof e.data !== 'object' && e.data !== ''){
 
-    var data = jQuery.parseJSON(e.data);
+    var data = JSON.parse(e.data);
     console.log('data.position', data.position,localStorage['onslyde.attendeeIP'], localStorage['onslyde.attendeeIP'] === data.attendeeIP);
     if(data !== '' && localStorage['onslyde.attendeeIP'] === data.attendeeIP){
       handleSpeakEvent(data);

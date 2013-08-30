@@ -75,7 +75,6 @@ public class OnslydeWebSocketHandler
         if (mediator.getJsEvent() != null && mediator.getCurrentSessionID() != 0) {
             try {
                 //only send to presenter for session
-                System.out.println("----sync current sessionID for remote: "+ mediator.getCurrentSessionID() + " " + mediator.getPsessions().containsKey(mediator.getCurrentSessionID()));
                 if(mediator.getPsessions().containsKey(mediator.getCurrentSessionID())){
                     for(Session owsh :  mediator.getPsessions().get(mediator.getCurrentSessionID()).values()){
                         owsh.getRemote().sendStringByFuture(mediator.getJsEvent());

@@ -17,8 +17,16 @@ function checkAuth() {
 
 function handleAuthResult(authResult) {
   var authorizeButton = document.getElementById('authorize-button');
+  var speakButton = document.getElementById('speak');
+
   if (authResult && !authResult.error) {
     authorizeButton.style.visibility = 'hidden';
+    speakButton.onclick = function(event) {
+      _gaq.push(['_trackEvent', 'onslyde-speak', 'vote']);
+        ws.send('speak:' + JSON.stringify(userObject));
+        speak.disabled = true;
+        speak.value = 'You are queued to speak';
+      };
     makeApiCall();
   } else {
     authorizeButton.style.visibility = '';

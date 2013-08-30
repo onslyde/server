@@ -1,20 +1,26 @@
-/**
- * WebSocket with graceful degradation - jQuery plugin
- * @author David Lindkvist
- * @version 0.1
- *
- */
 
 var ws;
 window.addEventListener('load', function (e) {
   // in fallback mode: connect returns a dummy object implementing the WebSocket interface
-  ws = $.gracefulWebSocket('ws://'+ slidfast.ws.ip(slidfast.ws.sessionID()) + ':8081'); // the ws-protocol will automatically be changed to http
+  ws = myws().gracefulWebSocket('ws://'+ slidfast.ws.ip(slidfast.ws.sessionID()) + ':8081'); // the ws-protocol will automatically be changed to http
   ws = slidfast.ws.connect(ws);
 }, false);
 
-(function ($) {
+function myws(){
 
-$.extend({
+  function encodeData(data){
+    var urlEncodedData = "";
+
+    for(name in data) {
+      urlEncodedData += name + "=" + data[name] + "&";
+    }
+
+    // We remove the last "&" character
+    urlEncodedData = urlEncodedData.slice(0, -1);
+    return urlEncodedData;
+  }
+
+  return{
   gracefulWebSocket: function (url, options) {
     // Default properties
     this.defaults = {
@@ -31,7 +37,7 @@ $.extend({
     };
     console.log('----',url)
     // Override defaults with user properties
-    var opts = $.extend({}, this.defaults, options);
+    var opts = this.defaults;
 
     /**
      * Creates a fallback object implementing the WebSocket interface
@@ -47,6 +53,8 @@ $.extend({
       var pollInterval;
       var openTimout;
       var posturl = '';
+
+
 
       // create WebSocket object
       var fws = {
@@ -91,26 +99,17 @@ $.extend({
             senddata = {"vote": vote, "sessionID": slidfast.ws.sessionID(), "attendeeIP": attendeeIP, "username": userObject.name, "email": userObject.email};
           }
 
-          $.ajax({
-            async: false, // send synchronously
-            type: opts.fallbackSendMethod,
-            url: posturl,
-            data: senddata,
-            dataType: 'text',
-            contentType : "application/x-www-form-urlencoded; charset=utf-8",
-            success: pollSuccess,
-            error: function (xhr) {
-              success = false;
-              $(fws).triggerHandler('error');
-            }
-          });
+          var ai = new onslyde.core.ajax(posturl, function (text, url) {
+            pollSuccess();
+          }, false);
+          ai.doPost(encodeData(senddata));
+
           return success;
         },
         close: function () {
           clearTimeout(openTimout);
           clearInterval(pollInterval);
           this.readyState = CLOSED;
-          $(fws).triggerHandler('close');
         },
         onopen: function () {},
         onmessage: function () {},
@@ -120,30 +119,26 @@ $.extend({
         currentRequest: null
       };
 
+
       function getFallbackParams(tracked) {
 
         // update timestamp of previous and current poll request
         fws.previousRequest = fws.currentRequest;
         fws.currentRequest = new Date().getTime();
 
-        // extend default params with plugin options
-        return $.extend(opts.fallbackPollParams, {
+        return  {
           "previousRequest": fws.previousRequest,
           "currentRequest": fws.currentRequest,
           "sessionID": slidfast.ws.sessionID(),
           "attendeeIP" : localStorage['onslyde.attendeeIP'],
-          "tracked" : tracked});
+          "tracked" : tracked};
       }
 
       /**
        * @param {Object} data
        */
       function pollSuccess(data) {
-        // trigger onmessage
-
         var messageEvent = {"data" : data};
-         console.log('data-',messageEvent)
-        //alert(messageEvent);
         fws.onmessage(messageEvent);
       }
 
@@ -154,19 +149,13 @@ $.extend({
           tracked = 'active';
         }
 
-        $.ajax({
-          type: opts.fallbackPollMethod,
-          url: opts.fallbackPollURL + '/go/attendees/json',
-          dataType: 'text',
-          data: getFallbackParams(tracked),
-          success: pollSuccess,
-          async: false,
-          timeout: 8000,
-          error: function (a,b,c) {
-            console.log('ajax error',a,b,c)
-            $(fws).triggerHandler('error');
-          }
-        });
+        var pollData = getFallbackParams(tracked);
+
+        var ai = new onslyde.core.ajax(opts.fallbackPollURL + '/go/attendees/json?' + encodeData(pollData), function (text, url) {
+          pollSuccess(text);
+        }, false);
+        ai.doGet();
+
         counter++;
         if(counter === 3600){
           window.clearInterval(pollInterval);
@@ -175,8 +164,6 @@ $.extend({
       // simulate open event and start polling
       openTimout = setTimeout(function () {
         fws.readyState = OPEN;
-        //fws.currentRequest = new Date().getTime();
-        $(fws).triggerHandler('open');
         poll('start');
         pollInterval = setInterval(poll, opts.fallbackPollInterval);
       }, opts.fallbackOpenDelay);
@@ -187,12 +174,24 @@ $.extend({
 
     // create a new websocket or fallback
     var ws = ("WebSocket" in window && WebSocket.CLOSED > 2) ? new WebSocket(url + '?session=' + slidfast.ws.sessionID() + '&attendeeIP=' + slidfast.ws.getip()) : new FallbackSocket();
-    $(window).unload(function () {
-      //close ws connection
+    var senddata = {"sessionID": slidfast.ws.sessionID(), "attendeeIP": slidfast.ws.getip()};
+    var ai = new onslyde.core.ajax(opts.fallbackPollURL + '/go/attendees/remove', function (text, url) {
+      console.log('remove',text, url)
+    }, false);
+    window.addEventListener("beforeunload", function (e) {
       ws.close();
       ws = null;
+      var confirmationMessage = 'thanks!';
+      //disconnect polling client on server
+      if(!("WebSocket" in window)){
+        ai.doPost(encodeData(senddata));
+      }
+      (e || window.event).returnValue = confirmationMessage;  //Webkit, Safari, Chrome etc.
+
+      return confirmationMessage;
     });
+
     return ws;
   }
-});
-})(jQuery);
+  };
+}

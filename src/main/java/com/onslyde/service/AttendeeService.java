@@ -188,12 +188,30 @@ public class AttendeeService {
             mediator.setJsEvent(null);
             mediator.setCurrentSessionID(0);
         }
-//        Response.ResponseBuilder builder = null;
-
-//        builder = Response.ok();
-
-//        builder = Response.ok();
 
         return Response.ok("", MediaType.APPLICATION_JSON).build();
+    }
+
+
+    @POST
+    @Path("/remove")
+    @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response removeAttendee(@FormParam("attendeeIP") String attendeeIP, @FormParam("sessionID") int sessionID) {
+        mediatorEventSrc.fire(mediator);
+        Map<Integer,HashSet<String>> pollcount = mediator.getPollCount();
+        if(pollcount.containsKey(sessionID)){
+            HashSet<String> ips = pollcount.get(sessionID);
+            if(ips.contains(attendeeIP)){
+                ips.remove(attendeeIP);
+            }
+            pollcount.put(sessionID,ips);
+        }
+
+        Response.ResponseBuilder builder = null;
+
+        builder = Response.ok();
+
+        return builder.build();
     }
 }
