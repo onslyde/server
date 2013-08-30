@@ -2,8 +2,8 @@
 var ws;
 window.addEventListener('load', function (e) {
   // in fallback mode: connect returns a dummy object implementing the WebSocket interface
-  ws = myws().gracefulWebSocket('ws://'+ slidfast.ws.ip(slidfast.ws.sessionID()) + ':8081'); // the ws-protocol will automatically be changed to http
-  ws = slidfast.ws.connect(ws);
+  ws = myws().gracefulWebSocket('ws://'+ onslyde.ws.ip(onslyde.ws.sessionID()) + ':8081'); // the ws-protocol will automatically be changed to http
+  ws = onslyde.ws.connect(ws);
 }, false);
 
 function myws(){
@@ -73,7 +73,7 @@ function myws(){
           if(senddata.indexOf('speak:') === 0){
             vote = senddata.replace(('speak:'),'');
             posturl = opts.fallbackSendURL + '/go/attendees/speak';
-            senddata = {"speak": vote, "sessionID": slidfast.ws.sessionID(), "attendeeIP": attendeeIP};
+            senddata = {"speak": vote, "sessionID": onslyde.ws.sessionID(), "attendeeIP": attendeeIP};
           }else{
             if(senddata.indexOf('vote:') === 0){
               vote = senddata.replace(('vote:'),'');
@@ -96,7 +96,7 @@ function myws(){
             }
 
             posturl = opts.fallbackSendURL + '/go/attendees/vote';
-            senddata = {"vote": vote, "sessionID": slidfast.ws.sessionID(), "attendeeIP": attendeeIP, "username": userObject.name, "email": userObject.email};
+            senddata = {"vote": vote, "sessionID": onslyde.ws.sessionID(), "attendeeIP": attendeeIP, "username": userObject.name, "email": userObject.email};
           }
 
           var ai = new onslyde.core.ajax(posturl, function (text, url) {
@@ -129,7 +129,7 @@ function myws(){
         return  {
           "previousRequest": fws.previousRequest,
           "currentRequest": fws.currentRequest,
-          "sessionID": slidfast.ws.sessionID(),
+          "sessionID": onslyde.ws.sessionID(),
           "attendeeIP" : localStorage['onslyde.attendeeIP'],
           "tracked" : tracked};
       }
@@ -173,8 +173,8 @@ function myws(){
     }
 
     // create a new websocket or fallback
-    var ws = ("WebSocket" in window && WebSocket.CLOSED > 2) ? new WebSocket(url + '?session=' + slidfast.ws.sessionID() + '&attendeeIP=' + slidfast.ws.getip()) : new FallbackSocket();
-    var senddata = {"sessionID": slidfast.ws.sessionID(), "attendeeIP": slidfast.ws.getip()};
+    var ws = ("WebSocket" in window && WebSocket.CLOSED > 2) ? new WebSocket(url + '?session=' + onslyde.ws.sessionID() + '&attendeeIP=' + onslyde.ws.getip()) : new FallbackSocket();
+    var senddata = {"sessionID": onslyde.ws.sessionID(), "attendeeIP": onslyde.ws.getip()};
     var ai = new onslyde.core.ajax(opts.fallbackPollURL + '/go/attendees/remove', function (text, url) {
       console.log('remove',text, url)
     }, false);
