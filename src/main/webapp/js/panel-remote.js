@@ -8,11 +8,11 @@ var voted;
 
 disablePoll();
 
-speak.onclick = function(event) {
+speak.onclick = function (event) {
   _gaq.push(['_trackEvent', 'onslyde-speak', 'vote']);
-  if(userObject.name === ''){
+  if (userObject.name === '') {
     speak.onclick = handleAuthClick;
-  }else{
+  } else {
     ws.send('speak:' + JSON.stringify(userObject));
     speak.disabled = true;
     speak.value = 'You are queued to speak';
@@ -24,37 +24,37 @@ speak.onclick = function(event) {
 var agreeTimeout,
   disagreeTimeout;
 
-disagree.onclick = function(event) {
+disagree.onclick = function (event) {
   _gaq.push(['_trackEvent', 'onslyde-disagree', 'vote']);
   ws.send('props:disagree,' + userObject.name + "," + userObject.email);
   disagree.disabled = true;
   disagree.style.opacity = .4;
   disagree.value = "vote again in 30 seconds";
   clearTimeout(disagreeTimeout);
-  disagreeTimeout = setTimeout(function(){
+  disagreeTimeout = setTimeout(function () {
     disagree.disabled = false;
     disagree.style.opacity = 1;
     disagree.value = 'Disagree';
-  },30000);
+  }, 30000);
   return false;
 };
 
-agree.onclick = function(event) {
+agree.onclick = function (event) {
   _gaq.push(['_trackEvent', 'onslyde-agree', 'vote']);
   ws.send('props:agree,' + userObject.name + "," + userObject.email);
   agree.disabled = true;
   agree.style.opacity = .4;
   agree.value = "vote again in 30 seconds";
   clearTimeout(agreeTimeout);
-  agreeTimeout = setTimeout(function(){
+  agreeTimeout = setTimeout(function () {
     agree.disabled = false;
     agree.style.opacity = 1;
     agree.value = 'Agree';
-  },30000);
+  }, 30000);
   return false;
 };
 
-function disablePoll(){
+function disablePoll() {
   disagree.disabled = true;
   disagree.disabled = true;
   agree.style.opacity = .4;
@@ -65,7 +65,7 @@ function disablePoll(){
   voteLabel.innerHTML = 'Waiting...';
 }
 
-function enablePoll(){
+function enablePoll() {
   speak.disabled = false;
   disagree.disabled = false;
   agree.disabled = false;
@@ -78,36 +78,36 @@ function enablePoll(){
   voted = false;
 }
 
-window.addEventListener('updateOptions', function(e) {
+window.addEventListener('updateOptions', function (e) {
   console.log('---updateOptions')
   enablePoll();
 }, false);
 
 //callback for pressing the speak button (managed server side)
-window.addEventListener('speak', function(e) {
+window.addEventListener('speak', function (e) {
   handleSpeakEvent(e);
 }, false);
 
 var resetTimeout;
 
-function handleSpeakEvent(e){
+function handleSpeakEvent(e) {
 
-  console.log('resetTimeout',resetTimeout,e)
-  if(e.position === '777' && (typeof resetTimeout === 'undefined')){
+  console.log('resetTimeout', resetTimeout, e)
+  if (e.position === '777' && (typeof resetTimeout === 'undefined')) {
     speak.value = 'Thanks for speaking!';
-    resetTimeout = setTimeout(function(){
+    resetTimeout = setTimeout(function () {
       speak.value = 'I want to speak';
       speak.disabled = false;
-    },20000);
-  }else{
+    }, 20000);
+  } else {
 
   }
 }
 
-window.addEventListener('remoteMarkup', function(e) {
+window.addEventListener('remoteMarkup', function (e) {
 //  console.log('e', typeof e.markup);
 
-  if(e.markup !== ''){
+  if (e.markup !== '') {
     var markup = JSON.parse(e.markup);
     try {
       document.getElementById('from-slide').innerHTML = decodeURIComponent(markup.remoteMarkup);
@@ -117,13 +117,13 @@ window.addEventListener('remoteMarkup', function(e) {
 
   //checking for type of object due to the way this response comes back from polling vs. ws clients
   //this code is also duped as a filler for polling clients ... todo unify
-  if(typeof e.data !== 'object' && e.data !== ''){
+  if (typeof e.data !== 'object' && e.data !== '') {
 
     var data = JSON.parse(e.data);
-    console.log('data.position', data.position,localStorage['onslyde.attendeeIP'], localStorage['onslyde.attendeeIP'] === data.attendeeIP);
-    if(data !== '' && localStorage['onslyde.attendeeIP'] === data.attendeeIP){
+    console.log('data.position', data.position, localStorage['onslyde.attendeeIP'], localStorage['onslyde.attendeeIP'] === data.attendeeIP);
+    if (data !== '' && localStorage['onslyde.attendeeIP'] === data.attendeeIP) {
       handleSpeakEvent(data);
-    }else{
+    } else {
       speak.value = 'I want to speak';
     }
   }
@@ -131,23 +131,25 @@ window.addEventListener('remoteMarkup', function(e) {
 }, false);
 
 
-window.addEventListener('roulette', function(e) {
+window.addEventListener('roulette', function (e) {
   var rouletteDiv = document.getElementById('roulette'),
     timer1,
     timer2;
   rouletteDiv.style.display = 'block';
-  if(!e.winner){
+  if (!e.winner) {
     //simple state check for multiple raffles on the same session
-    if(rouletteDiv.style.backgroundColor !== 'yellow'){
+    if (rouletteDiv.style.backgroundColor !== 'yellow') {
       rouletteDiv.innerHTML = "<p>calculating...</p>";
-      timer1 = setTimeout(function(){rouletteDiv.innerHTML = "<p>sorry! maybe next time :)</p>";},5000);
+      timer1 = setTimeout(function () {
+        rouletteDiv.innerHTML = "<p>sorry! maybe next time :)</p>";
+      }, 5000);
     }
 
-  }else if(e.winner){
-    setTimeout(function(){
+  } else if (e.winner) {
+    setTimeout(function () {
       rouletteDiv.style.backgroundColor = 'yellow';
       rouletteDiv.innerHTML = "<p>WINNER!!...</p>";
-    },5000);
+    }, 5000);
   }
 }, false);
 
