@@ -81,17 +81,19 @@ function disablePoll() {
 function enablePoll() {
   speak.disabled = false;
 
-  if(!agreeTimeout){
+  clearTimeout(agreeTimeout);
+  clearInterval(agreeInterval);
     agree.disabled = false;
     agree.style.opacity = 1;
     agree.value = 'Agree';
-  }
+//  }
 
-  if(!disagreeTimeout){
+  clearTimeout(disagreeTimeout);
+  clearInterval(disagreeInterval);
     disagree.disabled = false;
     disagree.value = 'Disagree';
     disagree.style.opacity = 1;
-  }
+//  }
 
 
   speak.style.opacity = 1;

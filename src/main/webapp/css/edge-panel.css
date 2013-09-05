@@ -132,17 +132,21 @@ h2, h3 {
 .panel-list > li {
     width: 46%;
     float:left;
-    margin: 10px;
+    margin: 5px;
+}
+
+.panel-list > li.filler {
+    height: 77px;
 }
 
 .panel-list > li > img {
-    width: 100px;
+    width: 75px;
     float:left;
     margin: 0 10px 0 0;
     border: 1px solid #fff;
+    -webkit-box-shadow:    0px 0px 10px 1px #2E6651;
     -moz-box-shadow:    0px 0px 10px 1px #2E6651;
-    -moz-box-shadow:    0px 0px 10px 1px #2E6651;
-    -moz-box-shadow:    0px 0px 10px 1px #2E6651;
+    box-shadow:    0px 0px 10px 1px #2E6651;
 }
 /*============================ Right column*/
 .right-col {
