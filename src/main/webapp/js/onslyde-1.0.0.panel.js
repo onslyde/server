@@ -283,7 +283,6 @@
           var speaker = JSON.parse(e.attendee);
           try {
             if (speaker.name !== '') {
-              speakerList.push({'speaker':speaker,'ip':e.ip});
               onslyde.panel.queueSpeaker(speaker, e.ip);
             }
           } catch (e) {
@@ -373,13 +372,23 @@
         image.src = speaker.pic;
         image.onclick = function(){fn(speaker,ip);};
         fragment.querySelector('.name').innerHTML = speaker.name;
-        fragment.querySelector('.org').innerHTML = 'test org';
+        fragment.querySelector('.org').innerHTML = (speaker.org !== '' ? speaker.org : 'org');
         return fragment;
       },
 
       queueSpeaker : function(speaker,ip) {
-        //passing in speaker data along with necessary onclick function for moderators
-        document.getElementById('speakerQueue').appendChild(onslyde.panel.createSpeakerNode(speaker,ip,onslyde.panel.upNextSpeaker));
+        var speakerIsQueued = false;
+        for (var i = 0, len = speakerList.length; i < len; i++) {
+          speakerIsQueued = (speakerList[i].speaker.email === speaker.email);
+        }
+        //if speaker is already queued remove them
+        if(speakerIsQueued){
+          onslyde.panel.removeSpeakerFromList(speaker.email);
+        }else{
+          speakerList.push({'speaker':speaker,'ip':ip});
+          //passing in speaker data along with necessary onclick function for moderators
+          document.getElementById('speakerQueue').appendChild(onslyde.panel.createSpeakerNode(speaker,ip,onslyde.panel.speakerLive));
+        }
         //update count
         document.getElementById('queuedSpeakers').innerHTML = speakerList.length;
       },
@@ -394,12 +403,14 @@
       },
 
       speakerLive : function(speaker,ip) {
-        document.getElementById('currentSpeaker').innerHTML = '';
-        document.getElementById('currentSpeaker').appendChild(onslyde.panel.createSpeakerNode(speaker,ip,onslyde.panel.removeSpeakerFromLive));
+        var currentSpeakerNode = document.getElementById('currentSpeaker');
+        currentSpeakerNode.innerHTML = '';
+        currentSpeakerNode.appendChild(onslyde.panel.createSpeakerNode(speaker,ip,onslyde.panel.removeSpeakerFromLive));
         //should we automatically move the next in the list to "up next" ?
         //for now just remove.
-        document.getElementById('upNext').innerHTML = '';
-
+//        document.getElementById('upNext').innerHTML = '';
+        //remove from list
+        onslyde.panel.removeSpeakerFromList(speaker.email);
         //activate new poll for new speaker
         //server side
         var activeOptionsString = 'activeOptions:null,null,' + speaker.name + "," + ip;
@@ -411,22 +422,30 @@
 
         onslyde.panel.connect(activeOptionsString);
         onslyde.panel.sendMarkup('<b>Currently Speaking:</b> '  + speaker.name);
+
+        //adjust UI
+        document.getElementById('queuedSpeakers').innerHTML = speakerList.length;
       },
 
       removeSpeakerFromList : function(email) {
+        var speakerWasQueued = false;
         //removes speaker from queue
         for(var i=0;i < speakerList.length;i++){
           if(speakerList[i].speaker.email === email){
             speakerList.splice(i,1);
-            console.log('removed speaker: ', email);
+            speakerWasQueued = true;
           }
         }
-//        console.log('speakerList after remove',speakerList);
-        //todo - rebuild list - improve this
-        document.getElementById('speakerQueue').innerHTML = '';
 
-        for(var j=0;j < speakerList.length;j++){
-          onslyde.panel.queueSpeaker(speakerList[j].speaker,speakerList[j].ip);
+        //check for on the fly adding of speaker to "now speaking" from panel members
+        if(speakerWasQueued){
+  //        console.log('speakerList after remove',speakerList);
+          //todo - rebuild list - improve this
+          document.getElementById('speakerQueue').innerHTML = '';
+
+          for(var j=0;j < speakerList.length;j++){
+            onslyde.panel.queueSpeaker(speakerList[j].speaker,speakerList[j].ip);
+          }
         }
 
       },

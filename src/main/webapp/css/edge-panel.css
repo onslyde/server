@@ -14,6 +14,7 @@ body {
 h2, h3 {
     color: #343434;
     text-transform: uppercase;
+    margin: 5px 0 5px 0;
 }
 
 .primary-header {
@@ -85,6 +86,10 @@ h2, h3 {
     text-transform: uppercase;
 }
 
+#currentSpeaker {
+    height:103px
+}
+
 #currentSpeaker,
 #currentSpeaker .speaker-details .name{
     font-size: 3rem;
@@ -134,6 +139,10 @@ h2, h3 {
     width: 100px;
     float:left;
     margin: 0 10px 0 0;
+    border: 1px solid #fff;
+    -moz-box-shadow:    0px 0px 10px 1px #2E6651;
+    -moz-box-shadow:    0px 0px 10px 1px #2E6651;
+    -moz-box-shadow:    0px 0px 10px 1px #2E6651;
 }
 /*============================ Right column*/
 .right-col {
@@ -143,19 +152,23 @@ h2, h3 {
     padding: 0 0 0 20px;
 }
 
-.up-next-container .title {
-    font-size: 2em;
-    color: #3daa93;
-    width: 32%;
-    float:left;
-    text-transform: uppercase;
-    font-family: 'Lato-Bold', sans-serif
-}
+/*.up-next-container .title {*/
+    /*font-size: 2em;*/
+    /*color: #3daa93;*/
+    /*width: 32%;*/
+    /*float:left;*/
+    /*text-transform: uppercase;*/
+    /*font-family: 'Lato-Bold', sans-serif*/
+/*}*/
 
-.up-next-container #upNext {
-    width: 68%;
-    float:left;
-    color: #343434;
+/*.up-next-container #upNext {*/
+    /*width: 68%;*/
+    /*float:left;*/
+    /*color: #343434;*/
+/*}*/
+
+.queue-title {
+    margin: 10px 0 0 0;
 }
 
 .speaker-list {
@@ -177,9 +190,10 @@ h2, h3 {
 }
 
 #speaker-template > img {
-    width: 75px;
+    width: 85px;
     float:left;
-    margin: 0 10px 0 0;
+    margin: 10px 10px 0 0;
+    border:1px solid #fff;
 }
 
 .speaker-details {
@@ -229,51 +243,57 @@ h2, h3 {
 
 .sentiment-bar2 #sentiment-chart-good {
     background-color:#3daa93;
-    height:100px;
+    height:120px;
     float:left;
     position: relative;
+    margin: 12px 0 0 0;
+    overflow: hidden;
 }
 
 .sentiment-bar2 #sentiment-chart-good #goodCount {
     position: absolute;
     padding: 3px 5px 0 0;
-    top:0;
-    right:0;
+    top:36%;
+    right:31%;
     color: #fff;
-    font-size: 1rem;
+    font-size: 1.5rem;
     font-family: 'Lato-Bold';
 }
 
 .sentiment-bar1 #sentiment-chart-bad {
     background-color:#343434;
-    height:100px;
+    height:120px;
     float:right;
     position: relative;
+    margin: 12px 0 0 0;
+    overflow: hidden;
 }
 
 .sentiment-bar1 #sentiment-chart-bad #badCount {
     position: absolute;
     padding: 3px 0 0 5px;
-    top:0;
-    left:0;
+    top:36%;
+    left:31%;
     color: #fff;
-    font-size: 1rem;
+    font-size: 1.5rem;
     font-family: 'Lato-Bold';
 }
 
 .bad-label {
     color: #343434;
     font-family: 'Lato-Bold';
-    font-size: 1rem;
+    font-size: 1.5rem;
     width:100%;
     text-align:right;
     margin: 0 0 3px 0;
+    opacity: .7;
 }
 
 .good-label {
     color: #3daa93;
     font-family: 'Lato-Bold';
-    font-size: 1rem;
+    font-size: 1.5rem;
     width:100%;
     margin: 0 0 3px 0;
+    opacity: .7;
 }

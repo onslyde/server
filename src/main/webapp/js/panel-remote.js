@@ -14,28 +14,35 @@ speak.onclick = function (event) {
     speak.onclick = handleAuthClick;
   } else {
     ws.send('speak:' + JSON.stringify(userObject));
-    speak.disabled = true;
-    speak.value = 'You are queued to speak';
+    speak.value = 'Remove yourself from queue';
   }
 
 
 };
 
 var agreeTimeout,
-  disagreeTimeout;
+  disagreeTimeout,
+  disagreeInterval,
+  agreeInterval;
 
 disagree.onclick = function (event) {
   _gaq.push(['_trackEvent', 'onslyde-disagree', 'vote']);
   ws.send('props:disagree,' + userObject.name + "," + userObject.email);
   disagree.disabled = true;
   disagree.style.opacity = .4;
-  disagree.value = "vote again in 30 seconds";
+
   clearTimeout(disagreeTimeout);
   disagreeTimeout = setTimeout(function () {
     disagree.disabled = false;
     disagree.style.opacity = 1;
     disagree.value = 'Disagree';
+    clearInterval(disagreeInterval);
   }, 30000);
+  var counter = 30;
+  disagreeInterval = setInterval(function(){
+    disagree.value = 'vote again in ' + counter + ' seconds';
+    counter--;
+  },1000);
   return false;
 };
 
@@ -50,7 +57,13 @@ agree.onclick = function (event) {
     agree.disabled = false;
     agree.style.opacity = 1;
     agree.value = 'Agree';
+    clearInterval(agreeInterval);
   }, 30000);
+  var counter = 30;
+  agreeInterval = setInterval(function(){
+    agree.value = 'vote again in ' + counter + ' seconds';
+    counter--;
+  },1000);
   return false;
 };
 
@@ -67,13 +80,22 @@ function disablePoll() {
 
 function enablePoll() {
   speak.disabled = false;
-  disagree.disabled = false;
-  agree.disabled = false;
-  disagree.value = 'Disagree';
-  agree.value = 'Agree';
+
+  if(!agreeTimeout){
+    agree.disabled = false;
+    agree.style.opacity = 1;
+    agree.value = 'Agree';
+  }
+
+  if(!disagreeTimeout){
+    disagree.disabled = false;
+    disagree.value = 'Disagree';
+    disagree.style.opacity = 1;
+  }
+
+
   speak.style.opacity = 1;
-  disagree.style.opacity = 1;
-  agree.style.opacity = 1;
+
   voteLabel.innerHTML = 'Vote!';
   voted = false;
 }
@@ -91,13 +113,12 @@ window.addEventListener('speak', function (e) {
 var resetTimeout;
 
 function handleSpeakEvent(e) {
-
-  console.log('resetTimeout', resetTimeout, e)
-  if (e.position === '777' && (typeof resetTimeout === 'undefined')) {
+  if (e.position === '777') {
     speak.value = 'Thanks for speaking!';
     resetTimeout = setTimeout(function () {
       speak.value = 'I want to speak';
       speak.disabled = false;
+      clearTimeout(resetTimeout);
     }, 20000);
   } else {
 

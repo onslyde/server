@@ -61,7 +61,7 @@ Mobile Device Page Setup
 
 .slide {
     position: absolute;
-    background-color: #ececec;
+    background-color: #fff;
     border-radius: 3px;
     border: 3px solid white;
     margin: 35px;
@@ -74,10 +74,6 @@ Mobile Device Page Setup
     -moz-box-shadow: 0 0 27px -3px #777;
     -webkit-box-shadow: 0 0 27px -3px #777;
     box-shadow: 0 0 27px -3px #777;
-    background: -moz-linear-gradient(top,  rgba(255,255,255,1) 0%, rgba(246,246,246,1) 47%, rgba(237,237,237,1) 100%); /* FF3.6+ */
-    background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,rgba(255,255,255,1)), color-stop(47%,rgba(246,246,246,1)), color-stop(100%,rgba(237,237,237,1))); /* Chrome,Safari4+ */
-    background: -webkit-linear-gradient(top,  rgba(255,255,255,1) 0%,rgba(246,246,246,1) 47%,rgba(237,237,237,1) 100%); /* Chrome10+,Safari5.1+ */
-    background: linear-gradient(top,  rgba(255,255,255,1) 0%,rgba(246,246,246,1) 47%,rgba(237,237,237,1) 100%); /* W3C */
 }
 
 /*************************************************

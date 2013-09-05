@@ -4,11 +4,16 @@ module.exports = function(grunt) {
   // Project configuration.
   grunt.initConfig({
     // Metadata.
+
+    //checkout panel and presentation modules
     shell: {
       gitclone: {
         command: 'git clone git@github.com:onslyde/onslyde-panel.git panel'
       }
     },
+
+    //merge ambiguous files
+
     pkg: grunt.file.readJSON('package.json'),
     banner: '/*! <%= pkg.title || pkg.name %> - v<%= pkg.version %> - ' +
       '<%= grunt.template.today("yyyy-mm-dd") %>\n' +

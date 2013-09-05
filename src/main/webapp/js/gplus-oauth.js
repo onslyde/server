@@ -24,8 +24,11 @@ function handleAuthResult(authResult) {
     speakButton.onclick = function(event) {
       _gaq.push(['_trackEvent', 'onslyde-speak', 'vote']);
         ws.send('speak:' + JSON.stringify(userObject));
-        speak.disabled = true;
-        speak.value = 'You are queued to speak';
+        if(speak.value === 'Remove yourself from queue'){
+          speak.value = 'I want to speak';
+        }else{
+          speak.value = 'Remove yourself from queue';
+        }
       };
     makeApiCall();
   } else {
