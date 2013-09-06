@@ -124,6 +124,7 @@ function handleSpeakEvent(e) {
     speak.style.opacity = .4;
     resetTimeout = setTimeout(function () {
       isSpeaking = false;
+      speak.style.opacity = 1;
       speak.value = 'I want to speak';
       speak.disabled = false;
       clearTimeout(resetTimeout);
