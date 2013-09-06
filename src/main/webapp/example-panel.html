@@ -50,7 +50,7 @@
            <h3>Panel</h3>
 
             <ul id="panelists" class="panel-list">
-                <li onclick="onslyde.panel.speakerLive(panelists[0],'111.111.111.111')">
+                <li class="moderator" onclick="onslyde.panel.speakerLive(panelists[0],'111.111.111.111')">
                     <img src="http://edgeconf.com/images/panelists/andre-behrens.jpg" alt="Andre Behrens" />
                     <ul class="panelist-details">
                         <li class="name">Andre Behrens</li>
@@ -105,15 +105,15 @@
         <div class="sentiment-container">
             <div class="sentiment-bar1">
 
-                <div id="sentiment-chart-bad"><span id="badCount">0</span></div>
+                <div id="sentiment-chart-bad" class="transition"><span id="badCount">0</span></div>
             </div>
             <div class="sentiment-bar2">
 
-                <div id="sentiment-chart-good"><span id="goodCount">0</span></div>
+                <div id="sentiment-chart-good" class="transition"><span id="goodCount">0</span></div>
             </div>
         </div>
 
-        <h3 class="queue-title">Delegates Queued to Speak (<span id="queuedSpeakers"></span>)</h3>
+        <h3 class="queue-title">Delegates Queued to Speak <a href="#" onclick="onslyde.panel.clearQueue()">(<span id="queuedSpeakers">0</span>)</a></h3>
 
         <section class="speaker-list" id="speakerQueue">
 

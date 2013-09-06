@@ -450,6 +450,17 @@
 
       },
 
+      clearQueue : function(){
+        speakerList = [];
+        document.getElementById('speakerQueue').innerHTML = '';
+        currentVotes.good = 0;
+        currentVotes.bad = 0;
+        onslyde.panel.drawSentimentChart();
+        var activeOptionsString = 'activeOptions:null,null,Discussion';
+        onslyde.panel.connect(activeOptionsString);
+        document.getElementById('queuedSpeakers').innerHTML = speakerList.length;
+      },
+
       removeSpeakerFromLive : function() {
         currentVotes.good = 0;
         currentVotes.bad = 0;

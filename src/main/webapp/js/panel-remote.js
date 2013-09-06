@@ -1,10 +1,9 @@
-var speak = document.querySelector('#speak');
-var disagree = document.querySelector('#disagree');
-var agree = document.querySelector('#agree');
-var voteLabel = document.querySelector('#vote-label');
-var voted;
-//todo make this unique user for session management/voter registration
-//var ws = slidfast.ws.join('client:anonymous2');
+var speak = document.querySelector('#speak'),
+  disagree = document.querySelector('#disagree'),
+  agree = document.querySelector('#agree'),
+  voteLabel = document.querySelector('#vote-label'),
+  voted,
+  isSpeaking = false;
 
 disablePoll();
 
@@ -79,8 +78,12 @@ function disablePoll() {
 }
 
 function enablePoll() {
-  speak.disabled = false;
 
+  if(!isSpeaking){
+    speak.disabled = false;
+    speak.value = 'I want to speak';
+    speak.style.opacity = 1;
+  }
   clearTimeout(agreeTimeout);
   clearInterval(agreeInterval);
     agree.disabled = false;
@@ -96,14 +99,13 @@ function enablePoll() {
 //  }
 
 
-  speak.style.opacity = 1;
+
 
   voteLabel.innerHTML = 'Vote!';
   voted = false;
 }
 
 window.addEventListener('updateOptions', function (e) {
-  console.log('---updateOptions')
   enablePoll();
 }, false);
 
@@ -116,8 +118,12 @@ var resetTimeout;
 
 function handleSpeakEvent(e) {
   if (e.position === '777') {
-    speak.value = 'Thanks for speaking!';
+    isSpeaking = true;
+    speak.value = 'You\'re speaking!';
+    speak.disabled = true;
+    speak.style.opacity = .4;
     resetTimeout = setTimeout(function () {
+      isSpeaking = false;
       speak.value = 'I want to speak';
       speak.disabled = false;
       clearTimeout(resetTimeout);

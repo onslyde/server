@@ -87,7 +87,7 @@ h2, h3 {
 }
 
 #currentSpeaker {
-    height:103px
+    margin: 0 0 10px 0;
 }
 
 #currentSpeaker,
@@ -111,6 +111,10 @@ h2, h3 {
 
 .panel {
     margin: 0 0 0 30px;
+}
+
+.moderator {
+    /*border-bottom: 3px solid #2E6651;*/
 }
 
 .panel-list,
@@ -300,4 +304,11 @@ h2, h3 {
     width:100%;
     margin: 0 0 3px 0;
     opacity: .7;
+}
+
+.transition {
+    -moz-transition:  all 1s ease;
+    -webkit-transition: all 1s ease;
+    -o-transition: all 1s ease;
+    transition: all 1s ease;
 }
