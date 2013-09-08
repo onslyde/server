@@ -100,6 +100,9 @@ public class Mediator {
         }
 
         public Map<String, Session> getQueuedParticipants() {
+            if(queuedParticipants == null){
+                queuedParticipants = new HashMap<String,Session>();
+            }
             return queuedParticipants;
         }
 

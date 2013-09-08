@@ -214,7 +214,6 @@ public class OnslydeWebSocketHandler
         } else if (data.contains(ACTIVE_OPTIONS)) {
             String options = data.substring(ACTIVE_OPTIONS.length(), data.length());
             List<String> optionList = Arrays.asList(options.split("\\s*,\\s*"));
-                System.out.println("=======optionList.size()=" + optionList.size() + " " + optionList.get(2));
             String liveAttendee = "";
             if (optionList.size() == 4) {
                 //hack for the panels, notify those that want to speak their position, etc...
@@ -222,7 +221,6 @@ public class OnslydeWebSocketHandler
                 liveAttendee = optionList.get(3);
                 //save the list as orginal 3 items
                 optionList = optionList.subList(0,3);
-                System.out.println("====" + getSessionTracker(sessionID) + "=" + sessionID);
                 if(getSessionTracker(sessionID).getQueuedParticipants().containsKey(liveAttendee)){
                     Session thanks = getSessionTracker(sessionID).getQueuedParticipants().get(liveAttendee);
                     //polling clients get a null session, so must check
@@ -234,6 +232,7 @@ public class OnslydeWebSocketHandler
                     //populate for polling clients to let them know who is speaking
                     getSessionTracker(sessionID).setActiveData("{\"attendeeIP\":\"" + liveAttendee + "\",\"position\":\"777\"}");
 
+                    //todo make this part of the api so remotes can call it when cancelling speak event
                     getSessionTracker(sessionID).getQueuedParticipants().remove(liveAttendee);
                     Collection<Session> participantSessions = getSessionTracker(sessionID).getQueuedParticipants().values();
                     int count = 0;
@@ -251,7 +250,6 @@ public class OnslydeWebSocketHandler
                     getSessionTracker(sessionID).setActiveData("{\"attendeeIP\":\"\",\"position\":\"\"}");
                 }
             }
-            System.out.println("=======optionList.size2()=" + optionList.size());
             //basic continue with normal 3 options
             if (optionList.size() == 3) {
 
@@ -281,7 +279,7 @@ public class OnslydeWebSocketHandler
             data = ClientEvent.clientVote(vote, sessionID);
             sendToPresenter(data, this.session, sessionID);
         } else if (data.contains("speak:")) {
-
+            System.out.println("Speak:" + data);
             String name = data.substring("speak:".length(), data.length());
 
             data = ClientEvent.speak(sessionID, attendeeIP, name, 0);
@@ -290,9 +288,6 @@ public class OnslydeWebSocketHandler
             //send notification to remote
             Mediator.SessionTracker st = getSessionTracker(sessionID);
             if (st != null) {
-                if(st.getQueuedParticipants() == null){
-                   st.setQueuedParticipants(new HashMap<String,Session>());
-                }
                 st.getQueuedParticipants().put(attendeeIP,this.session);
                 //use the same speak event and send back to remote... handle as confirm
                 //you are queued as #xx

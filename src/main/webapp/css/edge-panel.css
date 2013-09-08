@@ -262,7 +262,7 @@ h2, h3 {
     position: absolute;
     padding: 3px 5px 0 0;
     top:36%;
-    right:31%;
+    right:0;
     color: #fff;
     font-size: 1.5rem;
     font-family: 'Lato-Bold';
@@ -281,7 +281,7 @@ h2, h3 {
     position: absolute;
     padding: 3px 0 0 5px;
     top:36%;
-    left:31%;
+    left:0;
     color: #fff;
     font-size: 1.5rem;
     font-family: 'Lato-Bold';

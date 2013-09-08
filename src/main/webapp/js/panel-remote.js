@@ -15,8 +15,6 @@ speak.onclick = function (event) {
     ws.send('speak:' + JSON.stringify(userObject));
     speak.value = 'Remove yourself from queue';
   }
-
-
 };
 
 var agreeTimeout,
@@ -36,8 +34,8 @@ disagree.onclick = function (event) {
     disagree.style.opacity = 1;
     disagree.value = 'Disagree';
     clearInterval(disagreeInterval);
-  }, 30000);
-  var counter = 30;
+  }, 15000);
+  var counter = 15;
   disagreeInterval = setInterval(function(){
     disagree.value = 'vote again in ' + counter + ' seconds';
     counter--;
@@ -50,15 +48,15 @@ agree.onclick = function (event) {
   ws.send('props:agree,' + userObject.name + "," + userObject.email);
   agree.disabled = true;
   agree.style.opacity = .4;
-  agree.value = "vote again in 30 seconds";
+//  agree.value = "vote again in 15 seconds";
   clearTimeout(agreeTimeout);
   agreeTimeout = setTimeout(function () {
     agree.disabled = false;
     agree.style.opacity = 1;
     agree.value = 'Agree';
     clearInterval(agreeInterval);
-  }, 30000);
-  var counter = 30;
+  }, 15000);
+  var counter = 15;
   agreeInterval = setInterval(function(){
     agree.value = 'vote again in ' + counter + ' seconds';
     counter--;
