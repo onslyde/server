@@ -216,7 +216,8 @@ nav.primary > ul li a {
 }
 
 #from-slide img {
-    width: 100%;
+    float:left;
+    max-width: 100%;
 }
 
 #roulette {
@@ -237,4 +238,9 @@ nav.primary > ul li a {
     font-size: 4em;
     font-weight: bold;
     line-height: 1em;
+}
+
+.logo-banner {
+    background-image: url('../images/edge/bg_billboard.jpg');
+    text-align:center;
 }

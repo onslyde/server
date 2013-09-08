@@ -1,7 +1,7 @@
 var speak = document.querySelector('#speak'),
   disagree = document.querySelector('#disagree'),
   agree = document.querySelector('#agree'),
-  voteLabel = document.querySelector('#vote-label'),
+//  voteLabel = document.querySelector('#vote-label'),
   voted,
   isSpeaking = false;
 
@@ -72,7 +72,7 @@ function disablePoll() {
 
   speak.disabled = true;
   speak.style.opacity = .4;
-  voteLabel.innerHTML = 'Waiting...';
+//  voteLabel.innerHTML = 'Waiting...';
 }
 
 function enablePoll() {
@@ -99,7 +99,7 @@ function enablePoll() {
 
 
 
-  voteLabel.innerHTML = 'Vote!';
+//  voteLabel.innerHTML = 'Vote!';
   voted = false;
 }
 
