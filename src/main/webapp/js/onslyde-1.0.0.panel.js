@@ -264,7 +264,6 @@
       speakerList = [],
       currentSpeaker,
       activeOptionsString,
-      rollingChartInterval,
       propsList = [],
       rollingAverageEnabled = true,
       currentVotes = {agree:0,disagree:0};
@@ -353,8 +352,6 @@
         //set the active options for opening discussion
         activeOptionsString = 'activeOptions:null,null,Discussion';
 
-//        onslyde.panel.rollingChart();
-
         this.connect('::connect::');
         setTimeout(function(){onslyde.panel.updateRemotes();},1000);
         this.drawSentimentChart();
@@ -435,11 +432,9 @@
         //activate new poll for new speaker
         //server side
         activeOptionsString = 'activeOptions:null,null,' + speaker.name + "," + ip;
-        onslyde.panel.rollingChart();
+
         //client side
-        currentVotes.agree = 0;
-        currentVotes.disagree = 0;
-        onslyde.panel.drawSentimentChart();
+        onslyde.panel.resetAllVotes();
 
         onslyde.panel.connect(activeOptionsString);
         onslyde.panel.sendMarkup('<b>Currently Speaking:</b> '  + speaker.name);
@@ -474,24 +469,27 @@
       clearQueue : function(){
         speakerList = [];
         document.getElementById('speakerQueue').innerHTML = '';
-        currentVotes.agree = 0;
-        currentVotes.disagree = 0;
-        onslyde.panel.drawSentimentChart();
+        onslyde.panel.resetAllVotes();
         activeOptionsString = 'activeOptions:null,null,Discussion';
-        onslyde.panel.rollingChart();
+
         onslyde.panel.connect(activeOptionsString);
         document.getElementById('queuedSpeakers').innerHTML = speakerList.length;
       },
 
       removeSpeakerFromLive : function() {
-        currentVotes.agree = 0;
-        currentVotes.disagree = 0;
-        onslyde.panel.drawSentimentChart();
+        onslyde.panel.resetAllVotes();
         document.getElementById('currentSpeaker').innerHTML = 'Discussion';
         onslyde.panel.sendMarkup('<b>Panel Discussion</b>');
         activeOptionsString = 'activeOptions:null,null,Discussion';
-        onslyde.panel.rollingChart();
+
         onslyde.panel.connect(activeOptionsString);
+      },
+
+      resetAllVotes : function(){
+        currentVotes.agree = 0;
+        currentVotes.disagree = 0;
+        onslyde.panel.drawSentimentChart();
+        propsList = [];
       },
 
       drawSentimentChart : function() {
