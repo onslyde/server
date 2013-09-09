@@ -240,7 +240,8 @@ nav.primary > ul li a {
     line-height: 1em;
 }
 
-.logo-banner {
+nav.primary li.logo-banner {
     background-image: url('../images/edge/bg_billboard.jpg');
     text-align:center;
+    padding: 3px 0 3px 0;
 }

@@ -249,7 +249,7 @@ h2, h3 {
     border-left: 2px solid #777;
 }
 
-.sentiment-bar2 #sentiment-chart-good {
+.sentiment-bar2 #sentiment-chart-agree {
     background-color:#3daa93;
     height:120px;
     float:left;
@@ -258,7 +258,7 @@ h2, h3 {
     overflow: hidden;
 }
 
-.sentiment-bar2 #sentiment-chart-good #goodCount {
+.sentiment-bar2 #sentiment-chart-agree #agreeCount {
     position: absolute;
     padding: 3px 5px 0 0;
     top:36%;
@@ -268,7 +268,7 @@ h2, h3 {
     font-family: 'Lato-Bold';
 }
 
-.sentiment-bar1 #sentiment-chart-bad {
+.sentiment-bar1 #sentiment-chart-disagree {
     background-color:#343434;
     height:120px;
     float:right;
@@ -277,7 +277,7 @@ h2, h3 {
     overflow: hidden;
 }
 
-.sentiment-bar1 #sentiment-chart-bad #badCount {
+.sentiment-bar1 #sentiment-chart-disagree #disagreeCount {
     position: absolute;
     padding: 3px 0 0 5px;
     top:36%;

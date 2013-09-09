@@ -255,7 +255,6 @@
     };
 
     var activeSlide,
-      csessionID,
       activeOptions = [],
       wscount,
       pollcount,
@@ -266,7 +265,9 @@
       currentSpeaker,
       activeOptionsString,
       rollingChartInterval,
-      currentVotes = {good:0,bad:0};
+      propsList = [],
+      rollingAverageEnabled = true,
+      currentVotes = {agree:0,disagree:0};
 
     onslyde.panel = onslyde.prototype = {
 
@@ -292,33 +293,38 @@
           }
         }, false);
 
-        window.addEventListener('clearRoute', function(e) {
-          slidfast.slides.clearRoute();
-        }, false);
 
         window.addEventListener('disagree', function(e) {
-          var disagree = document.getElementById("disagree");
-          currentVotes.bad++;
-          onslyde.panel.drawSentimentChart();
-          disagree.innerHTML = "Thumbs Down!";
-          if(disagree){
-            disagree.className = "show-disagree transition";
-            setTimeout(function(){disagree.className = "hide-disagree transition"},800)
-          }
+          handleProps('disagree');
         }, false);
 
         window.addEventListener('agree', function(e) {
-          var agree = document.getElementById("agree");
-          currentVotes.good++;
-          onslyde.panel.drawSentimentChart();
-          agree.innerHTML = "agree!";
-          if(agree){
-            agree.className = "show-agree agree transition";
-            setTimeout(function(){agree.className = "hide-agree transition"},800)
-          }
+          handleProps('agree');
         }, false);
         //-----------end event listeners
 
+        function handleProps(type){
+          var prop = document.getElementById(type);
+          currentVotes[type]++;
+          //add to scheduled list of votes/props for rolling average
+          propsList.push({time:new Date(),type:type});
+          //draw chart for this vote
+          onslyde.panel.drawSentimentChart();
+          if(prop){
+            prop.className = 'show-' + type + ' transition';
+            setTimeout(function(){prop.className = 'hide-' + type + ' transition'},800)
+          }
+        }
+
+        function manageRollingAverageVote(nowDate){
+          for(var i = 0; i < propsList.length; i++){
+            if((nowDate - propsList[i].time) > 15000){
+              currentVotes[propsList[i].type]--;
+              propsList.splice(i,1);
+              onslyde.panel.drawSentimentChart();
+            }
+          }
+        }
 
         //start timer
         var timerHolder = document.getElementById('timer');
@@ -327,6 +333,10 @@
 
         setInterval(function(){
           var now = new Date();
+
+          if(rollingAverageEnabled){
+            manageRollingAverageVote(now);
+          }
 
           var diff = (now-eventDate);
 
@@ -343,7 +353,7 @@
         //set the active options for opening discussion
         activeOptionsString = 'activeOptions:null,null,Discussion';
 
-        onslyde.panel.rollingChart();
+//        onslyde.panel.rollingChart();
 
         this.connect('::connect::');
         setTimeout(function(){onslyde.panel.updateRemotes();},1000);
@@ -366,24 +376,8 @@
         }
       },
 
-      rollingChart : function(){
-        if(rollingChartInterval){
-          onslyde.panel.clearRollingChart();
-        }
-        rollingChartInterval = setInterval(function(){
-          //only roll the chart if we have votes
-          if(currentVotes.good > 0 || currentVotes.bad > 0){
-            console.log('---roll chart');
-            onslyde.panel.connect(activeOptionsString);
-            currentVotes.good = 0;
-            currentVotes.bad = 0;
-            onslyde.panel.drawSentimentChart();
-          }
-        },30000);
-      },
-
-      clearRollingChart : function(){
-        window.clearInterval(rollingChartInterval);
+      disableRollingAverage : function(){
+        rollingAverageEnabled = false;
       },
 
       updateDeck : function(wsc,pc) {
@@ -443,8 +437,8 @@
         activeOptionsString = 'activeOptions:null,null,' + speaker.name + "," + ip;
         onslyde.panel.rollingChart();
         //client side
-        currentVotes.good = 0;
-        currentVotes.bad = 0;
+        currentVotes.agree = 0;
+        currentVotes.disagree = 0;
         onslyde.panel.drawSentimentChart();
 
         onslyde.panel.connect(activeOptionsString);
@@ -480,8 +474,8 @@
       clearQueue : function(){
         speakerList = [];
         document.getElementById('speakerQueue').innerHTML = '';
-        currentVotes.good = 0;
-        currentVotes.bad = 0;
+        currentVotes.agree = 0;
+        currentVotes.disagree = 0;
         onslyde.panel.drawSentimentChart();
         activeOptionsString = 'activeOptions:null,null,Discussion';
         onslyde.panel.rollingChart();
@@ -490,8 +484,8 @@
       },
 
       removeSpeakerFromLive : function() {
-        currentVotes.good = 0;
-        currentVotes.bad = 0;
+        currentVotes.agree = 0;
+        currentVotes.disagree = 0;
         onslyde.panel.drawSentimentChart();
         document.getElementById('currentSpeaker').innerHTML = 'Discussion';
         onslyde.panel.sendMarkup('<b>Panel Discussion</b>');
@@ -501,24 +495,24 @@
       },
 
       drawSentimentChart : function() {
-        var goodbar = document.getElementById('sentiment-chart-good'),
-            badbar = document.getElementById('sentiment-chart-bad'),
-          goodCount = document.getElementById('goodCount'),
-          badCount = document.getElementById('badCount');
-        if(currentVotes.good === 0 && currentVotes.bad === 0){
+        var agreebar = document.getElementById('sentiment-chart-agree'),
+            disagreebar = document.getElementById('sentiment-chart-disagree'),
+          agreeCount = document.getElementById('agreeCount'),
+          disagreeCount = document.getElementById('disagreeCount');
+        if(currentVotes.agree === 0 && currentVotes.disagree === 0){
           //reset chart
-          goodbar.style.width = '10%';
-          badbar.style.width = '10%';
+          agreebar.style.width = '10%';
+          disagreebar.style.width = '10%';
         }else{
-           var goodVotes = (currentVotes.good / (currentVotes.good + currentVotes.bad));
-           var badVotes = (currentVotes.bad / (currentVotes.good + currentVotes.bad));
-          goodbar.style.width = (goodVotes * 100) + '%';
-          badbar.style.width =  (badVotes * 100) + '%';
-//           document.getElementById('sentiment-chart-bad').style.marginRight = (badVotes * 100) + '%';
+           var agreeVotes = (currentVotes.agree / (currentVotes.agree + currentVotes.disagree));
+           var disagreeVotes = (currentVotes.disagree / (currentVotes.agree + currentVotes.disagree));
+          agreebar.style.width = (agreeVotes * 100) + '%';
+          disagreebar.style.width =  (disagreeVotes * 100) + '%';
+//           document.getElementById('sentiment-chart-disagree').style.marginRight = (disagreeVotes * 100) + '%';
          }
 
-          goodCount.innerHTML = currentVotes.good;
-          badCount.innerHTML = currentVotes.bad;
+          agreeCount.innerHTML = currentVotes.agree;
+          disagreeCount.innerHTML = currentVotes.disagree;
 
       },
 
