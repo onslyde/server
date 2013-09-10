@@ -37,25 +37,6 @@ import java.util.logging.Logger;
 @Path("/{session:[0-9][0-9]*}")
 @RequestScoped
 public class RemoteService {
-    @Inject
-    private Logger log;//
-
-    @Inject
-    private EntityManager em;
-
-    @Inject
-    private Event<SessionManager> slidFastEventSrc;
-
-    @Inject
-    private Validator validator;
-
-    @Inject
-    private SessionManager sessionManager;
-
-    private String currentOptions;
-
-    @Inject
-    private MemberRepository repository;
 
     @GET
     @Produces(MediaType.APPLICATION_JSON)

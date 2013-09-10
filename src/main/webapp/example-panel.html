@@ -50,51 +50,7 @@
            <h3>Panel</h3>
 
             <ul id="panelists" class="panel-list">
-                <li class="moderator" onclick="onslyde.panel.speakerLive(panelists[0],'111.111.111.111')">
-                    <img src="http://edgeconf.com/2013-nyc/images/panelists/andre-behrens.jpg" alt="Andre Behrens" />
-                    <ul class="panelist-details">
-                        <li class="name">Andre Behrens</li>
-                        <li class="org">The New York Times</li>
-                        <li class="mod">Moderator</li>
-                    </ul>
-                </li>
-                <li class="filler"></li>
-                <li onclick="onslyde.panel.speakerLive(panelists[1],'111.111.111.111')">
-                    <img src="http://edgeconf.com/2013-nyc/images/panelists/jonathan-klein.jpg" alt="Jonathan Klein" />
-                    <ul class="panelist-details">
-                        <li class="name">Jonathan Klein</li>
-                        <li class="org">Etsy</li>
-                    </ul>
-                </li>
-                <li onclick="onslyde.panel.speakerLive(panelists[2],'111.111.111.111')">
-                    <img src="http://edgeconf.com/2013-nyc/images/panelists/paul-lewis.jpg" alt="Paul Lewis" />
-                    <ul class="panelist-details">
-                        <li class="name">Paul Lewis</li>
-                        <li class="org">Google</li>
-                    </ul>
-                </li>
-                <li onclick="onslyde.panel.speakerLive(panelists[3],'111.111.111.111')">
-                    <img src="http://edgeconf.com/2013-nyc/images/panelists/ariya-hidayat.jpg" alt="Ariya Hidayat" />
-                    <ul class="panelist-details">
-                        <li class="name">Ariya Hidayat</li>
-                        <li class="org">Sencha</li>
-                    </ul>
-                </li>
-                <li onclick="onslyde.panel.speakerLive(panelists[4],'111.111.111.111')">
-                    <img src="http://edgeconf.com/2013-nyc/images/panelists/joshua-peek.jpg" alt="Joshua Peek" />
-                    <ul class="panelist-details">
-                        <li class="name">Joshua Peek</li>
-                        <li class="org">Github</li>
-                        <li class="mod"></li>
-                    </ul>
-                </li>
-                <li onclick="onslyde.panel.speakerLive(panelists[5],'111.111.111.111')">
-                    <img src="http://edgeconf.com/2013-nyc/images/panelists/eli-fidler.jpg" alt="Eli Fidler" />
-                    <ul class="panelist-details">
-                        <li class="name">Eli Fidler</li>
-                        <li class="org">BlackBerry</li>
-                    </ul>
-                </li>
+
             </ul>
         </div>
 
@@ -119,28 +75,34 @@
 
         </section>
 
-        <div style="display:none">
-        <div id="speaker-template">
-            <img src="" alt="" />
-            <ul class="speaker-details">
-                <li class="name"></li>
-                <li class="org"></li>
-            </ul>
-        </div>
-        </div>
     </section>
 
 </div>
 
-<script>
-    var panelists = [
-        {name:'Andre Behrens',org:'The New York Times',pic:'http://edgeconf.com/2013-nyc/images/panelists/andre-behrens.jpg'},
-        {name:'Jonathan Klein',org:'Etsy',pic:'http://edgeconf.com/2013-nyc/images/panelists/jonathan-klein.jpg'},
-        {name:'Paul Lewis',org:'Google',pic:'http://edgeconf.com/2013-nyc/images/panelists/paul-lewis.jpg'},
-        {name:'Ariya Hidayat',org:'Sencha',pic:'http://edgeconf.com/2013-nyc/images/panelists/ariya-hidayat.jpg'},
-        {name:'Joshua Peek',org:'Github',pic:'http://edgeconf.com/2013-nyc/images/panelists/joshua-peek.jpg'},
-        {name:'Eli Fidler',org:'BlackBerry',pic:'http://edgeconf.com/2013-nyc/images/panelists/eli-fidler.jpg'}
-    ]
+<div style="display:none">
+    <div id="speaker-template">
+        <img src="" alt="" />
+        <ul class="speaker-details">
+            <li class="name"></li>
+            <li class="org"></li>
+        </ul>
+    </div>
+</div>
+
+<script type="text/html" id="panelist_template">
+    <%
+    var panelists = getPanelists();
+    for ( var i = 0; i < panelists.length; i++ ) {
+    %>
+    <li class="<%= panelists[i].mod === true ? 'moderator' : ''%>">
+        <img src="<%=panelists[i].pic%>" alt="<%=panelists[i].name%>" />
+        <ul class="panelist-details">
+            <li class="name"><%=panelists[i].name%></li>
+            <li class="org"><%=panelists[i].org%></li>
+            <li class="<%= panelists[i].mod === true ? 'mod' : 'hide'%>">Moderator</li>
+        </ul>
+    </li>
+    <% } %>
 </script>
 
 <script type="text/javascript" src="js/onslyde-1.0.0.panel.js" ></script>
@@ -150,5 +112,37 @@
         panel: {sessionID: 167, mode:'default'}
     });
 </script>
+
+<script>
+
+
+
+    function getPanelists(sessionID){
+        return [
+            {name:'Andre Behrens',org:'The New York Times',pic:'http://edgeconf.com/2013-nyc/images/panelists/andre-behrens.jpg',twitter:'mrandre', mod:true},
+            {name:'Jonathan Klein',org:'Etsy',pic:'http://edgeconf.com/2013-nyc/images/panelists/jonathan-klein.jpg',twitter:'jonathanklein'},
+            {name:'Paul Lewis',org:'Google',pic:'http://edgeconf.com/2013-nyc/images/panelists/paul-lewis.jpg',twitter:'aerotwist'},
+            {name:'Ariya Hidayat',org:'Sencha',pic:'http://edgeconf.com/2013-nyc/images/panelists/ariya-hidayat.jpg',twitter:'ariyahidayat'},
+            {name:'Joshua Peek',org:'Github',pic:'http://edgeconf.com/2013-nyc/images/panelists/joshua-peek.jpg',twitter:'joshpeek'},
+            {name:'Eli Fidler',org:'BlackBerry',pic:'http://edgeconf.com/2013-nyc/images/panelists/eli-fidler.jpg',twitter:'efidler'}
+        ]
+    }
+
+
+    document.getElementById('panelists').innerHTML = onslyde.template.simple('panelist_template',getPanelists());
+
+    var panelistNodes = document.querySelectorAll('#panelists > li');
+
+    var onclickHelper = function (e,a) {
+        return function (f) {
+            onslyde.panel.speakerLive(e,'111.111.111.11' + a)
+        };
+    };
+    for(var i=0;i<panelistNodes.length;i++){
+        panelistNodes[i].onclick = onclickHelper(getPanelists()[i],i);
+    };
+
+</script>
+
 </body>
 </html>

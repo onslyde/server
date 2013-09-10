@@ -437,7 +437,11 @@
         onslyde.panel.resetAllVotes();
 
         onslyde.panel.connect(activeOptionsString);
-        onslyde.panel.sendMarkup('<b>Currently Speaking:</b> '  + speaker.name);
+        onslyde.panel.sendMarkup('' +
+          '<b>Currently Speaking:</b> '  + speaker.name + '<br/>' +
+          '<a href="https://twitter.com/intent/tweet?text=' + encodeURIComponent('Listening to @' + speaker.twitter + ' talk about... at #edgeconf') + '" target="_blank">Tweet what ' + speaker.name.split(' ')[0] + ' just said</a>' +
+          '');
+
 
         //adjust UI
         document.getElementById('queuedSpeakers').innerHTML = speakerList.length;
@@ -660,6 +664,44 @@
         }
       }
 
+    };
+
+    onslyde.template = onslyde.prototype = {
+
+      // Simple JavaScript Templating
+      // John Resig - http://ejohn.org/ - MIT Licensed
+      simple: function (str, data) {
+        var cache = {};
+
+          // Figure out if we're getting a template, or if we need to
+          // load the template - and be sure to cache the result.
+          var fn = !/\W/.test(str) ?
+            cache[str] = cache[str] ||
+              onslyde.template.simple(document.getElementById(str).innerHTML) :
+
+            // Generate a reusable function that will serve as a template
+            // generator (and which will be cached).
+            new Function("obj",
+              "var p=[],print=function(){p.push.apply(p,arguments);};" +
+
+                // Introduce the data as local variables using with(){}
+                "with(obj){p.push('" +
+
+                // Convert the template into pure JavaScript
+                str
+                  .replace(/[\r\t\n]/g, " ")
+                  .split("<%").join("\t")
+                  .replace(/((^|%>)[^\t]*)'/g, "$1\r")
+                  .replace(/\t=(.*?)%>/g, "',$1,'")
+                  .split("\t").join("');")
+                  .split("%>").join("p.push('")
+                  .split("\r").join("\\'")
+                + "');}return p.join('');");
+
+          // Provide some basic currying to the user
+          return data ? fn( data ) : fn;
+
+      }
     };
 
 

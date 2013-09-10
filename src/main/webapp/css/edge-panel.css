@@ -113,8 +113,9 @@ h2, h3 {
     margin: 0 0 0 30px;
 }
 
-.moderator {
+.panel-list > li.moderator {
     /*border-bottom: 3px solid #2E6651;*/
+    width: 100%;
 }
 
 .panel-list,
@@ -311,4 +312,8 @@ h2, h3 {
     -webkit-transition: all 1s ease;
     -o-transition: all 1s ease;
     transition: all 1s ease;
+}
+
+.hide {
+    display: none;
 }
