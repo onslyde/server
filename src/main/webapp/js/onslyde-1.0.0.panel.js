@@ -354,9 +354,21 @@
 
         this.connect('::connect::');
         setTimeout(function(){onslyde.panel.updateRemotes();},1000);
+
+        document.getElementById('sessionID').innerHTML = this.calculateConnectString(sessionID);
+
         this.drawSentimentChart();
 
-        document.getElementById('sessionID').innerHTML = sessionID;
+      },
+
+      calculateConnectString : function(sessionID){
+        var lookup = ['x', 'b', 'z', 'd', 'y', 'f', 'r', 'h', 's', 'j'];
+        var key = sessionID.toString().split('');
+        var connectString = '';
+        for(var i=0;i < key.length;i++){
+          connectString += lookup[key[i]];
+        }
+        return connectString;
       },
 
       connect : function(initString) {

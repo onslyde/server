@@ -17,7 +17,7 @@ public class PanelRemoteService {
         if (session.isEmpty()) {
             throw new WebApplicationException(Response.Status.NOT_FOUND);
         }
-        String[] lookup = { "a", "b", "c", "d", "e", "f", "g", "h", "i", "j"};
+        String[] lookup = { "x", "b", "z", "d", "y", "f", "r", "h", "s", "j"};
 
         System.out.println("=====" + Arrays.asList(lookup).get(3));
 
