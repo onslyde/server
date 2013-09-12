@@ -403,13 +403,11 @@
       toggleConnectInfo : function(){
         if(!connectInfoMode){
           document.getElementById("panel-container").className = "blur";
-          document.getElementById("canvas").className = "blur-less";
           document.getElementById("modal").className = "visible";
           document.getElementById("modal-connect-string").innerHTML = document.querySelector('.connect-url').innerHTML;
           connectInfoMode = true;
         }else{
           document.getElementById("panel-container").className = '';
-          document.getElementById("canvas").className = '';
           document.getElementById("modal").className = '';
           connectInfoMode = false;
         }
