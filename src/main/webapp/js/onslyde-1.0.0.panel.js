@@ -30,14 +30,14 @@
         return new onslyde.core.init();
       },
 
-      panel = {sessionID: 0, mode: 'default'},
-      panelRemote = {sessionID: 0, mode: 'default'},
+      panel = {sessionID:0, mode:'default'},
+      panelRemote = {sessionID:0, mode:'default'},
       sessionID = 0;
 
     onslyde.core = onslyde.prototype = {
-      constructor: onslyde,
+      constructor:onslyde,
 
-      start: function () {
+      start:function () {
 
         try {
           if (options) {
@@ -63,12 +63,12 @@
 
       },
 
-      hideURLBar: function () {
+      hideURLBar:function () {
         //hide the url bar on mobile devices
         setTimeout(scrollTo, 0, 0, 1);
       },
 
-      init: function () {
+      init:function () {
 
         window.addEventListener('load', function (e) {
           onslyde.core.start();
@@ -79,7 +79,7 @@
 
       },
 
-      ajax: function (url, callback, async) {
+      ajax:function (url, callback, async) {
         var req = init();
         req.onreadystatechange = processRequest;
 
@@ -125,7 +125,7 @@
     var isopen = false;
     onslyde.ws = onslyde.prototype = {
 
-      ip: function (thisSessionID) {
+      ip:function (thisSessionID) {
         //todo come up with better approach :)
         //there are 3 environments in which this call must be made:
         //(1) running just HTML locally
@@ -157,7 +157,7 @@
         return ip;
       },
 
-      getip: function () {
+      getip:function () {
 
         var createRandom = function () {
           return Math.floor(Math.random() * (max - min + 1)) + min;
@@ -168,9 +168,9 @@
         if (!localStorage['onslyde.attendeeIP']) {
           aip = createRandom() + '.' + createRandom() + '.' + createRandom() + '.' + createRandom();
           //if in private browsing mode this will fail
-          try{
-          localStorage['onslyde.attendeeIP'] = aip;
-          }catch(e){
+          try {
+            localStorage['onslyde.attendeeIP'] = aip;
+          } catch (e) {
 
           }
         } else {
@@ -179,9 +179,11 @@
         return aip;
       },
 
-      sessionID: function(){return sessionID;},
+      sessionID:function () {
+        return sessionID;
+      },
 
-      connect: function (websocket, initString, thisSessionID) {
+      connect:function (websocket, initString, thisSessionID) {
 
         username = 'anonymous';
         //here we check to see if we're passing in our mock websocket object from polling clients (using gracefulWebSocket.js)
@@ -216,14 +218,14 @@
         return ws;
       },
 
-      _onmessage: function (m) {
+      _onmessage:function (m) {
 //        console.log('---onmessage:', m.data);
         if (m.data) {
-          if(typeof m.data === 'object'){
-            if(m.data.onslydeEvent.sessionID !== 0){
+          if (typeof m.data === 'object') {
+            if (m.data.onslydeEvent.sessionID !== 0) {
               m.data.onslydeEvent.fire();
             }
-          }else if (m.data.indexOf('sessionID":"' + sessionID) > 0) {
+          } else if (m.data.indexOf('sessionID":"' + sessionID) > 0) {
             try {
               //avoid use of eval...
               var event = (m.data);
@@ -238,16 +240,16 @@
         }
       },
 
-      _onclose: function (m) {
+      _onclose:function (m) {
         onslyde.ws._send('::disconnect::');
         ws = null;
       },
 
-      _onerror: function (e) {
+      _onerror:function (e) {
 //        console.log(e);
       },
 
-      _send: function (message) {
+      _send:function (message) {
         //console.log('sent ');
         ws.send(message);
 
@@ -266,60 +268,62 @@
       activeOptionsString,
       propsList = [],
       rollingAverageEnabled = true,
-      currentVotes = {agree:0,disagree:0};
+      currentVotes = {agree:0, disagree:0};
 
     onslyde.panel = onslyde.prototype = {
 
-      init : function(thisSession) {
+      init:function (thisSession) {
 
         //-----------begin event listeners
         window.addEventListener('clientVote', function (e) {
           onslyde.panel.optionVote(e.vote, activeSlide);
         }, false);
 
-        window.addEventListener('updateCount', function(e) {
-          onslyde.panel.updateDeck(e.wsCount,e.pollCount);
+        window.addEventListener('updateCount', function (e) {
+          onslyde.panel.updateDeck(e.wsCount, e.pollCount);
         }, false);
 
-        window.addEventListener('speak', function(e) {
+        window.addEventListener('speak', function (e) {
           var speaker = JSON.parse(e.attendee);
           try {
             if (speaker.name !== '') {
               onslyde.panel.queueSpeaker(speaker, e.ip);
             }
           } catch (e) {
-            console.log('problem queueing speaker:',e);
+            console.log('problem queueing speaker:', e);
           }
         }, false);
 
 
-        window.addEventListener('disagree', function(e) {
+        window.addEventListener('disagree', function (e) {
           handleProps('disagree');
         }, false);
 
-        window.addEventListener('agree', function(e) {
+        window.addEventListener('agree', function (e) {
           handleProps('agree');
         }, false);
         //-----------end event listeners
 
-        function handleProps(type){
+        function handleProps(type) {
           var prop = document.getElementById(type);
           currentVotes[type]++;
           //add to scheduled list of votes/props for rolling average
-          propsList.push({time:new Date(),type:type});
+          propsList.push({time:new Date(), type:type});
           //draw chart for this vote
           onslyde.panel.drawSentimentChart();
-          if(prop){
+          if (prop) {
             prop.className = 'show-' + type + ' transition';
-            setTimeout(function(){prop.className = 'hide-' + type + ' transition'},800)
+            setTimeout(function () {
+              prop.className = 'hide-' + type + ' transition'
+            }, 800)
           }
         }
 
-        function manageRollingAverageVote(nowDate){
-          for(var i = 0; i < propsList.length; i++){
-            if((nowDate - propsList[i].time) > 15000){
+        function manageRollingAverageVote(nowDate) {
+          for (var i = 0; i < propsList.length; i++) {
+            if ((nowDate - propsList[i].time) > 15000) {
               currentVotes[propsList[i].type]--;
-              propsList.splice(i,1);
+              propsList.splice(i, 1);
               onslyde.panel.drawSentimentChart();
             }
           }
@@ -330,14 +334,14 @@
         var startsecond = 0;
         var eventDate = new Date();
 
-        setInterval(function(){
+        setInterval(function () {
           var now = new Date();
 
-          if(rollingAverageEnabled){
+          if (rollingAverageEnabled) {
             manageRollingAverageVote(now);
           }
 
-          var diff = (now-eventDate);
+          var diff = (now - eventDate);
 
           var currentHours = Math.floor(diff / 3600000);
           var currentMinutes = Math.floor((diff % 3600000) / 60000);
@@ -345,15 +349,20 @@
           currentHours = (currentHours < 10 ? "0" : "") + currentHours;
           currentMinutes = (currentMinutes < 10 ? "0" : "") + currentMinutes;
           currentSeconds = (currentSeconds < 10 ? "0" : "") + currentSeconds;
+
           timerHolder.innerHTML = currentHours + ':' + currentMinutes + ":" + currentSeconds;
-        },1000);
+
+
+        }, 1000);
 
 
         //set the active options for opening discussion
         activeOptionsString = 'activeOptions:null,null,Discussion';
 
         this.connect('::connect::');
-        setTimeout(function(){onslyde.panel.updateRemotes();},1000);
+        setTimeout(function () {
+          onslyde.panel.updateRemotes();
+        }, 1000);
 
         document.getElementById('sessionID').innerHTML = this.calculateConnectString(sessionID);
 
@@ -361,17 +370,17 @@
 
       },
 
-      calculateConnectString : function(sessionID){
+      calculateConnectString:function (sessionID) {
         var lookup = ['x', 'b', 'z', 'd', 'y', 'f', 'r', 'h', 's', 'j'];
         var key = sessionID.toString().split('');
         var connectString = '';
-        for(var i=0;i < key.length;i++){
+        for (var i = 0; i < key.length; i++) {
           connectString += lookup[key[i]];
         }
         return connectString;
       },
 
-      connect : function(initString) {
+      connect:function (initString) {
         //ws connect
 //        console.log('connect',initString);
         try {
@@ -381,61 +390,64 @@
             onslyde.ws._send(initString, sessionID);
           }
         } catch (e) {
-          console.log('error',e);
+          console.log('error', e);
         }
       },
 
-      disableRollingAverage : function(){
+      disableRollingAverage:function () {
         rollingAverageEnabled = false;
       },
 
-      updateDeck : function(wsc,pc) {
+      updateDeck:function (wsc, pc) {
+        var countHolder = document.getElementById('totalCount');
         wscount = wsc;
         pollcount = pc;
-        document.getElementById('totalCount').innerHTML = (parseInt(wsc,10) + parseInt(pc,10));
+        countHolder.innerHTML = (parseInt(wsc, 10) + parseInt(pc, 10));
       },
 
-      createSpeakerNode : function(speaker,ip,fn) {
+      createSpeakerNode:function (speaker, ip, fn) {
         var fragment = document.createDocumentFragment();
         fragment.appendChild(document.getElementById('speaker-template').cloneNode(true));
         var image = fragment.querySelector('img');
         image.src = speaker.pic;
-        image.onclick = function(){fn(speaker,ip);};
+        image.onclick = function () {
+          fn(speaker, ip);
+        };
         fragment.querySelector('.name').innerHTML = speaker.name;
         fragment.querySelector('.org').innerHTML = (speaker.org !== '' ? speaker.org : 'org');
         return fragment;
       },
 
-      queueSpeaker : function(speaker,ip) {
+      queueSpeaker:function (speaker, ip) {
         var speakerIsQueued = false;
         for (var i = 0, len = speakerList.length; i < len; i++) {
           speakerIsQueued = (speakerList[i].speaker.email === speaker.email);
         }
         //if speaker is already queued remove them
-        if(speakerIsQueued){
+        if (speakerIsQueued) {
           onslyde.panel.removeSpeakerFromList(speaker.email);
-        }else{
-          speakerList.push({'speaker':speaker,'ip':ip});
+        } else {
+          speakerList.push({'speaker':speaker, 'ip':ip});
           //passing in speaker data along with necessary onclick function for moderators
-          document.getElementById('speakerQueue').appendChild(onslyde.panel.createSpeakerNode(speaker,ip,onslyde.panel.speakerLive));
+          document.getElementById('speakerQueue').appendChild(onslyde.panel.createSpeakerNode(speaker, ip, onslyde.panel.speakerLive));
         }
         //update count
         document.getElementById('queuedSpeakers').innerHTML = speakerList.length;
       },
 
-      upNextSpeaker : function(speaker,ip) {
+      upNextSpeaker:function (speaker, ip) {
         //passing in speaker data along with necessary onclick function for moderators
-        document.getElementById('upNext').appendChild(onslyde.panel.createSpeakerNode(speaker,ip,onslyde.panel.speakerLive));
+        document.getElementById('upNext').appendChild(onslyde.panel.createSpeakerNode(speaker, ip, onslyde.panel.speakerLive));
         //remove from list
         onslyde.panel.removeSpeakerFromList(speaker.email);
         //adjust UI
         document.getElementById('queuedSpeakers').innerHTML = speakerList.length;
       },
 
-      speakerLive : function(speaker,ip) {
+      speakerLive:function (speaker, ip) {
         var currentSpeakerNode = document.getElementById('currentSpeaker');
         currentSpeakerNode.innerHTML = '';
-        currentSpeakerNode.appendChild(onslyde.panel.createSpeakerNode(speaker,ip,onslyde.panel.removeSpeakerFromLive));
+        currentSpeakerNode.appendChild(onslyde.panel.createSpeakerNode(speaker, ip, onslyde.panel.removeSpeakerFromLive));
         //should we automatically move the next in the list to "up next" ?
         //for now just remove.
 //        document.getElementById('upNext').innerHTML = '';
@@ -448,10 +460,11 @@
         //client side
         onslyde.panel.resetAllVotes();
 
+        var twitterHandle = (speaker.twitter ? '@' + speaker.twitter : speaker.name);
         onslyde.panel.connect(activeOptionsString);
         onslyde.panel.sendMarkup('' +
-          '<b>Currently Speaking:</b> '  + speaker.name + '<br/>' +
-          '<a href="https://twitter.com/intent/tweet?text=' + encodeURIComponent('Listening to @' + speaker.twitter + ' talk about... at #edgeconf') + '" target="_blank">Tweet what ' + speaker.name.split(' ')[0] + ' just said</a>' +
+          '<span class="currently-speaking">Currently Speaking:</span><span class="speaker-name">' + speaker.name + '</span>' +
+          '<span class="tweet-button"><a href="https://twitter.com/intent/tweet?text=' + encodeURIComponent('Listening to ' + twitterHandle + ' talk about... at #edgeconf') + '" target="_blank"><i class="pictogram">&#62217;</i>Tweet what ' + speaker.name.split(' ')[0] + ' just said</a></span>' +
           '');
 
 
@@ -459,30 +472,30 @@
         document.getElementById('queuedSpeakers').innerHTML = speakerList.length;
       },
 
-      removeSpeakerFromList : function(email) {
+      removeSpeakerFromList:function (email) {
         var speakerWasQueued = false;
         //removes speaker from queue
-        for(var i=0;i < speakerList.length;i++){
-          if(speakerList[i].speaker.email === email){
-            speakerList.splice(i,1);
+        for (var i = 0; i < speakerList.length; i++) {
+          if (speakerList[i].speaker.email === email) {
+            speakerList.splice(i, 1);
             speakerWasQueued = true;
           }
         }
 
         //check for on the fly adding of speaker to "now speaking" from panel members
-        if(speakerWasQueued){
-  //        console.log('speakerList after remove',speakerList);
+        if (speakerWasQueued) {
+          //        console.log('speakerList after remove',speakerList);
           //todo - rebuild list - improve this
           document.getElementById('speakerQueue').innerHTML = '';
 
-          for(var j=0;j < speakerList.length;j++){
-            onslyde.panel.queueSpeaker(speakerList[j].speaker,speakerList[j].ip);
+          for (var j = 0; j < speakerList.length; j++) {
+            onslyde.panel.queueSpeaker(speakerList[j].speaker, speakerList[j].ip);
           }
         }
 
       },
 
-      clearQueue : function(){
+      clearQueue:function () {
         speakerList = [];
         document.getElementById('speakerQueue').innerHTML = '';
         onslyde.panel.resetAllVotes();
@@ -492,7 +505,7 @@
         document.getElementById('queuedSpeakers').innerHTML = speakerList.length;
       },
 
-      removeSpeakerFromLive : function() {
+      removeSpeakerFromLive:function () {
         onslyde.panel.resetAllVotes();
         document.getElementById('currentSpeaker').innerHTML = 'Discussion';
         onslyde.panel.sendMarkup('<b>Panel Discussion</b>');
@@ -501,59 +514,67 @@
         onslyde.panel.connect(activeOptionsString);
       },
 
-      resetAllVotes : function(){
+      resetAllVotes:function () {
         currentVotes.agree = 0;
         currentVotes.disagree = 0;
         onslyde.panel.drawSentimentChart();
         propsList = [];
       },
 
-      drawSentimentChart : function() {
+      drawSentimentChart:function () {
         var agreebar = document.getElementById('sentiment-chart-agree'),
-            disagreebar = document.getElementById('sentiment-chart-disagree'),
+          disagreebar = document.getElementById('sentiment-chart-disagree'),
           agreeCount = document.getElementById('agreeCount'),
           disagreeCount = document.getElementById('disagreeCount');
-        if(currentVotes.agree === 0 && currentVotes.disagree === 0){
+        if (currentVotes.agree === 0 && currentVotes.disagree === 0) {
           //reset chart
           agreebar.style.width = '10%';
           disagreebar.style.width = '10%';
-        }else{
-           var agreeVotes = (currentVotes.agree / (currentVotes.agree + currentVotes.disagree));
-           var disagreeVotes = (currentVotes.disagree / (currentVotes.agree + currentVotes.disagree));
+        } else {
+          var agreeVotes = (currentVotes.agree / (currentVotes.agree + currentVotes.disagree));
+          var disagreeVotes = (currentVotes.disagree / (currentVotes.agree + currentVotes.disagree));
           agreebar.style.width = (agreeVotes * 100) + '%';
-          disagreebar.style.width =  (disagreeVotes * 100) + '%';
-//           document.getElementById('sentiment-chart-disagree').style.marginRight = (disagreeVotes * 100) + '%';
-         }
+          disagreebar.style.width = (disagreeVotes * 100) + '%';
+        }
 
+        if(currentVotes.agree !== parseInt(agreeCount.innerHTML,10)){
           agreeCount.innerHTML = currentVotes.agree;
+          agreeCount.className = 'bump-out';
+          setTimeout(function(){agreeCount.className = 'bump-in';},200);
+        }
+
+        if(currentVotes.disagree !== parseInt(disagreeCount.innerHTML,10)){
           disagreeCount.innerHTML = currentVotes.disagree;
+          disagreeCount.className = 'bump-out';
+          setTimeout(function(){disagreeCount.className = 'bump-in';},200);
+        }
 
       },
 
-      wsCount : function() {
+      wsCount:function () {
         return wscount;
       },
 
-      pollCount : function() {
+      pollCount:function () {
         return pollcount;
       },
 
-      sendMarkup : function(markup) {
+      sendMarkup:function (markup) {
         // see if there's anything on the new slide to send to remotes EXPERIMENTAL
 
-            //send to remotes
-            var outerHtml = markup.replace(/'/g, "&#39;");
-            var remoteMarkup = JSON.stringify({remoteMarkup : encodeURIComponent(outerHtml)});
-            this.connect(remoteMarkup);
+        //send to remotes
+        var outerHtml = markup.replace(/'/g, "&#39;");
+        var remoteMarkup = JSON.stringify({remoteMarkup:encodeURIComponent(outerHtml)});
+        this.connect(remoteMarkup);
 
       },
 
-      updateRemotes: function () {
+      updateRemotes:function () {
         var activeOptionsString;
 
-        if(activeOptions.length >= 1){
+        if (activeOptions.length >= 1) {
           activeOptionsString = 'activeOptions:' + activeOptions + ',' + groupIndex + ':' + groupSlideIndex;
-        }else{
+        } else {
           activeOptionsString = 'activeOptions:null,null,' + groupIndex + ':' + groupSlideIndex;
         }
         console.log(activeOptionsString);
@@ -563,11 +584,11 @@
 
       },
 
-      roulette : function() {
+      roulette:function () {
         this.connect("roulette");
       },
 
-      optionVote: function (vote, activeSlide) {
+      optionVote:function (vote, activeSlide) {
         //given vote for a default slide
         var index;
         //if(vote in activeOptions){
@@ -591,7 +612,7 @@
 //        barChart.redraw();
       },
 
-      handleKeys: function (event) {
+      handleKeys:function (event) {
         switch (event.keyCode) {
           case 39: // right arrow
           case 13: // Enter
@@ -628,7 +649,7 @@
 
     onslyde.html5e = onslyde.prototype = {
       /*jshint sub:true */
-      supports_local_storage: function () {
+      supports_local_storage:function () {
         try {
           return 'localStorage' in window && window['localStorage'] !== null;
         } catch (e) {
@@ -636,7 +657,7 @@
         }
       },
 
-      supports_app_cache: function () {
+      supports_app_cache:function () {
         try {
           return 'applicationCache' in window && window['applicationCache'] !== null;
         } catch (e) {
@@ -644,7 +665,7 @@
         }
       },
       //geolocation cannot be accessed with dot notation in iOS5... will prevent page caching
-      supports_geolocation: function () {
+      supports_geolocation:function () {
         try {
           return 'geolocation' in navigator && navigator['geolocation'] !== null;
         } catch (e) {
@@ -652,7 +673,7 @@
         }
       },
 
-      supports_websocket: function () {
+      supports_websocket:function () {
         try {
           return 'WebSocket' in window && window['WebSocket'] !== null;
         } catch (e) {
@@ -660,7 +681,7 @@
         }
       },
 
-      supports_orientation: function () {
+      supports_orientation:function () {
         try {
           return 'DeviceOrientationEvent' in window && window['DeviceOrientationEvent'] !== null;
         } catch (e) {
@@ -668,7 +689,7 @@
         }
       },
 
-      supports_motion: function () {
+      supports_motion:function () {
         try {
           return 'DeviceMotionEvent' in window && window['DeviceMotionEvent'] !== null;
         } catch (e) {
@@ -682,36 +703,36 @@
 
       // Simple JavaScript Templating
       // John Resig - http://ejohn.org/ - MIT Licensed
-      simple: function (str, data) {
+      simple:function (str, data) {
         var cache = {};
 
-          // Figure out if we're getting a template, or if we need to
-          // load the template - and be sure to cache the result.
-          var fn = !/\W/.test(str) ?
-            cache[str] = cache[str] ||
-              onslyde.template.simple(document.getElementById(str).innerHTML) :
+        // Figure out if we're getting a template, or if we need to
+        // load the template - and be sure to cache the result.
+        var fn = !/\W/.test(str) ?
+          cache[str] = cache[str] ||
+            onslyde.template.simple(document.getElementById(str).innerHTML) :
 
-            // Generate a reusable function that will serve as a template
-            // generator (and which will be cached).
-            new Function("obj",
-              "var p=[],print=function(){p.push.apply(p,arguments);};" +
+          // Generate a reusable function that will serve as a template
+          // generator (and which will be cached).
+          new Function("obj",
+            "var p=[],print=function(){p.push.apply(p,arguments);};" +
 
-                // Introduce the data as local variables using with(){}
-                "with(obj){p.push('" +
+              // Introduce the data as local variables using with(){}
+              "with(obj){p.push('" +
 
-                // Convert the template into pure JavaScript
-                str
-                  .replace(/[\r\t\n]/g, " ")
-                  .split("<%").join("\t")
-                  .replace(/((^|%>)[^\t]*)'/g, "$1\r")
-                  .replace(/\t=(.*?)%>/g, "',$1,'")
-                  .split("\t").join("');")
-                  .split("%>").join("p.push('")
-                  .split("\r").join("\\'")
-                + "');}return p.join('');");
+              // Convert the template into pure JavaScript
+              str
+                .replace(/[\r\t\n]/g, " ")
+                .split("<%").join("\t")
+                .replace(/((^|%>)[^\t]*)'/g, "$1\r")
+                .replace(/\t=(.*?)%>/g, "',$1,'")
+                .split("\t").join("');")
+                .split("%>").join("p.push('")
+                .split("\r").join("\\'")
+              + "');}return p.join('');");
 
-          // Provide some basic currying to the user
-          return data ? fn( data ) : fn;
+        // Provide some basic currying to the user
+        return data ? fn(data) : fn;
 
       }
     };

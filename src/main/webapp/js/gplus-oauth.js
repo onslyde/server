@@ -17,22 +17,23 @@ function checkAuth() {
 
 function handleAuthResult(authResult) {
   var authorizeButton = document.getElementById('authorize-button');
+  var authHolder = document.getElementById('auth-holder');
   var speakButton = document.getElementById('speak');
 
   if (authResult && !authResult.error) {
-    authorizeButton.style.visibility = 'hidden';
+    authHolder.style.display = 'none';
     speakButton.onclick = function(event) {
       _gaq.push(['_trackEvent', 'onslyde-speak', 'vote']);
         ws.send('speak:' + JSON.stringify(userObject));
-        if(speak.value === 'Remove yourself from queue'){
+        if(speak.value === 'Cancel'){
           speak.value = 'I want to speak';
         }else{
-          speak.value = 'Remove yourself from queue';
+          speak.value = 'Cancel';
         }
       };
     makeApiCall();
   } else {
-    authorizeButton.style.visibility = '';
+    authHolder.style.display = '';
     authorizeButton.onclick = handleAuthClick;
   }
 }

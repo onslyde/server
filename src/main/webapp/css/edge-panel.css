@@ -1,3 +1,7 @@
+html {
+
+}
+
 body {
     font-family: 'Lato', sans-serif;
     color: #fff;
@@ -209,8 +213,17 @@ h2, h3 {
     margin: 10px 0 0 0;
 }
 
+.speaker-queue-container {
+    position:relative;
+}
+
 .speaker-list {
-    width: 100%;
+    position: absolute;
+    top:0;
+    left:0;
+    right:0;
+    bottom:0;
+    width: 115%;
     float:left;
     margin: 10px;
     color: #343434;
@@ -345,4 +358,59 @@ h2, h3 {
 
 .hide {
     display: none;
+}
+
+/*----------------------------- css effects*/
+
+.deepshadow {
+    text-shadow: 0 -1px 0 #ffffff, 0 1px 0 #2e2e2e, 0 2px 0 #2c2c2c, 0 3px 0 #2a2a2a, 0 4px 0 #282828, 0 5px 0 #262626, 0 6px 0 #242424, 0 7px 0 #222222, 0 8px 0 #202020, 0 9px 0 #1e1e1e, 0 10px 0 #1c1c1c, 0 11px 0 #1a1a1a, 0 12px 0 #181818, 0 13px 0 #161616, 0 14px 0 #141414, 0 15px 0 #121212, 0 22px 30px rgba(0, 0, 0, 0.9);
+}
+
+@-webkit-keyframes bump-in
+{
+  from {
+    -webkit-transform: scale(2,2);
+    opacity: .5;
+  }
+  to {
+    -webkit-transform: scale(1,1);
+    opacity: 1;
+  }
+}
+
+@-webkit-keyframes bump-out
+{
+  from {
+    -webkit-transform: scale(1,1);
+    opacity: 1;
+  }
+  to {
+    -webkit-transform: scale(2,2);
+    opacity: .5;
+  }
+}
+
+.anim-chart.waiting {
+
+}
+
+.bump-in {
+    display: inline-block;
+    -webkit-animation-name: bump-in;
+    -webkit-animation-duration: .2s;
+    -webkit-animation-timing-function: step-stop;
+    -webkit-animation-direction: normal;
+    -webkit-animation-iteration-count: 1;
+    -webkit-transform: scale(1,1)
+}
+
+.bump-out {
+    display: inline-block;
+    -webkit-animation-name: bump-out;
+    -webkit-animation-duration: .2s;
+    -webkit-animation-timing-function: step-stop;
+    -webkit-animation-direction: normal;
+    -webkit-animation-iteration-count: 1;
+    -webkit-transform: scale(2,2);
+    opacity: .5;
 }

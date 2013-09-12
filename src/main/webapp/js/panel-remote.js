@@ -13,7 +13,7 @@ speak.onclick = function (event) {
     speak.onclick = handleAuthClick;
   } else {
     ws.send('speak:' + JSON.stringify(userObject));
-    speak.value = 'Remove yourself from queue';
+    speak.value = 'Cancel';
   }
 };
 
