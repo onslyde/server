@@ -268,7 +268,9 @@
       activeOptionsString,
       propsList = [],
       rollingAverageEnabled = true,
-      currentVotes = {agree:0, disagree:0};
+      currentVotes = {agree:0, disagree:0},
+      queueTitle,
+      connectInfoMode = false;
 
     onslyde.panel = onslyde.prototype = {
 
@@ -366,6 +368,10 @@
 
         document.getElementById('sessionID').innerHTML = this.calculateConnectString(sessionID);
 
+        //hide the queued speaker title and show the connect info
+        queueTitle = document.querySelector('.queue-title');
+        queueTitle.style.display = 'none';
+
         this.drawSentimentChart();
 
       },
@@ -394,8 +400,31 @@
         }
       },
 
-      disableRollingAverage:function () {
-        rollingAverageEnabled = false;
+      toggleConnectInfo : function(){
+        if(!connectInfoMode){
+          document.getElementById("panel-container").className = "blur";
+          document.getElementById("canvas").className = "blur-less";
+          document.getElementById("modal").className = "visible";
+          document.getElementById("modal-connect-string").innerHTML = document.querySelector('.connect-url').innerHTML;
+          connectInfoMode = true;
+        }else{
+          document.getElementById("panel-container").className = '';
+          document.getElementById("canvas").className = '';
+          document.getElementById("modal").className = '';
+          connectInfoMode = false;
+        }
+      },
+
+      toggleRollingAverage:function () {
+        rollingAverageEnabled = !rollingAverageEnabled;
+        if(!rollingAverageEnabled){
+          document.querySelector('.sentiment-bar1').style.borderRightColor = '#000';
+          document.querySelector('.sentiment-bar2').style.borderLeftColor = '#000';
+        }else{
+          document.querySelector('.sentiment-bar1').style.borderRightColor = '#777';
+          document.querySelector('.sentiment-bar2').style.borderLeftColor = '#777';
+        }
+
       },
 
       updateDeck:function (wsc, pc) {
@@ -431,8 +460,15 @@
           //passing in speaker data along with necessary onclick function for moderators
           document.getElementById('speakerQueue').appendChild(onslyde.panel.createSpeakerNode(speaker, ip, onslyde.panel.speakerLive));
         }
-        //update count
-        document.getElementById('queuedSpeakers').innerHTML = speakerList.length;
+
+        //hide/show the header
+        if(speakerList.length > 0){
+          queueTitle.style.display = '';
+          document.getElementById('queuedSpeakers').innerHTML = speakerList.length;
+        }else if(speakerList.length === 0){
+          queueTitle.style.display = 'none';
+        }
+
       },
 
       upNextSpeaker:function (speaker, ip) {
@@ -497,6 +533,7 @@
 
       clearQueue:function () {
         speakerList = [];
+        queueTitle.style.display = 'none';
         document.getElementById('speakerQueue').innerHTML = '';
         onslyde.panel.resetAllVotes();
         activeOptionsString = 'activeOptions:null,null,Discussion';

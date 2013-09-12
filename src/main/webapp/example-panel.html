@@ -12,8 +12,10 @@
     <link rel="stylesheet" href="css/edge-panel.css">
 </head>
 <body>
+<canvas id="canvas"></canvas>
+<section id="panel-container">
 <header class="primary-header">
-    <div class="connect-url">
+    <div class="connect-url" onclick="onslyde.panel.toggleConnectInfo()">
         <i class="pictogram">&#128241;</i> onslyde.com/go/<span id="sessionID"></span>
     </div>
     <div class="session-time light">
@@ -50,7 +52,7 @@
 
     <section class="right-col">
 
-        <div class="sentiment-container" onclick="onslyde.panel.disableRollingAverage();">
+        <div class="sentiment-container" onclick="onslyde.panel.toggleRollingAverage();">
             <div class="sentiment-bar1">
 
                 <div id="sentiment-chart-disagree" class="transition"><span id="disagreeCount">0</span></div>
@@ -63,6 +65,7 @@
 
         <h3 class="queue-title" onclick="onslyde.panel.clearQueue()">Delegates Queued to Speak (<span id="queuedSpeakers">0</span>)</h3>
         <div class="speaker-queue-container">
+
         <section class="speaker-list" id="speakerQueue">
 
         </section>
@@ -80,6 +83,12 @@
         </ul>
     </div>
 </div>
+</section>
+
+<section id="modal" onclick="onslyde.panel.toggleConnectInfo()">
+    <div id="modal-connect-string"></div>
+    <div id="qr"></div>
+</section>
 
 <script type="text/html" id="panelist_template">
     <%
@@ -133,6 +142,17 @@
     for(var i=0;i<panelistNodes.length;i++){
         panelistNodes[i].onclick = onclickHelper(getPanelists()[i],i);
     };
+
+</script>
+
+<script src="js/qrcode.js"></script>
+<script>
+    qrInterval = setInterval(function(){
+        if(document.getElementById('sessionID').innerHTML != ''){
+            document.getElementById('qr').innerHTML = create_qrcode('http://onslyde.com/go/' + document.getElementById('sessionID').innerHTML);
+            clearInterval(qrInterval)
+        }
+    },1000)
 
 </script>
 
