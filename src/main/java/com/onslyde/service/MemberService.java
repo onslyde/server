@@ -211,6 +211,30 @@ public class MemberService {
         return user != null;
     }
 
+    @POST
+    @Path("/register")
+    @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response userRegister(@FormParam("email") String name, @FormParam("email") String email, @FormParam("password") String password) {
+        User user = null;
+        UserSummary userSummary = new UserSummary();
+        log.info("User login attempt: " + email);
+        try {
+            user = repository.findByEmail(email);
+            if(password.equals(user.getPassword())){
+                userSummary.setName(user.getFullName());
+                userSummary.setCreated(user.getCreated());
+                userSummary.setEmail(user.getEmail());
+                userSummary.setSessions(sessionHome.findByUser(user));
+                System.out.println(user.getFullName() + " logged in.");
+            }
+        } catch (NoResultException e) {
+            log.severe("Bad login: User does not exist");
+            userSummary.setName("Not Found");
+        }
+        return Response.ok(userSummary, MediaType.APPLICATION_JSON).build();
+    }
+
 
     @POST
     @Path("/login")

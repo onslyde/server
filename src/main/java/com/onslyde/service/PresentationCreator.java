@@ -40,16 +40,21 @@ public class PresentationCreator {
     @Produces("text/html")
     public void createPres(@QueryParam("email") String email,
                          @QueryParam("token") String token,
+                         @QueryParam("sessionId") String sessionId,
                          @QueryParam("presName") String presName,
                          @QueryParam("poll1") String poll1,
                          @QueryParam("option1") String option1,
                          @QueryParam("option2") String option2) throws ServletException, IOException {
-
         int presID = 0;
-        try {
-            presID = memberReg.createPresentation(email,token,presName);
-        } catch (Exception e) {
-            e.printStackTrace();
+        if(sessionId.isEmpty()){
+
+            try {
+                presID = memberReg.createPresentation(email,token,presName);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }else{
+            presID = Integer.parseInt(sessionId);
         }
 
         HttpServletRequest request = ResteasyProviderFactory.getContextData(HttpServletRequest.class);
