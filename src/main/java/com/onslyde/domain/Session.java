@@ -2,6 +2,8 @@ package com.onslyde.domain;
 
 // Generated Jun 15, 2012 8:41:06 AM by Hibernate Tools 3.4.0.CR1
 
+import org.codehaus.jackson.annotate.JsonIgnore;
+
 import javax.persistence.*;
 import java.util.Date;
 import java.util.HashSet;
@@ -60,6 +62,7 @@ public class Session implements java.io.Serializable {
 		this.id = id;
 	}
 
+    @JsonIgnore
 	@ManyToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name = "user_id", nullable = false)
 	public User getUser() {

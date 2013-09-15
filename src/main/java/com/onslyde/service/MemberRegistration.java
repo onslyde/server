@@ -20,6 +20,7 @@ CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 package com.onslyde.service;
 
+import com.onslyde.data.MemberRepository;
 import com.onslyde.domain.Session;
 import com.onslyde.domain.User;
 
@@ -39,6 +40,9 @@ public class MemberRegistration {
     @Inject
     private EntityManager em;
 
+    @Inject
+    private MemberRepository repository;
+
     private Session currentSession;
 
     public int register(User user) throws Exception {
@@ -52,5 +56,25 @@ public class MemberRegistration {
         currentSession.setCreated(new Date());
         em.persist(currentSession);
         return currentSession.getId();
+    }
+
+    public int createPresentation(String email, String token, String presName) throws Exception {
+        try {
+            User user = repository.findByEmail(email);
+            if(token.equals(String.valueOf(user.getCreated().getTime()))){
+                currentSession = new Session();
+                currentSession.setSessionCode("beta");
+                currentSession.setSessionName(presName);
+                currentSession.setUser(user);
+                currentSession.setCreated(new Date());
+                em.persist(currentSession);
+                return currentSession.getId();
+            }else{
+                return 0;
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return 0;
     }
 }

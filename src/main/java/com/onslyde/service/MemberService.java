@@ -75,6 +75,7 @@ public class MemberService {
         String name;
         Date created;
         List Sessions;
+        String email;
 
         public String getName() {
             return name;
@@ -98,6 +99,14 @@ public class MemberService {
 
         public void setSessions(List sessions) {
             Sessions = sessions;
+        }
+
+        public String getEmail() {
+            return email;
+        }
+
+        public void setEmail(String email) {
+            this.email = email;
         }
     }
 
@@ -207,16 +216,19 @@ public class MemberService {
     @Path("/login")
     @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
     @Produces(MediaType.APPLICATION_JSON)
-    public Response optionSpeak(@FormParam("email") String email, @FormParam("password") String password) {
+    public Response userLogin(@FormParam("email") String email, @FormParam("password") String password) {
         User user = null;
         UserSummary userSummary = new UserSummary();
-        log.info("User login: " + email);
+        log.info("User login attempt: " + email);
         try {
             user = repository.findByEmail(email);
-            userSummary.setName(user.getFullName());
-            userSummary.setCreated(user.getCreated());
-            userSummary.setSessions(sessionHome.findByUser(user));
-            System.out.println(user.getFullName());
+            if(password.equals(user.getPassword())){
+                userSummary.setName(user.getFullName());
+                userSummary.setCreated(user.getCreated());
+                userSummary.setEmail(user.getEmail());
+                userSummary.setSessions(sessionHome.findByUser(user));
+                System.out.println(user.getFullName() + " logged in.");
+            }
         } catch (NoResultException e) {
             log.severe("Bad login: User does not exist");
             userSummary.setName("Not Found");
