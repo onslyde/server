@@ -21,8 +21,12 @@ CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 package com.onslyde.service;
 
 import com.onslyde.data.MemberRepository;
+import com.onslyde.domain.SessionHome;
 import com.onslyde.domain.User;
 import com.onslyde.domain.UserHome;
+import com.onslyde.model.Mediator;
+import com.onslyde.util.ClientEvent;
+import org.eclipse.jetty.websocket.api.Session;
 
 import javax.ejb.Stateful;
 import javax.enterprise.context.RequestScoped;
@@ -33,14 +37,13 @@ import javax.mail.Transport;
 import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
 import javax.persistence.NoResultException;
+import javax.servlet.http.HttpServletRequest;
 import javax.validation.ConstraintViolation;
 import javax.validation.ConstraintViolationException;
 import javax.validation.ValidationException;
 import javax.validation.Validator;
-import javax.ws.rs.Consumes;
-import javax.ws.rs.POST;
-import javax.ws.rs.Path;
-import javax.ws.rs.Produces;
+import javax.ws.rs.*;
+import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import java.util.*;
@@ -60,32 +63,45 @@ public class MemberService {
     UserHome userHome;
 
     @Inject
+    SessionHome sessionHome;
+
+    @Inject
     private MemberRepository repository;
 
     @Inject
     MemberRegistration registration;
 
-//    @GET
-//    @Produces(MediaType.APPLICATION_JSON)
-//    public List<Member> listAllMembers() {
-//        return repository.findAllOrderedByName();
-//    }
+    private class UserSummary {
+        String name;
+        Date created;
+        List Sessions;
 
-//    @GET
-//    @Path("/{id:[0-9][0-9]*}")
-//    @Produces(MediaType.APPLICATION_JSON)
-//    public Member lookupMemberById(@PathParam("id") long id) {
-//        Member member = repository.findById(id);
-//        if (member == null) {
-//            throw new WebApplicationException(Response.Status.NOT_FOUND);
-//        }
-//        return member;
-//    }
+        public String getName() {
+            return name;
+        }
 
-    /**
-     * Creates a new member from the values provided.  Performs validation, and will return a JAX-RS response with either
-     * 200 ok, or with a map of fields, and related errors.
-     */
+        public void setName(String name) {
+            this.name = name;
+        }
+
+        public Date getCreated() {
+            return created;
+        }
+
+        public void setCreated(Date created) {
+            this.created = created;
+        }
+
+        public List getSessions() {
+            return Sessions;
+        }
+
+        public void setSessions(List sessions) {
+            Sessions = sessions;
+        }
+    }
+
+
     @POST
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
@@ -184,6 +200,28 @@ public class MemberService {
             // ignore
         }
         return user != null;
+    }
+
+
+    @POST
+    @Path("/login")
+    @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response optionSpeak(@FormParam("email") String email, @FormParam("password") String password) {
+        User user = null;
+        UserSummary userSummary = new UserSummary();
+        log.info("User login: " + email);
+        try {
+            user = repository.findByEmail(email);
+            userSummary.setName(user.getFullName());
+            userSummary.setCreated(user.getCreated());
+            userSummary.setSessions(sessionHome.findByUser(user));
+            System.out.println(user.getFullName());
+        } catch (NoResultException e) {
+            log.severe("Bad login: User does not exist");
+            userSummary.setName("Not Found");
+        }
+        return Response.ok(userSummary, MediaType.APPLICATION_JSON).build();
     }
 
 

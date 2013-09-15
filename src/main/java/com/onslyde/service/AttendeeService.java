@@ -24,6 +24,7 @@ import com.onslyde.model.Mediator;
 import com.onslyde.model.SessionManager;
 import com.onslyde.util.ClientEvent;
 import org.eclipse.jetty.websocket.api.Session;
+import org.jboss.resteasy.annotations.GZIP;
 
 import javax.enterprise.context.RequestScoped;
 import javax.enterprise.event.Event;
@@ -68,6 +69,7 @@ public class AttendeeService {
 
     private String ip = null;
 
+//    @GZIP
     @GET
     @Path("/json")
     @Produces(MediaType.APPLICATION_JSON)

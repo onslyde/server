@@ -9,6 +9,7 @@ import javax.persistence.PersistenceContext;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Root;
+import java.util.List;
 import java.util.logging.Logger;
 
 /**
@@ -59,9 +60,9 @@ public class SessionHome {
 		}
 	}
 
-	public Session findById(Integer id) {
-		log.fine("getting Session instance with id: " + id);
-		try {
+    public Session findById(Integer id) {
+        log.fine("getting Session instance with id: " + id);
+        try {
 
             CriteriaBuilder cb = entityManager.getCriteriaBuilder();
             CriteriaQuery<Session> criteria = cb.createQuery(Session.class);
@@ -71,9 +72,27 @@ public class SessionHome {
             return entityManager.createQuery(criteria).getSingleResult();
 
 
-		} catch (RuntimeException re) {
-			log.severe("get failed" + re);
-			throw re;
-		}
-	}
+        } catch (RuntimeException re) {
+            log.severe("get failed" + re);
+            throw re;
+        }
+    }
+
+    public List findByUser(User user) {
+        log.fine("getting Session instance by user: " + user);
+        try {
+
+            CriteriaBuilder cb = entityManager.getCriteriaBuilder();
+            CriteriaQuery<Session> criteria = cb.createQuery(Session.class);
+            Root<Session> session = criteria.from(Session.class);
+            criteria.select(session).where(cb.equal(session.get("user"), user));
+            log.fine("get successful");
+            return entityManager.createQuery(criteria).getResultList();
+
+
+        } catch (RuntimeException re) {
+            log.severe("get failed" + re);
+            throw re;
+        }
+    }
 }
