@@ -1,0 +1,116 @@
+<!-- First Band (Image) -->
+
+<div class="row">
+  <div class="large-12 columns">
+    <img src="images/banner1-3d.png">
+  </div>
+</div>
+<!-- Second Band (Image Left with Text) -->
+
+<div class="row margin-top15">
+  <div class="large-7 columns">
+    <h2>Get Started</h2>
+    <div class="how-can-use">
+      <ul id="how-can-use" data-orbit>
+        <li>
+          <div class="slide slide1">
+            <div class="caption">
+              Bring the audience closer with real-time interaction and voting.
+            </div>
+            <img src="images/wesley-devoxx.png" class="slide-poll"/>
+            <img src="images/remote-hand.png" class="remote" />
+          </div>
+        </li>
+        <li>
+          <div class="slide hidden">
+            <div class="caption">
+              Everyone in the room becomes an expert. Get more out of panel sessions.</div>
+            <img src="images/panel-small.png" class="slide-poll"/>
+            <img src="images/remote-samsung.png" class="remote" />
+          </div>
+        </li>
+        <li>
+          <div class="slide hidden">
+            <div class="caption">
+              Capture everything: Discover who voted along with what they did and didn't like.</div>
+            <img src="images/poll-results-tn.png" class="slide-poll"/>
+            <img src="images/bar-chart-large.png" class="remote" />
+          </div>
+        </li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="large-5 columns login" ng-if="!registerMessage.sessionId && !userInfo.created">
+
+      <h2>It's Free</h2>
+      <p>Create your account to get started on your first presentation.</p>
+
+      <div ng-controller="LoginCtrl">
+        {{registerAlert}}
+
+      <form id="sign-up" name="sign-up" data-abide>
+        <div class="large-12">
+          <label>Your Name</label>
+          <input ng-model="register.fullName" type="text" placeholder="Your Name" required pattern="[a-zA-Z]+">
+          <small class="error">Name is required and must be a string.</small>
+        </div>
+        <div class="large-12">
+          <label>Email</label>
+          <input ng-model="register.email" type="email" placeholder="you@somewhere.com" required pattern="email">
+          <small class="error">Email is required  and should be in proper format (you@somewhere.com)</small>
+        </div>
+        <div class="large-12">
+          <div class="row collapse">
+            <label>Password</label>
+            <input ng-model="register.password" type="password" placeholder="something secret" required>
+            <small class="error">Password must be within 3 to 14 characters.</small>
+          </div>
+        </div>
+        <div class="large-12">
+          <button type="submit" class="button right">Create</button>
+        </div>
+      </form>
+
+      </div>
+  </div>
+
+  <div ng-if="registerMessage.sessionId || userInfo.created">
+    <h2>Realtime Presentations</h2>
+    <p>Now create your presentation. <a href="#!/gettingstarted">Get started here</a>.</p>
+  </div>
+</div>
+
+
+<!-- Third Band (Image Right with Text) -->
+<div id="basics_movie" class="reveal-modal medium" style="text-align:center">
+  <iframe width="100%" height="360" src="//www.youtube.com/embed/SidOO_hgSfI" frameborder="0" allowfullscreen></iframe>
+</div>
+
+<div id="inaction_movie" class="reveal-modal medium" style="text-align:center">
+  <iframe width="100%" height="360" src="http://www.youtube.com/embed/n-7Xu75T2bU?feature=player_detailpage" frameborder="0" allowfullscreen></iframe>
+</div>
+
+<div class="row margin-top45 actions">
+  <div class="large-4 columns text-left">
+    <h2>The Basics</h2>
+    <a data-reveal-id="basics_movie"><img src="images/the-basics.png"/></a>
+  </div>
+  <div class="large-4 columns text-center">
+    <h2>In Action</h2>
+    <a data-reveal-id="inaction_movie"><img src="images/in-action.png"/></a>
+  </div>
+  <div class="large-4 columns text-right">
+    <h2>Results</h2>
+    <a href="/analytics.html" target="_blank"><img src="images/results.png"/></a>
+  </div>
+</div>
+
+<div class="row margin-top45">
+  <div class="large-12 columns">
+    <h2>Where's It Used?</h2>
+    <img src="images/where-used-sprite.png"/>
+  </div>
+</div>
+
+

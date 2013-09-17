@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>onslyde</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="onslyde, audience engagement">
+    <meta name="author" content="Wesley Hales">
+    <link href="../bootstrap/css/bootstrap.css" rel="stylesheet">
+    <style>
+        body {
+            padding-top: 60px; /* 60px to make the container go all the way to the bottom of the topbar */
+        }
+    </style>
+    <link href="../bootstrap/css/bootstrap-responsive.css" rel="stylesheet">
+    <!--[if lt IE 9]>
+    <script type="text/javascript" src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+
+    <link href="../css/onslyde.css" rel="stylesheet">
+</head>
+
+<body>
+
+<div id="signupmodal" class="modal hide fade">
+    <form name="reg" id="reg" class="form-horizontal">
+    <div class="modal-header">
+        <h3>Create Your Presentation</h3>
+    </div>
+    <div class="modal-body">
+
+            <fieldset class="control-group">
+
+                <div id="formMsgs"></div>
+                <div id="forminputs">
+                <div class="control-group">
+                    <label class="control-label" for="fullName">Full Name</label>
+                    <div class="controls">
+                        <input type="text" name="fullName" id="fullName" placeholder="Your Name" required autofocus/>
+                    </div>
+                </div>
+                <div class="control-group">
+                    <label class="control-label" for="email">Email</label>
+                    <div class="controls">
+                        <input type="email" name="email" id="email" placeholder="Email" required/>
+                    </div>
+                </div>
+                <div class="control-group">
+                    <label class="control-label" for="password">Password</label>
+                    <div class="controls">
+                        <input type="password" name="password" id="password"  placeholder="Password" required/>
+                    </div>
+                </div>
+                </div>
+            </fieldset>
+
+    </div>
+    <div class="modal-footer">
+
+        <input type="submit" name="register" id="register" value="Go!" class="btn btn-primary pull-right">
+        &nbsp;
+        <a href="#signupmodal" role="button" class="btn pull-left" data-toggle="modal">cancel</a>
+    </div>
+    </form>
+</div>
+
+<div id="main-container" class="container-fluid">
+    <header class="row-fluid">
+        <div class="span9"><h1 class="no-bold">onslyde</h1><h3 class="no-bold">realtime audience interaction</h3></div>
+        <div class="span3">
+            <a href="#signupmodal" role="button" class="btn btn-inverse pull-left" data-toggle="modal">create presentation</a>
+        </div>
+    </header>
+
+    <section class="main row-fluid">
+
+       <div class="span12">
+           <div class="slides">
+                <img src="/images/site/onslyde_home.png"/>
+           </div>
+       </div>
+
+    </section>
+
+    <section class="section-title howworks row-fluid">
+        <div class="span12">
+        <h2 class="no-bold">How it works</h2>
+        <div class="span8">
+            <script src="https://gist.github.com/wesleyhales/5014482.js"></script>
+        </div>
+
+        <div class="span3">
+            <h3>Declaritive Markup</h3>
+            <p>Everything is controlled through HTML,
+            allowing for easy slide creation.</p>
+
+            <h3>Voting Options
+                </h3>
+            <p>Are given through the data-option
+                attribute. You are only allowed 2 options
+                per poll</p>
+
+            <h3>Fork Your Slides
+                </h3>
+            <p>After the audience votes, your slides
+                will be forked for the majority vote. You
+                can have any number of slides prepared
+                for each vote option.</p>
+
+            <h3>Send Notes
+                </h3>
+            <p>Increase engagement and learning by
+                sending data for each slide. This is done
+                by wrapping content with a class=``send``
+                node.</p>
+        </div>
+        </div>
+    </section>
+
+    <section class="section-title getstarted row-fluid">
+        <div class="span12">
+            <h2 class="no-bold">What are people saying?</h2>
+        </div>
+        <div class="span12">
+
+            <div class="span4">
+                <blockquote class="twitter-tweet"><p>@<a href="https://twitter.com/hakimel">hakimel</a> @<a href="https://twitter.com/onslyde">onslyde</a> That's amazing!</p>&mdash; Brad Frost (@brad_frost) <a href="https://twitter.com/brad_frost/status/309709117608570882">March 7, 2013</a></blockquote>
+                <script async src="//platform.twitter.com/widgets.js" charset="utf-8"></script>
+            </div>
+            <div class="span4">
+                <blockquote class="twitter-tweet"><p>Excited about using <a href="http://t.co/AEfULJ5Z" title="http://onslyde.com/">onslyde.com</a> to do my slides for the "Hands on HTML5" talk.</p>&mdash; Toby Ho (@airportyh) <a href="https://twitter.com/airportyh/status/213354290813747200">June 14, 2012</a></blockquote>
+                <script async src="//platform.twitter.com/widgets.js" charset="utf-8"></script>
+            </div>
+            <div class="span4">
+                <blockquote class="twitter-tweet"><p>Awesome audience interactive html slide tool by <a href="https://twitter.com/wesleyhales">@wesleyhales</a> : <a href="https://t.co/PxTbTz1nnz">https://t.co/PxTbTz1nnz</a> . Might cause me to cheat on Keynote at some point.</p>&mdash; Felix Geisendörfer (@felixge) <a href="https://twitter.com/felixge/statuses/345555978151944192">June 14, 2013</a></blockquote>
+                <script async src="//platform.twitter.com/widgets.js" charset="utf-8"></script>
+            </div>
+        </div>
+    </section>
+
+    <section class="section-title getstarted row-fluid">
+        <div class="span12">
+
+
+                <h2 class="no-bold"><a name="getstarted"></a>Get Started</h2>
+
+
+
+
+            </div>
+            </section>
+            <div class="span12">
+                <div id="mc_embed_signup" style="margin: 0 auto 0 auto">
+                    <form action="http://onslyde.us7.list-manage.com/subscribe/post?u=9e6d1ccd730f736331bb99246&amp;id=f2338862b0" method="post" id="mc-embedded-subscribe-form" name="mc-embedded-subscribe-form" class="validate" target="_blank" novalidate>
+                        <label for="mce-EMAIL">Subscribe to get updates about onslyde</label>
+                        <input type="email" value="" name="EMAIL" class="email" id="mce-EMAIL" placeholder="email address" required>
+                        <input type="submit" value="Subscribe" name="subscribe" id="mc-embedded-subscribe" class="button">
+                    </form>
+                </div>
+                <img src="/images/site/Screen-Shot-2013-03-03-at-12.47.jpg" align="left" style="margin: 0 15px 10px 0"/>
+                <h3>Run through the example deck</h3>
+
+                <ul class="clearfix" style="list-style-position: inside;">
+                    <li><a href="http://onslyde.com/example-deck.html" target="_blank">Start the example presentation</a>.</li>
+                    <li><a href="http://onslyde.com/go/175" target="_blank">Launch the remote control IN A SEPARATE BROWSER OR INCOGNITO TAB</a>. The tracking info is stored in localStorage so a presenter cannot be an audience member in the same browser.</li>
+                    <li>Navigate through each slide until you hit a survey/poll.</li>
+                    <li>Use the remote control to vote.</li>
+                    <li>Notice how the content you specify is sent to each remote as you move through the slides</li>
+                    <li>Still need more info? Read this <a href="http://wesleyhales.com/blog/2013/02/25/How-Collective-Wisdom-Shapes-a-Talk/" target="_blank">blog post</a>.</li>
+                </ul>
+
+                <h3>Download the presentation</h3>
+                <p>Just save the <a href="http://onslyde.com/example-deck.html" target="_blank">example</a> (File->Save Page As (make sure you select the "Webpage, HTML only" option) to your computer and start building your presentation.</p>
+
+
+                <h3>Setup a private session</h3>
+                <p>Right now, you're viewing the example along with anyone else who happens to be viewing it. You do not want to present with this session ID (167).
+                    When you're ready to present, <a href="#signupmodal" data-toggle="modal">create a user account</a> and you will get a unique sessionID. Use this ID in your slide deck by opening the HTML file you just saved to your computer and replacing the number "103" with your supplied session ID.</p>
+                <img src="/images/site/javascript2.png"/> <br/>
+                <br/>
+                <h3>Session Analytics</h3>
+                <p>You've never seen feedback<a href="/analytics.html" target="_blank"> like this</a> before. View the analytics on your presentation! You'll be able to see which slides the audience liked the best and how you performed for EACH SLIDE! (analytics dashboard is currently being built, but we can provide the raw data upon request)</p>
+                <h3>Presentation Frameworks</h3>
+                <p>onlsyde uses the well known <a href="http://lab.hakim.se/reveal-js" target="_blank">reveal.js</a> presentation framework, so refer to their docs if you have any questions. We also have a generic HTML+CSS slide deck (somewhere) if you don't like reveal - but seriously, how could you not like revealjs? :) The plan is to integrate with all presentation frameworks. Suggest one <a href="https://github.com/wesleyhales/onslyde/issues?state=open" target="_blank">here</a>.</p>
+                <br/>
+
+            </div>
+        </div>
+    </section>
+
+    <footer>
+        <hr/>
+        <p class="pull-right">&copy; 2013 <a href="http://twitter.com/wesleyhales">Wesley Hales</a> and contributors</p>
+    </footer>
+
+</div><!--/.fluid-container-->
+<a href="https://github.com/wesleyhales/onslyde/"><img style="position: absolute; top: 0; right: 0; border: 0;" src="https://a248.e.akamai.net/camo.github.com/e6bef7a091f5f3138b8cd40bc3e114258dd68ddf/687474703a2f2f73332e616d617a6f6e6177732e636f6d2f6769746875622f726962626f6e732f666f726b6d655f72696768745f7265645f6161303030302e706e67" alt="Fork me on GitHub"></a>
+
+<script src="../bootstrap/js/jquery.js"></script>
+
+<script type="text/javascript" src="../js/app.js"></script>
+<script src="../bootstrap/js/bootstrap-alert.js"></script>
+<script src="../bootstrap/js/bootstrap-modal.js"></script>
+<script type="text/javascript">
+
+    $( document ).ready( function() {
+        //Register an event listener on the sumbit action
+        $('#reg').submit(function(event) {
+            event.preventDefault();
+            var memberData = $(this).serializeObject();
+            if( memberData.register ) {
+              delete memberData.register;
+            }
+            registerMember(memberData);
+        });
+    });
+
+    $.fn.serializeObject = function() {
+        var o = {};
+        var a = this.serializeArray();
+        $.each(a, function() {
+            if (o[this.name]) {
+                if (!o[this.name].push) {
+                    o[this.name] = [o[this.name]];
+                }
+                o[this.name].push(this.value || '');
+            } else {
+                o[this.name] = this.value || '';
+            }
+        });
+        return o;
+    };
+
+    var _gaq = _gaq || [];
+    _gaq.push(['_setAccount', 'UA-31854873-1']);
+    _gaq.push(['_setDomainName', 'onslyde.com']);
+    _gaq.push(['_trackPageview']);
+
+    (function() {
+        var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+        ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+        var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+    })();
+
+</script>
+</body>
+</html>

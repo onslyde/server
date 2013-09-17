@@ -1,0 +1,25 @@
+<div class="login-content">
+  <div class="login-holder">
+  <form name="login-form" id="login-form" class="form-horizontal">
+    <h1 class="title">Enter your credentials</h1>
+    <div class="alert" ng-if="loginMessage">{{loginMessage}}</div>
+    <div class="control-group">
+      <label class="control-label" for="login-username">Email or Username:</label>
+      <div class="controls">
+        <input type="text" ng-model="login_username" class="" value="{{login_username}}" size="20">
+      </div>
+    </div>
+    <div class="control-group">
+      <label class="control-label" for="login-password">Password:</label>
+      <div class="controls">
+        <input type="password" ng-model="login_password" class="" value="{{login_password}}" size="20">
+      </div>
+    </div>
+    <div class="form-actions">
+      <div class="submit">
+        <input ng-click="login()" type="submit" name="button-login" id="button-login" value="Log In" class="btn btn-primary pull-right">
+      </div>
+    </div>
+  </form>
+  </div>
+</div>

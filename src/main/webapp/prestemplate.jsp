@@ -59,7 +59,7 @@
 
             <section>
                 <h2 class="send"><%= request.getAttribute("presName") %></h2>
-                <h3><a href="http://twitter.com/">@yourtwitterhandle</a></h3>
+                <h3><a href="http://twitter.com/<%= request.getAttribute("twitter") %>">@<%= request.getAttribute("twitter") %></a></h3>
             </section>
 
         </section>

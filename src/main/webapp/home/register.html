@@ -1,0 +1,35 @@
+<div class="row">
+  <div class="large-8 columns login" ng-if="!registerMessage.sessionId && !userInfo.created">
+
+    <h2>It's Free</h2>
+    <p>Create your account to get started on your first presentation.</p>
+
+    <div ng-controller="LoginCtrl">
+      {{registerAlert}}
+
+      <form id="sign-up" name="sign-up" data-abide>
+        <div class="large-7">
+          <label>Your Name</label>
+          <input ng-model="register.fullName" type="text" placeholder="Your Name" required pattern="[a-zA-Z]+">
+          <small class="error">Name is required and must be a string.</small>
+        </div>
+        <div class="large-7">
+          <label>Email</label>
+          <input ng-model="register.email" type="email" placeholder="you@somewhere.com" required pattern="email">
+          <small class="error">Email is required  and should be in proper format (you@somewhere.com)</small>
+        </div>
+        <div class="large-7">
+          <div class="row collapse">
+            <label>Password</label>
+            <input ng-model="register.password" type="password" placeholder="something secret" required>
+            <small class="error">Password must be within 3 to 14 characters.</small>
+          </div>
+        </div>
+        <div class="large-7">
+          <button type="submit" class="button right" >Create</button>
+        </div>
+      </form>
+
+    </div>
+  </div>
+</div>

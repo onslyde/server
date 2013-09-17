@@ -60,6 +60,7 @@ public class MemberRegistration {
 
     public int createPresentation(String email, String token, String presName) throws Exception {
         try {
+            log.info("Create presentation for: " + email);
             User user = repository.findByEmail(email);
             if(token.equals(String.valueOf(user.getCreated().getTime()))){
                 currentSession = new Session();

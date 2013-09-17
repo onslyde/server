@@ -1,0 +1,73 @@
+<!-- First Band (Image) -->
+<div id="preview-container" class="reveal-modal expand" >
+
+</div>
+
+<div class="row">
+  <div class="large-12 columns">
+    <h2>Getting Started</h2>
+    <p class="intro">Setting up a presentation is simple. The form below is simply a kick starter to help you create an interactive presentation.
+    After you view the presentation, you must download it and edit it on your computer. You can then open and review it in your browser.</p>
+    <div class="row">
+    <ol class="large-12 columns">
+      <li ng-if="!userInfo.created">First, <a href="#!/register">you must create an account,</a> which only takes 2 seconds, <a data-reveal-id="signin-container">or Sign in.</a></li>
+      <li  ng-if="userInfo.created">First, give it a title.
+        <div class="large-12">
+          <div class="row collapse">
+            <div class="small-9 columns">
+              <input type="text" ng-model="getstarted.presName" maxlength="50" placeholder="My Awesome Presentation"/>
+            </div>
+          </div>
+          <div class="row collapse">
+            <label>Your twitter handle</label>
+            <div class="small-4 columns">
+              <input type="text" ng-model="getstarted.twitter" maxlength="50" placeholder="twitter username"/>
+            </div>
+          </div>
+        </div>
+      </li>
+      <li ng-if="userInfo.created" >Next, we'll setup the first question that you would like to ask the audience, then give them 2 options to choose from.
+        <div class="large-12">
+          <div class="row collapse">
+            <div class="small-9 columns">
+              <input type="text" ng-model="getstarted.poll1" maxlength="50" placeholder="What is your favorite color?"/>
+            </div>
+            <div class="small-3 columns">
+              <span class="postfix">(limit 50 characters)</span>
+            </div>
+          </div>
+        </div>
+        <div class="large-6">
+          <div class="row collapse">
+            <label>Option 1</label>
+            <div class="small-6 columns">
+              <input type="text" ng-model="getstarted.option1" maxlength="10" placeholder="Red"/>
+            </div>
+            <div class="small-6 columns">
+              <span class="postfix">(limit 10 characters)</span>
+            </div>
+          </div>
+        </div>
+        <div class="large-6">
+          <div class="row collapse">
+            <label>Option 2</label>
+            <div class="small-6 columns">
+              <input type="text" ng-model="getstarted.option2" maxlength="10" placeholder="Blue"/>
+            </div>
+            <div class="small-6 columns">
+              <span class="postfix">(limit 10 characters)</span>
+            </div>
+          </div>
+        </div>
+      </li>
+      <li ng-if="userInfo.created">Finally view and save your presentation.
+      <div>
+        <a ng-click="(userInfo.created && getstarted.presName) ? viewPres() : ''" class="button">Preview</a>
+      </div></li>
+    </ol>
+      </div>
+  </div>
+</div>
+
+
+

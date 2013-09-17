@@ -27,6 +27,7 @@ import com.onslyde.domain.UserHome;
 import com.onslyde.model.Mediator;
 import com.onslyde.util.ClientEvent;
 import org.eclipse.jetty.websocket.api.Session;
+import org.jboss.resteasy.spi.ResteasyProviderFactory;
 
 import javax.ejb.Stateful;
 import javax.enterprise.context.RequestScoped;
@@ -38,6 +39,7 @@ import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
 import javax.persistence.NoResultException;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.validation.ConstraintViolation;
 import javax.validation.ConstraintViolationException;
 import javax.validation.ValidationException;
@@ -130,7 +132,8 @@ public class MemberService {
                 e.printStackTrace();
             }
             //Create an "ok" response
-            builder = Response.ok().entity("{\"sessionId\":\"" + sessionId + "\"}");
+            builder = Response.ok("{\"sessionId\":\"" + sessionId + "\"}", MediaType.APPLICATION_JSON);
+
         } catch (ConstraintViolationException ce) {
             //Handle bean validation issues
             builder = createViolationResponse(ce.getConstraintViolations());
@@ -145,6 +148,8 @@ public class MemberService {
             responseObj.put("error", e.getMessage());
             builder = Response.status(Response.Status.BAD_REQUEST).entity(responseObj);
         }
+
+
 
         return builder.build();
     }
@@ -212,31 +217,6 @@ public class MemberService {
     }
 
     @POST
-    @Path("/register")
-    @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
-    @Produces(MediaType.APPLICATION_JSON)
-    public Response userRegister(@FormParam("email") String name, @FormParam("email") String email, @FormParam("password") String password) {
-        User user = null;
-        UserSummary userSummary = new UserSummary();
-        log.info("User login attempt: " + email);
-        try {
-            user = repository.findByEmail(email);
-            if(password.equals(user.getPassword())){
-                userSummary.setName(user.getFullName());
-                userSummary.setCreated(user.getCreated());
-                userSummary.setEmail(user.getEmail());
-                userSummary.setSessions(sessionHome.findByUser(user));
-                System.out.println(user.getFullName() + " logged in.");
-            }
-        } catch (NoResultException e) {
-            log.severe("Bad login: User does not exist");
-            userSummary.setName("Not Found");
-        }
-        return Response.ok(userSummary, MediaType.APPLICATION_JSON).build();
-    }
-
-
-    @POST
     @Path("/login")
     @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
     @Produces(MediaType.APPLICATION_JSON)
@@ -257,6 +237,9 @@ public class MemberService {
             log.severe("Bad login: User does not exist");
             userSummary.setName("Not Found");
         }
+//        HttpServletRequest request = ResteasyProviderFactory.getContextData(HttpServletRequest.class);
+        HttpServletResponse response = ResteasyProviderFactory.getContextData(HttpServletResponse.class);
+        response.setHeader("Access-Control-Allow-Origin","http://localhost:8001");
         return Response.ok(userSummary, MediaType.APPLICATION_JSON).build();
     }
 

@@ -32,6 +32,7 @@ function handleAuthResult(authResult) {
         }
       };
     makeApiCall();
+
   } else {
     authHolder.style.display = '';
     authorizeButton.onclick = handleAuthClick;
