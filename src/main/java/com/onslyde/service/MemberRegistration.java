@@ -43,13 +43,11 @@ public class MemberRegistration {
     @Inject
     private MemberRepository repository;
 
-    private Session currentSession;
-
     public int register(User user) throws Exception {
         log.info("Registering " + user.getFullName());
         user.setCreated(new Date());
         em.persist(user);
-        currentSession = new Session();
+        Session currentSession = new Session();
         currentSession.setSessionCode("beta");
         currentSession.setSessionName("beta");
         currentSession.setUser(user);
@@ -63,7 +61,7 @@ public class MemberRegistration {
             log.info("Create presentation for: " + email);
             User user = repository.findByEmail(email);
             if(token.equals(String.valueOf(user.getCreated().getTime()))){
-                currentSession = new Session();
+                Session currentSession = new Session();
                 currentSession.setSessionCode("beta");
                 currentSession.setSessionName(presName);
                 currentSession.setUser(user);
