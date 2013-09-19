@@ -21,8 +21,10 @@ CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 package com.onslyde.websockets;
 
 import com.onslyde.model.Mediator;
+import com.onslyde.model.Mediator.SessionTracker;
 import com.onslyde.model.SessionManager;
 import com.onslyde.util.ClientEvent;
+
 import org.eclipse.jetty.io.Connection;
 import org.eclipse.jetty.websocket.api.Session;
 import org.eclipse.jetty.websocket.api.annotations.*;
@@ -30,6 +32,7 @@ import org.eclipse.jetty.websocket.server.WebSocketServerConnection;
 
 import javax.enterprise.event.Observes;
 import javax.inject.Inject;
+
 import java.io.IOException;
 import java.util.*;
 import java.util.concurrent.ConcurrentLinkedQueue;
@@ -141,11 +144,15 @@ public class OnslydeWebSocketHandler
                 }
                 System.out.println("_____sessions in map: " + mediator.getSessionID() + " users session: " + sessionID + " size for session: " + mediator.getSessions().get(sessionID).size() + "---" + mediator.getSessions().get(sessionID).get(attendeeIP));
 
-                if (getSessionTracker(sessionID) != null) {
-                    List options = getSessionTracker(sessionID).getActiveOptions();
+                SessionTracker sesionTracker = getSessionTracker(sessionID);
+                if (sesionTracker != null) {
+                    List options = sesionTracker.getActiveOptions();
                     if (options.size() == 3) {
-                        //only send options to this connection
                         this.session.getRemote().sendStringByFuture(ClientEvent.createEvent("updateOptions", options, sessionID));
+                    }
+                    String activeMarkup = sesionTracker.getActiveMarkup();
+                    if(activeMarkup != null) {
+                        this.session.getRemote().sendStringByFuture(ClientEvent.remoteMarkup(activeMarkup,"",sessionID));
                     }
                 }
             }
