@@ -6,7 +6,7 @@ window.addEventListener('clearRoute', function(e) {
 
 window.addEventListener('disagree', function(e) {
    var disagree = document.querySelector("#disagree");
-   disagree.innerHTML = "Thumbs Down!";
+   disagree.innerHTML = "Disagree!";
    if(disagree){
       disagree.className = "show-disagree transition";
       setTimeout(function(){disagree.className = "hide-disagree transition"},800)
@@ -16,7 +16,7 @@ window.addEventListener('disagree', function(e) {
 window.addEventListener('agree', function(e) {
 //    console.log('agree');
     var agree = document.querySelector("#agree");
-    agree.innerHTML = "agree!";
+    agree.innerHTML = "Agree!";
     if(agree){
         agree.className = "show-agree agree transition";
         setTimeout(function(){agree.className = "hide-agree transition"},800)

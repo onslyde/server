@@ -22,7 +22,10 @@
         document.write( '<link rel="stylesheet" href="http://onslyde.com/css/reveal/print/' + ( window.location.search.match( /print-pdf/gi ) ? 'pdf' : 'paper' ) + '.css" type="text/css" media="print">' );
     </script>
 
-    <link rel="stylesheet" href="http://onslyde.com/css/deck.css?v=2">
+    <!--[if lt IE 9]>
+    <script src="http://onslyde.com/js/reveal/lib/js/html5shiv.js"></script>
+    <![endif]-->
+    <link rel="stylesheet" href="http://onslyde.com/css/deck.css">
 </head>
 
 <body>
@@ -40,10 +43,10 @@
 
 </script>
 <div id="disagree" class="hide-disagree">
-    Thumbs Down!!
+    Disagree
 </div>
 <div id="agree" class="hide-agree">
-    Nice!!!
+    Agree
 </div>
 <div id="stats">
     <span><span id="wscount"></span> WebSocket </span><span><span id="pollcount"></span> Polling</span>
@@ -89,7 +92,6 @@
                     more <%= request.getAttribute("option1") %> track...
                 </div>
             </section>
-
 
             <section class="slide" data-option="<%= request.getAttribute("option2") %>">
                 <div class="send">

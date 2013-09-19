@@ -22,14 +22,16 @@
 //optimize for minification and performance
 (function (window, document, undefined) {
   "use strict";
-  window.slidfast = (function () {
+  window.onslyde = (function () {
 
     var options,
 
-      slidfast = function (startupOptions) {
+      onslyde = function (startupOptions) {
         options = startupOptions;
-        return new slidfast.core.init();
+        return new onslyde.core.init();
       },
+
+      sessionID = 0,
 
       defaultPageID = null,
 
@@ -49,17 +51,17 @@
 
       cacheImages = false,
 
-      isReady = false,
-
       flipped = false,
 
       hashNS = "",
 
-      onslyde = {deck: false, sessionID: 0, mode: 'default'};
+      deck = {sessionID:0, mode:'default'},
+
+      deckRemote = {sessionID:0, mode:'default'};
 
 
-    slidfast.core = slidfast.prototype = {
-      constructor: slidfast,
+    onslyde.core = onslyde.prototype = {
+      constructor:onslyde,
 
       start: function () {
 
@@ -67,7 +69,6 @@
           if (options) {
             //setup all the options being passed in in the init
             defaultPageID = options.defaultPageID;
-            onslyde = options.onslyde !== null ? options.onslyde : null;
             hashNS = options.hahsNS !== null ? options.hashNS : "#sf-";
             touchEnabled = options.touchEnabled;
             singlePageModel = options.singlePageModel;
@@ -76,6 +77,8 @@
             cacheImages = options.cacheImages;
             geo = options.geo !== null ? options.geo : null;
             workers = options.workers !== null ? options.workers : null;
+            deck = options.deck !== null ? options.deck : null;
+            deckRemote = options.deckRemote !== null ? options.deckRemote : null;
           }
         } catch (e) {
           //alert('Problem with init. Check your options: ' + e);
@@ -83,45 +86,47 @@
 
         //depends on proper DOM structure with defaultPageID
         if (touchEnabled) {
-          slidfast.ui.Touch(getElement(defaultPageID));
+          onslyde.ui.Touch(getElement(defaultPageID));
         }
 
         if (optimizeNetwork) {
-          slidfast.network.init();
+          onslyde.network.init();
         } else {
           //if network optimization isn't turned on, still allow use of AJAX fetch and cache
           if (singlePageModel) {
-            slidfast.core.fetchAndCache(true);
+            onslyde.core.fetchAndCache(true);
           }
         }
 
         if (orientationNav) {
-          slidfast.orientation.init();
+          onslyde.orientation.init();
         }
 
         //standalone without DOM structure
         if (geo && geo.on) {
-          slidfast.location.init(geo);
+          onslyde.location.init(geo);
         }
 
         if (workers && workers.script !== null) {
-          slidfast.worker.init(workers);
+          onslyde.worker.init(workers);
         }
 
-        slidfast.core.hideURLBar();
+        onslyde.core.hideURLBar();
         //hash change
-        slidfast.core.locationChange();
+        onslyde.core.locationChange();
 
         if (cacheImages) {
-          slidfast.core.cacheExternalImage();
+          onslyde.core.cacheExternalImage();
         }
 
-        if (onslyde && onslyde.sessionID) {
-          window.onslydeSessionID = onslyde.sessionID;
+        if (deck && deck.sessionID) {
+          console.log(deck.sessionID)
+          sessionID = deck.sessionID;
+          onslyde.slides.init();
         }
 
-        if (onslyde && onslyde.deck) {
-          slidfast.slides.init(onslyde.sessionID);
+        if (deckRemote && deckRemote.sessionID) {
+          sessionID = deckRemote.sessionID;
         }
 
 
@@ -135,22 +140,22 @@
       init: function () {
 
         window.addEventListener('load', function (e) {
-          isReady = true;
-          slidfast.core.start();
+          onslyde.core.start();
         }, false);
 
         window.addEventListener('hashchange', function (e) {
-          slidfast.core.locationChange();
+          onslyde.core.locationChange();
         }, false);
 
-        if (options.onslyde.deck) {
+        if (deck) {
           //slide specific todo fix later
           document.addEventListener('keydown', function (e) {
-            slidfast.slides.handleKeys(e);
+            onslyde.slides.handleKeys(e);
+            //todo handle other nav
           }, false);
         }
 
-        return slidfast.core;
+        return onslyde.core;
 
       },
 
@@ -161,7 +166,7 @@
         } else if (targetId) {
           try {
             //todo implement for backbutton
-            //slidfast.ui.slideTo(targetId.replace(hashNS, ''));
+            //onslyde.ui.slideTo(targetId.replace(hashNS, ''));
           } catch (e) {
             //console.log(e);
           }
@@ -183,27 +188,12 @@
         function processRequest() {
           if (req.readyState === 4) {
             if (req.status === 200) {
-              if (slidfast.html5e.supports_local_storage()) {
-                try {
-                  localStorage[url] = req.responseText;
-                } catch (e) {
-                  if (e.name === 'QUOTA_EXCEEDED_ERR') {
-                    //write this markup to a server-side
-                    //cache or extension of localStorage
-                    alert('Quota exceeded!');
-                  }
-                }
-              }
               if (callback) {
                 callback(req.responseText, url);
               }
             } else {
-              // There is an error of some kind, use our cached copy (if available).
-              if (!!localStorage[url]) {
-                // We have some data cached, return that to the callback.
-                callback(localStorage[url], url);
-                return;
-              }
+              // handle error
+
             }
           }
         }
@@ -235,7 +225,7 @@
         //helper for onlcick below
         var onclickHelper = function (e) {
           return function (f) {
-            slidfast.ui.slideTo(e);
+            onslyde.ui.slideTo(e);
           };
         };
         for (i = 0; i < pageCount; i += 1) {
@@ -313,17 +303,17 @@
       },
 
       fetchAndCache: function (async) {
-        var links = slidfast.core.getUnconvertedLinks(document, 'fetch');
+        var links = onslyde.core.getUnconvertedLinks(document, 'fetch');
 
         var i;
         var insertPage = function () {
           var text = arguments[0];
           var url = arguments[1];
           //insert the new mobile page into the DOM
-          slidfast.core.insertPages(text, url);
+          onslyde.core.insertPages(text, url);
         };
         for (i = 0; i < links.length; i += 1) {
-          var ai = new slidfast.core.ajax(links[i], insertPage, async);
+          var ai = new onslyde.core.ajax(links[i], insertPage, async);
           ai.doGet();
         }
 
@@ -363,9 +353,9 @@
 
     };
 
-    slidfast.core.init.prototype = slidfast.core;
+    onslyde.core.init.prototype = onslyde.core;
 
-    slidfast.ui = slidfast.prototype = {
+    onslyde.ui = onslyde.prototype = {
 
       slideTo: function (id, callback) {
         if (!focusPage) {
@@ -402,7 +392,7 @@
           var frontNodes = front.getElementsByTagName('*');
           for (var i = 0; i < frontNodes.length; i += 1) {
             if (id.id === frontNodes[i].id && flipped) {
-              slidfast.ui.flip();
+              onslyde.ui.flip();
             }
           }
         }
@@ -421,10 +411,10 @@
         focusPage.className = 'slide transition stage-center';
 
         //6. make this transition bookmarkable
-        slidfast.core.locationChange(focusPage.id);
+        onslyde.core.locationChange(focusPage.id);
 
         if (touchEnabled) {
-          slidfast.ui.Touch(focusPage);
+          onslyde.ui.Touch(focusPage);
         }
 
         if (callback) {
@@ -569,9 +559,9 @@
           pageMove(event);
           //todo - this is a basic example, needs same code as orientationNav
           if (slideDirection === 'left') {
-            slidfast.ui.slideTo('products-page');
+            onslyde.ui.slideTo('products-page');
           } else if (slideDirection === 'right') {
-            slidfast.ui.slideTo('home-page');
+            onslyde.ui.slideTo('home-page');
           }
         };
 
@@ -582,30 +572,30 @@
     };
 
     var disabledLinks;
-    slidfast.network = slidfast.prototype = {
+    onslyde.network = onslyde.prototype = {
 
       init: function () {
         window.addEventListener('load', function (e) {
           if (navigator.onLine) {
             //new page load
-            slidfast.network.processOnline();
+            onslyde.network.processOnline();
           } else {
             //the app is probably already cached and (maybe) bookmarked...
-            slidfast.network.processOffline();
+            onslyde.network.processOffline();
           }
         }, false);
 
         window.addEventListener("offline", function (e) {
           //we just lost our connection and entered offline mode, disable eternal link
-          slidfast.network.processOffline(e.type);
+          onslyde.network.processOffline(e.type);
         }, false);
 
         window.addEventListener("online", function (e) {
           //just came back online, enable links
-          slidfast.network.processOnline(e.type);
+          onslyde.network.processOnline(e.type);
         }, false);
 
-        slidfast.network.setup();
+        onslyde.network.setup();
       },
 
       setup: function (event) {
@@ -617,28 +607,28 @@
           //Home Wifi latency: ~25-35ms
           //Coffee Wifi DL speed: ~550kbps-650kbps
           //Home Wifi DL speed: ~1000kbps-2000kbps
-          slidfast.core.fetchAndCache(true);
+          onslyde.core.fetchAndCache(true);
         } else if (connection.type === 3) {
           //edge
           //ATT Edge latency: ~400-600ms
           //ATT Edge DL speed: ~2-10kbps
-          slidfast.core.fetchAndCache(false);
+          onslyde.core.fetchAndCache(false);
         } else if (connection.type === 2) {
           //3g
           //ATT 3G latency: ~400ms
           //Verizon 3G latency: ~150-250ms
           //ATT 3G DL speed: ~60-100kbps
           //Verizon 3G DL speed: ~20-70kbps
-          slidfast.core.fetchAndCache(false);
+          onslyde.core.fetchAndCache(false);
         } else {
           //unknown
-          slidfast.core.fetchAndCache(true);
+          onslyde.core.fetchAndCache(true);
         }
       },
 
       processOnline: function (event) {
 
-        slidfast.network.setup();
+        onslyde.network.setup();
         checkAppCache();
 
         //reset our once disabled offline links
@@ -665,9 +655,9 @@
       },
 
       processOffline: function (event) {
-        slidfast.network.setup();
+        onslyde.network.setup();
         //disable external links until we come back - setting the bounds of app
-        disabledLinks = slidfast.core.getUnconvertedLinks(document);
+        disabledLinks = onslyde.core.getUnconvertedLinks(document);
         var i;
         //helper for onlcick below
         var onclickHelper = function (e) {
@@ -690,19 +680,19 @@
     };
 
     var geolocationID, currentPosition, interval, callback;
-    slidfast.location = slidfast.prototype = {
+    onslyde.location = onslyde.prototype = {
 
       init: function (geo) {
-        if (slidfast.html5e.supports_geolocation()) {
+        if (onslyde.html5e.supports_geolocation()) {
           if (geo.track) {
-            slidfast.location.track();
+            onslyde.location.track();
             interval = geo.interval ? geo.interval : 10000;
             callback = geo.callback;
           } else {
             if (currentPosition === undefined) {
               navigator.geolocation.getCurrentPosition(function (position) {
                 currentPosition = position;
-              }, slidfast.location.error);
+              }, onslyde.location.error);
             }
           }
 
@@ -719,9 +709,9 @@
             count++;
             if (count > 3) {  //when count reaches a number, reset interval
               window.clearInterval(geolocationID);
-              slidfast.location.track();
+              onslyde.location.track();
             } else {
-              navigator.geolocation.getCurrentPosition(slidfast.location.setPosition, slidfast.location.error, { enableHighAccuracy: true, timeout: 10000 });
+              navigator.geolocation.getCurrentPosition(onslyde.location.setPosition, onslyde.location.error, { enableHighAccuracy: true, timeout: 10000 });
             }
           },
           interval); //end setInterval;
@@ -756,14 +746,14 @@
 
     };
 
-    slidfast.orientation = slidfast.prototype = {
+    onslyde.orientation = onslyde.prototype = {
 
       init: function () {
-        if (slidfast.html5e.supports_orientation) {
+        if (onslyde.html5e.supports_orientation) {
           if (!focusPage) {
             focusPage = getElement(defaultPageID);
           }
-          slidfast.orientation.nav();
+          onslyde.orientation.nav();
         }
       },
 
@@ -844,7 +834,7 @@
         function slideQueue(page) {
           keepgoing = false;
           //simple way to put a block on the calling code. Since the orientation is a constant change
-          slidfast.ui.slideTo(page, function () {
+          onslyde.ui.slideTo(page, function () {
             keepgoing = true;
           });
         }
@@ -853,7 +843,7 @@
 
       motion: function () {
 
-        if (slidfast.html5e.supports_motion) {
+        if (onslyde.html5e.supports_motion) {
           window.addEventListener('devicemotion', deviceMotionHandler, false);
         }
 
@@ -886,7 +876,7 @@
       }
     };
     var sharedobj = {};
-    slidfast.worker = slidfast.prototype = {
+    onslyde.worker = onslyde.prototype = {
       //
       init: function (workers) {
 
@@ -906,7 +896,7 @@
               // get the worker from the front of the queue
               var workerThread = _this.workerQueue.shift();
               //get an index for tracking
-              slidfast.worker.obj().index = _this.workerQueue.length;
+              onslyde.worker.obj().index = _this.workerQueue.length;
               workerThread.run(workerTask);
             } else {
               // no free workers,
@@ -951,7 +941,7 @@
                 mycallback(event);
                 _this.parentPool.freeWorkerThread(_this);
               }, false);
-              worker.postMessage(slidfast.worker.obj());
+              worker.postMessage(onslyde.worker.obj());
             }
           };
 
@@ -966,16 +956,16 @@
 
         var pool = new Pool(workers.threads);
         pool.init();
-        var workerTask = new WorkerTask(workers.script, mycallback, slidfast.worker.obj());
+        var workerTask = new WorkerTask(workers.script, mycallback, onslyde.worker.obj());
 
         //todo, break these out into public API/usage
         //basic chunking of data per thread/task
         pool.addWorkerTask(workerTask);
-        slidfast.worker.obj().foo = 10;
+        onslyde.worker.obj().foo = 10;
         pool.addWorkerTask(workerTask);
-        slidfast.worker.obj().foo = 20;
+        onslyde.worker.obj().foo = 20;
         pool.addWorkerTask(workerTask);
-        slidfast.worker.obj().foo = 30;
+        onslyde.worker.obj().foo = 30;
         pool.addWorkerTask(workerTask);
       },
 
@@ -988,21 +978,20 @@
     var ip = null, ws;
     var username;
     var isopen = false;
-    //var _onopen,_onmessage,_onclose,_onerror;
-    slidfast.ws = slidfast.prototype = {
+    onslyde.ws = onslyde.prototype = {
 
-      ip: function (sessionID) {
+      ip:function (thisSessionID) {
         //todo come up with better approach :)
         //there are 3 environments in which this call must be made:
         //(1) running just HTML locally
         //(2) running the ws server and HTML locally
         //(3) prod where ip needs to be hard coded since we get ec2 private IP on this call
 
-        var ai = new slidfast.core.ajax('/go/presenters/ip?session=' + window.onslydeSessionID, function (text, url) {
+        var ai = new onslyde.core.ajax('/go/presenters/ip?session=' + thisSessionID, function (text, url) {
           if (location.host === 'onslyde.com') {
             //(3) - set proper IP if in prod
             //todo - even though we set the IP and don't use data from server, this http request bootstraps an internal piece on each connect
-            ip = '107.22.176.73'
+            ip = '107.22.176.73';
           } else {
             //(2) - set proper IP dynamically for locally running server
             ip = text;
@@ -1010,7 +999,9 @@
 
         }, false);
 
-        if (ip === null && location.protocol !== "file:") {
+        //added one more exception for running node server on port 8001 :)
+        //todo - this needs to be refactored with a whitelist for all 4 environments.
+        if (ip === null && location.protocol !== "file:" && location.host !== 'localhost:8001') {
           //(3) and (2) make sure we make the ajax request
           ai.doGet();
         } else {
@@ -1031,37 +1022,49 @@
         var max = 999;
         if (!localStorage['onslyde.attendeeIP']) {
           aip = createRandom() + '.' + createRandom() + '.' + createRandom() + '.' + createRandom();
-          localStorage['onslyde.attendeeIP'] = aip;
+          //if in private browsing mode this will fail
+          try {
+            localStorage['onslyde.attendeeIP'] = aip;
+          } catch (e) {
+
+          }
         } else {
           aip = localStorage['onslyde.attendeeIP'];
         }
         return aip;
       },
 
-      sessionID: function(){return window.onslydeSessionID;},
+      sessionID:function () {
+        return sessionID;
+      },
 
-      connect: function (websocket, initString, sessionID) {
+      connect:function (websocket, initString, thisSessionID) {
 
         username = 'anonymous';
         //here we check to see if we're passing in our mock websocket object from polling clients (using gracefulWebSocket.js)
         console.log('connecting now', websocket);
+        //if websocket doesn't exist, create one from spec
         if (!websocket) {
           if (!ip) {
-            ip = this.ip(window.onslydeSessionID);
+            ip = this.ip(thisSessionID);
           }
-          var location = 'ws://' + ip + ':8081/?session=' + window.onslydeSessionID + '&attendeeIP=' + this.getip();
+          var location = 'ws://' + ip + ':8081/?session=' + thisSessionID + '&attendeeIP=' + this.getip();
           ws = new WebSocket(location);
         } else {
+          //we sent in a mock object from jquery polling
+          //still need to setup ip in localStorage
+          this.getip();
+
           ws = websocket;
         }
+
         ws.onopen = function () {
           isopen = true;
-          //basic auth until we get something better
-          console.log('sent initString ' + initString);
-          slidfast.ws._send('user:' + username);
+//           console.log('onopen',initString,typeof initString !== 'undefined')
+          onslyde.ws._send('user:' + username);
 
-          if (initString) {
-            slidfast.ws._send(initString);
+          if (typeof initString !== 'undefined') {
+            onslyde.ws._send(initString);
           }
         };
         ws.onmessage = this._onmessage;
@@ -1072,12 +1075,13 @@
       },
 
       _onmessage: function (m) {
+//        console.log('---onmessage:', m.data);
         if (m.data) {
           if(typeof m.data === 'object'){
-            if(m.data.onslydeEvent.sessionID > 0){
+            if (m.data.onslydeEvent.sessionID !== 0) {
               m.data.onslydeEvent.fire();
             }
-          }else if (m.data.indexOf('sessionID":"' + onslyde.sessionID) > 0) {
+          } else if (m.data.indexOf('sessionID":"' + sessionID) > 0) {
             try {
               //avoid use of eval...
               var event = (m.data);
@@ -1093,7 +1097,7 @@
       },
 
       _onclose: function (m) {
-        slidfast.ws._send('::disconnect::');
+        onslyde.ws._send('::disconnect::');
         ws = null;
       },
 
@@ -1126,9 +1130,9 @@
       currentVotes = {},
       totalVotes = 0;
 
-    slidfast.slides = slidfast.prototype = {
+    onslyde.slides = onslyde.prototype = {
 
-      init : function(sessionID) {
+      init : function() {
         csessionID = sessionID;
         futureGroups = toArray(this.groups());
         for (var i = 0; i < futureGroups.length; i++) {
@@ -1150,12 +1154,30 @@
         activeSlide = futureSlides.shift();
 
         window.addEventListener('clientVote', function (e) {
-          slidfast.slides.optionVote(e.vote, activeSlide);
+          onslyde.slides.optionVote(e.vote, activeSlide);
         }, false);
 
         window.addEventListener('updateCount', function(e) {
-          slidfast.slides.updateDeck(e.wsCount,e.pollCount);
+          onslyde.slides.updateDeck(e.wsCount,e.pollCount);
         }, false);
+
+        window.addEventListener('disagree', function (e) {
+          handleProps('disagree');
+        }, false);
+
+        window.addEventListener('agree', function (e) {
+          handleProps('agree');
+        }, false);
+
+        var props = [];
+        function handleProps(type) {
+          props[type] = document.getElementById(type);
+//          nice.innerHTML = "Nice!";
+          if(props[type]){
+            props[type].className = 'show-' + type + ' ' + type + ' transition';
+            setTimeout(function(){props[type].className = 'hide-' + type + ' transition'},800)
+          }
+        }
 
         document.getElementById('sessionID').innerHTML = csessionID;
 
@@ -1163,10 +1185,10 @@
 
         if(onslyde.mode === 'default'){
           focusPage = activeSlide;
-          slidfast.ui.slideTo(activeSlide);
+          onslyde.ui.slideTo(activeSlide);
         }
         this.connect('::connect::');
-        setTimeout(function(){slidfast.slides.updateRemotes();},1000);
+        setTimeout(function(){onslyde.slides.updateRemotes();},1000);
       },
 
       connect : function(initString) {
@@ -1174,9 +1196,9 @@
 //        console.log('connect',initString);
         try {
           if (!ws) {
-            slidfast.ws.connect(null, initString, csessionID);
+            onslyde.ws.connect(null, initString, csessionID);
           } else {
-            slidfast.ws._send(initString, csessionID);
+            onslyde.ws._send(initString, csessionID);
           }
         } catch (e) {
           console.log('error',e)
@@ -1256,7 +1278,7 @@
           pastSlides.push(activeSlide);
           activeSlide = futureSlides.shift();
           if(onslyde.mode === 'default'){
-            slidfast.ui.slideTo(activeSlide);
+            onslyde.ui.slideTo(activeSlide);
           }
           groupSlideIndex++;
           this.updateRemotes();
@@ -1283,7 +1305,7 @@
           futureSlides.unshift(activeSlide);
           activeSlide = pastSlides.pop();
           if(onslyde.mode === 'default'){
-            slidfast.ui.slideTo(activeSlide);
+            onslyde.ui.slideTo(activeSlide);
           }
           groupSlideIndex--;
           this.updateRemotes();
@@ -1337,7 +1359,7 @@
           this.checkOptions();
           this.updateRemotes();
           if(onslyde.mode === 'default'){
-            slidfast.ui.slideTo(activeSlide);
+            onslyde.ui.slideTo(activeSlide);
           }
 
           //reset votes
@@ -1401,13 +1423,13 @@
             activeSlide = pastSlides.pop();
           }
 
-            this.checkOptions();
-            this.updateRemotes();
-            //console.log('---groupOptions ' + groupOptions);
-            //console.log('activeSlide ' + activeSlide);
+          this.checkOptions();
+          this.updateRemotes();
+          //console.log('---groupOptions ' + groupOptions);
+          //console.log('activeSlide ' + activeSlide);
 
           if(onslyde.mode === 'default'){
-            slidfast.ui.slideTo(activeSlide);
+            onslyde.ui.slideTo(activeSlide);
           }
           //reset votes
           currentVotes = {};
@@ -1567,9 +1589,9 @@
           case 32: // space
           case 34: // PgDn
             if(onslyde.mode === 'default'){
-              slidfast.slides.nextSlide();
+              onslyde.slides.nextSlide();
             }else{
-              slidfast.slides.nextGroup();
+              onslyde.slides.nextGroup();
             }
             event.preventDefault();
             break;
@@ -1578,20 +1600,20 @@
 //          case 8: // Backspace
           case 33: // PgUp
             if(onslyde.mode === 'default'){
-              slidfast.slides.prevSlide();
+              onslyde.slides.prevSlide();
             }else{
-              slidfast.slides.prevGroup();
+              onslyde.slides.prevGroup();
             }
             event.preventDefault();
             break;
 
           case 40: // down arrow
-            slidfast.slides.nextSlide();
+            onslyde.slides.nextSlide();
             event.preventDefault();
             break;
 
           case 38: // up arrow
-            slidfast.slides.prevSlide();
+            onslyde.slides.prevSlide();
             event.preventDefault();
             break;
 
@@ -1607,7 +1629,7 @@
 
     };
 
-    slidfast.html5e = slidfast.prototype = {
+    onslyde.html5e = onslyde.prototype = {
       /*jshint sub:true */
       supports_local_storage: function () {
         try {
@@ -1732,7 +1754,7 @@
     };
 
 
-    return slidfast;
+    return onslyde;
 
   })();
 })(window, document);

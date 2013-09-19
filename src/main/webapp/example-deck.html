@@ -1,157 +1,160 @@
 <!doctype html>
-<html lang="en"> 
+<html lang="en">
 
 <head>
-    <meta charset="utf-8">
+  <meta charset="utf-8">
 
-    <title>onslyde - example deck</title>
+  <title>onslyde - example deck</title>
 
-    <meta name="description" content="onslyde example">
-    <meta name="author" content="Wesley Hales">
+  <meta name="description" content="onslyde example">
+  <meta name="author" content="Wesley Hales">
 
-    <meta name="apple-mobile-web-app-capable" content="yes" />
-    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
 
-    <link rel="stylesheet" href="http://onslyde.com/css/reveal/reveal.css">
-    <link rel="stylesheet" href="http://onslyde.com/css/reveal/theme/default.css" id="theme">
+  <link rel="stylesheet" href="http://onslyde.com/css/reveal/reveal.css">
+  <link rel="stylesheet" href="http://onslyde.com/css/reveal/theme/default.css" id="theme">
 
-    <!-- For syntax highlighting -->
-    <link rel="stylesheet" href="http://onslyde.com/js/reveal/lib/css/zenburn.css">
+  <!-- For syntax highlighting -->
+  <link rel="stylesheet" href="http://onslyde.com/js/reveal/lib/css/zenburn.css">
 
-    <!-- If the query includes 'print-pdf', use the PDF print sheet -->
-    <script>
-        document.write( '<link rel="stylesheet" href="http://onslyde.com/css/reveal/print/' + ( window.location.search.match( /print-pdf/gi ) ? 'pdf' : 'paper' ) + '.css" type="text/css" media="print">' );
-    </script>
+  <!-- If the query includes 'print-pdf', use the PDF print sheet -->
+  <script>
+    document.write( '<link rel="stylesheet" href="http://onslyde.com/css/reveal/print/' + ( window.location.search.match( /print-pdf/gi ) ? 'pdf' : 'paper' ) + '.css" type="text/css" media="print">' );
+  </script>
 
-    <link rel="stylesheet" href="/css/deck.css?v=2">
+  <!--[if lt IE 9]>
+  <script src="http://onslyde.com/js/reveal/lib/js/html5shiv.js"></script>
+  <![endif]-->
+  <link rel="stylesheet" href="http://onslyde.com/css/deck.css">
 </head>
 
 <body>
-<script> 
+<script>
 
-    var _gaq = _gaq || [];
-    _gaq.push(['_setAccount', 'UA-31854873-2']);
-    _gaq.push(['_trackPageview']);
+  var _gaq = _gaq || [];
+  _gaq.push(['_setAccount', 'UA-31854873-2']);
+  _gaq.push(['_trackPageview']);
 
-    (function() {
-        var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
-        ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
-        var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
-    })();
+  (function() {
+    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+  })();
 
 </script>
 <div id="disagree" class="hide-disagree">
-    Thumbs Down!!
+  Disagree
 </div>
 <div id="agree" class="hide-agree">
-    Nice!!!
+  Agree
 </div>
 <div id="stats">
-    <span><span id="wscount"></span> WebSocket </span><span><span id="pollcount"></span> Polling</span>
+  <span><span id="wscount"></span> WebSocket </span><span><span id="pollcount"></span> Polling</span>
 </div>
 <div class="reveal">
-<div class="address">
+  <div class="address">
     <h4 style="text-transform: lowercase;">connect now <span style="color:#13daec;">http://onslyde.com/go/<span id="sessionID"></span></span></h4>
-</div>
-<!-- Any section element inside of this container is displayed as a slide -->
-<div class="slides">
-
-<section class="slide-group">
-
-    <section>
-        <h2 class="send">onslyde example deck</h2>
-        <h3><a href="http://twitter.com/onslyde">@onslyde</a></h3>
-    </section>
-
-</section>
-
-<section class="slide-group">
-
-    <section>
-        <p class="send">onslyde is a JavaScript based presentation tool that helps you present better.</p>
-    </section>
-
-</section>
+  </div>
+  <!-- Any section element inside of this container is displayed as a slide -->
+  <div class="slides">
 
     <section class="slide-group">
 
-        <section class="slide" data-option="master">
-            <h3 style="color:orange" class="send">Does this excite you?</h3>
-        </section>
-
-        <section class="slide" data-option="Yes">
-            <div class="send">
-                Awesome, then keep going
-            </div>
-        </section>
-
-        <section class="slide" data-option="No Way">
-            <div class="send">
-                Alrighty, go use Keynote or Powerpoint and pray the audience stays awake ;)
-            </div>
-        </section>
+      <section>
+        <h2 class="send">onslyde example deck</h2>
+        <h3><a href="http://twitter.com/onslyde">@onslyde</a></h3>
+      </section>
 
     </section>
 
-<section class="slide-group">
+    <section class="slide-group">
 
-    <section data-state="alert">
+      <section>
+        <p class="send">onslyde is a JavaScript based presentation tool that helps you present better.</p>
+      </section>
+
+    </section>
+
+    <section class="slide-group">
+
+      <section class="slide" data-option="master">
+        <h3 style="color:orange" class="send">Does this excite you?</h3>
+      </section>
+
+      <section class="slide" data-option="Yes">
+        <div class="send">
+          Awesome, then keep going
+        </div>
+      </section>
+
+      <section class="slide" data-option="No Way">
+        <div class="send">
+          Alrighty, go use Keynote or Powerpoint and pray the audience stays awake ;)
+        </div>
+      </section>
+
+    </section>
+
+    <section class="slide-group">
+
+      <section data-state="alert">
         <h3>Getting Started (is simple)</h3>
         <ul class="send">
-            <li>Just click File->Save Page As (make sure you select the Webpage, HTML only)
-            </li>
+          <li>Just click File->Save Page As (make sure you select the Webpage, HTML only)
+          </li>
         </ul>
         <img src="http://onslyde.com/images/savepageas.PNG"/>
+      </section>
+
     </section>
 
-</section>
+    <section class="slide-group">
 
-<section class="slide-group">
-
-    <section>
+      <section>
         <h3>That's IT!</h3>
         <ul class="send">
-            <li>You now have your presentation running on your machine.</li>
-            <li>After you save this deck locally, you can edit it and present with it.</li>
-            <li>To make your session private, <a href="http://onslyde.com" target="_blank">signup here</a> and get a session ID.</li>
-            <li>Check out the <a href="https://github.com/wesleyhales/onslyde/blob/master/README.md" target="_blank">readme</a> for more docs.</li>
+          <li>You now have your presentation running on your machine.</li>
+          <li>After you save this deck locally, you can edit it and present with it.</li>
+          <li>To make your session private, <a href="http://onslyde.com" target="_blank">signup here</a> and get a session ID.</li>
+          <li>Check out the <a href="https://github.com/wesleyhales/onslyde/blob/master/README.md" target="_blank">readme</a> for more docs.</li>
         </ul>
+      </section>
+
     </section>
 
-</section>
-
-<section class="slide-group">
-    <section class="slide" data-option="master">
+    <section class="slide-group">
+      <section class="slide" data-option="master">
         <h3 style="color:orange" class="send">This is the coolest thing, ever.</h3>
-    </section>
+      </section>
 
-    <section class="slide" data-option="Yep!">
+      <section class="slide" data-option="Yep!">
         <div class="send">
-            There is still a ton of stuff to do. <a href="https://github.com/wesleyhales/onslyde">Please come help</a>.
+          There is still a ton of stuff to do. <a href="https://github.com/wesleyhales/onslyde">Please come help</a>.
         </div>
-    </section>
+      </section>
 
-    <section class="slide" data-option="Nope!">
+      <section class="slide" data-option="Nope!">
         <div class="send">
-            Ping me at <a href="http://twitter.com/onslyde">@onslyde</a> and let me know who's cooler :)
+          Ping me at <a href="http://twitter.com/onslyde">@onslyde</a> and let me know who's cooler :)
         </div>
+      </section>
     </section>
-</section>
 
 
-<section class="slide-group">
+    <section class="slide-group">
 
-    <section>
+      <section>
         <h3>Thanks!!</h3>
         <p><a target="_blank" href="http://onslyde.com/analytics.html">Now go view the analytics for this session</a></p>
         <p>or</p>
         <a href="javascript:slidfast.slides.roulette();void(0)">Pick a winner</a>
+      </section>
+
     </section>
 
-</section>
 
-
-</div>
+  </div>
 
 
 </div>
@@ -161,39 +164,39 @@
 
 <script>
 
-    // Full list of configuration options available here:
-    // https://github.com/hakimel/reveal.js#configuration
-    Reveal.initialize({
-        controls: true,
-        progress: true,
-        history: true,
+  // Full list of configuration options available here:
+  // https://github.com/hakimel/reveal.js#configuration
+  Reveal.initialize({
+    controls: true,
+    progress: true,
+    history: true,
 
-        theme: Reveal.getQueryHash().theme, // available themes are in /css/theme
-        transition: Reveal.getQueryHash().transition || 'default', // default/cube/page/concave/zoom/linear/none
+    theme: Reveal.getQueryHash().theme, // available themes are in /css/theme
+    transition: Reveal.getQueryHash().transition || 'default', // default/cube/page/concave/zoom/linear/none
 
-        // Optional libraries used to extend on reveal.js
-        dependencies: [
-            { src: 'http://onslyde.com/js/reveal/lib/js/classList.js', condition: function() { return !document.body.classList; } },
-            { src: 'http://onslyde.com/js/reveal/plugin/markdown/showdown.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
-            { src: 'http://onslyde.com/js/reveal/plugin/markdown/markdown.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
-            { src: 'http://onslyde.com/js/reveal/plugin/highlight/highlight.js', async: true, callback: function() { hljs.initHighlightingOnLoad(); } },
-            { src: 'http://onslyde.com/js/reveal/plugin/zoom-js/zoom.js', async: true, condition: function() { return !!document.body.classList; } },
-            { src: 'http://onslyde.com/js/reveal/plugin/notes/notes.js', async: true, condition: function() { return !!document.body.classList; } }
-        ]
-    });
+    // Optional libraries used to extend on reveal.js
+    dependencies: [
+      { src: 'http://onslyde.com/js/reveal/lib/js/classList.js', condition: function() { return !document.body.classList; } },
+      { src: 'http://onslyde.com/js/reveal/plugin/markdown/showdown.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
+      { src: 'http://onslyde.com/js/reveal/plugin/markdown/markdown.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
+      { src: 'http://onslyde.com/js/reveal/plugin/highlight/highlight.js', async: true, callback: function() { hljs.initHighlightingOnLoad(); } },
+      { src: 'http://onslyde.com/js/reveal/plugin/zoom-js/zoom.js', async: true, condition: function() { return !!document.body.classList; } },
+      { src: 'http://onslyde.com/js/reveal/plugin/notes/notes.js', async: true, condition: function() { return !!document.body.classList; } }
+    ]
+  });
 
 </script>
 
-<script src="/js/onslyde-1.0.0.deck.js?v=1"></script>
+<script src="http://onslyde.com/js/onslyde-1.0.0.deck.js"></script>
 <script>
 
-    slidfast({
-        onslyde: {deck:true,sessionID: 175, mode:'reveal'}
-    });
+  onslyde({
+    deck: {sessionID: 175, mode:'reveal'}
+  });
 </script>
 <script src="http://code.jquery.com/jquery-1.8.3.min.js"></script>
 <script src="http://onslyde.com/js/libs/jquery.flot.js"></script>
-<script src="/js/deck.js?v=1"></script>
+<script src="http://onslyde.com/js/deck.js"></script>
 
 </body>
 </html>

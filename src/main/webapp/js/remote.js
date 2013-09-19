@@ -58,27 +58,27 @@ function disablePoll(){
 
 window.addEventListener('updateOptions', function(e) {
   //quick check to make sure we don't re-enable on polling clients and disabling on null options
-    if(e.option1 !== undefined && e.option1 !== 'null' && e.option2 !== 'null'){
-      if((option1.value != e.option1 && option2.value != e.option2)){
-        option1.disabled = false;
-        option2.disabled = false;
-        disagree.disabled = false;
-        agree.disabled = false;
-        option1.value = e.option1;
-        option2.value = e.option2;
-        disagree.value = 'Thumbs Down!';
-        agree.value = 'agree!';
-        //voteLabel.style.opacity = 1;
-        option1.style.opacity = 1;
-        option2.style.opacity = 1;
-        disagree.style.opacity = 1;
-        agree.style.opacity = 1;
-        voteLabel.innerHTML = 'Vote!';
-        voted = false;
-      }
-    }else{
-      disablePoll();
+  if(e.option1 !== undefined && e.option1 !== 'null' && e.option2 !== 'null'){
+    if((option1.value != e.option1 && option2.value != e.option2)){
+      option1.disabled = false;
+      option2.disabled = false;
+      disagree.disabled = false;
+      agree.disabled = false;
+      option1.value = e.option1;
+      option2.value = e.option2;
+      disagree.value = 'Disagree';
+      agree.value = 'Agree!';
+      //voteLabel.style.opacity = 1;
+      option1.style.opacity = 1;
+      option2.style.opacity = 1;
+      disagree.style.opacity = 1;
+      agree.style.opacity = 1;
+      voteLabel.innerHTML = 'Vote!';
+      voted = false;
     }
+  }else{
+    disablePoll();
+  }
 
 
 }, false);
@@ -91,8 +91,8 @@ window.addEventListener('remoteMarkup', function(e) {
 
 window.addEventListener('roulette', function(e) {
   var rouletteDiv = document.getElementById('roulette'),
-  timer1,
-  timer2;
+    timer1,
+    timer2;
   rouletteDiv.style.display = 'block';
   if(!e.winner){
     //simple state check for multiple raffles on the same session
