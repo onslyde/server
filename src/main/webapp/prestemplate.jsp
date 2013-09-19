@@ -154,8 +154,8 @@
 <script src="http://onslyde.com/js/onslyde-1.0.0.deck.js?v=1"></script>
 <script>
 
-    slidfast({
-        onslyde: {deck:true,sessionID: <%= request.getAttribute("eventid") %>, mode:'reveal'}
+    onslyde({
+        deck: {sessionID: 175, mode:'reveal'}
     });
 </script>
 <script src="http://code.jquery.com/jquery-1.8.3.min.js"></script>
