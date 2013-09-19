@@ -92,7 +92,7 @@ public class Session implements java.io.Serializable {
 	}
 
 	@Temporal(TemporalType.TIMESTAMP)
-	@Column(name = "start", nullable = false, length = 19)
+	@Column(name = "start", nullable = true, length = 19)
 	public Date getStart() {
 		return this.start;
 	}
