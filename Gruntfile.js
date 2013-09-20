@@ -8,7 +8,7 @@ module.exports = function(grunt) {
     //checkout panel and presentation modules
     shell: {
       gitclone: {
-        command: 'git clone git@github.com:onslyde/onslyde-panel.git panel'
+        command: 'git clone git@github.com:onslyde/onslyde-panel.git src/main/webapp/panel'
       }
     },
 
@@ -21,25 +21,25 @@ module.exports = function(grunt) {
       '* Copyright (c) <%= grunt.template.today("yyyy") %> <%= pkg.author.name %>;' +
       ' Licensed <%= _.pluck(pkg.licenses, "type").join(", ") %> */\n',
     // Task configuration.
-    concat: {
-      options: {
-        banner: '<%= banner %>',
-        stripBanners: true
-      },
-      dist: {
-        src: ['lib/<%= pkg.name %>.js'],
-        dest: 'dist/<%= pkg.name %>.js'
-      }
-    },
-    uglify: {
-      options: {
-        banner: '<%= banner %>'
-      },
-      dist: {
-        src: '<%= concat.dist.dest %>',
-        dest: 'dist/<%= pkg.name %>.min.js'
-      }
-    },
+//    concat: {
+//      options: {
+//        banner: '<%= banner %>',
+//        stripBanners: true
+//      },
+//      dist: {
+//        src: ['src/main/webapp/panel/js/panel/*.js'],
+//        dest: 'src/main/webapp/panel/js/panel/dist/'
+//      }
+//    },
+//    uglify: {
+//      options: {
+//        banner: '<%= banner %>'
+//      },
+//      dist: {
+//        src: '<%= concat.dist.dest %>',
+//        dest: 'dist/<%= pkg.name %>.min.js'
+//      }
+//    },
     jshint: {
       options: {
         curly: true,
@@ -50,33 +50,44 @@ module.exports = function(grunt) {
         noarg: true,
         sub: true,
         undef: true,
-        unused: true,
+        unused: false,
         boss: true,
         eqnull: true,
         globals: {
-          jQuery: true
+          jQuery: true,
+          'gapi' : true,
+          '_gaq': true,
+          'speak': true,
+          'ws': true,
+          window: true,
+          document: true,
+          onslyde: true,
+          userObject: true,
+          localStorage: true,
+          WebSocket: true
         }
       },
       gruntfile: {
         src: 'Gruntfile.js'
       },
       lib_test: {
-        src: ['lib/**/*.js', 'test/**/*.js']
-      }
-    },
-    nodeunit: {
-      files: ['test/**/*_test.js']
-    },
-    watch: {
-      gruntfile: {
-        files: '<%= jshint.gruntfile.src %>',
-        tasks: ['jshint:gruntfile']
-      },
-      lib_test: {
-        files: '<%= jshint.lib_test.src %>',
-        tasks: ['jshint:lib_test', 'nodeunit']
+        src: ['src/main/webapp/panel/js/panel/*.js']
       }
     }
+//    ,
+//    nodeunit: {
+//      files: ['test/**/*_test.js']
+//    },
+//    watch: {
+//      gruntfile: {
+//        files: '<%= jshint.gruntfile.src %>',
+//        tasks: ['jshint:gruntfile']
+//      },
+//      lib_test: {
+//        files: '<%= jshint.lib_test.src %>',
+//        tasks: ['jshint:lib_test', 'nodeunit']
+//      }
+//    }
   });
 
   // These plugins provide necessary tasks.

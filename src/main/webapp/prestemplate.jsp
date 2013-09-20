@@ -155,7 +155,7 @@
 <script>
 
     onslyde({
-        deck: {sessionID: 175, mode:'reveal'}
+        deck: {sessionID: <%= request.getAttribute("eventid") %>, mode:'reveal'}
     });
 </script>
 <script src="http://code.jquery.com/jquery-1.8.3.min.js"></script>
