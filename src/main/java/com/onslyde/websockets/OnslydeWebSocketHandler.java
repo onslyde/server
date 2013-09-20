@@ -256,6 +256,7 @@ public class OnslydeWebSocketHandler
                 try {
                     getSessionManager().addGroupOptions(optionList, sessionID);
                 } catch (Exception e) {
+                    System.out.println("----- couldn't find session: " + sessionID + " here's the option list: " + optionList);
                     e.printStackTrace();
                 }
 
