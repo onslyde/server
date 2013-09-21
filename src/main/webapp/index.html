@@ -21,30 +21,30 @@
 <!-- Header and Nav -->
 <div id="signin-container" class="reveal-modal small" >
 
-    <div class="lead">
-      <h2>Sign In</h2>
-    </div>
+  <div class="lead">
+    <h2>Sign In</h2>
+  </div>
 
-      <fieldset ng-controller="LoginCtrl">
+  <fieldset ng-controller="LoginCtrl">
 
-        <form name="signin" id="signin"  data-abide >
-          {{loginAlert}}
-          <div class="large-12">
-            <label>Email</label>
-            <input type="text" placeholder="you@somewhere.com" required pattern="email" ng-model="login_email">
-            <small class="error">Email is required  and should be in proper format (you@somewhere.com)</small>
-          </div>
-          <div class="large-12">
-            <label>Password</label>
-            <input type="password" placeholder="something secret" required pattern="password" ng-model="login_password">
-            <small class="error">Password must be within 3 to 14 characters.</small>
-          </div>
-          <div class="large-12">
-            <button type="submit" class="button right">Sign In</button>
-          </div>
-        </form>
+    <form name="signin" id="signin"  data-abide >
+      {{loginAlert}}
+      <div class="large-12">
+        <label>Email</label>
+        <input type="text" placeholder="you@somewhere.com" required pattern="email" ng-model="login_email">
+        <small class="error">Email is required  and should be in proper format (you@somewhere.com)</small>
+      </div>
+      <div class="large-12">
+        <label>Password</label>
+        <input type="password" placeholder="something secret" required pattern="password" ng-model="login_password">
+        <small class="error">Password must be within 3 to 14 characters.</small>
+      </div>
+      <div class="large-12">
+        <button type="submit" class="button right">Sign In</button>
+      </div>
+    </form>
 
-      </fieldset>
+  </fieldset>
 </div>
 
 <div class="row">
@@ -95,9 +95,9 @@
 <script src="foundation-4.3.1/js/foundation/foundation.reveal.js"></script>
 <script src="foundation-4.3.1/js/foundation/foundation.orbit.js"></script>
 
-<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.1.5/angular.js"></script>
-<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.1.5/angular-resource.min.js"></script>
-<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.1.5/angular-cookies.min.js"></script>
+<script src="js/libs/angular-1.1.5/angular.js"></script>
+<script src="js/libs/angular-1.1.5/angular-resource.min.js"></script>
+<script src="js/libs/angular-1.1.5/angular-cookies.min.js"></script>
 
 
 <script src="js/app.js"></script>
