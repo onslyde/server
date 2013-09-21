@@ -139,7 +139,7 @@ public class AttendeeService {
     @Produces(MediaType.APPLICATION_JSON)
     public Response optionVote(@FormParam("attendeeIP") String attendeeIP, @FormParam("username") String username, @FormParam("email") String email, @FormParam("sessionID") int sessionID, @FormParam("vote") String vote) {
         mediatorEventSrc.fire(mediator);
-         System.out.println("-----vote" + vote);
+
         if(vote != null){
 
             sessionManager.updateGroupVote(vote,attendeeIP,username,email,sessionID);
@@ -168,7 +168,7 @@ public class AttendeeService {
     @Produces(MediaType.APPLICATION_JSON)
     public Response optionSpeak(@FormParam("attendeeIP") String attendeeIP, @FormParam("sessionID") int sessionID, @FormParam("speak") String speak, @Context HttpServletRequest req) {
         mediatorEventSrc.fire(mediator);
-        System.out.println("-----" + sessionID + " " + attendeeIP + " " + speak);
+
         String data = "";
         if(speak != null){
 

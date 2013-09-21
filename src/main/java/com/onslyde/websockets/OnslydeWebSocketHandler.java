@@ -93,7 +93,11 @@ public class OnslydeWebSocketHandler
     public void onWebSocketConnect(Session session)
     {
         this.session = session;
+        //16 minutes
         this.session.setIdleTimeout(1000000);
+
+        //1 hour
+//        this.session.setIdleTimeout(3600000);
 
         Map request = session.getUpgradeRequest().getParameterMap();
 
@@ -105,19 +109,9 @@ public class OnslydeWebSocketHandler
 
         //when a user connects, we add his ws connection to a sessionID map
         if (mediator.getSessions().containsKey(sessionID)) {
-
-            //try to disconnect stale session on browser refresh before replacing with new
-//            if(mediator.getSessions().get(sessionID).get(attendeeIP) != null){
-//                try {
-//                    mediator.getSessions().get(sessionID).get(attendeeIP).disconnect();
-//                } catch (IOException e) {
-//                    e.printStackTrace();
-//                }
-//            }
-
+            //session in progress
             //get the map and put new value (dropping the old)
             mediator.getSessions().get(sessionID).put(attendeeIP, this.session);
-
 
         } else {
             Map<String,Session> sessionMap = new HashMap<String,Session>();
@@ -130,16 +124,14 @@ public class OnslydeWebSocketHandler
         // so at this point we are managing 2 lists of the same thing
         mediator.getWebsockets().add(this);
 
-//        System.out.println("----attendeeIP 1: " + attendeeIP);
 
-
-
+        //we must do 2 things on each client connect, send active options for vote, and send active markup
+        //this also updates how many connections we have for UI
         try {
             if (mediator != null) {
                 if (mediator.getPollCount().containsKey(sessionID)) {
                     pollCount = mediator.getPollCount().get(sessionID).size();
                 }
-                System.out.println("_____sessions in map: " + mediator.getSessionID() + " users session: " + sessionID + " size for session: " + mediator.getSessions().get(sessionID).size() + "---" + mediator.getSessions().get(sessionID).get(attendeeIP));
 
                 if (getSessionTracker(sessionID) != null) {
                     List options = getSessionTracker(sessionID).getActiveOptions();
@@ -155,7 +147,7 @@ public class OnslydeWebSocketHandler
                 }
             }
         } catch (Exception e) {
-            System.out.println("error1=========");
+            System.out.println("Error updating client on connect");
             e.printStackTrace();
         }
         //update count on deck
@@ -169,7 +161,7 @@ public class OnslydeWebSocketHandler
             }
 
         } catch (Exception e) {
-            System.out.println("error2=========");
+            System.out.println("Problem sending connection count to presenter");
             e.printStackTrace();
         }
     }
@@ -348,41 +340,18 @@ public class OnslydeWebSocketHandler
         } else if (data.contains("::connect::")) {
             try {
 
-//                if(mediator.getPsessions().containsKey(sessionID) &&
-//                        mediator.getPsessions().get(sessionID).containsKey(attendeeIP)) {
-
-                    //Insert presenter into existing sessionID
-//                    replace with new ws session
-//                    mediator.getPsessions().get(sessionID).put(attendeeIP,this);
-
-//                } else {
-                    //start a new session for presenter and purge all existing ws connections
-
-                    getSessionManager().startSession(sessionID);
-                    getSessionManager().setPollcount(0);
-                    Map<String,Session> presenterData = new HashMap<String,Session>();
-                    presenterData.put(attendeeIP,this.session);
-                    //todo - prevent session takeover
-                    //needs auth
-                    if(mediator.getPsessions().containsKey(sessionID)){
-                        //simple fix to allow mirroring
-                        mediator.getPsessions().get(sessionID).put(attendeeIP,this.session);
-                    }else{
-                        mediator.getPsessions().put(sessionID, presenterData);
-                    }
-
-
-                    //this is fugly....disconnect any existing sessions
-                    //clear out the session management map
-
-//                    Iterator<String> it = mediator.getSessions().get(sessionID).keySet().iterator();
-//                    while (it.hasNext()) {
-//                        String ips = it.next();
-//                        if(!ips.equals(attendeeIP)) {
-//                            it.remove();
-//                        }
-//                    }
-//                }
+                getSessionManager().startSession(sessionID);
+                getSessionManager().setPollcount(0);
+                Map<String,Session> presenterData = new HashMap<String,Session>();
+                presenterData.put(attendeeIP,this.session);
+                //todo - prevent session takeover
+                //needs auth
+                if(mediator.getPsessions().containsKey(sessionID)){
+                    //simple fix to allow mirroring
+                    mediator.getPsessions().get(sessionID).put(attendeeIP,this.session);
+                }else{
+                    mediator.getPsessions().put(sessionID, presenterData);
+                }
 
             } catch (Exception e) {
                 e.printStackTrace();
@@ -465,39 +434,26 @@ public class OnslydeWebSocketHandler
     @OnWebSocketClose
     public void onWebSocketClose(int statusCode, String reason)
     {
-//        System.out.println("-this.sessionID----------" + this.sessionID + " sesseion " + this.session);
+
         if(mediator.getSessions().containsKey(sessionID)){
-            System.out.println("-remove attendee socket--" + attendeeIP + "--------" + sessionID + " sesseion " + this.session);
+            System.out.println("-remove attendee socket--" + attendeeIP + "--------" + sessionID);
             Map session = mediator.getSessions().get(sessionID);
 
             if(session.containsKey(attendeeIP)){
                 session.remove(attendeeIP);
             }
 
-//            if(mediator.getSessions().get(sessionID).size() == 0){
-//                System.out.println("-remove session ID from memory----------" + sessionID);
-//                mediator.getSessions().remove(sessionID);
-//                Iterator<Integer> i = mediator.getSessionID().iterator();
-//                while (i.hasNext()) {
-//                    Integer s = i.next();
-//                    i.remove();
-//                }
-//            }
-        }
-//        System.out.println("---onclose" + mediator.getWebsockets().size());
-//        System.out.println("---onclose" + mediator.getWebsockets().contains(this));
+            mediator.getWebsockets().remove(this);
 
-        mediator.getWebsockets().remove(this);
+            if(mediator.getPsessions().containsKey(this.sessionID)){
+                if(mediator.getPsessions().get(this.sessionID).containsKey(this.attendeeIP)){
+                    System.out.println("-remove presenter socket--" + this.attendeeIP + "--------" + sessionID + " sesseion " + this.session);
+                    mediator.getPsessions().get(this.sessionID).remove(this.attendeeIP);
+                }
 
-        if(mediator.getPsessions().containsKey(this.sessionID)){
-            if(mediator.getPsessions().get(this.sessionID).containsKey(this.attendeeIP)){
-                System.out.println("-remove presenter socket--" + this.attendeeIP + "--------" + sessionID + " sesseion " + this.session);
-                mediator.getPsessions().get(this.sessionID).remove(this.attendeeIP);
             }
 
         }
-//        System.out.println("---onclose" + mediator.getWebsockets().size());
-
     }
 
     @OnWebSocketError
