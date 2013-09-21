@@ -147,6 +147,11 @@ public class OnslydeWebSocketHandler
                         //only send options to this connection
                         this.session.getRemote().sendStringByFuture(ClientEvent.createEvent("updateOptions", options, sessionID));
                     }
+                    Mediator.SessionTracker st = getSessionTracker(sessionID);
+                    if (!st.getActiveMarkup().isEmpty()) {
+                        //send active markup
+                        this.session.getRemote().sendStringByFuture(ClientEvent.remoteMarkup(st.getActiveMarkup(),"",sessionID));
+                    }
                 }
             }
         } catch (Exception e) {
