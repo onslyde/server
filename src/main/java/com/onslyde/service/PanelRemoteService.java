@@ -28,7 +28,7 @@ public class PanelRemoteService {
         }
 
         return Response.status(Response.Status.SEE_OTHER)
-                .header(HttpHeaders.LOCATION, "/panel-remote.html?session=" + sessionID)
+                .header(HttpHeaders.LOCATION, "/panel/panel-remote.html?session=" + sessionID)
                 .build();
 
     }

@@ -21,25 +21,32 @@ module.exports = function(grunt) {
       '* Copyright (c) <%= grunt.template.today("yyyy") %> <%= pkg.author.name %>;' +
       ' Licensed <%= _.pluck(pkg.licenses, "type").join(", ") %> */\n',
     // Task configuration.
-//    concat: {
-//      options: {
-//        banner: '<%= banner %>',
-//        stripBanners: true
-//      },
-//      dist: {
-//        src: ['src/main/webapp/panel/js/panel/*.js'],
-//        dest: 'src/main/webapp/panel/js/panel/dist/'
-//      }
-//    },
-//    uglify: {
-//      options: {
-//        banner: '<%= banner %>'
-//      },
-//      dist: {
-//        src: '<%= concat.dist.dest %>',
-//        dest: 'dist/<%= pkg.name %>.min.js'
-//      }
-//    },
+    concat: {
+      options: {
+        banner: '<%= banner %>',
+        stripBanners: true
+      },
+      basic_and_extras: {
+        files: {
+          'src/main/webapp/panel/js/panel/dist/onslyde-panel-1.0.0.js': ['src/main/webapp/panel/js/panel/onslyde-1.0.0.panel.js'],
+          'src/main/webapp/panel/js/panel/dist/onslyde-remote-1.0.0.js': ['src/main/webapp/panel/js/panel/panel-remote.js',
+            'src/main/webapp/panel/js/panel/gplus-oauth.js',
+            'src/main/webapp/panel/js/panel/gracefulWebSocket.js',
+            'src/main/webapp/panel/js/panel/fastclick.min.js']
+        }
+      }
+    },
+    uglify: {
+      options: {
+        banner: '<%= banner %>'
+      },
+      primary : {
+        files: {
+          'src/main/webapp/panel/js/panel/dist/onslyde-remote-1.0.0.min.js': ['src/main/webapp/panel/js/panel/dist/onslyde-remote-1.0.0.js'],
+          'src/main/webapp/panel/js/panel/dist/onslyde-panel-1.0.0.min.js': ['src/main/webapp/panel/js/panel/dist/onslyde-panel-1.0.0.js']
+        }
+      }
+    },
     jshint: {
       options: {
         curly: true,
@@ -64,7 +71,16 @@ module.exports = function(grunt) {
           onslyde: true,
           userObject: true,
           localStorage: true,
-          WebSocket: true
+          WebSocket: true,
+          setTimeout: true,
+          clearTimeout: true,
+          setInterval: true,
+          clearInterval: true,
+          XMLHttpRequest: true,
+          location: true,
+          console: true,
+          navigator: true,
+          getAttendees: true
         }
       },
       gruntfile: {
@@ -100,6 +116,6 @@ module.exports = function(grunt) {
   grunt.loadNpmTasks('grunt-shell');
 
   // Default task.
-  grunt.registerTask('default', ['shell','jshint', 'nodeunit', 'concat', 'uglify']);
+  grunt.registerTask('default', ['shell','jshint', 'concat', 'uglify']);
 
 };
