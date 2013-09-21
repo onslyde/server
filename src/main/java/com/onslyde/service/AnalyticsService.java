@@ -125,8 +125,12 @@ public class AnalyticsService {
             for (int key : mediator.getSessions().keySet()){
                 SessionSummary ss = new SessionSummary();
                 ss.setSessionID(key);
-                ss.setPollingCount(mediator.getPollCount().get(key).size());
-                ss.setWsCount(mediator.getSessions().get(key).size());
+                if(mediator.getPollCount().get(key) != null){
+                    ss.setPollingCount(mediator.getPollCount().get(key).size());
+                }
+                if(mediator.getSessions().get(key) != null){
+                    ss.setWsCount(mediator.getSessions().get(key).size());
+                }
                 allSessions.getSessionSummaries().add(ss);
             }
 
