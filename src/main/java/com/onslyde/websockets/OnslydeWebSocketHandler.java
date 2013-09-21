@@ -93,8 +93,8 @@ public class OnslydeWebSocketHandler
     public void onWebSocketConnect(Session session)
     {
         this.session = session;
-        //16 minutes
-        this.session.setIdleTimeout(1000000);
+        //33 minutes
+        this.session.setIdleTimeout(2000000);
 
         //1 hour
 //        this.session.setIdleTimeout(3600000);
