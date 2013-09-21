@@ -110,6 +110,16 @@
         <section class="slide-group">
 
             <section>
+                <p><a target="_blank" href="http://onslyde.com/analytics.html">You can view the analytics for this session</a></p>
+                <p>You can use other features (like Roulette) for random giveaways or to choose an audience member</p>
+                <a href="javascript:onslyde.slides.roulette();void(0)">Pick a winner</a>
+            </section>
+
+        </section>
+
+        <section class="slide-group">
+
+            <section>
                 <h3>Add more content to this presentation...</h3>
                 <p>Save this page to your computer.</p>
                 <p>Click File->Save Page As (make sure you select the Webpage, HTML only menu option)</p>
