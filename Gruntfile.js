@@ -8,7 +8,7 @@ module.exports = function(grunt) {
     //checkout panel and presentation modules
     shell: {
       gitclone: {
-        command: 'git clone git@github.com:onslyde/onslyde-panel.git src/main/webapp/panel'
+        command: 'git clone https://github.com/onslyde/onslyde-panel.git src/main/webapp/panel'
       }
     },
 
