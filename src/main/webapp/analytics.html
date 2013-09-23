@@ -129,6 +129,7 @@
                       <th class="id">Vote</th>
                       <th class="name">Vote Time</th>
                       <th class="description">Attendee ID</th>
+                      <th class="description">Attendee Name</th>
                     </tr>
                     </thead>
                     <tbody>
@@ -136,6 +137,7 @@
                       <td>{{slidevote.slideOptions.name}}</td>
                       <td>{{slidevote.voteTime  | date:'medium'}}</td>
                       <td>{{slidevote.attendee.ip}}</td>
+                      <td>{{slidevote.attendee.name}}</td>
                     </tr>
                     </tbody>
                   </table>

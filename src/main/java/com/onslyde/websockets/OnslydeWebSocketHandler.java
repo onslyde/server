@@ -223,7 +223,12 @@ public class OnslydeWebSocketHandler
                     //polling clients get a null session, so must check
                     //using 777 as a stopgap for start/end of talk
                     if(thanks != null){
-                        thanks.getRemote().sendStringByFuture(ClientEvent.speak(sessionID, attendeeIP, "", 777));
+
+                        try {
+                            thanks.getRemote().sendStringByFuture(ClientEvent.speak(sessionID, attendeeIP, "", 777));
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
                     }
 
                     //populate for polling clients to let them know who is speaking
