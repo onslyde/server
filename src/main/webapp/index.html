@@ -6,7 +6,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="description" content="">
   <meta name="author" content="">
-
+  <base href="/">
   <link href="http://fonts.googleapis.com/css?family=Lato:300,400,700,900" rel="stylesheet" type="text/css">
 
   <link rel="stylesheet" href="foundation-4.3.1/css/foundation.css">
@@ -49,11 +49,11 @@
 
 <div class="row">
   <div class="large-3 columns">
-    <h1 class="logo" onclick="window.location = '#!/home'">onslyde</h1>
+    <h1 class="logo"><a href="/home">onslyde</a></h1>
   </div>
   <div class="large-9 columns">
     <ul class="top-buttons button-group right" ng-controller="LoginCtrl">
-      <li><a href="#!/gettingstarted" class="o-button"><i class="pictogram">&#128213;</i>Getting Started</a></li>
+      <li><a href="/gettingstarted" class="o-button"><i class="pictogram">&#128213;</i>Getting Started</a></li>
       <li ng-if="userInfo.created">{{userInfo.name}} | <a ng-click="logout()"><i class="pictogram">&#59201;</i>Sign Out</a></li>
       <li ng-if="!userInfo.created"><a data-reveal-id="signin-container" class="o-button"><i class="pictogram">&#59198;</i>Sign In</a></li>
 
@@ -95,9 +95,10 @@
 <script src="foundation-4.3.1/js/foundation/foundation.reveal.js"></script>
 <script src="foundation-4.3.1/js/foundation/foundation.orbit.js"></script>
 
-<script src="js/libs/angular-1.1.5/angular.js"></script>
-<script src="js/libs/angular-1.1.5/angular-resource.min.js"></script>
-<script src="js/libs/angular-1.1.5/angular-cookies.min.js"></script>
+<script src="js/libs/angular-1.2.0-rc.2/angular.js"></script>
+<script src="js/libs/angular-1.2.0-rc.2/angular-resource.js"></script>
+<script src="js/libs/angular-1.2.0-rc.2/angular-cookies.js"></script>
+<script src="js/libs/angular-1.2.0-rc.2/angular-route.js"></script>
 
 
 <script src="js/app.js"></script>

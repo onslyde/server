@@ -10,12 +10,14 @@ onslyde.Directives = angular.module('onslyde.directives', []);
 
 angular.module('onslyde',
     ['ngResource',
+      'ngRoute',
       'localStorage',
       'onslyde.filters',
       'onslyde.services',
       'onslyde.directives',
       'onslyde.constants',
       'onslyde.controllers']).config(['$routeProvider', '$locationProvider', function ($routeProvider, $locationProvider) {
+
 
     $routeProvider
       .when('/home', {templateUrl: 'home/home.html', controller: 'PageCtrl'})
@@ -25,8 +27,10 @@ angular.module('onslyde',
       .otherwise({redirectTo: '/home'});
 
     $locationProvider
-      .html5Mode(false)
+      .html5Mode(true)
       .hashPrefix('!');
+
+
   }])
   .run(function ($rootScope) {
     $rootScope.$on('$viewContentLoaded', function () {
@@ -75,7 +79,7 @@ angular.module('onslyde',
 //        });
 //      });
 
-    })
+    });
 
   });
 
