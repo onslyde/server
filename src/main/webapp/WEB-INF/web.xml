@@ -18,6 +18,7 @@
         <url-pattern>/gettingstarted</url-pattern>
         <url-pattern>/register</url-pattern>
         <url-pattern>/docs</url-pattern>
+        <url-pattern>/analytics</url-pattern>
     </servlet-mapping>
     <mime-mapping>
         <extension>appcache</extension>

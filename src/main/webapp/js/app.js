@@ -24,6 +24,7 @@ angular.module('onslyde',
       .when('/login', {templateUrl: 'global/login.html', controller: 'LoginCtrl'})
       .when('/gettingstarted', {templateUrl: 'gettingstarted/gettingstarted.html', controller: 'GetStartedCtrl'})
       .when('/register', {templateUrl: 'home/register.html', controller: 'PageCtrl'})
+      .when('/analytics', {templateUrl: 'analytics/analytics.html', controller: 'AnalyticsCtrl'})
       .otherwise({redirectTo: '/home'});
 
     $locationProvider

@@ -1,0 +1,45 @@
+<div class="row" ng-init="analyticsSetup()">
+  <div id="chart_movie" class="reveal-modal medium" style="text-align:center">
+    <iframe width="100%" id="chart-movie-frame" height="360" src="" frameborder="0" allowfullscreen></iframe>
+  </div>
+
+  <div class="large-12 columns">
+    <h2 class="loading-title bold" ng-if="!twoOptionsList">Loading your report <br/><div class="loading center style-2"></div></h2>
+    <h2 class="session-title bold">{{sessionData.sessionName}}</h2>
+
+     <ul ng-repeat="twooption in twoOptionsList | orderBy:'created'" class="chart-list">
+
+       <li class="row">
+         <div class="large-12 columns">
+          <h2 class="topic-title">{{twooption.topicName === '0:0' ? 'Discussion': twooption.topicName}}</h2>
+
+         </div>
+
+         <div class="large-4 columns">
+           {{twooption[1].datapoints[0].timestamp}}
+           <h3 class="disagree">{{twooption[1].datapoints[twooption[0].datapoints.length-1].count}} {{twooption[1].label}}</h3>
+           <h3 class="agree">{{twooption[0].datapoints[twooption[0].datapoints.length-1].count}} {{twooption[0].label}}</h3>
+
+           <chart id="percentage"
+                  chartdata="twooption.pieChartData"
+                  type="pie" style="height:260px"
+                  titleicon=""
+                  titlecolor="rgba(255,3,3,0.5)"
+                  titleimagetop="-6%"
+                  titleimageleft="-2%"></chart>
+
+         </div>
+         <div class="large-8 columns">
+           <chart id="topic-totals"
+                  chartdata="twooption.chartData"
+                  type="area"
+                  xAxisLabel="return Highcharts.dateFormat('%H:%M:%S', this.value);"
+                  xAxisStep="3"></chart>
+           </div>
+       </li>
+     </ul>
+
+</div>
+  </div>
+
+
