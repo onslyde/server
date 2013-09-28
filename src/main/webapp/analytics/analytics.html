@@ -1,6 +1,6 @@
 <div class="row" ng-init="analyticsSetup()">
   <div id="chart_movie" class="reveal-modal medium" style="text-align:center">
-    <iframe width="100%" id="chart-movie-frame" height="360" src="" frameborder="0" allowfullscreen></iframe>
+    <div youtube id="analytics-player"></div>
   </div>
 
   <div class="large-12 columns">
@@ -16,7 +16,6 @@
          </div>
 
          <div class="large-4 columns">
-           {{twooption[1].datapoints[0].timestamp}}
            <h3 class="disagree">{{twooption[1].datapoints[twooption[0].datapoints.length-1].count}} {{twooption[1].label}}</h3>
            <h3 class="agree">{{twooption[0].datapoints[twooption[0].datapoints.length-1].count}} {{twooption[0].label}}</h3>
 

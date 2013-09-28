@@ -37,6 +37,12 @@ angular.module('onslyde',
     $rootScope.$on('$viewContentLoaded', function () {
 
       angular.element(document).ready(function () {
+
+        var tag = document.createElement('script');
+        tag.src = "//www.youtube.com/iframe_api";
+        var firstScriptTag = document.getElementsByTagName('script')[0];
+        firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
+
         //very, very fugly
         window.runFoundation(window, document, undefined);
         window.runAbide(window, document, undefined);

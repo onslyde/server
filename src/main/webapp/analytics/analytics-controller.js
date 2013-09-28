@@ -6,8 +6,7 @@ onslyde.Controllers.controller('AnalyticsCtrl',
     '$scope',
     '$rootScope',
     '$routeParams',
-    '$timeout', function (pagedata, chartservice, $scope, $rootScope, $routeParams, $timeout) {
-
+    '$timeout', 'youtubeapi', function (pagedata, chartservice, $scope, $rootScope, $routeParams, $timeout, youtubeapi) {
 
     $scope.analyticsSetup = function () {
 
@@ -59,11 +58,15 @@ onslyde.Controllers.controller('AnalyticsCtrl',
           pagedata.get(null, '/go/analytics/' + $routeParams.sessionID).then(function (success) {
             $rootScope.sessionData = success;
 
+
+            youtubeapi.videoId = $rootScope.sessionData.sessionCode;
+            youtubeapi.loadPlayer();
+
             var allVotes = [
               {label:'',datapoints:[]},
               {label:'',datapoints:[]}
             ];
-            console.log($rootScope.sessionData);
+//            console.log($rootScope.sessionData);
 
             $scope.twoOptionsList = [];
 
@@ -86,9 +89,9 @@ onslyde.Controllers.controller('AnalyticsCtrl',
               twooptions.created = value.created;
               twooptions.topicName = value.slides[0].slideIndex;
 
-
+               console.log(value.slides[0].slideVoteses,value.slides[0].slideVoteses.length);
               //if we have atleast 1 vote on the topic
-              if(value.slides[0].slideVoteses.length > 0){
+              if(value.slides[0].slideVoteses.length > 2){
 
                 var optionTracker = {},
                   slideOptions = value.slides[0].slideOptionses;
@@ -175,7 +178,7 @@ onslyde.Controllers.controller('AnalyticsCtrl',
                 twooptions.chartData = chartservice.convertLineChart(twooptions, tempLineChart, dataDescription.timeseries, '');
                 twooptions.pieChartData = chartservice.convertPieChart(twooptions, tempPieChart, dataDescription.pie, '');
 
-
+//                youtubeapi.bindVideoPlayer('analytics-player');
 
                 var createClickable = function(series) {
 
@@ -184,8 +187,12 @@ onslyde.Controllers.controller('AnalyticsCtrl',
                       console.log(this.category);
 //                      var d = new Date(this.category - startTime);
                       $('#chart_movie').foundation('reveal', 'open');
-                      document.getElementById('chart-movie-frame').src = 'http://www.youtube.com/v/' + $rootScope.sessionData.sessionCode + '?version=3&autoplay=1&start=' + ((this.category - startTime) / 1000);
-
+                      $('#chart_movie').bind('close', function() {
+                        youtubeapi.player.pauseVideo();
+                      });
+//                      document.getElementById('chart-movie-frame').src = 'http://www.youtube.com/v/' + $rootScope.sessionData.sessionCode + '?version=3&autoplay=1&start=' + ((this.category - startTime) / 1000);
+                      youtubeapi.player.seekTo(((this.category - startTime) / 1000));
+                      youtubeapi.player.playVideo();
                     }
                   }
                   };
