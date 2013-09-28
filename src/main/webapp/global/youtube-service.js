@@ -25,7 +25,10 @@ onslyde.Services.factory('youtubeapi', function ($window, $rootScope, $log) {
     return new YT.Player(this.playerId, {
       height: this.playerHeight,
       width: this.playerWidth,
-      videoId: this.videoId
+      videoId: this.videoId,
+      events: {
+        'onReady': $window.onPlayerReady
+      }
     });
   };
 
@@ -37,7 +40,7 @@ onslyde.Services.factory('youtubeapi', function ($window, $rootScope, $log) {
       }
 
       this.player = this.createPlayer();
-      console.log(this.player);
+
     }
   };
 

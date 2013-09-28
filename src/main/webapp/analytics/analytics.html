@@ -5,10 +5,10 @@
 
   <div class="large-12 columns">
     <h2 class="loading-title bold" ng-if="!twoOptionsList">Loading your report <br/><div class="loading center style-2"></div></h2>
-    <h2 class="session-title bold">{{sessionData.sessionName}}</h2>
-
+    <h2 class="session-title bold" ng-if="twoOptionsList" >{{sessionData.sessionName}}</h2>
+    <p ng-if="twoOptionsList">There were {{twoOptionsList.totals.agree}} agree votes and {{twoOptionsList.totals.disagree}} disagree votes during the entire session. </p>
+    <p ng-if="twoOptionsList">Click on a point in the timeseries chart to see the video for each voting period.</p>
      <ul ng-repeat="twooption in twoOptionsList | orderBy:'created'" class="chart-list">
-
        <li class="row">
          <div class="large-12 columns">
           <h2 class="topic-title">{{twooption.topicName === '0:0' ? 'Discussion': twooption.topicName}}</h2>

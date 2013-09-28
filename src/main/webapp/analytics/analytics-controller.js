@@ -6,7 +6,7 @@ onslyde.Controllers.controller('AnalyticsCtrl',
     '$scope',
     '$rootScope',
     '$routeParams',
-    '$timeout', 'youtubeapi', function (pagedata, chartservice, $scope, $rootScope, $routeParams, $timeout, youtubeapi) {
+    '$timeout', 'youtubeapi', '$window', function (pagedata, chartservice, $scope, $rootScope, $routeParams, $timeout, youtubeapi, $window) {
 
     $scope.analyticsSetup = function () {
 
@@ -62,6 +62,23 @@ onslyde.Controllers.controller('AnalyticsCtrl',
             youtubeapi.videoId = $rootScope.sessionData.sessionCode;
             youtubeapi.loadPlayer();
 
+//              function(){
+//              setTimeout(function(){
+//                if(!$scope.$$phase) {
+//                  $scope.$apply(function () {
+//                    youtubeapi.player.seekTo(0);
+//                  })
+//                }
+//
+//            },10000);
+//            });
+//            $window.onPlayerReady = function(){
+
+//
+//            }
+
+
+
             var allVotes = [
               {label:'',datapoints:[]},
               {label:'',datapoints:[]}
@@ -69,6 +86,7 @@ onslyde.Controllers.controller('AnalyticsCtrl',
 //            console.log($rootScope.sessionData);
 
             $scope.twoOptionsList = [];
+            $scope.twoOptionsList.totals = {agree: 1, disagree: 1};
 
             angular.forEach($scope.sessionData.slideGroups, function(value, index){
 
@@ -88,8 +106,8 @@ onslyde.Controllers.controller('AnalyticsCtrl',
 
               twooptions.created = value.created;
               twooptions.topicName = value.slides[0].slideIndex;
+              twooptions.topicID = value.slides[0].id;
 
-               console.log(value.slides[0].slideVoteses,value.slides[0].slideVoteses.length);
               //if we have atleast 1 vote on the topic
               if(value.slides[0].slideVoteses.length > 2){
 
@@ -131,8 +149,9 @@ onslyde.Controllers.controller('AnalyticsCtrl',
                           optionTracker[twooptions[i].label] = 1;
                         }
                         twooptions[i].datapoints.push({"timestamp":voteTime,"count":optionTracker[twooptions[i].label]++});
-
                       }
+                      $scope.twoOptionsList.totals[twooptions[i].label] += 1;
+
                       allVotes[i].datapoints.push({"timestamp":voteTime,"count":1});
 
                     //otherwise populate with 0, or the last known count for the opposite label
@@ -184,7 +203,6 @@ onslyde.Controllers.controller('AnalyticsCtrl',
 
                   series.point = {events: {
                     click: function (event) {
-                      console.log(this.category);
 //                      var d = new Date(this.category - startTime);
                       $('#chart_movie').foundation('reveal', 'open');
                       $('#chart_movie').bind('close', function() {
