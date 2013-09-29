@@ -10,8 +10,6 @@ onslyde.Controllers.controller('AnalyticsCtrl',
 
     $scope.analyticsSetup = function () {
 
-      !function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');
-
       function createGradient(color1, color2) {
         var perShapeGradient = {
           x1:0,
@@ -54,8 +52,13 @@ onslyde.Controllers.controller('AnalyticsCtrl',
         //get the chart template for this view... right now it covers all charts...
         pagedata.get(null, 'charts/highcharts.json').then(function (success) {
           $rootScope.chartTemplate = success;
+          $scope.createCharts();
+        }, function (fail) {
+          console.log('Problem getting chart template', fail)
+        });
+      }
 
-
+      $scope.createCharts = function(){
           pagedata.get(null, '/go/analytics/' + $routeParams.sessionID).then(function (success) {
             $rootScope.sessionData = success;
 
@@ -249,10 +252,7 @@ onslyde.Controllers.controller('AnalyticsCtrl',
             console.log('Problem getting chart datapoints', fail)
           });
 
-        }, function (fail) {
-          console.log('Problem getting chart template', fail)
-        });
-      }
+        }
 
       //todo - this is a temporary lookup for edge. need to add columns to attendee db for pic and twitter
       $scope.getPanelist = function(sessionID, name) {
