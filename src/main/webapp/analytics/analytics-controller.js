@@ -6,7 +6,7 @@ onslyde.Controllers.controller('AnalyticsCtrl',
     '$scope',
     '$rootScope',
     '$routeParams',
-    '$timeout', 'youtubeapi', '$window', function (pagedata, chartservice, $scope, $rootScope, $routeParams, $timeout, youtubeapi, $window) {
+    '$timeout', 'youtubeapi', '$location', '$anchorScroll', function (pagedata, chartservice, $scope, $rootScope, $routeParams, $timeout, youtubeapi, $location, $anchorScroll) {
 
     $scope.analyticsSetup = function () {
 
@@ -237,7 +237,9 @@ onslyde.Controllers.controller('AnalyticsCtrl',
 //              return a > b ? 1 : a < b ? -1 : 0;
 //            });
 //            $scope.twoOptionsList.overviewChart = chartservice.convertPieChart(allVotes, tempPieChart, dataDescription.pie, '');
-
+            if($location.hash()){
+              $timeout(function(){$anchorScroll($location.hash())},5000);
+            }
 
 
           }, function (fail) {

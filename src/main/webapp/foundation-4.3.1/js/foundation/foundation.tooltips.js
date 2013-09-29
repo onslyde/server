@@ -1,5 +1,5 @@
 /*jslint unparam: true, browser: true, indent: 2 */
-
+window.runTooltip = function(window,document,undefined){
 ;(function ($, window, document, undefined) {
   'use strict';
 
@@ -206,3 +206,4 @@
     reflow : function () {}
   };
 }(Foundation.zj, this, this.document));
+}

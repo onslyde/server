@@ -51,6 +51,7 @@ angular.module('onslyde',
         window.runAbide(window, document, undefined);
         window.runOrbit(window, document, undefined);
         window.runReveal(window, document, undefined);
+        window.runTooltip(window, document, undefined);
 
 
         $(document)
