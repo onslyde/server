@@ -10,6 +10,7 @@ onslyde.Controllers.controller('AnalyticsCtrl',
 
     $scope.analyticsSetup = function () {
 
+      !function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');
 
       function createGradient(color1, color2) {
         var perShapeGradient = {
@@ -77,16 +78,23 @@ onslyde.Controllers.controller('AnalyticsCtrl',
 //
 //            }
 
+            $scope.twoOptionsList = [];
+            $scope.twoOptionsList.totals = {agree: 1, disagree: 1};
 
+            $scope.twoOptionsList.sessionVotesFilterList =
+              [
+                {name: 1},
+                {name: 2},
+                {name: 3}
+              ];
+
+            $scope.twoOptionsList.sessionVotesFilter = $scope.twoOptionsList.sessionVotesFilterList[2];
 
             var allVotes = [
               {label:'',datapoints:[]},
               {label:'',datapoints:[]}
             ];
-//            console.log($rootScope.sessionData);
 
-            $scope.twoOptionsList = [];
-            $scope.twoOptionsList.totals = {agree: 1, disagree: 1};
 
             angular.forEach($scope.sessionData.slideGroups, function(value, index){
 
@@ -107,11 +115,11 @@ onslyde.Controllers.controller('AnalyticsCtrl',
               twooptions.created = value.created;
               twooptions.topicName = value.slides[0].slideIndex;
               twooptions.topicID = value.slides[0].id;
-
+              twooptions.sessionID = $routeParams.sessionID;
 
 
               //if we have atleast 1 vote on the topic
-              if(value.slides[0].slideVoteses.length > 2){
+              if(value.slides[0].slideVoteses.length >= $scope.twoOptionsList.sessionVotesFilter.name){
 
                 twooptions.speakerData = $scope.getPanelist($routeParams.sessionID,twooptions.topicName);
 

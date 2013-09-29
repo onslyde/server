@@ -46,6 +46,10 @@ p.intro {
   color: #777;
 }
 
+p.text {
+  margin-bottom: .75em;
+}
+
 @font-face {
   font-family: 'entypo';
   src: url('entypo/entypo.eot');
@@ -450,4 +454,32 @@ h3.disagree {
 
 .topic-img {
   margin: 0 10px 0 0;
+}
+
+.topic-info {
+  width: 40%;
+}
+
+.share-info {
+  text-align: right;
+  height: 19px;
+  position: relative;
+  display: block;
+  width: 43%;
+}
+
+.share-info iframe#twitter {
+  width: 90px;
+  height: 20px;
+  position: absolute;
+  right: 90px;
+  bottom: 0;
+}
+
+.share-info iframe#gplus {
+  width: 90px;
+  height: 29px;
+  position: absolute;
+  right: 0;
+  bottom: 0;
 }

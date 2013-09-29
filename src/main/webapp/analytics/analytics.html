@@ -6,18 +6,23 @@
   <div class="large-12 columns">
     <h2 class="loading-title bold" ng-if="!twoOptionsList">Loading your report <br/><div class="loading center style-2"></div></h2>
     <h2 class="session-title bold" ng-if="twoOptionsList" >{{sessionData.sessionName}}</h2>
-    <p ng-if="twoOptionsList">There were {{twoOptionsList.totals.agree}} agree votes and {{twoOptionsList.totals.disagree}} disagree votes during the entire session. </p>
-    <p ng-if="twoOptionsList">Click on a point in the timeseries chart to see the video for each voting period.</p>
+    <!--<select ng-if="twoOptionsList" ng-model="twoOptionsList.sessionVotesFilter" ng-options="opt.name for opt in twoOptionsList.sessionVotesFilterList">-->
+      <!--<option value="">-- chose minimum votes --</option>-->
+    <!--</select>-->
+    <p class="text" ng-if="twoOptionsList">There were {{twoOptionsList.totals.agree}} agree votes and {{twoOptionsList.totals.disagree}} disagree votes during this session. </p>
+    <!--<span class="label right" ng-if="twoOptionsList">Click on a point in the timeseries chart to see the video for each voting period.</span>-->
      <ul ng-repeat="twooption in twoOptionsList | orderBy:'created'" class="chart-list">
        <li class="row">
          <div class="large-12 columns">
+           <a name="{{twooption.topicID}}"></a>
           <h2 class="topic-title">
             <div class="left topic-img">
-              <a href="http://twitter.com/{{twooption.speakerData.twitter}}" target="_blank"><img ng-if="twooption.speakerData.pic" src="{{twooption.speakerData.pic}}" width="70"/></a>
+              <a href="http://twitter.com/{{twooption.speakerData.twitter}}" target="_blank"><img ng-if="twooption.speakerData.pic" ng-src="{{twooption.speakerData.pic}}" width="70"/></a>
             </div>
             <div class="left topic-info">
               {{twooption.topicName === '0:0' ? 'Discussion': twooption.topicName}} <div ng-if="twooption.speakerData.twitter" class="twitter-sub"><i class="pictogram-social">&#62217;</i> <a href="http://twitter.com/{{twooption.speakerData.twitter}}" target="_blank">{{twooption.speakerData.twitter}}</a></div>
             </div>
+
            </h2>
 
 
