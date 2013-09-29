@@ -1,11 +1,11 @@
-<div class="row" ng-if="!twooption.sessionID">
+<div class="row" ng-if="!sessionID">
   <div class="large-12 columns">
      <p>You must be logged in to view the analytics for your sessions.</p>
      <p>If you're just kicking the tires, check out the data from <a href="/analytics/edge2013">the Edge Conf New York panels</a>.</p>
   </div>
 </div>
 
-<div class="row" ng-if="twooption.sessionID" ng-init="analyticsSetup()">
+<div class="row" ng-if="sessionID" ng-init="analyticsSetup()">
   <div id="chart_movie" class="reveal-modal medium" style="text-align:center">
     <div youtube id="analytics-player"></div>
   </div>

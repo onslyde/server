@@ -8,6 +8,8 @@ onslyde.Controllers.controller('AnalyticsCtrl',
     '$routeParams',
     '$timeout', 'youtubeapi', '$location', '$anchorScroll', function (pagedata, chartservice, $scope, $rootScope, $routeParams, $timeout, youtubeapi, $location, $anchorScroll) {
 
+    $scope.sessionID = $routeParams.sessionID;
+
     $scope.analyticsSetup = function () {
 
       function createGradient(color1, color2) {
