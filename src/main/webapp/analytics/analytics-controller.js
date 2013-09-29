@@ -56,6 +56,8 @@ onslyde.Controllers.controller('AnalyticsCtrl',
         }, function (fail) {
           console.log('Problem getting chart template', fail)
         });
+      }else{
+        $scope.createCharts();
       }
 
       $scope.createCharts = function(){
