@@ -11,7 +11,15 @@
      <ul ng-repeat="twooption in twoOptionsList | orderBy:'created'" class="chart-list">
        <li class="row">
          <div class="large-12 columns">
-          <h2 class="topic-title">{{twooption.topicName === '0:0' ? 'Discussion': twooption.topicName}}</h2>
+          <h2 class="topic-title">
+            <div class="left topic-img">
+              <a href="http://twitter.com/{{twooption.speakerData.twitter}}" target="_blank"><img ng-if="twooption.speakerData.pic" src="{{twooption.speakerData.pic}}" width="70"/></a>
+            </div>
+            <div class="left topic-info">
+              {{twooption.topicName === '0:0' ? 'Discussion': twooption.topicName}} <div ng-if="twooption.speakerData.twitter" class="twitter-sub"><i class="pictogram-social">&#62217;</i> <a href="http://twitter.com/{{twooption.speakerData.twitter}}" target="_blank">{{twooption.speakerData.twitter}}</a></div>
+            </div>
+           </h2>
+
 
          </div>
 

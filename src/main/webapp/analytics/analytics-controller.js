@@ -108,8 +108,12 @@ onslyde.Controllers.controller('AnalyticsCtrl',
               twooptions.topicName = value.slides[0].slideIndex;
               twooptions.topicID = value.slides[0].id;
 
+
+
               //if we have atleast 1 vote on the topic
               if(value.slides[0].slideVoteses.length > 2){
+
+                twooptions.speakerData = $scope.getPanelist($routeParams.sessionID,twooptions.topicName);
 
                 var optionTracker = {},
                   slideOptions = value.slides[0].slideOptionses;
@@ -241,6 +245,72 @@ onslyde.Controllers.controller('AnalyticsCtrl',
           console.log('Problem getting chart template', fail)
         });
       }
+
+      //todo - this is a temporary lookup for edge. need to add columns to attendee db for pic and twitter
+      $scope.getPanelist = function(sessionID, name) {
+        var result;
+
+        var allpanels =
+        [
+            {name:'Natasha Rooney', org:'GSMA', pic:'http://edgeconf.com/2013-nyc/images/panelists/natasha-rooney.jpg', twitter:'', mod:true},
+            {name:'Manu Sporny', org:'Digital Bazaar', pic:'http://edgeconf.com/2013-nyc/images/panelists/manu-sporny.jpg', twitter:'manusporny'},
+            {name:'Rob Grimshaw', org:'FT.com', pic:'http://edgeconf.com/2013-nyc/images/panelists/rob-grimshaw.jpg', twitter:'r_g'},
+            {name:'Cyndy Lobb', org:'Google', pic:'http://edgeconf.com/2013-nyc/images/panelists/cyndy-lobb.jpg', twitter:''},
+            {name:'Ricardo Varela', org:'Telefónica', pic:'http://edgeconf.com/2013-nyc/images/panelists/ricardo-varela.jpg', twitter:'phobeo'},
+            {name:'Kumar McMillan', org:'Mozilla', pic:'http://edgeconf.com/2013-nyc/images/panelists/kumar-mcmillan.jpg', twitter:'kumar303'},
+
+            {name:'Marcos Caceres', org:'Mozilla', pic:'http://edgeconf.com/2013-nyc/images/panelists/marcos-caceres.jpg', twitter:'marcosc', mod:true},
+            {name:'Yoav Weiss', org:'WL Square', pic:'http://edgeconf.com/2013-nyc/images/panelists/yoav-weiss.jpg', twitter:'yoavweiss'},
+            {name:'Ann Robson', org:'freelance', pic:'http://edgeconf.com/2013-nyc/images/panelists/ann-robson.jpg', twitter:'arobson'},
+            {name:'Estelle Weyl', org:'freelance', pic:'http://edgeconf.com/2013-nyc/images/panelists/estelle-weyl.jpg', twitter:'estellevw'},
+            {name:'Peter Miller', org:'Conde Nast', pic:'http://edgeconf.com/2013-nyc/images/panelists/peter-miller.jpg', twitter:'petemill'},
+            {name:'John Mellor', org:'Google', pic:'http://edgeconf.com/2013-nyc/images/panelists/john-mellor.jpg', twitter:''},
+
+            {name:'Andre Behrens', org:'The New York Times', pic:'http://edgeconf.com/2013-nyc/images/panelists/andre-behrens.jpg', twitter:'mrandre', mod:true},
+            {name:'Jonathan Klein', org:'Etsy', pic:'http://edgeconf.com/2013-nyc/images/panelists/jonathan-klein.jpg', twitter:'jonathanklein'},
+            {name:'Paul Lewis', org:'Google', pic:'http://edgeconf.com/2013-nyc/images/panelists/paul-lewis.jpg', twitter:'aerotwist'},
+            {name:'Ariya Hidayat', org:'Sencha', pic:'http://edgeconf.com/2013-nyc/images/panelists/ariya-hidayat.jpg', twitter:'ariyahidayat'},
+            {name:'Joshua Peek', org:'Github', pic:'http://edgeconf.com/2013-nyc/images/panelists/joshua-peek.jpg', twitter:'joshpeek'},
+            {name:'Eli Fidler', org:'BlackBerry', pic:'http://edgeconf.com/2013-nyc/images/panelists/eli-fidler.jpg', twitter:'efidler'},
+
+            {name:'Scott Jenson', org:'Jenson Design', pic:'http://edgeconf.com/2013-nyc/images/panelists/scott-jenson.jpg', twitter:'scottjenson', mod:true},
+            {name:'Martyn Loughran', org:'Pusher', pic:'http://edgeconf.com/2013-nyc/images/panelists/martyn-loughran.jpg', twitter:'mloughran'},
+            {name:'Wesley Hales', org:'Apigee', pic:'http://edgeconf.com/2013-nyc/images/panelists/wesley-hales.jpg', twitter:'wesleyhales'},
+            {name:'Rob Hawkes', org:'freelance', pic:'http://edgeconf.com/2013-nyc/images/panelists/rob-hawkes.jpg', twitter:'robhawkes'},
+            {name:'John Fallows', org:'Kaazing', pic:'http://edgeconf.com/2013-nyc/images/panelists/john-fallows.jpg', twitter:''},
+            {name:'Henrik Joretag', org:'&yet', pic:'http://edgeconf.com/2013-nyc/images/panelists/henrik-joretag.jpg', twitter:'HenrikJoreteg'},
+
+            {name:'Paul Irish', org:'Google', pic:'http://edgeconf.com/2013-nyc/images/panelists/paul-irish.jpg', twitter:'paul_irish', mod:true},
+            {name:'Tom Maslen', org:'BBC', pic:'http://edgeconf.com/2013-nyc/images/panelists/tom-maslen.jpg', twitter:'tmaslen'},
+            {name:'Tomomi Imura', org:'Nokia', pic:'http://edgeconf.com/2013-nyc/images/panelists/tomomi-imura.jpg', twitter:'girlie_mac'},
+            {name:'Shwetank Dixit', org:'Opera', pic:'http://edgeconf.com/2013-nyc/images/panelists/shwetank-dixit.jpg', twitter:'shwetank'},
+            {name:'Edd Sowden', org:'Government Digital Service', pic:'http://edgeconf.com/2013-nyc/images/panelists/edd-sowden.jpg', twitter:'edds'},
+
+            {name:'Steve Thair', org:'Seriti Consulting', pic:'http://edgeconf.com/2013-nyc/images/panelists/steve-thair.jpg', twitter:'theopsmgr', mod:true},
+            {name:'Ben Vinegar', org:'Disqus', pic:'http://edgeconf.com/2013-nyc/images/panelists/ben-vinegar.jpg', twitter:'bentlegen'},
+            {name:'Guy Podjarny', org:'Akamai', pic:'http://edgeconf.com/2013-nyc/images/panelists/guy-podjarny.jpg', twitter:'guypod'},
+            {name:'Stoyan Stefanov', org:'Facebook', pic:'http://edgeconf.com/2013-nyc/images/panelists/stoyan-stefanov.jpg', twitter:'stoyanstefanov'},
+            {name:'Barbara Bermes', org:'CBC', pic:'http://edgeconf.com/2013-nyc/images/panelists/barbara-bermes.jpg', twitter:'bbinto'},
+
+            {name:'Jake Archibald', org:'Google', pic:'http://edgeconf.com/2013-nyc/images/panelists/jake-archibald.jpg', twitter:'jaffathecake', mod:true},
+            {name:'Alex Russell', org:'Google', pic:'http://edgeconf.com/2013-nyc/images/panelists/alex-russell.jpg', twitter:'slightlylate'},
+            {name:'Matt Andrews', org:'FT Labs', pic:'http://edgeconf.com/2013-nyc/images/panelists/matt-andrews.jpg', twitter:'andrewsmatt'},
+            {name:'Craig Cavalier', org:'LiquidFrameworks', pic:'http://edgeconf.com/2013-nyc/images/panelists/craig-cavalier.jpg', twitter:''},
+            {name:'Calvin Spealman', org:'Caktus Consulting', pic:'http://edgeconf.com/2013-nyc/images/panelists/calvin-spealman.jpg', twitter:''}
+          ];
+
+
+
+
+
+        angular.forEach(allpanels, function(value, index){
+          if(value.name === name){
+            result = value;
+          }
+        });
+
+        return result;
+      };
 
     };
 
