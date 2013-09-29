@@ -48,17 +48,7 @@ onslyde.Controllers.controller('AnalyticsCtrl',
         }
       };
 
-      if (!$rootScope.chartTemplate) {
-        //get the chart template for this view... right now it covers all charts...
-        pagedata.get(null, 'charts/highcharts.json').then(function (success) {
-          $rootScope.chartTemplate = success;
-          $scope.createCharts();
-        }, function (fail) {
-          console.log('Problem getting chart template', fail)
-        });
-      }else{
-        $scope.createCharts();
-      }
+
 
       $scope.createCharts = function(){
           pagedata.get(null, '/go/analytics/' + $routeParams.sessionID).then(function (success) {
@@ -255,6 +245,18 @@ onslyde.Controllers.controller('AnalyticsCtrl',
           });
 
         }
+
+      if (!$rootScope.chartTemplate) {
+        //get the chart template for this view... right now it covers all charts...
+        pagedata.get(null, 'charts/highcharts.json').then(function (success) {
+          $rootScope.chartTemplate = success;
+          $scope.createCharts();
+        }, function (fail) {
+          console.log('Problem getting chart template', fail)
+        });
+      }else{
+        $scope.createCharts();
+      }
 
       //todo - this is a temporary lookup for edge. need to add columns to attendee db for pic and twitter
       $scope.getPanelist = function(sessionID, name) {
