@@ -6,6 +6,7 @@
   <div class="large-12 columns">
     <h2 class="loading-title bold" ng-if="!twoOptionsList">Loading your report <br/><div class="loading center style-2"></div></h2>
     <h2 class="session-title bold" ng-if="twoOptionsList" >{{sessionData.sessionName}}</h2>
+    <div ng-if="twoOptionsList" class="right"><a class="label" href="/analytics/edge2013"><i class="pictogram">&#59146;</i> View Related Sessions</a></div>
     <!--<select ng-if="twoOptionsList" ng-model="twoOptionsList.sessionVotesFilter" ng-options="opt.name for opt in twoOptionsList.sessionVotesFilterList">-->
       <!--<option value="">-- chose minimum votes --</option>-->
     <!--</select>-->

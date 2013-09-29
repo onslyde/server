@@ -19,6 +19,7 @@
         <url-pattern>/register</url-pattern>
         <url-pattern>/docs</url-pattern>
         <url-pattern>/analytics</url-pattern>
+        <url-pattern>/analytics/edge2013</url-pattern>
     </servlet-mapping>
     <mime-mapping>
         <extension>appcache</extension>
