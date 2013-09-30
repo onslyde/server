@@ -63,8 +63,8 @@ angular.module('onslyde',
           });
 
         $("#how-can-use").on("orbit:after-slide-change", function (event, orbit) {
-          console.info("after slide change");
-          console.info("slide ", document.querySelectorAll('.slide'));
+//          console.info("after slide change");
+//          console.info("slide ", document.querySelectorAll('.slide'));
           var counter = 1;
           angular.forEach(document.querySelectorAll('.slide'), function (value, key) {
 

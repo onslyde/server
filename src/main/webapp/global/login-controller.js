@@ -41,8 +41,9 @@ onslyde.Controllers.controller('LoginCtrl', [ '$store', '$http', '$scope', '$roo
 
   });
 
-  $('#sign-up').on('invalid', function () {}).on('valid', function () {
+  $('#sign-up').on('invalid', function () {console.log('invalid form')}).on('valid', function () {
     $scope.$apply(function() {
+
       $scope.signup();
     });
 
