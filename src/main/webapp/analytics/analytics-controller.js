@@ -126,7 +126,7 @@ onslyde.Controllers.controller('AnalyticsCtrl',
                       spearkerStat = $scope.twoOptionsList.speakerTotals.splice(d, 1)[0];
 //                      speakerExists = true;
 
-                      console.log(spearkerStat);
+
                       break;
                     }else{
                       spearkerStat = {topic:twooptions.topicName,agree:0,disagree:0,sessions:0,speaker:twooptions.speakerData};
@@ -218,7 +218,7 @@ onslyde.Controllers.controller('AnalyticsCtrl',
 
                 //increment total count for speaker
                 for (var i = 0; i < twooptions.length; i++) {
-                  console.log('-',spearkerStat,twooptions[i].datapoints[twooptions[i].datapoints.length-1])
+
                   spearkerStat[twooptions[i].label] += twooptions[i].datapoints[twooptions[i].datapoints.length-1].count;
 
                 }
