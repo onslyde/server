@@ -85,7 +85,7 @@ onslyde.Controllers.controller('AnalyticsCtrl',
                 {name: 3}
               ];
 
-            $scope.twoOptionsList.sessionVotesFilter = $scope.twoOptionsList.sessionVotesFilterList[2];
+            $scope.twoOptionsList.sessionVotesFilter = $scope.twoOptionsList.sessionVotesFilterList[1];
 
             var allVotes = [
               {label:'',datapoints:[]},
@@ -304,7 +304,7 @@ onslyde.Controllers.controller('AnalyticsCtrl',
 
         var allpanels =
         [
-            {name:'Natasha Rooney', org:'GSMA', pic:'http://edgeconf.com/2013-nyc/images/panelists/natasha-rooney.jpg', twitter:'', mod:true},
+            {name:'Natasha Rooney', org:'GSMA', pic:'http://edgeconf.com/2013-nyc/images/panelists/natasha-rooney.jpg', twitter:'thisnatasha', mod:true},
             {name:'Manu Sporny', org:'Digital Bazaar', pic:'http://edgeconf.com/2013-nyc/images/panelists/manu-sporny.jpg', twitter:'manusporny'},
             {name:'Rob Grimshaw', org:'FT.com', pic:'http://edgeconf.com/2013-nyc/images/panelists/rob-grimshaw.jpg', twitter:'r_g'},
             {name:'Cyndy Lobb', org:'Google', pic:'http://edgeconf.com/2013-nyc/images/panelists/cyndy-lobb.jpg', twitter:''},
@@ -347,8 +347,8 @@ onslyde.Controllers.controller('AnalyticsCtrl',
             {name:'Jake Archibald', org:'Google', pic:'http://edgeconf.com/2013-nyc/images/panelists/jake-archibald.jpg', twitter:'jaffathecake', mod:true},
             {name:'Alex Russell', org:'Google', pic:'http://edgeconf.com/2013-nyc/images/panelists/alex-russell.jpg', twitter:'slightlylate'},
             {name:'Matt Andrews', org:'FT Labs', pic:'http://edgeconf.com/2013-nyc/images/panelists/matt-andrews.jpg', twitter:'andrewsmatt'},
-            {name:'Craig Cavalier', org:'LiquidFrameworks', pic:'http://edgeconf.com/2013-nyc/images/panelists/craig-cavalier.jpg', twitter:''},
-            {name:'Calvin Spealman', org:'Caktus Consulting', pic:'http://edgeconf.com/2013-nyc/images/panelists/calvin-spealman.jpg', twitter:''}
+            {name:'Craig Cavalier', org:'LiquidFrameworks', pic:'http://edgeconf.com/2013-nyc/images/panelists/craig-cavalier.jpg', twitter:'CraigCav'},
+            {name:'Calvin Spealman', org:'Caktus Consulting', pic:'http://edgeconf.com/2013-nyc/images/panelists/calvin-spealman.jpg', twitter:'caktusgroup'}
           ];
 
 
