@@ -17,7 +17,16 @@
     <!--<select ng-if="twoOptionsList" ng-model="twoOptionsList.sessionVotesFilter" ng-options="opt.name for opt in twoOptionsList.sessionVotesFilterList">-->
       <!--<option value="">-- chose minimum votes --</option>-->
     <!--</select>-->
-    <p class="text" ng-if="twoOptionsList">There were {{twoOptionsList.totals.agree}} agree votes and {{twoOptionsList.totals.disagree}} disagree votes during this session. </p>
+    <div class="text" ng-if="twoOptionsList">There were {{twoOptionsList.totals.agree}} agree votes and {{twoOptionsList.totals.disagree}} disagree votes during this session.
+      <br/><br/><div class="light">Speaker Summary:</div>
+      <ul class="inline-list" >
+        <li ng-repeat="speaker in twoOptionsList.speakerTotals | orderBy:'topic'" >
+          <span ng-if="speaker.speaker"><a href="http://twitter.com/{{speaker.speaker.twitter}}" target="_blank">{{speaker.topic}}</a> <span class="agree"><i class="pictogram">&#128077;</i>{{speaker.agree}}</span> <span class="disagree"><i class="pictogram">&#128078;</i>{{speaker.disagree}}</span></span>
+
+        </li>
+      </ul>
+
+    </div>
     <!--<span class="label right" ng-if="twoOptionsList">Click on a point in the timeseries chart to see the video for each voting period.</span>-->
      <ul ng-repeat="twooption in twoOptionsList | orderBy:'created'" class="chart-list">
        <li class="row">

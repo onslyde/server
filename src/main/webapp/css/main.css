@@ -431,14 +431,40 @@ input[type="text"], input[type="password"], input[type="date"], input[type="date
   list-style: none;
 }
 
-h3.agree {
+h3.agree,
+.agree {
  color: rgba(43,166,203,0.4);
   font-family: 'Lato-Bold', sans-serif;
   margin: 0 0 0 0;
 }
 
-h3.disagree {
+h3.disagree,
+.disagree {
   color: rgba(52,52,52,0.3);
+  font-family: 'Lato-Bold', sans-serif;
+  margin: 0;
+}
+
+
+.agree {
+  color: rgba(43,166,203,0.9);
+  font-family: 'Lato-Bold', sans-serif;
+  margin: 0 0 0 0;
+}
+
+.agree .pictogram {
+  color: rgba(43,166,203,0.4);
+  font-size: 2em
+}
+
+.disagree .pictogram {
+  color: rgba(52,52,52,0.4);
+  font-size: 2em
+}
+
+
+.disagree {
+  color: rgba(52,52,52,0.9);
   font-family: 'Lato-Bold', sans-serif;
   margin: 0;
 }

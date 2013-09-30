@@ -77,7 +77,7 @@ onslyde.Controllers.controller('AnalyticsCtrl',
 
             $scope.twoOptionsList = [];
             $scope.twoOptionsList.totals = {agree: 1, disagree: 1};
-
+            $scope.twoOptionsList.speakerTotals = [];
             $scope.twoOptionsList.sessionVotesFilterList =
               [
                 {name: 1},
@@ -114,11 +114,31 @@ onslyde.Controllers.controller('AnalyticsCtrl',
               twooptions.topicID = value.slides[0].id;
               twooptions.sessionID = $routeParams.sessionID;
 
+              twooptions.speakerData = $scope.getPanelist($routeParams.sessionID,twooptions.topicName);
 
               //if we have atleast 1 vote on the topic
               if(value.slides[0].slideVoteses.length >= $scope.twoOptionsList.sessionVotesFilter.name){
+                var spearkerStat,speakerExists;
+                //see if speaker is already in individual stats
+                if($scope.twoOptionsList.speakerTotals.length > 0){
+                  for(var d=0;d<$scope.twoOptionsList.speakerTotals.length;d++){
+                    if($scope.twoOptionsList.speakerTotals[d].topic === twooptions.topicName){
+                      spearkerStat = $scope.twoOptionsList.speakerTotals.splice(d, 1)[0];
+//                      speakerExists = true;
 
-                twooptions.speakerData = $scope.getPanelist($routeParams.sessionID,twooptions.topicName);
+                      console.log(spearkerStat);
+                      break;
+                    }else{
+                      spearkerStat = {topic:twooptions.topicName,agree:0,disagree:0,sessions:0,speaker:twooptions.speakerData};
+                    }
+                  }
+                }else{
+                  spearkerStat = {topic:twooptions.topicName,agree:0,disagree:0,sessions:0,speaker:twooptions.speakerData};
+                }
+
+
+
+
 
                 var optionTracker = {},
                   slideOptions = value.slides[0].slideOptionses;
@@ -159,7 +179,10 @@ onslyde.Controllers.controller('AnalyticsCtrl',
                         }
                         twooptions[i].datapoints.push({"timestamp":voteTime,"count":optionTracker[twooptions[i].label]++});
                       }
+                      //increment total count for summary
                       $scope.twoOptionsList.totals[twooptions[i].label] += 1;
+
+
 
                       allVotes[i].datapoints.push({"timestamp":voteTime,"count":1});
 
@@ -187,9 +210,20 @@ onslyde.Controllers.controller('AnalyticsCtrl',
 
 
 
+
                   }
 
                 });
+
+
+                //increment total count for speaker
+                for (var i = 0; i < twooptions.length; i++) {
+                  console.log('-',spearkerStat,twooptions[i].datapoints[twooptions[i].datapoints.length-1])
+                  spearkerStat[twooptions[i].label] += twooptions[i].datapoints[twooptions[i].datapoints.length-1].count;
+
+                }
+                spearkerStat.sessions += 1;
+                $scope.twoOptionsList.speakerTotals.push(spearkerStat);
 
                 //sort the labels alphabetically
                 twooptions.sort(function(a, b){
@@ -229,6 +263,8 @@ onslyde.Controllers.controller('AnalyticsCtrl',
                 createClickable(twooptions.chartData.series[1]);
                 $scope.twoOptionsList.push(twooptions);
 
+
+
               }
             });
 
@@ -240,7 +276,7 @@ onslyde.Controllers.controller('AnalyticsCtrl',
 //            });
 //            $scope.twoOptionsList.overviewChart = chartservice.convertPieChart(allVotes, tempPieChart, dataDescription.pie, '');
             if($location.hash()){
-              $timeout(function(){$anchorScroll($location.hash())},5000);
+              $timeout(function(){$anchorScroll($location.hash())},2000);
             }
 
 

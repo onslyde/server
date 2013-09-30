@@ -15,7 +15,9 @@ onslyde.Directives.directive('chart', function ($rootScope) {
     link: function (scope, element, attrs) {
       //we need scope.watch because the value is not populated yet
       //http://stackoverflow.com/questions/14619884/angularjs-passing-object-to-directive
-      scope.$watch('chartdata', function(chartdata,oldchartdata) {
+//      scope.$watch('chartdata', function(chartdata,oldchartdata) {
+
+       var chartdata = scope.chartdata;
 
         if(chartdata){
           //set chart defaults through tag attributes
@@ -135,7 +137,7 @@ onslyde.Directives.directive('chart', function ($rootScope) {
           renderChart(chartsDefaults,chartdata);
         }
 
-      },true)
+//      },true)
     }
   }
 
