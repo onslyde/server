@@ -348,7 +348,7 @@ onslyde.Controllers.controller('AnalyticsCtrl',
             {name:'Alex Russell', org:'Google', pic:'http://edgeconf.com/2013-nyc/images/panelists/alex-russell.jpg', twitter:'slightlylate'},
             {name:'Matt Andrews', org:'FT Labs', pic:'http://edgeconf.com/2013-nyc/images/panelists/matt-andrews.jpg', twitter:'andrewsmatt'},
             {name:'Craig Cavalier', org:'LiquidFrameworks', pic:'http://edgeconf.com/2013-nyc/images/panelists/craig-cavalier.jpg', twitter:'CraigCav'},
-            {name:'Calvin Spealman', org:'Caktus Consulting', pic:'http://edgeconf.com/2013-nyc/images/panelists/calvin-spealman.jpg', twitter:'caktusgroup'}
+            {name:'Calvin Spealman', org:'Caktus Consulting', pic:'http://edgeconf.com/2013-nyc/images/panelists/calvin-spealman.jpg', twitter:'ironfroggy'}
           ];
 
 
