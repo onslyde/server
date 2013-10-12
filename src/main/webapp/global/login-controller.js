@@ -18,6 +18,7 @@ onslyde.Controllers.controller('LoginCtrl', [ '$store', '$http', '$scope', '$roo
         if(data.created){
           $('#signin').foundation('reveal', 'close');
           $rootScope.userInfo = data;
+
           $store.set('userInfo',$rootScope.userInfo)
           $store.bind($rootScope,'userInfo');
           if($rootScope.userInfo && !$rootScope.userInfo.created){

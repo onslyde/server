@@ -76,7 +76,7 @@
       "text": ""
     },
     "tooltip": {
-      "formatter": "return '<span style=\"font-weight:bold;font-size:14px;color:' + this.point.series.color + '\">'+ this.y +' ' + (this.point.name || this.series.name) + ' </span><span style=\"font-weight:bold;\">(click point to see video)</span><br />'+Highcharts.dateFormat('%A %H:%M', this.x) + '<br />'",
+      "formatter": "return '<span style=\"font-weight:bold;font-size:14px;color:' + this.point.series.color + '\">'+ this.y +' ' + (this.point.name || this.series.name) + ' </span><span style=\"font-weight:bold;\"></span><br />'+Highcharts.dateFormat('%A %H:%M', this.x) + '<br />'",
       "borderRadius" : 0
     },
     "xAxis": [
@@ -178,7 +178,7 @@
     },
     "tooltip": {
       "percentageDecimals": 0,
-      "formatter": "return this.x + '<br/>' + '<span style=\"font-weight:bold;font-size:14px;color:' + this.point.series.color + '\">'+ this.y + ' ' + (this.point.name || this.series.name) + ' (click point to see video)</span><br />'",
+      "formatter": "return this.x + '<br/>' + '<span style=\"font-weight:bold;font-size:14px;color:' + this.point.series.color + '\">'+ this.y + ' ' + (this.point.name || this.series.name) + '</span><br />'",
       "borderRadius" : 0
     },
     "xAxis": {

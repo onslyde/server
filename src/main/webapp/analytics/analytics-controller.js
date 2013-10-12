@@ -10,7 +10,13 @@ onslyde.Controllers.controller('AnalyticsCtrl',
 
     $scope.sessionID = $routeParams.sessionID;
 
-    $scope.analyticsSetup = function () {
+    $scope.presAnalyticsSetup = function(){
+
+//      console.log($rootScope.userInfo)
+
+    };
+
+    $scope.panelAnalyticsSetup = function () {
 
       function createGradient(color1, color2) {
         var perShapeGradient = {
@@ -34,7 +40,9 @@ onslyde.Controllers.controller('AnalyticsCtrl',
           labels:['Total'],
           dataAttr:['label', ['timestamp','count']],
           colors:['rgba(43,166,203,0.9)',
-                  'rgba(52,52,52,0.9)'],
+                  'rgba(52,52,52,0.9)',
+            'rgba(169,234,181,0.9)',
+            'rgba(234,209,169,0.9)'],
           borderColor:'#1b97d1'
         },
         pie: {
@@ -42,9 +50,8 @@ onslyde.Controllers.controller('AnalyticsCtrl',
           colors: [
             'rgba(43,166,203,0.4)',
             'rgba(52,52,52,0.3)',
-            'rgba(146,223,129,0.5)',
-            'rgba(146,223,129,0.5)',
-            'rgba(146,223,129,0.5)',
+            'rgba(169,234,181,0.5)',
+            'rgba(234,209,169,0.5)',
             '#ff9191', '#ffa1a1', '#ffb6b6', '#ffcbcb'],
           borderColor: '#ff0303'
         }
@@ -55,25 +62,6 @@ onslyde.Controllers.controller('AnalyticsCtrl',
       $scope.createCharts = function(){
           pagedata.get(null, '/go/analytics/' + $routeParams.sessionID).then(function (success) {
             $rootScope.sessionData = success;
-
-
-            youtubeapi.videoId = $rootScope.sessionData.sessionCode;
-            youtubeapi.loadPlayer();
-
-//              function(){
-//              setTimeout(function(){
-//                if(!$scope.$$phase) {
-//                  $scope.$apply(function () {
-//                    youtubeapi.player.seekTo(0);
-//                  })
-//                }
-//
-//            },10000);
-//            });
-//            $window.onPlayerReady = function(){
-
-//
-//            }
 
             $scope.twoOptionsList = [];
             $scope.twoOptionsList.totals = {agree: 1, disagree: 1};
@@ -87,48 +75,74 @@ onslyde.Controllers.controller('AnalyticsCtrl',
 
             $scope.twoOptionsList.sessionVotesFilter = $scope.twoOptionsList.sessionVotesFilterList[1];
 
-            var allVotes = [
-              {label:'',datapoints:[]},
-              {label:'',datapoints:[]}
-            ];
-
-
             angular.forEach($scope.sessionData.slideGroups, function(value, index){
 
+              var twooptions,
+                voteData,
+                voteOptions,
+                allVotes;
 
-              var options = [
-                {label:'',datapoints:[]},
-                {label:'',datapoints:[]},
-                {label:'',datapoints:[]},
-                {label:'',datapoints:[]}
-              ];
+              if(value.slideGroupOptionses.length > 2){
 
+                twooptions = [
+                  {label:'',datapoints:[]},
+                  {label:'',datapoints:[]},
+                  {label:'',datapoints:[]},
+                  {label:'',datapoints:[]}
+                ];
 
-              var twooptions = [
-                {label:'',datapoints:[]},
-                {label:'',datapoints:[]}
-              ];
+                allVotes = [
+                  {label:'',datapoints:[]},
+                  {label:'',datapoints:[]},
+                  {label:'',datapoints:[]},
+                  {label:'',datapoints:[]}
+                ];
+
+                voteData = value.slideGroupVoteses;
+                voteOptions = value.slideGroupOptionses;
+                twooptions.topicName = value.groupName;
+              }else{
+
+                twooptions = [
+                  {label:'',datapoints:[]},
+                  {label:'',datapoints:[]}
+                ];
+
+                allVotes = [
+                  {label:'',datapoints:[]},
+                  {label:'',datapoints:[]}
+                ];
+                voteData = value.slides[0].slideVoteses;
+                voteOptions = value.slides[0].slideOptionses;
+                twooptions.topicName = value.slides[0].slideIndex;
+              }
+
 
               twooptions.created = value.created;
-              twooptions.topicName = value.slides[0].slideIndex;
+
               twooptions.topicID = value.slides[0].id;
               twooptions.sessionID = $routeParams.sessionID;
 
               twooptions.speakerData = $scope.getPanelist($routeParams.sessionID,twooptions.topicName);
 
+
+              //-------BEGIN
+              //
+              // summary data for UI display at top
+
               //if we have atleast 1 vote on the topic
-              if(value.slides[0].slideVoteses.length >= $scope.twoOptionsList.sessionVotesFilter.name){
+              if(voteData.length >= $scope.twoOptionsList.sessionVotesFilter.name){
                 var spearkerStat,speakerExists;
-                //see if speaker is already in individual stats
+                //see if speaker (aka topic) is already in individual stats
+
                 if($scope.twoOptionsList.speakerTotals.length > 0){
                   for(var d=0;d<$scope.twoOptionsList.speakerTotals.length;d++){
                     if($scope.twoOptionsList.speakerTotals[d].topic === twooptions.topicName){
                       spearkerStat = $scope.twoOptionsList.speakerTotals.splice(d, 1)[0];
-//                      speakerExists = true;
-
-
+                      //topic does exist so break
                       break;
                     }else{
+                      //add a new object for topic
                       spearkerStat = {topic:twooptions.topicName,agree:0,disagree:0,sessions:0,speaker:twooptions.speakerData};
                     }
                   }
@@ -136,13 +150,11 @@ onslyde.Controllers.controller('AnalyticsCtrl',
                   spearkerStat = {topic:twooptions.topicName,agree:0,disagree:0,sessions:0,speaker:twooptions.speakerData};
                 }
 
-
-
+               //-------END
 
 
                 var optionTracker = {},
-                  slideOptions = value.slides[0].slideOptionses;
-
+                  slideOptions = voteOptions;
 
                 //get list of available options
                 for(var i=0;i<slideOptions.length;i++){
@@ -153,10 +165,17 @@ onslyde.Controllers.controller('AnalyticsCtrl',
                 }
 
 
-                //get the votes and attendee data
-                angular.forEach(value.slides[0].slideVoteses, function(vote, toindex){
+                //get the votes and attendee data for agree/disagree ONLY options
+                angular.forEach(voteData, function(vote, toindex){
                   var voteTime = vote.voteTime,
-                    attendee = vote.attendee;
+                    attendee = vote.attendee,
+                    thisSlideOptions;
+
+                  if(twooptions.length === 2){
+                    thisSlideOptions = vote.slideOptions;
+                  }else{
+                    thisSlideOptions = vote.slideGroupOptions;
+                  }
 
                   //loop through all options for compare... this is so we can display a growth chart and not just spikes when votes occur
                   for(var i=0;i<twooptions.length;i++){
@@ -168,7 +187,7 @@ onslyde.Controllers.controller('AnalyticsCtrl',
 
                      //if we find a vote, fill it in to the approriate array
                     //todo - cleanup repetitive code
-                    if(twooptions[i].label === vote.slideOptions.name){
+                    if(twooptions[i].label === thisSlideOptions.name){
 
                       if(optionTracker[twooptions[i].label] === 0  && totalLength.timestamp === 0){
                         twooptions[i].datapoints[0] = {"timestamp":voteTime,"count":1};
@@ -177,12 +196,11 @@ onslyde.Controllers.controller('AnalyticsCtrl',
                         if(optionTracker[twooptions[i].label] === 0){
                           optionTracker[twooptions[i].label] = 1;
                         }
+                        //increment the option tracker for this label by 1
                         twooptions[i].datapoints.push({"timestamp":voteTime,"count":optionTracker[twooptions[i].label]++});
                       }
                       //increment total count for summary
                       $scope.twoOptionsList.totals[twooptions[i].label] += 1;
-
-
 
                       allVotes[i].datapoints.push({"timestamp":voteTime,"count":1});
 
@@ -191,10 +209,8 @@ onslyde.Controllers.controller('AnalyticsCtrl',
 
                       if(optionTracker[twooptions[i].label] === 0 && totalLength.timestamp === 0){
                         twooptions[i].datapoints[0] = {"timestamp":voteTime,"count":optionTracker[twooptions[i].label]};
-
                       }else{
                         twooptions[i].datapoints.push({"timestamp":voteTime,"count":optionTracker[twooptions[i].label]});
-
                       }
                       allVotes[i].datapoints.push({"timestamp":voteTime,"count":0});
 
@@ -208,9 +224,6 @@ onslyde.Controllers.controller('AnalyticsCtrl',
                     });
 
 
-
-
-
                   }
 
                 });
@@ -218,9 +231,7 @@ onslyde.Controllers.controller('AnalyticsCtrl',
 
                 //increment total count for speaker
                 for (var i = 0; i < twooptions.length; i++) {
-
                   spearkerStat[twooptions[i].label] += twooptions[i].datapoints[twooptions[i].datapoints.length-1].count;
-
                 }
                 spearkerStat.sessions += 1;
                 $scope.twoOptionsList.speakerTotals.push(spearkerStat);
@@ -240,9 +251,8 @@ onslyde.Controllers.controller('AnalyticsCtrl',
                 twooptions.chartData = chartservice.convertLineChart(twooptions, tempLineChart, dataDescription.timeseries, '');
                 twooptions.pieChartData = chartservice.convertPieChart(twooptions, tempPieChart, dataDescription.pie, '');
 
-//                youtubeapi.bindVideoPlayer('analytics-player');
 
-                var createClickable = function(series) {
+                var createYoutubeClickable = function(series) {
 
                   series.point = {events: {
                     click: function (event) {
@@ -259,8 +269,10 @@ onslyde.Controllers.controller('AnalyticsCtrl',
                   };
                 }
 
-                createClickable(twooptions.chartData.series[0]);
-                createClickable(twooptions.chartData.series[1]);
+                if($rootScope.sessionData.sessionCode && $rootScope.sessionData.sessionCode !== 'beta'){
+                  createYoutubeClickable(twooptions.chartData.series[0]);
+                  createYoutubeClickable(twooptions.chartData.series[1]);
+                }
                 $scope.twoOptionsList.push(twooptions);
 
 
@@ -268,13 +280,7 @@ onslyde.Controllers.controller('AnalyticsCtrl',
               }
             });
 
-//            var tempPieChart = angular.copy($rootScope.chartTemplate.pie);
-//            allVotes.sort(function(a, b){
-//              a = a['label'].toLowerCase();
-//              b = b['label'].toLowerCase();
-//              return a > b ? 1 : a < b ? -1 : 0;
-//            });
-//            $scope.twoOptionsList.overviewChart = chartservice.convertPieChart(allVotes, tempPieChart, dataDescription.pie, '');
+            //todo change timeout to after angular document loaded
             if($location.hash()){
               $timeout(function(){$anchorScroll($location.hash())},2000);
             }

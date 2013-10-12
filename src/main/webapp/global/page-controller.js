@@ -18,7 +18,7 @@ onslyde.Controllers.controller('PageCtrl',
                      $q,
                      $route,
                      $store) {
-      console.log($location)
+
       $scope.location = $location;
 
 

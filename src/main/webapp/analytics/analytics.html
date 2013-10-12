@@ -1,13 +1,24 @@
-<div class="row" ng-if="!sessionID">
+<div class="row" ng-if="!sessionID && !userInfo.name">
   <div class="large-12 columns">
      <p>You must be logged in to view the analytics for your sessions.</p>
      <p>If you're just kicking the tires, check out the data from <a href="/analytics/edge2013">the Edge Conf New York panels</a>.</p>
   </div>
 </div>
 
-<div class="row" ng-if="sessionID" ng-init="analyticsSetup()">
-  <div id="chart_movie" class="reveal-modal medium" style="text-align:center">
-    <div youtube id="analytics-player"></div>
+<div class="row" ng-if="!sessionID && userInfo.name" ng-init="presAnalyticsSetup()">
+  <div class="large-12 columns">
+    <h2>Your Sessions:</h2>
+    <ul>
+      <li ng-repeat="session in userInfo.sessions">
+        <a href="/analytics?sessionID={{session.id}}">{{session.sessionName}}</a>
+      </li>
+    </ul>
+  </div>
+</div>
+
+<div class="row" ng-if="sessionID" ng-init="panelAnalyticsSetup()">
+  <div ng-if="sessionData.sessionCode && sessionData.sessionCode != 'beta'" id="chart_movie" class="reveal-modal medium" style="text-align:center">
+    <div youtube sessionId="{{sessionData.sessionCode}}" id="analytics-player"></div>
   </div>
 
   <div class="large-12 columns">

@@ -16,12 +16,12 @@ onslyde.Services.factory('youtubeapi', function ($window, $rootScope, $log) {
   service.playerWidth = '640';
 
   service.bindVideoPlayer = function (elementId) {
-    $log.info('Binding to player ' + elementId);
+//    $log.info('Binding to player ' + elementId);
     service.playerId = elementId;
   };
 
   service.createPlayer = function () {
-    $log.info('Creating a new Youtube player for DOM id ' + this.playerId + ' and video ' + this.videoId);
+//    $log.info('Creating a new Youtube player for DOM id ' + this.playerId + ' and video ' + this.videoId);
     return new YT.Player(this.playerId, {
       height: this.playerHeight,
       width: this.playerWidth,
@@ -38,9 +38,7 @@ onslyde.Services.factory('youtubeapi', function ($window, $rootScope, $log) {
       if(this.player) {
         this.player.destroy();
       }
-
       this.player = this.createPlayer();
-
     }
   };
 
