@@ -49,7 +49,7 @@
     Agree
 </div>
 <div id="stats">
-    <span><span id="wscount"></span> WebSocket </span><span><span id="pollcount"></span> Polling</span>
+    <span><span id="wscount"></span> Connected Attendees</span>
 </div>
 <div class="reveal">
     <div class="address">
@@ -110,7 +110,7 @@
         <section class="slide-group">
 
             <section>
-                <p><a target="_blank" href="http://onslyde.com/analytics.html">You can view the analytics for this session</a></p>
+                <p><a target="_blank" href="http://onslyde.com/#!/analytics">You can view the analytics for this session</a></p>
                 <p>You can use other features (like Roulette) for random giveaways or to choose an audience member</p>
                 <a href="javascript:onslyde.slides.roulette();void(0)">Pick a winner</a>
             </section>

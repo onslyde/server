@@ -5,28 +5,27 @@
     <p>Create your account to get started on your first presentation.</p>
 
     <div ng-controller="LoginCtrl">
-      {{registerAlert}}
-
-      <form id="sign-up" name="sign-up" data-abide>
-        <div class="large-7">
+      <div ng-if="registerAlert" class="validation error header">{{registerAlert}}</div>
+      <form id="signup" name="signup" ng-submit="registerUser()" novalidate>
+        <div class="large-12">
           <label>Your Name</label>
-          <input ng-model="register.fullName" type="text" placeholder="Your Name" required pattern="[a-zA-Z]+">
-          <small class="error">Name is required and must be a string.</small>
+          <input ng-model="register.fullName" type="text" name="fullName" placeholder="Your Name" ng-required="signup.$dirty">
+          <div ng-show="signup.fullName.$invalid" class="validation error">Name is required and must be a string.</div>
         </div>
-        <div class="large-7">
+        <div class="large-12">
           <label>Email</label>
-          <input ng-model="register.email" type="email" placeholder="you@somewhere.com" required pattern="email">
-          <small class="error">Email is required  and should be in proper format (you@somewhere.com)</small>
+          <input ng-model="register.email" name="email" type="email" placeholder="you@somewhere.com" ng-required="signup.$dirty" pattern="email">
+          <div ng-show="signup.email.$invalid" class="validation error">Email is required  and should be in proper format (you@somewhere.com)</div>
         </div>
-        <div class="large-7">
+        <div class="large-12">
           <div class="row collapse">
             <label>Password</label>
-            <input ng-model="register.password" type="password" placeholder="something secret" required>
-            <small class="error">Password must be within 3 to 14 characters.</small>
+            <input ng-model="register.password" name="password" type="password" placeholder="something secret" ng-required="signup.$dirty">
+            <div ng-show="signup.password.$invalid" class="validation error">Password must be at least 3 characters.</div>
           </div>
         </div>
-        <div class="large-7">
-          <button type="submit" class="button right" >Create</button>
+        <div class="large-12"> {{signupButton}}
+          <button type="submit" ng-disabled="signup.$invalid || signupButton.disabled" class="button right">{{signupButton.label}}</button>
         </div>
       </form>
 

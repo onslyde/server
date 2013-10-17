@@ -47,28 +47,27 @@
     <p>Create your account to get started on your first presentation.</p>
 
     <div ng-controller="LoginCtrl">
-      {{registerAlert}}
-
-      <form id="sign-up" name="sign-up" data-abide>
+      <div ng-if="registerAlert" class="validation error header">{{registerAlert}}</div>
+      <form id="signup" name="signup" ng-submit="registerUser()" novalidate>
         <div class="large-12">
           <label>Your Name</label>
-          <input ng-model="register.fullName" type="text" placeholder="Your Name" required pattern="[a-zA-Z]+">
-          <small class="error">Name is required and must be a string.</small>
+          <input ng-model="register.fullName" type="text" name="fullName" placeholder="Your Name" ng-required="signup.$dirty">
+          <div ng-show="signup.fullName.$invalid" class="validation error">Name is required and must be a string.</div>
         </div>
         <div class="large-12">
           <label>Email</label>
-          <input ng-model="register.email" type="email" placeholder="you@somewhere.com" required pattern="email">
-          <small class="error">Email is required  and should be in proper format (you@somewhere.com)</small>
+          <input ng-model="register.email" name="email" type="email" placeholder="you@somewhere.com" ng-required="signup.$dirty" pattern="email">
+          <div ng-show="signup.email.$invalid" class="validation error">Email is required  and should be in proper format (you@somewhere.com)</div>
         </div>
         <div class="large-12">
           <div class="row collapse">
             <label>Password</label>
-            <input ng-model="register.password" type="password" placeholder="something secret" required>
-            <small class="error">Password must be within 3 to 14 characters.</small>
+            <input ng-model="register.password" name="password" type="password" placeholder="something secret" ng-required="signup.$dirty">
+            <div ng-show="signup.password.$invalid" class="validation error">Password must be at least 3 characters.</div>
           </div>
         </div>
         <div class="large-12">
-          <button type="submit" class="button right" ng-click="register.email ? signup() : null">Create</button>
+          <button type="submit" ng-disabled="signup.$invalid || signupButton.disabled" class="button right">{{signupButton.label}}</button>
         </div>
       </form>
 
@@ -80,12 +79,12 @@
       <h2>Realtime Presentations</h2>
       <div class="row collapse">
 
-        <p>Now create your presentation. <a href="/gettingstarted">Get started here</a>.</p>
+        <p>Now create your presentation. <a href="#!/gettingstarted">Get started here</a>.</p>
 
         <form action="http://onslyde.us7.list-manage.com/subscribe/post?u=9e6d1ccd730f736331bb99246&amp;id=f2338862b0" method="post" id="mc-embedded-subscribe-form" name="mc-embedded-subscribe-form" class="validate small-12" target="_blank" novalidate>
           <label for="mce-EMAIL">Or subscribe to get the latest updates on onslyde.</label>
           <input type="email" value="" name="EMAIL" class="email" id="mce-EMAIL" placeholder="email address" required>
-          <input type="submit" value="Subscribe" name="subscribe" id="mc-embedded-subscribe" class="button">
+          <button type="submit" value="Subscribe" name="subscribe" id="mc-embedded-subscribe" class="button">Subscribe</button>
         </form>
 
 
@@ -115,7 +114,7 @@
   </div>
   <div class="large-4 columns text-right">
     <h2>Results</h2>
-    <a href="/analytics"><img src="images/results.png"/></a>
+    <a href="#!/analytics"><img src="images/results.png"/></a>
   </div>
 </div>
 

@@ -10,7 +10,32 @@
     After you view the presentation, you must download it and edit it on your computer. You can then open and review it in your browser.</p>
     <div class="row">
     <ol class="large-12 columns">
-      <li ng-if="!userInfo.created">First, <a href="/register">you must create an account,</a> which only takes 2 seconds, <a data-reveal-id="signin-container">or Sign in.</a></li>
+      <li ng-if="!userInfo.created">First, <a href="#!/register">you must create an account,</a> which only takes 2 seconds, <a data-reveal-id="signin-container">or Sign in.</a></li>
+      <li ng-if="!userInfo.created">Or select a demo:
+        <div class="row">
+          <div class="large-3 columns text-center">
+            <h2>RevealJS</h2>
+            <a ng-click="getstarted.deck = 'reveal'" ng-class="getstarted.deck === 'reveal' ? 'active-deck' : ''"><img src="images/revealjs-tn.png"/></a>
+          </div>
+          <div class="large-3 columns text-center">
+            <h2>ImpressJS</h2>
+            <a ng-click="getstarted.deck = 'impress'" ng-class="getstarted.deck === 'impress' ? 'active-deck' : ''"><img src="images/impressjs-tn.png"/></a>
+          </div>
+          <div class="large-3 columns text-center">
+            <h2>BespokeJS</h2>
+            <a ng-click="getstarted.deck = 'bespoke'" ng-class="getstarted.deck === 'bespoke' ? 'active-deck' : ''"><img src="images/bespokejs-tn.png"/></a>
+          </div>
+          <div class="large-3 columns text-center">
+            <h2>Simple HTML</h2>
+            <a ng-click="getstarted.deck = 'simple'" ng-class="getstarted.deck === 'simple' ? 'active-deck' : ''"><img src="images/simple-html-tn.png"/></a>
+          </div>
+        </div>
+      </li>
+      <li class="margin-top25" ng-if="!userInfo.created">Note - This is only a demo. You will want to sign in and use your own private session ID when you are ready to present.
+        <div>
+          <a ng-click="viewPres(true)" class="button">Preview</a>
+        </div>
+      </li>
       <li  ng-if="userInfo.created">First, give it a title.
         <div class="large-12">
           <div class="row collapse">
@@ -60,7 +85,27 @@
           </div>
         </div>
       </li>
-      <li ng-if="userInfo.created">Finally view and save your presentation.
+      <li ng-if="userInfo.created">Pick your presentation framework:
+        <div class="row">
+          <div class="large-3 columns text-center">
+            <h2>RevealJS</h2>
+            <a ng-click="getstarted.deck = 'reveal'" ng-class="getstarted.deck === 'reveal' ? 'active-deck' : ''"><img src="images/revealjs-tn.png"/></a>
+          </div>
+          <div class="large-3 columns text-center">
+            <h2>ImpressJS</h2>
+            <a ng-click="getstarted.deck = 'impress'" ng-class="getstarted.deck === 'impress' ? 'active-deck' : ''"><img src="images/impressjs-tn.png"/></a>
+          </div>
+          <div class="large-3 columns text-center">
+            <h2>BespokeJS</h2>
+            <a ng-click="getstarted.deck = 'bespoke'" ng-class="getstarted.deck === 'bespoke' ? 'active-deck' : ''"><img src="images/bespokejs-tn.png"/></a>
+          </div>
+          <div class="large-3 columns text-center">
+            <h2>Simple HTML</h2>
+            <a ng-click="getstarted.deck = 'simple'" ng-class="getstarted.deck === 'simple' ? 'active-deck' : ''"><img src="images/simple-html-tn.png"/></a>
+          </div>
+        </div>
+      </li>
+      <li class="margin-top25" ng-if="userInfo.created">Finally view and save your presentation. (If you already have a presentation and need a new session ID, use the one generated in your preview)
       <div>
         <a ng-click="(userInfo.created && getstarted.presName) ? viewPres() : ''" class="button">Preview</a>
       </div></li>

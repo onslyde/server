@@ -5,13 +5,17 @@ onslyde.Controllers.controller('LoginCtrl', [ '$store', '$http', '$scope', '$roo
   $store.bind($rootScope,'userInfo');
 
 
-
-
+  $scope.loginButton = {label:"Sign In",disabled:false};
 
   $scope.login = function(email,password) {
 
-    var email = (email || $scope.login_email);
-    var password = (password || $scope.login_password);
+//    if($scope.signin.$valid){
+
+    $scope.loginButton.label = "Signing in...";
+    $scope.loginButton.disabled = true;
+
+    var email = (email || $scope.login.email);
+    var password = (password || $scope.login.password);
 
     $http({method: 'POST', url: $scope.urls() + '/go/members/login', data: $.param({email:email,password:password}), headers: {'Content-Type': 'application/x-www-form-urlencoded'}}).
       success(function(data, status, headers, config) {
@@ -19,41 +23,37 @@ onslyde.Controllers.controller('LoginCtrl', [ '$store', '$http', '$scope', '$roo
           $('#signin').foundation('reveal', 'close');
           $rootScope.userInfo = data;
 
-          $store.set('userInfo',$rootScope.userInfo)
+          $store.set('userInfo',$rootScope.userInfo);
           $store.bind($rootScope,'userInfo');
-          if($rootScope.userInfo && !$rootScope.userInfo.created){
-            $scope.loginAlert = 'There was a problem logging in.'
-          }
+
+        }else{
+          $scope.loginAlert = 'There was a problem logging in: ' + data.name;
         }
+        $scope.loginButton.label = "Sign In";
+        $scope.loginButton.disabled = false;
+
       }).
       error(function(data, status, headers, config) {
         $scope.loginAlert = 'Wrong password or user not found.'
+        $scope.loginButton.label = "Sign In";
+        $scope.loginButton.disabled = false;
       });
 
+//    }
+//    $scope.signin.$setPristine();
+  };
 
-  }
-
-
-  //hooks into foundations validation - todo - fix with oob angular (or directive)
-  $('#signin').on('invalid', function () {}).on('valid', function () {
-    $scope.$apply(function() {
-      $scope.login();
-    });
-
-  });
-
-  $('#sign-up').on('invalid', function () {console.log('invalid form')}).on('valid', function () {
-    $scope.$apply(function() {
-
-      $scope.signup();
-    });
-
-    });
 
   $scope.register = {};
   $scope.registerMessage = '';
+  $scope.signupButton = {label:"Create",disabled:false};
 
-  $scope.signup = function() {
+  $scope.registerUser = function() {
+
+    if($scope.signup.$valid){
+
+    $scope.signupButton.disabled = true;
+    $scope.signupButton.label = "Creating...";
 
     var email = $scope.register.email;
     var password = $scope.register.password;
@@ -66,10 +66,16 @@ onslyde.Controllers.controller('LoginCtrl', [ '$store', '$http', '$scope', '$roo
         $store.set('registerMessage',$rootScope.registerMessage)
         $scope.login(email,password)
         $location.path('/gettingstarted');
+        $scope.signupButton.disabled = false;
+        $scope.signupButton.label = "Create";
       }).
       error(function(data, status, headers, config) {
-        $scope.registerAlert = 'Problem registering user.'
+        $scope.registerAlert = 'Problem registering user: ' + data.email;
+        $scope.signupButton.disabled = false;
+        $scope.signupButton.label = "Create";
       });
+
+    }
 
 
   }

@@ -3,7 +3,7 @@ cp -rf \
 /Users/wesleyhales/dev/onslyde/src/main/webapp/js \
 /Users/wesleyhales/dev/onslyde/src/main/webapp/css \
 /Users/wesleyhales/dev/onslyde/src/main/webapp/index.html \
-/Users/wesleyhales/dev/onslyde/src/main/webapp/prestemplate.jsp \
+/Users/wesleyhales/dev/onslyde/src/main/webapp/prestemplate* \
 /Users/wesleyhales/dev/onslyde/src/main/webapp/remote.html \
 /Users/wesleyhales/dev/onslyde/src/main/webapp/example-deck.html \
 /Users/wesleyhales/dev/onslyde/src/main/webapp/example-panel.html \

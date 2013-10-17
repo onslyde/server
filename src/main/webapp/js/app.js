@@ -29,7 +29,7 @@ angular.module('onslyde',
       .otherwise({redirectTo: '/home'});
 
     $locationProvider
-      .html5Mode(true)
+      .html5Mode(false)
       .hashPrefix('!');
 
 
@@ -55,12 +55,7 @@ angular.module('onslyde',
 
 
         $(document)
-          .foundation()
-          .foundation('abide', {
-            patterns: {
-              password: /^[a-zA-Z]\w{3,14}$/
-            }
-          });
+          .foundation();
 
         $("#how-can-use").on("orbit:after-slide-change", function (event, orbit) {
 //          console.info("after slide change");

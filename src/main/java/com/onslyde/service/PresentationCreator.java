@@ -112,7 +112,8 @@ public class PresentationCreator {
     @Path("/download")
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces("text/html")
-    public void downloadPres(@QueryParam("email") String email,
+    public void downloadPres(@QueryParam("deckType") String deckType,
+                         @QueryParam("email") String email,
                          @QueryParam("token") String token,
                          @QueryParam("twitter") String twitter,
                          @QueryParam("sessionId") String sessionId,
@@ -145,7 +146,16 @@ public class PresentationCreator {
 
 //        response.setHeader("Access-Control-Allow-Origin","http://localhost:8001");
 //        response.sendRedirect("/prestemplate.jsp");
-        request.getRequestDispatcher("/prestemplate.jsp").forward(request, response);
+        if(deckType.equals("reveal")){
+            request.getRequestDispatcher("/prestemplate-reveal.jsp").forward(request, response);
+        }else if(deckType.equals("impress")){
+            request.getRequestDispatcher("/prestemplate-impress.jsp").forward(request, response);
+        }else if(deckType.equals("bespoke")){
+            request.getRequestDispatcher("/prestemplate-bespoke.jsp").forward(request, response);
+        }else{
+            request.getRequestDispatcher("/prestemplate-simple.jsp").forward(request, response);
+        }
+
 
 //        System.out.println("-----" + response.toString());
 //        BufferedWriter bw = new BufferedWriter( new OutputStreamWriter(response.getOutputStream() ) );

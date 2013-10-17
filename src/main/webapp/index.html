@@ -27,20 +27,20 @@
 
   <fieldset ng-controller="LoginCtrl">
 
-    <form name="signin" id="signin"  data-abide >
-      {{loginAlert}}
+    <form name="signin" ng-submit="login()" novalidate id="signin">
+      <div ng-if="loginAlert" class="validation error header">{{loginAlert}}</div>
       <div class="large-12">
         <label>Email</label>
-        <input type="text" placeholder="you@somewhere.com" required pattern="email" ng-model="login_email">
-        <small class="error">Email is required  and should be in proper format (you@somewhere.com)</small>
+        <input type="email" name="email" placeholder="you@somewhere.com" ng-required="true" ng-model="login.email">
+        <div ng-show="signin.email.$dirty && signin.email.$invalid" class="validation error">Email is required and should be in proper format (you@somewhere.com)</div>
       </div>
       <div class="large-12">
         <label>Password</label>
-        <input type="password" placeholder="something secret" required pattern="password" ng-model="login_password">
-        <small class="error">Password must be within 3 to 14 characters.</small>
+        <input type="password" name="password" ng-minlength="3" placeholder="something secret" ng-required="true" ng-model="login.password">
+        <div ng-show="signin.password.$invalid && signin.password.$error.minlength" class="validation error">Password must be at least 3 characters.</div>
       </div>
       <div class="large-12">
-        <button type="submit" class="button right">Sign In</button>
+        <button type="submit" ng-disabled="signin.$invalid || loginButton.disabled" class="button right">{{loginButton.label}}</button>
       </div>
     </form>
 
@@ -49,15 +49,18 @@
 
 <div class="row">
   <div class="large-3 columns">
-    <h1 class="logo"><a href="/home">onslyde</a></h1>
+    <h1 class="logo"><a href="#!/home">onslyde</a></h1>
   </div>
   <div class="large-9 columns">
     <ul class="top-buttons button-group right" ng-controller="LoginCtrl">
-      <li><a href="/gettingstarted" class="o-button"><i class="pictogram">&#128213;</i> Getting Started</a></li>
+      <li><a ng-href="#!/gettingstarted" class="o-button"><i class="pictogram">&#128213;</i> Getting Started</a></li>
       <li ng-if="userInfo.created">{{userInfo.name}} | <a ng-click="logout()"><i class="pictogram">&#59201;</i> Sign Out</a></li>
-      <li ng-if="!userInfo.created"><a data-reveal-id="signin-container" class="o-button"><i class="pictogram" style="margin:0 5px 0 0">&#59198;</i>Sign In</a></li>
+      <li ng-if="!userInfo.created" ng-controller="LoginCtrl">
+        <a data-reveal-id="signin-container" class="o-button"><i class="pictogram" style="margin:0 5px 0 0">&#59198;</i>Sign In</a>
+      </li>
     </ul>
   </div>
+
 </div>
 
 <div ng-view></div>

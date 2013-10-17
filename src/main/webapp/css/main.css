@@ -191,6 +191,44 @@ input[type="text"], input[type="password"], input[type="date"], input[type="date
   color: #383838;
 }
 
+/*--------------------- forms*/
+
+.validation {
+  margin: -14px 0 14px 0;
+  padding: 3px;
+  color: #747474;
+  font-size: .8em;
+}
+.error {
+  background-color: #ececec;
+}
+
+.validation.error.header {
+  padding: 5px;
+  margin: 10px 0;
+  color: #e74c3c;
+  background-color:#fff;
+}
+
+form[novalidate] input {
+  border-left-width: 8px;
+  border-color: #3498db;
+  border-style:solid;
+}
+
+input[required].ng-pristine {
+  border-color: #e74c3c;
+}
+
+input.ng-invalid.ng-dirty {
+  border-color:#e74c3c;
+}
+
+input.ng-valid.ng-dirty {
+  border-color: #2ecc71;
+}
+
+
 /*--------------------- home styles*/
 
 
@@ -517,4 +555,9 @@ h3.disagree {
   position: absolute;
   right: 0;
   bottom: 0;
+}
+
+.active-deck {
+  border: 2px solid #777;
+  display: block;
 }
