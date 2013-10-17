@@ -13,10 +13,10 @@
     <link href="http://fonts.googleapis.com/css?family=Open+Sans:regular,semibold,italic,italicsemibold|PT+Sans:400,700,400italic,700italic|PT+Serif:400,700,400italic,700italic" rel="stylesheet" />
 
 
-    <link href="/js/libs/impress/impress-demo.css" rel="stylesheet" />
+    <link href="http://onslyde.com/js/libs/impress/impress-demo.css" rel="stylesheet" />
 
     <link href="http://fonts.googleapis.com/css?family=Lato:300,400,700,900" rel="stylesheet" type="text/css">
-    <link href="/css/deck.css" rel="stylesheet" />
+    <link href="http://onslyde.com/css/deck.css" rel="stylesheet" />
 
     <link rel="apple-touch-icon" href="apple-touch-icon.png" />
 </head>
@@ -143,10 +143,10 @@
 </script>
 
 
-<script src="/js/libs/impress/impress.js"></script>
+<script src="http://onslyde.com/js/libs/impress/impress.js"></script>
 <script>impress().init();</script>
 
-<script src="/js/onslyde-1.0.0.deck.js"></script>
+<script src="http://onslyde.com/js/onslyde-1.0.0.deck.js"></script>
 <script>
 
     onslyde({
@@ -154,8 +154,8 @@
     });
 </script>
 <script src="http://code.jquery.com/jquery-1.8.3.min.js"></script>
-<script src="/js/libs/jquery.flot.js"></script>
-<script src="/js/deck.js"></script>
+<script src="http://onslyde.com/js/libs/jquery.flot.js"></script>
+<script src="http://onslyde.com/js/deck.js"></script>
 
 </body>
 </html>

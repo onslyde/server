@@ -13,8 +13,8 @@
     <!-- controls the appearance of the status bar in full-screen mode -->
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
 
-    <link rel="stylesheet" media="all" href="/css/slidfast.css" />
-    <link href="/css/deck.css" rel="stylesheet" />
+    <link rel="stylesheet" media="all" href="http://onslyde.com/css/slidfast.css" />
+    <link href="http://onslyde.com/css/deck.css" rel="stylesheet" />
 
 
     <style>
@@ -127,7 +127,7 @@
 </div>
 
 
-<script src="/js/onslyde-1.0.0.deck.js"></script>
+<script src="http://onslyde.com/js/onslyde-1.0.0.deck.js"></script>
 <script>
 
     onslyde({
@@ -135,7 +135,7 @@
     });
 </script>
 <script src="http://code.jquery.com/jquery-1.8.3.min.js"></script>
-<script src="/js/libs/jquery.flot.js"></script>
-<script src="/js/deck.js"></script>
+<script src="http://onslyde.com/js/libs/jquery.flot.js"></script>
+<script src="http://onslyde.com/js/deck.js"></script>
 </body>
 </html>
