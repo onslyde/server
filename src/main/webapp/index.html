@@ -53,9 +53,10 @@
   </div>
   <div class="large-9 columns">
     <ul class="top-buttons button-group right" ng-controller="LoginCtrl">
+      <li ng-cloak ng-if="userInfo.created"><a ng-href="#!/analytics" ><i class="pictogram">&#128202</i> Your Sessions</a></li>
       <li><a ng-href="#!/gettingstarted" class="o-button"><i class="pictogram">&#128213;</i> Getting Started</a></li>
-      <li ng-if="userInfo.created">{{userInfo.name}} | <a ng-click="logout()"><i class="pictogram">&#59201;</i> Sign Out</a></li>
-      <li ng-if="!userInfo.created" ng-controller="LoginCtrl">
+      <li ng-cloak ng-if="userInfo.created">{{userInfo.name}} | <a ng-click="logout()"><i class="pictogram">&#59201;</i> Sign Out</a></li>
+      <li ng-cloak ng-if="!userInfo.created" ng-controller="LoginCtrl">
         <a data-reveal-id="signin-container" class="o-button"><i class="pictogram" style="margin:0 5px 0 0">&#59198;</i>Sign In</a>
       </li>
     </ul>
