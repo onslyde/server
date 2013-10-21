@@ -1,6 +1,6 @@
 onslyde.Services.factory('youtubeapi', function ($window, $rootScope, $log) {
 
-  var service = $rootScope.$new(true);
+  var service = $rootScope;
 
   // Youtube callback when API is ready
   $window.onYouTubeIframeAPIReady = function () {

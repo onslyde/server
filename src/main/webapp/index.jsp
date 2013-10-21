@@ -9,6 +9,6 @@
 //    System.out.println("request URL= " + request.getRequestURL());
 //    System.out.println("request URI= " + request.getRequestURI());
 //    System.out.println("getQueryString= " + request.getQueryString());
-    String url = "/index.html#!" + request.getRequestURI() + "?" + request.getQueryString();
+    String url = "/index.html#!" + request.getRequestURI() + (request.getQueryString() != null ? "?" + request.getQueryString() : "");
 %>
 <c:redirect url="<%=url%>"/>
