@@ -11,8 +11,12 @@ onslyde.Controllers.controller('AnalyticsCtrl',
     $scope.sessionID = $routeParams.sessionID;
 
     $scope.presAnalyticsSetup = function(){
+      pagedata.get(null, '/go/analytics/list/' + $rootScope.userInfo.id).then(function (success) {
+        $scope.sessionList = success;
+      }, function (fail) {
+        console.log('Problem getting session list', fail)
+      });
 
-//      console.log($rootScope.userInfo)
 
     };
 
@@ -40,9 +44,9 @@ onslyde.Controllers.controller('AnalyticsCtrl',
           labels:['Total'],
           dataAttr:['label', ['timestamp','count']],
           colors:['rgba(43,166,203,0.9)',
-                  'rgba(52,52,52,0.9)',
+                  'rgba(52,52,52,0.3)',
             'rgba(169,234,181,0.9)',
-            'rgba(234,209,169,0.9)'],
+            'rgba(43,43,43,0.5)'],
           borderColor:'#1b97d1'
         },
         pie: {
@@ -51,7 +55,7 @@ onslyde.Controllers.controller('AnalyticsCtrl',
             'rgba(43,166,203,0.4)',
             'rgba(52,52,52,0.3)',
             'rgba(169,234,181,0.5)',
-            'rgba(234,209,169,0.5)',
+            'rgba(43,43,43,0.5)',
             '#ff9191', '#ffa1a1', '#ffb6b6', '#ffcbcb'],
           borderColor: '#ff0303'
         }
@@ -63,17 +67,41 @@ onslyde.Controllers.controller('AnalyticsCtrl',
           pagedata.get(null, '/go/analytics/' + $routeParams.sessionID).then(function (success) {
             $rootScope.sessionData = success;
 
+
             $scope.twoOptionsList = [];
-            $scope.twoOptionsList.totals = {agree: 1, disagree: 1};
-            $scope.twoOptionsList.speakerTotals = [];
-            $scope.twoOptionsList.sessionVotesFilterList =
+
+            $scope.dashBoard = {};
+            $scope.dashBoard.totals = {agree: 1, disagree: 1};
+            $scope.dashBoard.speakerTotals = [];
+            $scope.dashBoard.sessionVotesFilterList =
               [
-                {name: 1},
-                {name: 2},
-                {name: 3}
+                {value: 1},
+                {value: 2},
+                {value: 3},
+                {value: 4},
+                {value: 5},
+                {value: 6},
+                {value: 7},
+                {value: 8},
+                {value: 9},
+                {value: 10}
               ];
 
-            $scope.twoOptionsList.sessionVotesFilter = $scope.twoOptionsList.sessionVotesFilterList[1];
+            $scope.dashBoard.sessionVotesFilter = $scope.dashBoard.sessionVotesFilterList[1];
+
+            $scope.$watch('dashBoard.sessionVotesFilter',function(newVal,oldVal){
+              if(newVal !== oldVal){
+                $scope.twoOptionsList = [];
+                $scope.dashBoard.totals = {agree: 1, disagree: 1};
+                $scope.dashBoard.speakerTotals = [];
+                createCharts();
+              }
+            });
+
+
+            createCharts();
+
+            function createCharts(){
 
             angular.forEach($scope.sessionData.slideGroups, function(value, index){
 
@@ -125,33 +153,11 @@ onslyde.Controllers.controller('AnalyticsCtrl',
 
               twooptions.speakerData = $scope.getPanelist($routeParams.sessionID,twooptions.topicName);
 
-
-              //-------BEGIN
-              //
-              // summary data for UI display at top
-
               //if we have atleast 1 vote on the topic
-              if(voteData.length >= $scope.twoOptionsList.sessionVotesFilter.name){
-                var spearkerStat,speakerExists;
-                //see if speaker (aka topic) is already in individual stats
+              if(voteData.length >= $scope.dashBoard.sessionVotesFilter.value){
 
-                if($scope.twoOptionsList.speakerTotals.length > 0){
-                  for(var d=0;d<$scope.twoOptionsList.speakerTotals.length;d++){
-                    if($scope.twoOptionsList.speakerTotals[d].topic === twooptions.topicName){
-                      spearkerStat = $scope.twoOptionsList.speakerTotals.splice(d, 1)[0];
-                      //topic does exist so break
-                      break;
-                    }else{
-                      //add a new object for topic
-                      spearkerStat = {topic:twooptions.topicName,agree:0,disagree:0,sessions:0,speaker:twooptions.speakerData};
-                    }
-                  }
-                }else{
-                  spearkerStat = {topic:twooptions.topicName,agree:0,disagree:0,sessions:0,speaker:twooptions.speakerData};
-                }
-
-               //-------END
-
+                // summary data for speaker display at top
+                var spearkerStat = getSpeakerSummaryData($scope.dashBoard.speakerTotals,twooptions);
 
                 var optionTracker = {},
                   slideOptions = voteOptions;
@@ -200,7 +206,7 @@ onslyde.Controllers.controller('AnalyticsCtrl',
                         twooptions[i].datapoints.push({"timestamp":voteTime,"count":optionTracker[twooptions[i].label]++});
                       }
                       //increment total count for summary
-                      $scope.twoOptionsList.totals[twooptions[i].label] += 1;
+                      $scope.dashBoard.totals[twooptions[i].label] += 1;
 
                       allVotes[i].datapoints.push({"timestamp":voteTime,"count":1});
 
@@ -234,14 +240,7 @@ onslyde.Controllers.controller('AnalyticsCtrl',
                   spearkerStat[twooptions[i].label] += twooptions[i].datapoints[twooptions[i].datapoints.length-1].count;
                 }
                 spearkerStat.sessions += 1;
-                $scope.twoOptionsList.speakerTotals.push(spearkerStat);
-
-                //sort the labels alphabetically
-                twooptions.sort(function(a, b){
-                  a = a['label'].toLowerCase();
-                  b = b['label'].toLowerCase();
-                  return a > b ? 1 : a < b ? -1 : 0;
-                });
+                $scope.dashBoard.speakerTotals.push(spearkerStat);
 
 
                 var startTime = $rootScope.sessionData.end;
@@ -280,6 +279,9 @@ onslyde.Controllers.controller('AnalyticsCtrl',
               }
             });
 
+
+            }
+
             //todo change timeout to after angular document loaded
             if($location.hash()){
               $timeout(function(){$anchorScroll($location.hash())},2000);
@@ -290,7 +292,25 @@ onslyde.Controllers.controller('AnalyticsCtrl',
             console.log('Problem getting chart datapoints', fail)
           });
 
+        };
+
+      function getSpeakerSummaryData(speakerTotals,twooptions){
+        var spearkerStat = {topic:twooptions.topicName,agree:0,disagree:0,sessions:0,speaker:twooptions.speakerData};
+
+        if(speakerTotals.length > 0){
+          for(var d=0;d<speakerTotals.length;d++){
+            if(speakerTotals[d].topic === twooptions.topicName){
+              spearkerStat = speakerTotals.splice(d, 1)[0];
+              //topic does exist so break
+              break;
+            }
+          }
         }
+
+        return spearkerStat;
+
+      }
+
 
       if (!$rootScope.chartTemplate) {
         //get the chart template for this view... right now it covers all charts...

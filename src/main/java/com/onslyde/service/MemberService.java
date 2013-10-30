@@ -74,10 +74,19 @@ public class MemberService {
     MemberRegistration registration;
 
     private class UserSummary {
+        int id;
         String name;
         Date created;
         List Sessions;
         String email;
+
+        public int getId() {
+            return id;
+        }
+
+        public void setId(int id) {
+            this.id = id;
+        }
 
         public String getName() {
             return name;
@@ -230,7 +239,7 @@ public class MemberService {
                 userSummary.setName(user.getFullName());
                 userSummary.setCreated(user.getCreated());
                 userSummary.setEmail(user.getEmail());
-                userSummary.setSessions(sessionHome.findByUser(user));
+                userSummary.setId(user.getId());
                 System.out.println(user.getFullName() + " logged in.");
             }
         } catch (NoResultException e) {
@@ -242,6 +251,8 @@ public class MemberService {
         response.setHeader("Access-Control-Allow-Origin","http://localhost:8001");
         return Response.ok(userSummary, MediaType.APPLICATION_JSON).build();
     }
+
+
 
 
     private boolean sendMessage(String email, int sessionID){

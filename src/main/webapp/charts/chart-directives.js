@@ -13,11 +13,8 @@ onslyde.Directives.directive('chart', function ($rootScope) {
 
     },
     link: function (scope, element, attrs) {
-      //we need scope.watch because the value is not populated yet
-      //http://stackoverflow.com/questions/14619884/angularjs-passing-object-to-directive
-//      scope.$watch('chartdata', function(chartdata,oldchartdata) {
 
-       var chartdata = scope.chartdata;
+      scope.$watch('chartdata', function(chartdata,oldchartdata) {
 
         if(chartdata){
           //set chart defaults through tag attributes
@@ -96,13 +93,8 @@ onslyde.Directives.directive('chart', function ($rootScope) {
             }
           });
 
-          //          scope.$parent.$watch('apptest.step',function(step){
-          //            xAxis1.labels.step = step
-          //            renderChart(chartsDefaults,chartdata);
-          //          })
 
           if(attrs.type === 'line'){
-            //------line charts
             var xAxis1 = chartdata.xAxis[0];
 
             //check for previous setting from service layer or json template... if it doesn't exist use the attr value
@@ -115,10 +107,6 @@ onslyde.Directives.directive('chart', function ($rootScope) {
             //end check
           }
 
-
-
-
-
           //pull any stringified from template JS and eval it
           if(chartdata.tooltip){
             if(typeof chartdata.tooltip.formatter === 'string'){
@@ -127,27 +115,20 @@ onslyde.Directives.directive('chart', function ($rootScope) {
 //            chartdata.tooltip.shared = true;
           }
 
-//          console.log('from directive',chartsDefaults,chartdata)
-
-//          scope.$parent.$watch(attrs.chartdata,function(newval, oldval, scope){
-//            renderChart(chartsDefaults,newval,attrs);
-//          },true)
-
 
           renderChart(chartsDefaults,chartdata);
         }
 
-//      },true)
+      });
+
     }
-  }
+  };
 
 });
 
 
 function renderChart(chartsDefaults,chartdata,attrs){
-
   var newSettings = {};
   $.extend(true, newSettings, chartsDefaults, chartdata);
-//  console.log(newSettings);
   var chart = new Highcharts.Chart(newSettings);
 }

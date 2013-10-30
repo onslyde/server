@@ -11,8 +11,6 @@ onslyde.Services.factory('chartservice', function () {
   return {
     convertLineChart: function (chartData, chartTemplate, dataDescription, settings) {
 
-
-
       var seriesCount = chartData.length,
         label;
 
@@ -21,8 +19,6 @@ onslyde.Services.factory('chartservice', function () {
       lineChart.series = [];
       label = '';
       xaxis = lineChart.xAxis[0];
-//      xaxis.categories = [];
-
 
 
       //the next 2 setting options are provided in the timeFormat dropdown, so we must inspect them here
@@ -42,7 +38,18 @@ onslyde.Services.factory('chartservice', function () {
           chartData.sort(function(a, b){
             a = a['label'].toLowerCase();
             b = b['label'].toLowerCase();
-            return a > b ? 1 : a < b ? -1 : 0;
+            if(a === 'agree'){
+              return -1;
+            }else if(b === 'agree'){
+              return 1;
+            }else if(a === 'disagree'){
+                return -1;
+              }else if(b === 'disagree'){
+                return 1;
+            }else{
+              return a > b ? 1 : a < b ? -1 : 0;
+            }
+
           });
 
             var dataPoints = chartData[l].datapoints;

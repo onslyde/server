@@ -30,4 +30,13 @@ public class MemberRepository {
         return em.createQuery(criteria).getSingleResult();
     }
 
+
+    public User findById(int id) {
+        CriteriaBuilder cb = em.getCriteriaBuilder();
+        CriteriaQuery<User> criteria = cb.createQuery(User.class);
+        Root<User> member = criteria.from(User.class);
+        criteria.select(member).where(cb.equal(member.get("id"), id));
+        return em.createQuery(criteria).getSingleResult();
+    }
+
 }

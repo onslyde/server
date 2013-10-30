@@ -20,9 +20,11 @@ CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 package com.onslyde.service;
 
+import com.onslyde.data.MemberRepository;
 import com.onslyde.domain.Session;
 import com.onslyde.domain.SessionHome;
 import com.onslyde.domain.SlideGroupHome;
+import com.onslyde.domain.User;
 import com.onslyde.model.Mediator;
 
 import javax.enterprise.context.RequestScoped;
@@ -50,12 +52,23 @@ public class AnalyticsService {
     @Inject
     private Mediator mediator;
 
+    @Inject
+    private MemberRepository repository;
+
     @GET
     @Produces("application/json")
     @Path("/{session:[0-9][0-9]*}")
     public Session getSessionData(@PathParam("session") int session){
         Session mySession = sessionHome.findById(session);
         return mySession;
+    }
+
+    @GET
+    @Produces("application/json")
+    @Path("/list/{userId:[0-9][0-9]*}")
+    public List getSessionList(@PathParam("userId") int userId){
+        User user = repository.findById(userId);
+        return sessionHome.findByUser(user);
     }
 
 //    @GET
