@@ -48,7 +48,6 @@ angular.module('onslyde',
 
         //very, very fugly
         window.runFoundation(window, document, undefined);
-        window.runAbide(window, document, undefined);
         window.runOrbit(window, document, undefined);
         window.runReveal(window, document, undefined);
         window.runTooltip(window, document, undefined);
