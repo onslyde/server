@@ -146,6 +146,7 @@
 <script src="http://onslyde.com/js/libs/impress/impress.js"></script>
 <script>impress().init();</script>
 
+<script src="http://code.jquery.com/jquery-1.8.3.min.js"></script>
 <script src="http://onslyde.com/deck/js/deck/dist/onslyde-deck-1.0.0.min.js"></script>
 <script>
 
@@ -153,7 +154,7 @@
         deck: {sessionID: <%= request.getAttribute("eventid") %>, mode: 'bespoke'}
     });
 </script>
-<script src="http://code.jquery.com/jquery-1.8.3.min.js"></script>
+
 <script src="http://onslyde.com/js/libs/jquery.flot.js"></script>
 
 </body>
