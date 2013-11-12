@@ -35,7 +35,7 @@ module.exports = function(grunt) {
             'src/main/webapp/panel/js/panel/gplus-oauth.js',
             'src/main/webapp/panel/js/panel/gracefulWebSocket.js',
             'src/main/webapp/panel/js/panel/fastclick.min.js'],
-          'src/main/webapp/deck/js/deck/dist/onslyde-deck-1.0.0.js': ['src/main/webapp/deck/js/deck/deck.js','src/main/webapp/js/deck/onslyde-1.0.0.deck.js'],
+          'src/main/webapp/deck/js/deck/dist/onslyde-deck-1.0.0.js': ['src/main/webapp/deck/js/deck/deck.js','src/main/webapp/deck/js/deck/onslyde-1.0.0.deck.js'],
           'src/main/webapp/deck/js/deck/dist/onslyde-core-1.0.0.js': ['src/main/webapp/deck/js/deck/onslyde-1.0.0.deck.js'],
           'src/main/webapp/deck/js/deck/dist/onslyde-remote-1.0.0.js': ['src/main/webapp/deck/js/deck/gracefulWebSocket.js','js/deck/remote.js']
         }
