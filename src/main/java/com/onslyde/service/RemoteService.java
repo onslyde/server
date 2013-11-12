@@ -47,7 +47,7 @@ public class RemoteService {
         }
 
         return Response.status(Response.Status.SEE_OTHER)
-                .header(HttpHeaders.LOCATION, "/remote.html?session=" + session)
+                .header(HttpHeaders.LOCATION, "/deck/remote.html?session=" + session)
                 .build();
 
     }

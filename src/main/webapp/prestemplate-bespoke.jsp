@@ -146,7 +146,7 @@
 
 <script src="http://onslyde.com/js/libs/bespoke/bespoke.js"></script>
 <script src="http://onslyde.com/js/libs/bespoke/demo.js"></script>
-<script src="http://onslyde.com/js/onslyde-1.0.0.deck.js"></script>
+<script src="http://onslyde.com/deck/js/deck/dist/onslyde-deck-1.0.0.min.js"></script>
 <script>
 
     onslyde({
@@ -155,6 +155,5 @@
 </script>
 <script src="http://code.jquery.com/jquery-1.8.3.min.js"></script>
 <script src="http://onslyde.com/js/libs/jquery.flot.js"></script>
-<script src="http://onslyde.com/js/deck.js"></script>
 </body>
 </html>

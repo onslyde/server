@@ -8,7 +8,9 @@ module.exports = function(grunt) {
     //checkout panel and presentation modules
     shell: {
       gitclone: {
-        command: 'git clone https://github.com/onslyde/onslyde-panel.git src/main/webapp/panel'
+        command: ['git clone https://github.com/onslyde/onslyde-panel.git src/main/webapp/panel',
+          'git clone https://github.com/onslyde/onslyde.git src/main/webapp/deck']
+          .join('&&')
       }
     },
 
@@ -32,7 +34,10 @@ module.exports = function(grunt) {
           'src/main/webapp/panel/js/panel/dist/onslyde-remote-1.0.0.js': ['src/main/webapp/panel/js/panel/panel-remote.js',
             'src/main/webapp/panel/js/panel/gplus-oauth.js',
             'src/main/webapp/panel/js/panel/gracefulWebSocket.js',
-            'src/main/webapp/panel/js/panel/fastclick.min.js']
+            'src/main/webapp/panel/js/panel/fastclick.min.js'],
+          'src/main/webapp/deck/js/deck/dist/onslyde-deck-1.0.0.js': ['src/main/webapp/deck/js/deck/deck.js','js/deck/onslyde-1.0.0.deck.js'],
+          'src/main/webapp/deck/js/deck/dist/onslyde-core-1.0.0.js': ['src/main/webapp/deck/js/deck/onslyde-1.0.0.deck.js'],
+          'src/main/webapp/deck/js/deck/dist/onslyde-remote-1.0.0.js': ['src/main/webapp/deck/js/deck/gracefulWebSocket.js','js/deck/remote.js']
         }
       }
     },
@@ -43,7 +48,10 @@ module.exports = function(grunt) {
       primary : {
         files: {
           'src/main/webapp/panel/js/panel/dist/onslyde-remote-1.0.0.min.js': ['src/main/webapp/panel/js/panel/dist/onslyde-remote-1.0.0.js'],
-          'src/main/webapp/panel/js/panel/dist/onslyde-panel-1.0.0.min.js': ['src/main/webapp/panel/js/panel/dist/onslyde-panel-1.0.0.js']
+          'src/main/webapp/panel/js/panel/dist/onslyde-panel-1.0.0.min.js': ['src/main/webapp/panel/js/panel/dist/onslyde-panel-1.0.0.js'],
+          'src/main/webapp/deck/js/deck/dist/onslyde-remote-1.0.0.min.js': ['src/main/webapp/deck/js/deck/dist/onslyde-remote-1.0.0.js'],
+          'src/main/webapp/deck/js/deck/dist/onslyde-core-1.0.0.min.js': ['src/main/webapp/deck/js/deck/dist/onslyde-core-1.0.0.js'],
+          'src/main/webapp/deck/js/deck/dist/onslyde-deck-1.0.0.min.js': ['src/main/webapp/deck/js/deck/dist/onslyde-deck-1.0.0.js']
         }
       }
     },
