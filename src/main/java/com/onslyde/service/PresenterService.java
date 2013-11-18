@@ -67,38 +67,18 @@ public class PresenterService {
     @Produces(MediaType.APPLICATION_JSON)
     public String ip(@QueryParam("session") int sessionID) {
 
-        //user signs up
-        //we generate session code and email it
-        //they use session code to init
-//        System.out.println("sessionID-------sessionID" + sessionID);
-        if(addr == null){
-
-//            if(slidFast.startSession(sessionID)){
-//                System.out.println("-getSlidFast().startSession()-------false");
-                //todo hack to sync objects across threads for now
-
-                //System.out.println("hello-----");
-                try {
-                    addr = InetAddress.getLocalHost().getHostAddress();
-                } catch (UnknownHostException e) {
-                    log.severe("can't get IP address, falling back to local");
-                    addr = "127.0.0.1";
-                }
-//            }else{
-                //todo - in startSession() this session has already been started
+//        if(addr == null){
+//            try {
+//                addr = InetAddress.getLocalHost().getHostAddress();
+//            } catch (UnknownHostException e) {
+//                log.severe("can't get IP address, falling back to local");
+//                addr = "127.0.0.1";
 //            }
-        }
-
-
-
-         slidFastEventSrc.fire(sessionManager);
-//        if(sessionID == null){
-//            //send message that ID is invalid
-//        }else{
-//
 //        }
-        //need to check for hosted mode
-        return "127.0.0.1";
+
+       slidFastEventSrc.fire(sessionManager);
+
+        return "192.168.1.15";
     }
 
 }
