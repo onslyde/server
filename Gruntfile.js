@@ -88,7 +88,8 @@ module.exports = function(grunt) {
           location: true,
           console: true,
           navigator: true,
-          getAttendees: true
+          getAttendees: true,
+          wsf: true
         }
       },
       gruntfile: {
