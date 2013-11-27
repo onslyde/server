@@ -14,7 +14,7 @@ Version: '5.5.23'
 Create a new mysql DB:
  mysql -u root
     CREATE database onslyde;
-    CREATE USER 'onslyde'@'localhost' IDENTIFIED BY 'onslyde123';
+    CREATE USER 'onslyde'@'localhost' IDENTIFIED BY 'password';
     GRANT ALL PRIVILEGES ON onslyde.* TO 'onslyde'@'localhost' WITH GRANT OPTION;
 
 then:
