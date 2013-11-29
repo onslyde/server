@@ -40,10 +40,6 @@ public class JettyEmbedded {
 
     public void onStartup(@Observes @Initialized ServletContext ctx)
     {
-//        System.out.println("Initialized web application at context path " + ctx.getContextPath());
-
-
-//
 
         {
             try {

@@ -78,7 +78,7 @@ public class PresenterService {
 
        slidFastEventSrc.fire(sessionManager);
 
-        return "192.168.1.15";
+        return "127.0.0.1";
     }
 
 }
