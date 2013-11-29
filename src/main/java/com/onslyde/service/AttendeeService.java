@@ -140,7 +140,7 @@ public class AttendeeService {
     @Produces(MediaType.APPLICATION_JSON)
     public Response optionVote(@FormParam("attendeeIP") String attendeeIP, @FormParam("username") String username, @FormParam("email") String email, @FormParam("sessionID") int sessionID, @FormParam("vote") String vote, @FormParam("voteTime") String voteTime) {
         mediatorEventSrc.fire(mediator);
-        System.out.println("------" + voteTime);
+
         if(vote != null){
             Long tempVoteTime = null;
             //convert the onclick timestamp... might be a bit overprotective with the try/catch
