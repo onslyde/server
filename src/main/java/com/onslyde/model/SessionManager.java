@@ -220,7 +220,7 @@ public class SessionManager implements Serializable {
         //sessionHome.persist(currentSession);
     }
 
-    public void updateGroupVote(String vote, String attendeeIP, String name, String email, int sessionID){
+    public void updateGroupVote(String vote, String attendeeIP, String name, String email, int sessionID, Long voteTime){
         Session currentSession;
         currentSession = sessionHome.findById(sessionID);
         SlideGroup currentSlideGroup = null;
@@ -269,6 +269,7 @@ public class SessionManager implements Serializable {
                                 sv.setSlide(currentSlide);
                                 sv.setSlideOptions(option);
                                 sv.setVoteTime(new Date());
+                                sv.setVoteClickTime(new Date(voteTime));
                                 slideVotesHome.persist(sv);
                             }
                         }
@@ -282,6 +283,7 @@ public class SessionManager implements Serializable {
                             sgv.setSlideGroupOptions(option);
     //                        System.out.println("set vote time:" + new Date());
                             sgv.setVoteTime(new Date());
+                            sgv.setVoteClickTime(new Date(voteTime));
                             //currentSlideGroup.getSlideGroupVoteses().add(sgv);
     //                        if(merge){
     //                            attendeeHome.merge(attendee);

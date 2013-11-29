@@ -31,6 +31,7 @@ import javax.enterprise.event.Event;
 import javax.inject.Inject;
 import javax.persistence.EntityManager;
 import javax.servlet.http.HttpServletRequest;
+import javax.swing.plaf.basic.BasicInternalFrameTitlePane;
 import javax.validation.Validator;
 import javax.ws.rs.*;
 import javax.ws.rs.core.Context;
@@ -137,12 +138,18 @@ public class AttendeeService {
     @Path("/vote")
     @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
     @Produces(MediaType.APPLICATION_JSON)
-    public Response optionVote(@FormParam("attendeeIP") String attendeeIP, @FormParam("username") String username, @FormParam("email") String email, @FormParam("sessionID") int sessionID, @FormParam("vote") String vote) {
+    public Response optionVote(@FormParam("attendeeIP") String attendeeIP, @FormParam("username") String username, @FormParam("email") String email, @FormParam("sessionID") int sessionID, @FormParam("vote") String vote, @FormParam("voteTime") String voteTime) {
         mediatorEventSrc.fire(mediator);
-
+        System.out.println("------" + voteTime);
         if(vote != null){
-
-            sessionManager.updateGroupVote(vote,attendeeIP,username,email,sessionID);
+            Long tempVoteTime = null;
+            //convert the onclick timestamp... might be a bit overprotective with the try/catch
+            try {
+                tempVoteTime = Long.valueOf(voteTime);
+            } catch (NumberFormatException e) {
+                e.printStackTrace();
+            }
+            sessionManager.updateGroupVote(vote,attendeeIP,username,email,sessionID,tempVoteTime);
 
             if(vote.equals("disagree") || vote.equals("agree")){
                 mediator.setJsEvent(ClientEvent.clientProps(vote,sessionID));

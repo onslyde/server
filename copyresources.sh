@@ -14,4 +14,5 @@ cp -rf \
 /Users/wesleyhales/dev/onslyde/src/main/webapp/charts \
 /Users/wesleyhales/dev/onslyde/src/main/webapp/admin \
 /Users/wesleyhales/dev/onslyde/src/main/webapp/panel \
+/Users/wesleyhales/dev/onslyde/src/main/webapp/deck \
 /Users/wesleyhales/dev/onslyde/target/onslyde-hosted/

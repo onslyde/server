@@ -21,16 +21,18 @@ public class SlideVotes implements java.io.Serializable {
 	private Slide slide;
 	private Attendee attendee;
 	private Date voteTime;
+    private Date voteClickTime;
 
 	public SlideVotes() {
 	}
 
 	public SlideVotes(SlideOptions slideOptions,
-                      Slide slide, Attendee attendee, Date voteTime) {
+                      Slide slide, Attendee attendee, Date voteTime, Date voteClickTime) {
 		this.slideOptions = slideOptions;
 		this.slide = slide;
 		this.attendee = attendee;
 		this.voteTime = voteTime;
+        this.voteClickTime = voteClickTime;
 	}
 
 	@Id
@@ -84,5 +86,15 @@ public class SlideVotes implements java.io.Serializable {
 	public void setVoteTime(Date voteTime) {
 		this.voteTime = voteTime;
 	}
+
+    @Temporal(TemporalType.TIMESTAMP)
+    @Column(name = "vote_click_time", nullable = false, length = 19)
+    public Date getVoteClickTime() {
+        return this.voteClickTime;
+    }
+
+    public void setVoteClickTime(Date voteClickTime) {
+        this.voteClickTime = voteClickTime;
+    }
 
 }

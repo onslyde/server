@@ -30,6 +30,7 @@ import org.eclipse.jetty.websocket.server.WebSocketServerConnection;
 
 import javax.enterprise.event.Observes;
 import javax.inject.Inject;
+import java.io.FileReader;
 import java.io.IOException;
 import java.util.*;
 import java.util.concurrent.ConcurrentLinkedQueue;
@@ -65,6 +66,7 @@ public class OnslydeWebSocketHandler
     private int pollCount = 0;
     private String name = "";
     private String email = "";
+    private Long voteTime = 0L;
 
     public void observeItemEvent(@Observes Mediator mediator) {
         syncMediator(mediator);
@@ -178,10 +180,17 @@ public class OnslydeWebSocketHandler
         if (request.get("session") != null)
             sessionID = Integer.parseInt(((String[]) request.get("session"))[0]);
 
+        if (data.contains(PROPS) || data.contains(VOTE)) {
 
-        if (data.contains(PROPS)) {
+            int substringLength = 0;
 
-            String vote = data.substring(PROPS.length(), data.length());
+            if (data.contains(PROPS)) {
+                substringLength = PROPS.length();
+            }else{
+                substringLength = VOTE.length();
+            }
+
+            String vote = data.substring(substringLength, data.length());
             List<String> optionList = null;
 
             //check to see if we're appending name and email
@@ -195,14 +204,19 @@ public class OnslydeWebSocketHandler
 
             if(optionList != null && optionList.size() > 1){
                 //parse name and email
-                name = optionList.get(1);
-                email = optionList.get(2);
+                try {
+                    name = optionList.get(1);
+                    email = optionList.get(2);
+                    voteTime = Long.valueOf(optionList.get(3));
+                } catch (NumberFormatException e) {
+                    e.printStackTrace();
+                }
             }
 
             data = ClientEvent.clientProps(vote, sessionID);
 
             try {
-                getSessionManager().updateGroupVote(vote, attendeeIP, name, email, sessionID);
+                getSessionManager().updateGroupVote(vote, attendeeIP, name, email, sessionID, voteTime);
             } catch (Exception e) {
                 e.printStackTrace();
             }
@@ -269,18 +283,6 @@ public class OnslydeWebSocketHandler
                     e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
                 }
             }
-        } else if (data.contains(VOTE)) {
-
-            String vote = data.substring(VOTE.length(), data.length());
-
-            try {
-                getSessionManager().updateGroupVote(vote, attendeeIP, name, email, sessionID);
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-
-            data = ClientEvent.clientVote(vote, sessionID);
-            sendToPresenter(data, this.session, sessionID);
         } else if (data.contains("speak:")) {
             System.out.println("Speak:" + data);
             String name = data.substring("speak:".length(), data.length());

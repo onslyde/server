@@ -21,16 +21,18 @@ public class SlideGroupVotes implements java.io.Serializable {
 	private SlideGroup slideGroup;
 	private Attendee attendee;
 	private Date voteTime;
+    private Date voteClickTime;
 
 	public SlideGroupVotes() {
 	}
 
 	public SlideGroupVotes(SlideGroupOptions slideGroupOptions,
-			SlideGroup slideGroup, Attendee attendee, Date voteTime) {
+			SlideGroup slideGroup, Attendee attendee, Date voteTime, Date voteClickTime) {
 		this.slideGroupOptions = slideGroupOptions;
 		this.slideGroup = slideGroup;
 		this.attendee = attendee;
 		this.voteTime = voteTime;
+        this.voteClickTime = voteClickTime;
 	}
 
 	@Id
@@ -84,5 +86,15 @@ public class SlideGroupVotes implements java.io.Serializable {
 	public void setVoteTime(Date voteTime) {
 		this.voteTime = voteTime;
 	}
+
+    @Temporal(TemporalType.TIMESTAMP)
+    @Column(name = "vote_click_time", nullable = false, length = 19)
+    public Date getVoteClickTime() {
+        return this.voteClickTime;
+    }
+
+    public void setVoteClickTime(Date voteClickTime) {
+        this.voteClickTime = voteClickTime;
+    }
 
 }
