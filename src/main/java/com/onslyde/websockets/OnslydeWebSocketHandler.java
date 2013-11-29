@@ -183,9 +183,11 @@ public class OnslydeWebSocketHandler
         if (data.contains(PROPS) || data.contains(VOTE)) {
 
             int substringLength = 0;
+            boolean isProps = false;
 
             if (data.contains(PROPS)) {
                 substringLength = PROPS.length();
+                isProps = true;
             }else{
                 substringLength = VOTE.length();
             }
@@ -213,7 +215,12 @@ public class OnslydeWebSocketHandler
                 }
             }
 
-            data = ClientEvent.clientProps(vote, sessionID);
+            //just determining whether this is sentiment or actual vote
+            if(isProps){
+              data = ClientEvent.clientProps(vote, sessionID);
+            }else{
+              data = ClientEvent.clientVote(vote, sessionID);
+            }
 
             try {
                 getSessionManager().updateGroupVote(vote, attendeeIP, name, email, sessionID, voteTime);
