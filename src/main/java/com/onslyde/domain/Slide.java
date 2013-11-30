@@ -5,6 +5,7 @@ package com.onslyde.domain;
 import org.codehaus.jackson.annotate.JsonIgnore;
 
 import javax.persistence.*;
+import java.sql.Blob;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -21,6 +22,8 @@ public class Slide implements java.io.Serializable {
 	private SlideGroup slideGroup;
 	private String name;
 	private String slideIndex;
+  private String screenshot;
+
     private Set<SlideVotes> slideVoteses = new HashSet<SlideVotes>(
             0);
     private Set<SlideOptions> slideOptionses = new HashSet<SlideOptions>(
@@ -36,12 +39,13 @@ public class Slide implements java.io.Serializable {
 
 	public Slide(SlideGroup slideGroup, String name, String slideIndex,
                  Set<SlideVotes> slideVoteses,
-                 Set<SlideOptions> slideOptionses) {
+                 Set<SlideOptions> slideOptionses, String screenshot) {
         this.slideGroup = slideGroup;
 		this.name = name;
 		this.slideIndex = slideIndex;
         this.slideVoteses = slideVoteses;
         this.slideOptionses = slideOptionses;
+    this.screenshot = screenshot;
 	}
 
 	@Id
@@ -80,11 +84,20 @@ public class Slide implements java.io.Serializable {
 		return this.slideIndex;
 	}
 
-	public void setSlideIndex(String slideIndex) {
+  public void setSlideIndex(String slideIndex) {
 		this.slideIndex = slideIndex;
 	}
 
-    @OneToMany(fetch = FetchType.EAGER, mappedBy = "slide")
+  @Column( name = "screenshot" )
+  public String getScreenshot() {
+    return screenshot;
+  }
+
+  public void setScreenshot(String screenshot) {
+    this.screenshot = screenshot;
+  }
+
+  @OneToMany(fetch = FetchType.EAGER, mappedBy = "slide")
     @OrderBy("voteTime ASC")
     public Set<SlideVotes> getSlideVoteses() {
         return this.slideVoteses;

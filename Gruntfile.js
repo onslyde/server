@@ -35,7 +35,7 @@ module.exports = function(grunt) {
             'src/main/webapp/panel/js/panel/gplus-oauth.js',
             'src/main/webapp/panel/js/panel/gracefulWebSocket.js',
             'src/main/webapp/panel/js/panel/fastclick.min.js'],
-          'src/main/webapp/deck/js/deck/dist/onslyde-deck-1.0.0.js': ['src/main/webapp/deck/js/deck/deck.js','src/main/webapp/deck/js/deck/onslyde-1.0.0.deck.js'],
+          'src/main/webapp/deck/js/deck/dist/onslyde-deck-1.0.0.js': ['src/main/webapp/deck/js/deck/libs/canvas2blob.js','src/main/webapp/deck/js/deck/libs/html2canvas.js','src/main/webapp/deck/js/deck/deck.js','src/main/webapp/deck/js/deck/onslyde-1.0.0.deck.js'],
           'src/main/webapp/deck/js/deck/dist/onslyde-core-1.0.0.js': ['src/main/webapp/deck/js/deck/onslyde-1.0.0.deck.js'],
           'src/main/webapp/deck/js/deck/dist/onslyde-remote-1.0.0.js': ['src/main/webapp/deck/js/deck/gracefulWebSocket.js','src/main/webapp/deck/js/deck/remote.js']
         }
@@ -89,7 +89,8 @@ module.exports = function(grunt) {
           console: true,
           navigator: true,
           getAttendees: true,
-          wsf: true
+          wsf: true,
+          html2canvas: true
         }
       },
       gruntfile: {
