@@ -6,11 +6,13 @@
 <div class="row">
   <div class="large-12 columns">
     <h2>Getting Started - Presentation</h2>
-    <p class="intro">Setting up a presentation is simple. The form below is simply a kick starter to help you create an interactive presentation.
+    <p class="intro" ng-if="!userInfo.created">You can review the different features of onslyde with this demo. However, other people may be using it
+    at the same time, so if things don't work like you think they should, <a href="#!/register">register</a> and create a private presentation. For the full story behind this project, check out <a href="http://coding.smashingmagazine.com/2013/11/20/reinventing-the-tech-conference-experience/">our article on Smashing Magazine</a>.</p>
+    <p class="intro" ng-if="userInfo.created">Setting up a presentation is simple. The form below is simply a kick starter to help you create an interactive presentation.
     After you view the presentation, you must download it and edit it on your computer. You can then open and review it in your browser.</p>
     <div class="row">
     <ol class="large-12 columns">
-      <li ng-if="!userInfo.created">First, <a href="#!/register">you must create an account</a> or <a data-reveal-id="signin-container">sign in</a> to create a presentation.</li>
+      <li ng-if="!userInfo.created">First, you should <a href="#!/register">create an account</a> or <a data-reveal-id="signin-container">sign in</a> to start a presentation.</li>
       <li ng-if="!userInfo.created">Just looking around? Select a demo:
         <div class="row">
           <div class="large-3 columns text-center">
@@ -31,7 +33,7 @@
           </div>
         </div>
       </li>
-      <li class="margin-top25" ng-if="!userInfo.created">Note - This is only a demo. You will want to sign in and use your own private session ID when you are ready to present.
+      <li class="margin-top25" ng-if="!userInfo.created">Note - This is only a demo. <strong>Other people may be using it!</strong> You will want to sign in and use your own private session ID when you are ready to present to a live audience.
         <div>
           <a ng-click="viewPres(true)" class="button">Preview</a>
         </div>
