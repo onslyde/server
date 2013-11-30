@@ -27,6 +27,9 @@ import javax.annotation.PostConstruct;
 import javax.ejb.Stateless;
 import javax.enterprise.event.Event;
 import javax.inject.Inject;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.OutputStream;
 import java.io.Serializable;
 import java.util.*;
 
@@ -136,7 +139,7 @@ public class SessionManager implements Serializable {
         }
     }
 
-    public void addGroupOptions(List<String> options, int sessionID){
+    public void addGroupOptions(List<String> options, int sessionID, byte[] screenshot){
         Session currentSession;
         SlideGroup currentSlideGroup;
         Slide currentSlide;
@@ -159,7 +162,22 @@ public class SessionManager implements Serializable {
                 currentSlide = new Slide();
                 currentSlide.setSlideIndex(options.get(2));
                 currentSlide.setSlideGroup(currentSlideGroup);
+
+                String randomID = UUID.randomUUID().toString();
+                String screenshotPath = "onslyde/screenshots/" + randomID + ".png";
+                try {
+                  OutputStream out = new FileOutputStream(screenshotPath);
+                  out.write(screenshot);
+                  out.close();
+                } catch (IOException e) {
+                  e.printStackTrace();
+                }
+
+                currentSlide.setScreenshot(randomID + ".png");
+
+//                currentSlide.setScreenshot(screenshot);
                 sid = sHome.persist(currentSlide);
+
                 //SlideGroupOptions sgos = new SlideGroupOptions();
 
                 SlideGroupOptions sgOption = null;
@@ -172,8 +190,6 @@ public class SessionManager implements Serializable {
                 alloptions.add("agree");
                 if(!options.get(0).equals("null")){
                     for(String option: alloptions){
-
-
                         sgOption = new SlideGroupOptions();
                         sgOption.setName(option);
                         currentSlideGroup.getSlideGroupOptionses().add(sgOption);

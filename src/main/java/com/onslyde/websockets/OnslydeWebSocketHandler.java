@@ -32,10 +32,12 @@ import javax.enterprise.event.Observes;
 import javax.inject.Inject;
 import java.io.FileReader;
 import java.io.IOException;
+import java.sql.Blob;
 import java.util.*;
 import java.util.concurrent.ConcurrentLinkedQueue;
 import java.util.logging.Logger;
 
+//@WebSocket(maxMessageSize = 64 * 2048)
 @WebSocket
 public class OnslydeWebSocketHandler
 {
@@ -168,6 +170,14 @@ public class OnslydeWebSocketHandler
         }
     }
 
+    private byte[] screenshot;
+
+    @OnWebSocketMessage
+    public void onWebSocketBinary(byte[] payload, int offset, int len)
+    {
+      screenshot = payload;
+    }
+
     @OnWebSocketMessage
     public void onWebSocketText(Session session, String data)
     {
@@ -277,7 +287,7 @@ public class OnslydeWebSocketHandler
             if (optionList.size() == 3) {
 
                 try {
-                    getSessionManager().addGroupOptions(optionList, sessionID);
+                    getSessionManager().addGroupOptions(optionList, sessionID, screenshot);
                 } catch (Exception e) {
                     System.out.println("----- couldn't find session: " + sessionID + " here's the option list: " + optionList);
                     e.printStackTrace();
