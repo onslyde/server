@@ -140,21 +140,29 @@ onslyde.Controllers.controller('AnalyticsCtrl',
                   {label:'',datapoints:[]},
                   {label:'',datapoints:[]}
                 ];
-                voteData = value.slides[0].slideVoteses;
-                voteOptions = value.slides[0].slideOptionses;
-                twooptions.topicName = value.slides[0].slideIndex;
+                if(typeof value.slides[0] !== 'undefined'){
+                  voteData = value.slides[0].slideVoteses;
+                  voteOptions = value.slides[0].slideOptionses;
+                  console.log(value.slides[0].screenshot)
+                  twooptions.yo = value.slides[0];
+                  twooptions.topicName = value.slides[0].slideIndex;
+                  twooptions.topicImage = value.slides[0].screenshot;
+                  twooptions.topicID = value.slides[0].id;
+                }
               }
 
 
               twooptions.created = value.created;
 
-              twooptions.topicID = value.slides[0].id;
+
               twooptions.sessionID = $routeParams.sessionID;
 
               twooptions.speakerData = $scope.getPanelist($routeParams.sessionID,twooptions.topicName);
 
+              console.log(voteData)
               //if we have atleast 1 vote on the topic
-              if(voteData.length >= $scope.dashBoard.sessionVotesFilter.value){
+              if(voteData){
+                if(voteData.length >= $scope.dashBoard.sessionVotesFilter.value){
 
                 // summary data for speaker display at top
                 var spearkerStat = getSpeakerSummaryData($scope.dashBoard.speakerTotals,twooptions);
@@ -276,6 +284,7 @@ onslyde.Controllers.controller('AnalyticsCtrl',
 
 
 
+              }
               }
             });
 
