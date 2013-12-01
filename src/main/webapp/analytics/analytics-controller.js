@@ -143,7 +143,6 @@ onslyde.Controllers.controller('AnalyticsCtrl',
                 if(typeof value.slides[0] !== 'undefined'){
                   voteData = value.slides[0].slideVoteses;
                   voteOptions = value.slides[0].slideOptionses;
-                  console.log(value.slides[0].screenshot)
                   twooptions.yo = value.slides[0];
                   twooptions.topicName = value.slides[0].slideIndex;
                   twooptions.topicImage = value.slides[0].screenshot;
@@ -159,7 +158,6 @@ onslyde.Controllers.controller('AnalyticsCtrl',
 
               twooptions.speakerData = $scope.getPanelist($routeParams.sessionID,twooptions.topicName);
 
-              console.log(voteData)
               //if we have atleast 1 vote on the topic
               if(voteData){
                 if(voteData.length >= $scope.dashBoard.sessionVotesFilter.value){

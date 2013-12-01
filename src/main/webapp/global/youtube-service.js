@@ -39,6 +39,15 @@ onslyde.Services.factory('youtubeapi', function ($window, $rootScope, $log) {
         this.player.destroy();
       }
       this.player = this.createPlayer();
+
+      // fixed Unable to post message to https://www.youtube.com.
+      // ref: https://code.google.com/p/gdata-issues/issues/detail?id=4697
+      setTimeout(function(){
+        var url = $('#analytics-player').prop('src');
+        if (url.match('^http://')) {
+          $('#analytics-player').prop('src', url.replace(/^http:\/\//i, 'https://'));
+        }
+      }, 500);
     }
   };
 
