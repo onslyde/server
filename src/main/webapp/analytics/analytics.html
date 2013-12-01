@@ -63,6 +63,9 @@
             </div>
             <div class="left topic-info">
               {{twooption.topicName === '0:0' ? 'Discussion': twooption.topicName}} <a href="#!/analytics?sessionID={{twooption.sessionID}}#{{twooption.topicID}}" alt="permalink"><i data-tooltip title="Permalink for this topic." class="pictogram has-tip" style="font-size:1.5em">&#128279;</i></a><div ng-if="twooption.speakerData.twitter" class="twitter-sub"><i class="pictogram-social">&#62217;</i> <a href="http://twitter.com/{{twooption.speakerData.twitter}}" target="_blank">{{twooption.speakerData.twitter}}</a></div>
+                <div ng-if="twooption.topicImage">
+                    <img src="/screenshots/{{twooption.topicImage}}" alt=""/>
+                </div>
             </div>
 
            </h2>
