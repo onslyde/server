@@ -18,7 +18,7 @@
 
 <div class="row" ng-if="sessionID" ng-init="panelAnalyticsSetup()">
   <div ng-if="sessionData.sessionCode && sessionData.sessionCode != 'beta'" id="chart_movie" class="reveal-modal medium" style="text-align:center">
-    <div youtube sessionId="{{sessionData.sessionCode}}" id="analytics-player"></div>
+    <div youtube sessionid="{{sessionData.sessionCode}}" id="analytics-player"></div>
   </div>
 
   <div class="large-12 columns">
