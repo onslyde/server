@@ -286,19 +286,21 @@ public class OnslydeWebSocketHandler
             //basic continue with normal 3 options
             if (optionList.size() == 3) {
 
-                try {
-                    getSessionManager().addGroupOptions(optionList, sessionID, screenshot);
-                } catch (Exception e) {
-                    System.out.println("----- couldn't find session: " + sessionID + " here's the option list: " + optionList);
-                    e.printStackTrace();
-                }
+              data = ClientEvent.createEvent("updateOptions", optionList, sessionID);
+              try {
+                sendToAll(data, this.session, sessionID);
+              } catch (IOException e) {
+                e.printStackTrace();
+              }
 
-                data = ClientEvent.createEvent("updateOptions", optionList, sessionID);
-                try {
-                    sendToAll(data, this.session, sessionID);
-                } catch (IOException e) {
-                    e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
-                }
+              try {
+                  getSessionManager().addGroupOptions(optionList, sessionID, screenshot);
+              } catch (Exception e) {
+                  System.out.println("----- couldn't find session: " + sessionID + " here's the option list: " + optionList);
+                  e.printStackTrace();
+              }
+
+
             }
         } else if (data.contains("speak:")) {
             System.out.println("Speak:" + data);
