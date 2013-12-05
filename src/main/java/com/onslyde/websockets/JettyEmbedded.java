@@ -56,19 +56,7 @@ public class JettyEmbedded {
     {
       try {
 
-        // HTTP Configuration
-        HttpConfiguration config = new HttpConfiguration();
-        config.setSendServerVersion(true);
 
-        // Http Connector
-        HttpConnectionFactory http = new HttpConnectionFactory(config);
-//                SSLConnectionFactory
-
-        ServerConnector httpConnector = new ServerConnector(server,http);
-        httpConnector.setPort(8081);
-        httpConnector.setIdleTimeout(10000);
-        httpConnector.setHost("0.0.0.0");
-        server.addConnector(httpConnector);
 
         // SSL configurations
         SslContextFactory sslContextFactory = new SslContextFactory();
@@ -89,6 +77,24 @@ public class JettyEmbedded {
             "SSL_DHE_DSS_EXPORT_WITH_DES40_CBC_SHA");
 
 
+        // HTTP Configuration
+        HttpConfiguration http_config = new HttpConfiguration();
+        http_config.setSecureScheme("https");
+        http_config.setSecurePort(8081);
+        http_config.addCustomizer(new SecureRequestCustomizer());
+        http_config.setSendServerVersion(true);
+
+
+        HttpConfiguration https_config = new HttpConfiguration(http_config);
+        https_config.addCustomizer(new SecureRequestCustomizer());
+
+        ServerConnector https = new ServerConnector(server,
+            new SslConnectionFactory(sslContextFactory,"http/1.1"),
+            new HttpConnectionFactory(https_config));
+        https.setPort(8081);
+        https.setIdleTimeout(500000);
+        https.setHost("0.0.0.0");
+
         // Spdy Connector - short version
         Map<Short,PushStrategy> pushMap = new HashMap<Short, PushStrategy>();
         pushMap.put(SPDY.V3,new ReferrerPushStrategy());
@@ -98,7 +104,7 @@ public class JettyEmbedded {
         spdyConnector.setPort(8443);
 
         server.addConnector(spdyConnector);
-
+        server.addConnector(https);
         // Setup handlers
 
 
@@ -121,6 +127,7 @@ public class JettyEmbedded {
 
         wscontext.setContextPath("/ws");
         wscontext.setHandler(wsHandler);
+
 
         server.start();
         server.dumpStdErr();
