@@ -35,7 +35,7 @@
         <version.org.jboss.as.arquillian.container>7.1.1.Final</version.org.jboss.as.arquillian.container>
         <version.junit>4.10</version.junit>
 
-        <jettyVersion>9.0.4.v20130625</jettyVersion>
+        <jettyVersion>9.1.0.v20131115</jettyVersion>
     </properties>
 
     <repositories>
@@ -293,21 +293,23 @@
             <version>${jettyVersion}</version>
         </dependency>
 
-        <!--<dependency>-->
-            <!--<groupId>org.eclipse.jetty</groupId>-->
-            <!--<artifactId>jetty-websocket</artifactId>-->
-            <!--<version>${jettyVersion}</version>-->
-        <!--</dependency>-->
-
-        <!--<dependency>-->
-            <!--<groupId>org.eclipse.jetty.spdy</groupId>-->
-            <!--<artifactId>spdy-jetty</artifactId>-->
-            <!--<version>${jettyVersion}</version>-->
-        <!--</dependency>-->
         <dependency>
             <groupId>org.eclipse.jetty.spdy</groupId>
             <artifactId>spdy-core</artifactId>
             <version>${jettyVersion}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.eclipse.jetty.spdy</groupId>
+            <artifactId>spdy-http-server</artifactId>
+            <version>${jettyVersion}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.eclipse.jetty.npn</groupId>
+            <artifactId>npn-api</artifactId>
+            <version>1.1.0.v20120525</version>
+            <scope>provided</scope>
         </dependency>
         <!--<dependency>-->
             <!--<groupId>org.eclipse.jetty.spdy</groupId>-->

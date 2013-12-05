@@ -19,7 +19,7 @@ import java.util.concurrent.TimeUnit;
  * To change this template use File | Settings | File Templates.
  */
 
-@WebSocket(maxMessageSize = 64 * 1024)
+@WebSocket
 public class RemoteLoadClientSocket {
     private final CountDownLatch closeLatch;
     @SuppressWarnings("unused")

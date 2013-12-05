@@ -22,6 +22,8 @@ package com.onslyde.websockets;
 
 import org.eclipse.jetty.websocket.api.UpgradeRequest;
 import org.eclipse.jetty.websocket.api.UpgradeResponse;
+import org.eclipse.jetty.websocket.servlet.ServletUpgradeRequest;
+import org.eclipse.jetty.websocket.servlet.ServletUpgradeResponse;
 import org.eclipse.jetty.websocket.servlet.WebSocketCreator;
 
 public class OnslydeSocketCreator implements WebSocketCreator
@@ -29,10 +31,9 @@ public class OnslydeSocketCreator implements WebSocketCreator
 
     private OnslydeWebSocketHandler onslydeSocket = new OnslydeWebSocketHandler();
 
-    @Override
-    public Object createWebSocket(UpgradeRequest req, UpgradeResponse resp)
-    {
-        return new OnslydeWebSocketHandler();
-    }
 
+  @Override
+  public Object createWebSocket(ServletUpgradeRequest servletUpgradeRequest, ServletUpgradeResponse servletUpgradeResponse) {
+    return new OnslydeWebSocketHandler();
+  }
 }

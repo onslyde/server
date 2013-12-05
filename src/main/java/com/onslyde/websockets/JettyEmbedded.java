@@ -23,78 +23,121 @@ package com.onslyde.websockets;
 
 import org.eclipse.jetty.server.*;
 import org.eclipse.jetty.server.handler.ContextHandler;
+import org.eclipse.jetty.server.handler.ContextHandlerCollection;
+import org.eclipse.jetty.server.handler.RequestLogHandler;
+import org.eclipse.jetty.servlet.DefaultServlet;
+import org.eclipse.jetty.servlet.ServletContextHandler;
+import org.eclipse.jetty.servlet.ServletHolder;
+import org.eclipse.jetty.spdy.api.SPDY;
+import org.eclipse.jetty.spdy.server.http.HTTPSPDYServerConnector;
+import org.eclipse.jetty.spdy.server.http.PushStrategy;
+import org.eclipse.jetty.spdy.server.http.ReferrerPushStrategy;
+import org.eclipse.jetty.util.ssl.SslContextFactory;
 import org.eclipse.jetty.websocket.server.WebSocketHandler;
 import org.eclipse.jetty.websocket.servlet.WebSocketServletFactory;
 
 import javax.enterprise.context.ApplicationScoped;
 import javax.enterprise.event.Observes;
 import javax.servlet.ServletContext;
+import java.util.HashMap;
+import java.util.Map;
 
 @ApplicationScoped
 public class JettyEmbedded {
 
 
-    Server server = new Server(8081);
-    WebSocketHandler wsHandler = new EchoSocketHandler();
-    ContextHandler context = new ContextHandler();
+  Server server = new Server();
+  WebSocketHandler wsHandler = new EchoSocketHandler();
+  ServletContextHandler context = new ServletContextHandler();
+  ServletContextHandler wscontext = new ServletContextHandler();
 
-    public void onStartup(@Observes @Initialized ServletContext ctx)
+  public void onStartup(@Observes @Initialized ServletContext ctx) {
+
     {
+      try {
 
-        {
-            try {
+        // HTTP Configuration
+        HttpConfiguration config = new HttpConfiguration();
+        config.setSendServerVersion(true);
 
-                // HTTP Configuration
-                HttpConfiguration http_config = new HttpConfiguration();
-//                http_config.setSecureScheme("https");
-//                http_config.setSecurePort(8443);
-                http_config.setOutputBufferSize(32768);
+        // Http Connector
+        HttpConnectionFactory http = new HttpConnectionFactory(config);
+//                SSLConnectionFactory
 
-                // HTTP connector
-                ServerConnector http = new ServerConnector(server,new HttpConnectionFactory(http_config));
-                http.setPort(8081);
-                http.setIdleTimeout(30000);
-                http.setHost("0.0.0.0");
+        ServerConnector httpConnector = new ServerConnector(server,http);
+        httpConnector.setPort(8081);
+        httpConnector.setIdleTimeout(10000);
+        httpConnector.setHost("0.0.0.0");
+        server.addConnector(httpConnector);
 
-                // HTTPS Configuration
-//                HttpConfiguration https_config = new HttpConfiguration(http_config);
-//                https_config.addCustomizer(new SecureRequestCustomizer());
-//
-//                // HTTPS connector
-//                ServerConnector https = new ServerConnector(server,
-//                        new SslConnectionFactory(sslContextFactory,"http/1.1"),
-//                        new HttpConnectionFactory(https_config));
-//                https.setPort(8443);
-//                https.setIdleTimeout(500000);
-
-                // Set the connectors
-                server.setConnectors(new Connector[] { http });
-
-//                System.out.println("-----------jetty start");
-//                context.setContextPath("/echo");
-                context.setHandler(wsHandler);
-                server.setHandler(context);
-
-
-                server.start();
-//                server.join();
+        // SSL configurations
+        SslContextFactory sslContextFactory = new SslContextFactory();
+        sslContextFactory.setKeyStorePath("keystore");
+        sslContextFactory.setTrustStorePath("keystore");
+        sslContextFactory.setKeyStorePassword("OBF:1vny1zlo1x8e1vnw1vn61x8g1zlu1vn4");
+        sslContextFactory.setKeyManagerPassword("OBF:1u2u1wml1z7s1z7a1wnl1u2g");
+        sslContextFactory.setTrustStorePassword("OBF:1vny1zlo1x8e1vnw1vn61x8g1zlu1vn4");
+        sslContextFactory.setProtocol("TLSv1");
+        sslContextFactory.setIncludeProtocols("TLSv1");
+        sslContextFactory.setExcludeCipherSuites(
+            "SSL_RSA_WITH_DES_CBC_SHA",
+            "SSL_DHE_RSA_WITH_DES_CBC_SHA",
+            "SSL_DHE_DSS_WITH_DES_CBC_SHA",
+            "SSL_RSA_EXPORT_WITH_RC4_40_MD5",
+            "SSL_RSA_EXPORT_WITH_DES40_CBC_SHA",
+            "SSL_DHE_RSA_EXPORT_WITH_DES40_CBC_SHA",
+            "SSL_DHE_DSS_EXPORT_WITH_DES40_CBC_SHA");
 
 
-            } catch (Exception e) {
-                e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
-            }
-        }
+        // Spdy Connector - short version
+        Map<Short,PushStrategy> pushMap = new HashMap<Short, PushStrategy>();
+        pushMap.put(SPDY.V3,new ReferrerPushStrategy());
+        HTTPSPDYServerConnector spdyConnector = new HTTPSPDYServerConnector(server,sslContextFactory,pushMap);
 
 
+        spdyConnector.setPort(8443);
+
+        server.addConnector(spdyConnector);
+
+        // Setup handlers
+
+
+        ContextHandlerCollection contexts = new ContextHandlerCollection();
+        RequestLogHandler requestLogHandler = new RequestLogHandler();
+
+
+        server.setHandler(requestLogHandler);
+        requestLogHandler.setHandler(contexts);
+
+        contexts.addHandler(wscontext);
+        contexts.addHandler(context);
+
+
+        context.setContextPath("/");
+        context.setResourceBase("standalone/deployments/onslyde-hosted.war");
+        ServletHolder servletHolder = new ServletHolder(DefaultServlet.class);
+        servletHolder.setName("default");
+        context.addServlet(servletHolder,"/");
+
+        wscontext.setContextPath("/ws");
+        wscontext.setHandler(wsHandler);
+
+        server.start();
+        server.dumpStdErr();
+
+      } catch (Exception e) {
+        e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
+      }
     }
 
-    public final class EchoSocketHandler extends WebSocketHandler
-    {
-        @Override
-        public void configure(WebSocketServletFactory factory)
-        {
-            factory.setCreator(new OnslydeSocketCreator());
-        }
+
+  }
+
+  public final class EchoSocketHandler extends WebSocketHandler {
+    @Override
+    public void configure(WebSocketServletFactory factory) {
+      factory.setCreator(new OnslydeSocketCreator());
     }
+  }
 
 }
