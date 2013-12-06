@@ -11,7 +11,7 @@ onslyde.Controllers.controller('AnalyticsCtrl',
     $scope.sessionID = $routeParams.sessionID;
 
     $scope.presAnalyticsSetup = function(){
-      pagedata.get(null, '/go/analytics/list/' + $rootScope.userInfo.id).then(function (success) {
+      pagedata.get(null, $rootScope.urls() + '/go/analytics/list/' + $rootScope.userInfo.id).then(function (success) {
         $scope.sessionList = success;
       }, function (fail) {
         console.log('Problem getting session list', fail)
@@ -64,7 +64,7 @@ onslyde.Controllers.controller('AnalyticsCtrl',
 
 
       $scope.createCharts = function(){
-          pagedata.get(null, '/go/analytics/' + $routeParams.sessionID).then(function (success) {
+          pagedata.get(null, $rootScope.urls() + '/go/analytics/' + $routeParams.sessionID).then(function (success) {
             $rootScope.sessionData = success;
 
 

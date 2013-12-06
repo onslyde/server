@@ -22,12 +22,12 @@ onslyde.Controllers.controller('PageCtrl',
       $scope.location = $location;
 
 
-    $scope.urls = function(){
+    $rootScope.urls = function(){
       var BASE_URL = '';
       if($location.host() === 'onslyde.com' || $location.host() === 'www.onslyde.com'){
         BASE_URL = 'http://onslyde.com';
       }else{
-        BASE_URL = 'http://localhost:8080';
+        BASE_URL = 'http://localhost:8081';
       }
       return BASE_URL;
     }

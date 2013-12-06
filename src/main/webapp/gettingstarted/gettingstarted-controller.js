@@ -26,7 +26,7 @@ onslyde.Controllers.controller('GetStartedCtrl',
 
 
 
-      window.open($scope.urls() + '/go/template/download?' +
+      window.open($rootScope.urls() + '/go/template/download?' +
         'deckType=' + $scope.getstarted.deck + '&' +
         'email=' + $rootScope.userInfo.email + '&' +
         'sessionId=' + (sessionID || '') + '&' +
@@ -49,7 +49,7 @@ onslyde.Controllers.controller('GetStartedCtrl',
       $scope.getstarted.sessionId = (($rootScope.registerMessage && $rootScope.registerMessage.sessionId) || '');
       $scope.getstarted.token = $rootScope.userInfo.created;
 
-      $http({method:'POST', url:$scope.urls() + '/go/template/create', data:$scope.getstarted, headers:{}}).
+      $http({method:'POST', url:$rootScope.urls() + '/go/template/create', data:$scope.getstarted, headers:{}}).
         success(
         function (data, status, headers, config) {
 //          console.log(data)
@@ -96,7 +96,7 @@ onslyde.Controllers.controller('GetStartedCtrl',
       $scope.getstarted.sessionId = (($rootScope.registerMessage && $rootScope.registerMessage.sessionId) || '');
       $scope.getstarted.token = $rootScope.userInfo.created;
 
-      $http({method:'GET', url:$scope.urls() + '/go/template/download', data:$scope.getstarted, headers:{}}).
+      $http({method:'GET', url:$rootScope.urls() + '/go/template/download', data:$scope.getstarted, headers:{}}).
         success(
         function (data, status, headers, config) {
           console.log(data)
