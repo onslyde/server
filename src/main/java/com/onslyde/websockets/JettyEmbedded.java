@@ -80,7 +80,7 @@ public class JettyEmbedded {
         // HTTP Configuration
         HttpConfiguration http_config = new HttpConfiguration();
         http_config.setSecureScheme("https");
-        http_config.setSecurePort(8081);
+        http_config.setSecurePort(443);
         http_config.addCustomizer(new SecureRequestCustomizer());
         http_config.setSendServerVersion(true);
 
@@ -91,7 +91,7 @@ public class JettyEmbedded {
         ServerConnector https = new ServerConnector(server,
             new SslConnectionFactory(sslContextFactory,"http/1.1"),
             new HttpConnectionFactory(https_config));
-        https.setPort(8081);
+        https.setPort(80);
         https.setIdleTimeout(500000);
         https.setHost("0.0.0.0");
 
@@ -101,10 +101,10 @@ public class JettyEmbedded {
         HTTPSPDYServerConnector spdyConnector = new HTTPSPDYServerConnector(server,sslContextFactory,pushMap);
 
 
-        spdyConnector.setPort(8443);
+        spdyConnector.setPort(443);
 
         server.addConnector(spdyConnector);
-        server.addConnector(https);
+//        server.addConnector(https);
         // Setup handlers
 
 

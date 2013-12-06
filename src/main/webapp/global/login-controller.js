@@ -17,7 +17,7 @@ onslyde.Controllers.controller('LoginCtrl', [ '$store', '$http', '$scope', '$roo
     var email = (email || $scope.login.email);
     var password = (password || $scope.login.password);
 
-    $http({method: 'POST', url: $scope.urls() + '/go/members/login', data: $.param({email:email,password:password}), headers: {'Content-Type': 'application/x-www-form-urlencoded'}}).
+    $http({method: 'POST', url: $rootScope.urls() + '/go/members/login', data: $.param({email:email,password:password}), headers: {'Content-Type': 'application/x-www-form-urlencoded'}}).
       success(function(data, status, headers, config) {
         if(data.created){
           $('#signin').foundation('reveal', 'close');
@@ -60,7 +60,7 @@ onslyde.Controllers.controller('LoginCtrl', [ '$store', '$http', '$scope', '$roo
     var name = $scope.register.fullName;
 
 
-    $http({method: 'POST', url: $scope.urls() + '/go/members', data: $scope.register, headers: {}}).
+    $http({method: 'POST', url: $rootScope.urls() + '/go/members', data: $scope.register, headers: {}}).
       success(function(data, status, headers, config) {
         $rootScope.registerMessage = data;
         $store.set('registerMessage',$rootScope.registerMessage)

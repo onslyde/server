@@ -341,7 +341,7 @@ function ListCtrl($scope,$http) {
 
   $scope.refreshData = function(epn,callback){
     epn = (epn || 175)
-    $http.get('/go/analytics/' + epn).
+    $http.get($rootScope.urls() + '/go/analytics/' + epn).
         success(function (data, status, headers, config) {
           callback(data);
         }).
