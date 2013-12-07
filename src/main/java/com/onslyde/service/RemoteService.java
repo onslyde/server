@@ -27,8 +27,10 @@ import javax.enterprise.context.RequestScoped;
 import javax.enterprise.event.Event;
 import javax.inject.Inject;
 import javax.persistence.EntityManager;
+import javax.servlet.http.HttpServletRequest;
 import javax.validation.Validator;
 import javax.ws.rs.*;
+import javax.ws.rs.core.Context;
 import javax.ws.rs.core.HttpHeaders;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
@@ -40,14 +42,17 @@ public class RemoteService {
 
     @GET
     @Produces(MediaType.APPLICATION_JSON)
-    public Response lookupMemberById(@PathParam("session") int session) {
+    public Response lookupMemberById(@PathParam("session") int session,@Context HttpServletRequest req) {
 //        Session session = repository.findById(id);
+
+      System.out.println("====" + req.getHeader("Origin"));
+      System.out.println("====" + req.getRequestURL());
         if (session == 0) {
             throw new WebApplicationException(Response.Status.NOT_FOUND);
         }
 
         return Response.status(Response.Status.SEE_OTHER)
-                .header(HttpHeaders.LOCATION, "/deck/remote.html?session=" + session)
+                .header(HttpHeaders.LOCATION, "https://127.0.0.1/deck/remote.html?session=" + session)
                 .build();
 
     }
