@@ -74,7 +74,7 @@ public class AttendeeService {
     @GET
     @Path("/json")
     @Produces(MediaType.APPLICATION_JSON)
-    public String listAllMembersJSON(@QueryParam("sessionID") int sessionID, @QueryParam("attendeeIP") String attendeeIP, @QueryParam("tracked") String tracked, @Context HttpServletRequest req) {
+    public Response listAllMembersJSON(@QueryParam("sessionID") int sessionID, @QueryParam("attendeeIP") String attendeeIP, @QueryParam("tracked") String tracked, @Context HttpServletRequest req) {
         //@SuppressWarnings("unchecked")
         //executing this every second on poll... nice :)
         String data = "";
@@ -122,8 +122,16 @@ public class AttendeeService {
             e.printStackTrace();
         }
 
+      Response.ResponseBuilder response = Response.ok(data, MediaType.APPLICATION_JSON);
 
-        return data;
+      response.header("Access-Control-Allow-Methods", "GET, POST, OPTIONS");
+      response.header("Access-Control-Allow-Origin", "*");
+      //response.header("Access-Control-Allow-Origin", request.getHeader("Origin"));
+      response.header("Access-Control-Allow-Headers", "accept, origin, ag-mobile-variant, content-type");
+      response.header("Content-Type", "text/plain");
+
+      return response.build();
+
     }
 
     private String randomIPRange(){
@@ -161,11 +169,17 @@ public class AttendeeService {
             mediator.setJsEvent(null);
             mediator.setCurrentSessionID(0);
         }
-        Response.ResponseBuilder builder = null;
 
-        builder = Response.ok();
+      Response.ResponseBuilder response = Response.ok("", MediaType.APPLICATION_JSON);
 
-        return builder.build();
+      response.header("Access-Control-Allow-Methods", "GET, POST, OPTIONS");
+      response.header("Access-Control-Allow-Origin", "*");
+      //response.header("Access-Control-Allow-Origin", request.getHeader("Origin"));
+      response.header("Access-Control-Allow-Headers", "accept, origin, ag-mobile-variant, content-type");
+      response.header("Content-Type", "text/plain");
+
+      return response.build();
+
     }
 
 
@@ -198,7 +212,18 @@ public class AttendeeService {
             mediator.setCurrentSessionID(0);
         }
 
-        return Response.ok("", MediaType.APPLICATION_JSON).build();
+
+      Response.ResponseBuilder response = Response.ok("", MediaType.APPLICATION_JSON);
+
+      response.header("Access-Control-Allow-Methods", "GET, POST, OPTIONS");
+      response.header("Access-Control-Allow-Origin", "*");
+      //response.header("Access-Control-Allow-Origin", request.getHeader("Origin"));
+      response.header("Access-Control-Allow-Headers", "accept, origin, ag-mobile-variant, content-type");
+      response.header("Content-Type", "text/plain");
+
+      return response.build();
+
+
     }
 
 
@@ -217,10 +242,18 @@ public class AttendeeService {
             pollcount.put(sessionID,ips);
         }
 
-        Response.ResponseBuilder builder = null;
+//        Response.ResponseBuilder builder = null;
 
-        builder = Response.ok();
+      Response.ResponseBuilder response = Response.ok();
 
-        return builder.build();
+      response.header("Access-Control-Allow-Methods", "GET, POST, OPTIONS");
+      response.header("Access-Control-Allow-Origin", "*");
+      //response.header("Access-Control-Allow-Origin", request.getHeader("Origin"));
+      response.header("Access-Control-Allow-Headers", "accept, origin, ag-mobile-variant, content-type");
+      response.header("Content-Type", "text/plain");
+
+//        builder = Response.ok();
+
+        return response.build();
     }
 }

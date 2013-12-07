@@ -28,12 +28,12 @@ import javax.enterprise.event.Event;
 import javax.inject.Inject;
 import javax.inject.Singleton;
 import javax.persistence.EntityManager;
+import javax.servlet.http.HttpServletRequest;
 import javax.validation.Validator;
-import javax.ws.rs.GET;
-import javax.ws.rs.Path;
-import javax.ws.rs.Produces;
-import javax.ws.rs.QueryParam;
+import javax.ws.rs.*;
+import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.Response;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
 import java.util.logging.Logger;
@@ -65,20 +65,18 @@ public class PresenterService {
     @GET
     @Path("/ip")
     @Produces(MediaType.APPLICATION_JSON)
-    public String ip(@QueryParam("session") int sessionID) {
+    public Response ip(@QueryParam("session") int sessionID) {
+      Response.ResponseBuilder response = Response.ok("127.0.0.1", MediaType.APPLICATION_JSON);
 
-//        if(addr == null){
-//            try {
-//                addr = InetAddress.getLocalHost().getHostAddress();
-//            } catch (UnknownHostException e) {
-//                log.severe("can't get IP address, falling back to local");
-//                addr = "127.0.0.1";
-//            }
-//        }
-
+      response.header("Access-Control-Allow-Methods", "GET, POST, OPTIONS");
+      response.header("Access-Control-Allow-Origin", "*");
+      //response.header("Access-Control-Allow-Origin", request.getHeader("Origin"));
+      response.header("Access-Control-Allow-Headers", "accept, origin, ag-mobile-variant, content-type");
+      response.header("Content-Type", "text/plain");
        slidFastEventSrc.fire(sessionManager);
 
-        return "127.0.0.1";
+//        return "127.0.0.1";
+      return response.build();
     }
 
 }

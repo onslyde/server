@@ -25,7 +25,7 @@ onslyde.Controllers.controller('PageCtrl',
     $rootScope.urls = function(){
       var BASE_URL = '';
       if($location.host() === 'onslyde.com' || $location.host() === 'www.onslyde.com'){
-        BASE_URL = 'http://onslyde.com';
+        BASE_URL = 'http://onslyde.com:8081';
       }else{
         BASE_URL = 'http://localhost:8081';
       }
