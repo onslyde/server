@@ -66,7 +66,7 @@ public class PresenterService {
     @Path("/ip")
     @Produces(MediaType.APPLICATION_JSON)
     public Response ip(@QueryParam("session") int sessionID) {
-      Response.ResponseBuilder response = Response.ok("127.0.0.1", MediaType.APPLICATION_JSON);
+      Response.ResponseBuilder response = Response.ok("www.onslyde.com", MediaType.APPLICATION_JSON);
 
       response.header("Access-Control-Allow-Methods", "GET, POST, OPTIONS");
       response.header("Access-Control-Allow-Origin", "*");
