@@ -22,12 +22,15 @@ package com.onslyde.rest;
 
 import com.onslyde.model.Mediator;
 import com.onslyde.model.SessionManager;
+import com.onslyde.service.JettyAttendeeService;
 
 import javax.annotation.PostConstruct;
 import javax.enterprise.event.Event;
 import javax.inject.Inject;
 import javax.ws.rs.ApplicationPath;
 import javax.ws.rs.core.Application;
+import java.util.HashSet;
+import java.util.Set;
 
 /**
  * A class extending {@link Application} and annotated with @ApplicationPath is the Java EE 6
@@ -38,9 +41,26 @@ import javax.ws.rs.core.Application;
  * annotation.
  * </p>
  */
-@ApplicationPath("/go")
 public class JaxRsActivator extends Application {
    /* class body intentionally left blank */
+
+  private Set<Object> singletons = new HashSet<Object>();
+  private Set<Class<?>> classes = new HashSet<Class<?>>();
+
+  public JaxRsActivator() {
+    singletons.add(new JettyAttendeeService());
+  }
+
+  @Override
+  public Set<Class<?>> getClasses() {
+    return classes;
+  }
+
+  @Override
+  public Set<Object> getSingletons() {
+    return singletons;
+  }
+
 
     @Inject
     private SessionManager sessionManager;
