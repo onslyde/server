@@ -10,7 +10,7 @@
     <name>onslyde hosted webapp</name>
     <description></description>
 
-    <url>http://onslyde.com</url>
+    <url>http://www.onslyde.com</url>
 
     <properties>
         <!-- Explicitly declaring the source encoding eliminates the following message: -->

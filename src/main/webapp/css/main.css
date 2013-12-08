@@ -80,8 +80,8 @@ i.pictogram {
 
 @font-face {
   font-family: 'entypo-social';
-  src: url('http://onslyde.com/css/entypo/entypo-social.eot');
-  src: url('http://onslyde.com/css/entypo/entypo-social.eot?#iefix') format('embedded-opentype'), url('http://onslyde.com/css/entypo/entypo-social.woff') format('woff'), url('http://onslyde.com/css/entypo/entypo-social.ttf') format('truetype'), url('http://onslyde.com/css/entypo/entypo-social.svg#entypo') format('svg');
+  src: url('//www.onslyde.com/css/entypo/entypo-social.eot');
+  src: url('//www.onslyde.com/css/entypo/entypo-social.eot?#iefix') format('embedded-opentype'), url('http://onslyde.com/css/entypo/entypo-social.woff') format('woff'), url('http://onslyde.com/css/entypo/entypo-social.ttf') format('truetype'), url('http://onslyde.com/css/entypo/entypo-social.svg#entypo') format('svg');
   font-weight: normal;
   font-style: normal;
 }
