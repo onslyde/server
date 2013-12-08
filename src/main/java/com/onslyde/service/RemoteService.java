@@ -50,7 +50,7 @@ public class RemoteService {
         }
 
         return Response.status(Response.Status.SEE_OTHER)
-                .header(HttpHeaders.LOCATION, "https://127.0.0.1/deck/remote.html?session=" + session)
+                .header(HttpHeaders.LOCATION, "https://www.onslyde.com/deck/remote.html?session=" + session)
                 .build();
 
     }
