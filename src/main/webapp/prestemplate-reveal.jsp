@@ -11,21 +11,21 @@
     <meta name="apple-mobile-web-app-capable" content="yes" />
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
 
-    <link rel="stylesheet" href="https://www.onslyde.com/css/reveal/reveal.css">
-    <link rel="stylesheet" href="https://www.onslyde.com/css/reveal/theme/default.css" id="theme">
+    <link rel="stylesheet" href="//www.onslyde.com/css/reveal/reveal.css">
+    <link rel="stylesheet" href="//www.onslyde.com/css/reveal/theme/default.css" id="theme">
 
     <!-- For syntax highlighting -->
-    <link rel="stylesheet" href="https://www.onslyde.com/js/reveal/lib/css/zenburn.css">
+    <link rel="stylesheet" href="//www.onslyde.com/js/reveal/lib/css/zenburn.css">
 
     <!-- If the query includes 'print-pdf', use the PDF print sheet -->
     <script>
-        document.write( '<link rel="stylesheet" href="https://www.onslyde.com/css/reveal/print/' + ( window.location.search.match( /print-pdf/gi ) ? 'pdf' : 'paper' ) + '.css" type="text/css" media="print">' );
+        document.write( '<link rel="stylesheet" href="//www.onslyde.com/css/reveal/print/' + ( window.location.search.match( /print-pdf/gi ) ? 'pdf' : 'paper' ) + '.css" type="text/css" media="print">' );
     </script>
 
     <!--[if lt IE 9]>
-    <script src="https://www.onslyde.com/js/reveal/lib/js/html5shiv.js"></script>
+    <script src="//www.onslyde.com/js/reveal/lib/js/html5shiv.js"></script>
     <![endif]-->
-    <link rel="stylesheet" href="https://www.onslyde.com/css/deck.css">
+    <link rel="stylesheet" href="//www.onslyde.com/css/deck.css">
 </head>
 
 <body>
@@ -53,7 +53,7 @@
 </div>
 <div class="reveal">
     <div class="address">
-        <h4 style="text-transform: lowercase;">connect now <span style="color:#13daec;">https://www.onslyde.com/go/<span id="sessionID"></span></span></h4>
+        <h4 style="text-transform: lowercase;">connect now <span style="color:#13daec;">//www.onslyde.com/go/<span id="sessionID"></span></span></h4>
     </div>
     <!-- Any section element inside of this container is displayed as a slide -->
     <div class="slides">
@@ -110,7 +110,7 @@
         <section class="slide-group">
 
             <section>
-                <p><a target="_blank" href="https://www.onslyde.com/#!/analytics">You can view the analytics for this session</a></p>
+                <p><a target="_blank" href="//www.onslyde.com/#!/analytics">You can view the analytics for this session</a></p>
                 <p>You can use other features (like Roulette) for random giveaways or to choose an audience member</p>
                 <a href="javascript:onslyde.slides.roulette();void(0)">Pick a winner</a>
             </section>
@@ -133,8 +133,8 @@
 
 </div>
 
-<script src="https://www.onslyde.com/js/reveal/lib/js/head.min.js"></script>
-<script src="https://www.onslyde.com/js/reveal/reveal.min.js"></script>
+<script src="//www.onslyde.com/js/reveal/lib/js/head.min.js"></script>
+<script src="//www.onslyde.com/js/reveal/reveal.min.js"></script>
 
 <script>
 
@@ -150,19 +150,19 @@
 
         // Optional libraries used to extend on reveal.js
         dependencies: [
-            { src: 'https://www.onslyde.com/js/reveal/lib/js/classList.js', condition: function() { return !document.body.classList; } },
-            { src: 'https://www.onslyde.com/js/reveal/plugin/markdown/showdown.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
-            { src: 'https://www.onslyde.com/js/reveal/plugin/markdown/markdown.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
-            { src: 'https://www.onslyde.com/js/reveal/plugin/highlight/highlight.js', async: true, callback: function() { hljs.initHighlightingOnLoad(); } },
-            { src: 'https://www.onslyde.com/js/reveal/plugin/zoom-js/zoom.js', async: true, condition: function() { return !!document.body.classList; } },
-            { src: 'https://www.onslyde.com/js/reveal/plugin/notes/notes.js', async: true, condition: function() { return !!document.body.classList; } }
+            { src: '//www.onslyde.com/js/reveal/lib/js/classList.js', condition: function() { return !document.body.classList; } },
+            { src: '//www.onslyde.com/js/reveal/plugin/markdown/showdown.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
+            { src: '//www.onslyde.com/js/reveal/plugin/markdown/markdown.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
+            { src: '//www.onslyde.com/js/reveal/plugin/highlight/highlight.js', async: true, callback: function() { hljs.initHighlightingOnLoad(); } },
+            { src: '//www.onslyde.com/js/reveal/plugin/zoom-js/zoom.js', async: true, condition: function() { return !!document.body.classList; } },
+            { src: '//www.onslyde.com/js/reveal/plugin/notes/notes.js', async: true, condition: function() { return !!document.body.classList; } }
         ]
     });
 
 </script>
 
 <script src="https://code.jquery.com/jquery-1.8.3.min.js"></script>
-<script src="https://www.onslyde.com/deck/js/deck/dist/onslyde-deck-1.0.0.min.js"></script>
+<script src="//www.onslyde.com/deck/js/deck/dist/onslyde-deck-1.0.0.min.js"></script>
 <script>
 
     onslyde({
@@ -170,7 +170,7 @@
     });
 </script>
 
-<script src="https://www.onslyde.com/js/libs/jquery.flot.js"></script>
+<script src="//www.onslyde.com/js/libs/jquery.flot.js"></script>
 
 </body>
 </html>
