@@ -31,4 +31,13 @@
         <param-name>resteasy.providers</param-name>
         <param-value>org.jboss.resteasy.plugins.providers.jackson.JacksonJsonpInterceptor</param-value>
     </context-param>
+
+    <security-constraint>
+        <web-resource-collection>
+            <url-pattern>/*</url-pattern>
+        </web-resource-collection>
+        <user-data-constraint>
+            <transport-guarantee>CONFIDENTIAL</transport-guarantee>
+        </user-data-constraint>
+    </security-constraint>
 </web-app>
