@@ -2,9 +2,9 @@ Onslyde Server Setup
 ======
 
 ##Important Message
-So this server is a bit complex to setup. It requires a mysql database, binding to ports 80 and 443 (with sudo), setting up a keystore for SSL/SPDY/WSS, and a lot of custom config in the JBoss server. I'm leaving this message to let you know that my current focus is on getting everything working properly and things are changing drastically on every deployment. It will be a waste a time to write docs until I'm done with the final setup.
+So this server is a bit complex to setup. It requires a mysql database, binding to ports 80 and 443 (with sudo), setting up a keystore for SSL/SPDY/WSS, and a lot of custom config in the JBoss server. I'm leaving this message to let you know that my current focus is on getting everything working properly and things are changing drastically on every deployment. It will be a waste of time to write docs until I'm done with the final setup.
 
-If you'd like to run this in it's current state, shoot an email to wesleyhales at gmail.com and I will put a zip file up on dropbox with everything you need in its current state.
+If you'd like to run this in it's current state, shoot an email to wesleyhales at gmail.com and I will put a zip file up on dropbox with everything you need to run it.
 
 
 ##Setup
