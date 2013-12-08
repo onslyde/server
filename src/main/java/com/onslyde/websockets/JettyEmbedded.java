@@ -30,6 +30,7 @@ import org.eclipse.jetty.server.session.SessionHandler;
 import org.eclipse.jetty.servlet.DefaultServlet;
 import org.eclipse.jetty.servlet.ServletContextHandler;
 import org.eclipse.jetty.servlet.ServletHolder;
+import org.eclipse.jetty.servlet.ServletMapping;
 import org.eclipse.jetty.spdy.api.SPDY;
 import org.eclipse.jetty.spdy.server.http.HTTPSPDYServerConnector;
 import org.eclipse.jetty.spdy.server.http.PushStrategy;
@@ -38,6 +39,7 @@ import org.eclipse.jetty.util.security.Constraint;
 import org.eclipse.jetty.util.ssl.SslContextFactory;
 import org.eclipse.jetty.websocket.server.WebSocketHandler;
 import org.eclipse.jetty.websocket.servlet.WebSocketServletFactory;
+import org.jboss.resteasy.plugins.server.servlet.HttpServletDispatcher;
 
 import javax.enterprise.context.ApplicationScoped;
 import javax.enterprise.event.Observes;
@@ -55,8 +57,10 @@ public class JettyEmbedded {
   Server server = new Server();
   WebSocketHandler wsHandler = new EchoSocketHandler();
   ServletContextHandler context = new ServletContextHandler();
+  ServletContextHandler restEasyContext = new ServletContextHandler();
   ServletContextHandler wscontext = new ServletContextHandler();
   private ConstraintSecurityHandler _security;
+
   private static SessionHandler _session;
 
   public void onStartup(@Observes @Initialized ServletContext ctx) {
@@ -158,40 +162,61 @@ public class JettyEmbedded {
         movedHandler.setDiscardQuery(false);
         movedHandler.setVirtualHosts(new String[]{"onslyde.com"});
 
-        MovedContextHandler goHandler = new MovedContextHandler();
-        goHandler.setNewContextURL("https://www.onslyde.com:8443/go");
-        goHandler.setContextPath("/go");
-        goHandler.setPermanent(true);
-        goHandler.setDiscardPathInfo(false);
-        goHandler.setDiscardQuery(false);
-        goHandler.setVirtualHosts(new String[]{"onslyde.com","www.onslyde.com"});
+//        MovedContextHandler goHandler = new MovedContextHandler();
+//        goHandler.setNewContextURL("https://www.onslyde.com:8443/go");
+//        goHandler.setContextPath("/go");
+//        goHandler.setPermanent(true);
+//        goHandler.setDiscardPathInfo(false);
+//        goHandler.setDiscardQuery(false);
+//        goHandler.setVirtualHosts(new String[]{"onslyde.com","www.onslyde.com"});
 
 //        _security.setHandler(context);
         context.setSecurityHandler(_security);
+//        restEasyContext.setSecurityHandler(_security);
 // no       context.setHandler(movedHandler);
 
         server.setHandler(requestLogHandler);
         requestLogHandler.setHandler(contexts);
 
 
-        contexts.addHandler(goHandler);
+//        contexts.addHandler(goHandler);
         contexts.addHandler(movedHandler);
 
         contexts.addHandler(wscontext);
         contexts.addHandler(context);
+        contexts.addHandler(restEasyContext);
+
 
 
         context.setContextPath("/");
         context.setResourceBase("standalone/deployments/onslyde-hosted.war");
-        ServletHolder servletHolder = new ServletHolder(DefaultServlet.class);
 
+        ServletHolder servletHolder = new ServletHolder(DefaultServlet.class);
+        ServletHolder restHolder = new ServletHolder(new HttpServletDispatcher());
+
+//        ServletMapping sm = new ServletMapping();
+////
+//        sm.setServletName("resteasy");
+//        sm.setPathSpec("/go/*");
+////
         servletHolder.setName("default");
-        servletHolder.setInitParameter( "gzip", "true" );
-        context.addServlet(servletHolder,"/");
+
+        restHolder.setName("resteasy");
+        restHolder.setDisplayName("resteasy");
+        restHolder.setInitParameter("javax.ws.rs.Application", "com.onslyde.rest.JaxRsActivator");
+//        servletHolder.setInitParameter("resteasy.scan","true");
+//        servletHolder.setInitParameter("resteasy.servlet.mapping.prefix","/go");
+        restHolder.setInitParameter( "resteasy.providers", "org.jboss.resteasy.plugins.providers.jackson.JacksonJsonpInterceptor" );
+
+
+        context.addServlet(servletHolder,"/*");
+
 
         wscontext.setContextPath("/ws");
         wscontext.setHandler(wsHandler);
 
+        restEasyContext.setContextPath("/go");
+        restEasyContext.addServlet(restHolder,"/*");
 
         server.start();
         server.dumpStdErr();
