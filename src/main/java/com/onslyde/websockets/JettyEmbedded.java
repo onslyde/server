@@ -158,6 +158,14 @@ public class JettyEmbedded {
         movedHandler.setDiscardQuery(false);
         movedHandler.setVirtualHosts(new String[]{"onslyde.com"});
 
+        MovedContextHandler goHandler = new MovedContextHandler();
+        goHandler.setNewContextURL("https://www.onslyde.com:8443/go");
+        goHandler.setContextPath("/go");
+        goHandler.setPermanent(true);
+        goHandler.setDiscardPathInfo(false);
+        goHandler.setDiscardQuery(false);
+        goHandler.setVirtualHosts(new String[]{"onslyde.com","www.onslyde.com"});
+
 //        _security.setHandler(context);
         context.setSecurityHandler(_security);
 // no       context.setHandler(movedHandler);
@@ -165,7 +173,10 @@ public class JettyEmbedded {
         server.setHandler(requestLogHandler);
         requestLogHandler.setHandler(contexts);
 
+
+        contexts.addHandler(goHandler);
         contexts.addHandler(movedHandler);
+
         contexts.addHandler(wscontext);
         contexts.addHandler(context);
 
