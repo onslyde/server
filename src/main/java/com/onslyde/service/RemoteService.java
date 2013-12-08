@@ -45,8 +45,6 @@ public class RemoteService {
     public Response lookupMemberById(@PathParam("session") int session,@Context HttpServletRequest req) {
 //        Session session = repository.findById(id);
 
-      System.out.println("====" + req.getHeader("Origin"));
-      System.out.println("====" + req.getRequestURL());
         if (session == 0) {
             throw new WebApplicationException(Response.Status.NOT_FOUND);
         }
