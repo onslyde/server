@@ -21,10 +21,15 @@ CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 package com.onslyde.websockets;
 
 
+import org.eclipse.jetty.http.HttpParser;
+import org.eclipse.jetty.security.ConstraintMapping;
+import org.eclipse.jetty.security.ConstraintSecurityHandler;
 import org.eclipse.jetty.server.*;
+import org.eclipse.jetty.server.handler.AbstractHandler;
 import org.eclipse.jetty.server.handler.ContextHandler;
 import org.eclipse.jetty.server.handler.ContextHandlerCollection;
 import org.eclipse.jetty.server.handler.RequestLogHandler;
+import org.eclipse.jetty.server.session.SessionHandler;
 import org.eclipse.jetty.servlet.DefaultServlet;
 import org.eclipse.jetty.servlet.ServletContextHandler;
 import org.eclipse.jetty.servlet.ServletHolder;
@@ -32,6 +37,7 @@ import org.eclipse.jetty.spdy.api.SPDY;
 import org.eclipse.jetty.spdy.server.http.HTTPSPDYServerConnector;
 import org.eclipse.jetty.spdy.server.http.PushStrategy;
 import org.eclipse.jetty.spdy.server.http.ReferrerPushStrategy;
+import org.eclipse.jetty.util.security.Constraint;
 import org.eclipse.jetty.util.ssl.SslContextFactory;
 import org.eclipse.jetty.websocket.server.WebSocketHandler;
 import org.eclipse.jetty.websocket.servlet.WebSocketServletFactory;
@@ -39,8 +45,11 @@ import org.eclipse.jetty.websocket.servlet.WebSocketServletFactory;
 import javax.enterprise.context.ApplicationScoped;
 import javax.enterprise.event.Observes;
 import javax.servlet.ServletContext;
-import java.util.HashMap;
-import java.util.Map;
+import javax.servlet.ServletException;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
+import java.util.*;
 
 @ApplicationScoped
 public class JettyEmbedded {
@@ -50,6 +59,8 @@ public class JettyEmbedded {
   WebSocketHandler wsHandler = new EchoSocketHandler();
   ServletContextHandler context = new ServletContextHandler();
   ServletContextHandler wscontext = new ServletContextHandler();
+  private ConstraintSecurityHandler _security;
+  private static SessionHandler _session;
 
   public void onStartup(@Observes @Initialized ServletContext ctx) {
 
@@ -77,12 +88,18 @@ public class JettyEmbedded {
             "SSL_DHE_DSS_EXPORT_WITH_DES40_CBC_SHA");
 
 
+
         // HTTP Configuration
         HttpConfiguration http_config = new HttpConfiguration();
         http_config.setSecureScheme("https");
         http_config.setSecurePort(443);
         http_config.addCustomizer(new SecureRequestCustomizer());
         http_config.setSendServerVersion(true);
+
+        ServerConnector http = new ServerConnector(server,new HttpConnectionFactory(http_config));
+        http.setPort(80);
+        http.setIdleTimeout(30000);
+        server.addConnector(http);
 
 
         HttpConfiguration https_config = new HttpConfiguration(http_config);
@@ -91,7 +108,7 @@ public class JettyEmbedded {
         ServerConnector https = new ServerConnector(server,
             new SslConnectionFactory(sslContextFactory,"http/1.1"),
             new HttpConnectionFactory(https_config));
-        https.setPort(80);
+        https.setPort(443);
         https.setIdleTimeout(500000);
         https.setHost("0.0.0.0");
 
@@ -99,18 +116,45 @@ public class JettyEmbedded {
         Map<Short,PushStrategy> pushMap = new HashMap<Short, PushStrategy>();
         pushMap.put(SPDY.V3,new ReferrerPushStrategy());
         HTTPSPDYServerConnector spdyConnector = new HTTPSPDYServerConnector(server,sslContextFactory,pushMap);
-
-
         spdyConnector.setPort(443);
 
         server.addConnector(spdyConnector);
-//        server.addConnector(https);
-        // Setup handlers
+        _security = new ConstraintSecurityHandler();
+
+        RequestHandler _handler = new RequestHandler();
+        _security.setHandler(_handler);
+
+//        <security-constraint>
+//        <web-resource-collection>
+//          <url-pattern>/*</url-pattern>
+//        </web-resource-collection>
+//        <user-data-constraint>
+//            <transport-guarantee>CONFIDENTIAL</transport-guarantee>
+//        </user-data-constraint>
+//    </security-constraint>
+
+
+        Constraint constraint0 = new Constraint();
+        constraint0.setAuthenticate(false);
+        constraint0.setName("force https");
+        constraint0.setDataConstraint(Constraint.DC_CONFIDENTIAL);
+        constraint0.setRoles(new String[]{"*","user"});
+        ConstraintMapping mapping0 = new ConstraintMapping();
+        mapping0.setPathSpec("/*");
+        mapping0.setConstraint(constraint0);
+
+        Set<String> knownRoles=new HashSet<String>();
+        knownRoles.add("*");
+        knownRoles.add("user");
+
+        _security.setConstraintMappings(Arrays.asList(mapping0),knownRoles);
 
 
         ContextHandlerCollection contexts = new ContextHandlerCollection();
         RequestLogHandler requestLogHandler = new RequestLogHandler();
 
+//        _security.setHandler(context);
+        context.setSecurityHandler(_security);
 
         server.setHandler(requestLogHandler);
         requestLogHandler.setHandler(contexts);
@@ -122,7 +166,9 @@ public class JettyEmbedded {
         context.setContextPath("/");
         context.setResourceBase("standalone/deployments/onslyde-hosted.war");
         ServletHolder servletHolder = new ServletHolder(DefaultServlet.class);
+
         servletHolder.setName("default");
+        servletHolder.setInitParameter( "gzip", "true" );
         context.addServlet(servletHolder,"/");
 
         wscontext.setContextPath("/ws");
@@ -138,6 +184,24 @@ public class JettyEmbedded {
     }
 
 
+  }
+
+
+  private class RequestHandler extends AbstractHandler
+  {
+    @Override
+    public void handle(String target, Request baseRequest, HttpServletRequest request, HttpServletResponse response ) throws IOException, ServletException
+    {
+      baseRequest.setHandled(true);
+
+      response.setStatus(200);
+      response.setContentType("text/plain; charset=UTF-8");
+      response.getWriter().println("URI="+request.getRequestURI());
+      String user = request.getRemoteUser();
+      response.getWriter().println("user="+user);
+      if (request.getParameter("test_parameter")!=null)
+        response.getWriter().println(request.getParameter("test_parameter"));
+    }
   }
 
   public final class EchoSocketHandler extends WebSocketHandler {
