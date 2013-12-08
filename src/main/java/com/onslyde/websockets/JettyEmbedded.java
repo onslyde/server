@@ -25,10 +25,7 @@ import org.eclipse.jetty.http.HttpParser;
 import org.eclipse.jetty.security.ConstraintMapping;
 import org.eclipse.jetty.security.ConstraintSecurityHandler;
 import org.eclipse.jetty.server.*;
-import org.eclipse.jetty.server.handler.AbstractHandler;
-import org.eclipse.jetty.server.handler.ContextHandler;
-import org.eclipse.jetty.server.handler.ContextHandlerCollection;
-import org.eclipse.jetty.server.handler.RequestLogHandler;
+import org.eclipse.jetty.server.handler.*;
 import org.eclipse.jetty.server.session.SessionHandler;
 import org.eclipse.jetty.servlet.DefaultServlet;
 import org.eclipse.jetty.servlet.ServletContextHandler;
@@ -152,13 +149,23 @@ public class JettyEmbedded {
 
         ContextHandlerCollection contexts = new ContextHandlerCollection();
         RequestLogHandler requestLogHandler = new RequestLogHandler();
+        MovedContextHandler movedHandler = new MovedContextHandler();
+
+        movedHandler.setNewContextURL("https://www.onslyde.com");
+        movedHandler.setContextPath("/");
+        movedHandler.setPermanent(true);
+        movedHandler.setDiscardPathInfo(false);
+        movedHandler.setDiscardQuery(false);
+        movedHandler.setVirtualHosts(new String[]{"onslyde.com"});
 
 //        _security.setHandler(context);
         context.setSecurityHandler(_security);
+// no       context.setHandler(movedHandler);
 
         server.setHandler(requestLogHandler);
         requestLogHandler.setHandler(contexts);
 
+        contexts.addHandler(movedHandler);
         contexts.addHandler(wscontext);
         contexts.addHandler(context);
 
