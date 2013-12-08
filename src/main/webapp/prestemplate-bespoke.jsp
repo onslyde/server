@@ -13,12 +13,12 @@
     <!-- controls the appearance of the status bar in full-screen mode -->
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
 
-    <link rel="stylesheet" type="text/css" href="http://onslyde.com/js/libs/bespoke/style.css" />
-    <link rel="stylesheet" type="text/css" href="http://onslyde.com/js/libs/bespoke/themes.css" />
+    <link rel="stylesheet" type="text/css" href="//www.onslyde.com/js/libs/bespoke/style.css" />
+    <link rel="stylesheet" type="text/css" href="//www.onslyde.com/js/libs/bespoke/themes.css" />
 
     <!--onslyde specific styles-->
-    <link href="http://fonts.googleapis.com/css?family=Lato:300,400,700,900" rel="stylesheet" type="text/css">
-    <link href="http://onslyde.com/css/deck.css" rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css?family=Lato:300,400,700,900" rel="stylesheet" type="text/css">
+    <link href="//www.onslyde.com/css/deck.css" rel="stylesheet" />
 
 
     <style>
@@ -53,7 +53,7 @@
 </div>
 
 <div class="address">
-    <h4 style="text-transform: lowercase;">connect now <span style="color:#13daec;">http://onslyde.com/go/<span id="sessionID"></span></span></h4>
+    <h4 style="text-transform: lowercase;">connect now <span style="color:#13daec;">//www.onslyde.com/go/<span id="sessionID"></span></span></h4>
 </div>
 <!-- Any section element inside of this container is displayed as a slide -->
 <div id="main">
@@ -108,7 +108,7 @@
         <span class="slide-group">
 
             <section class="slide">
-                <p><a target="_blank" href="http://onslyde.com/#!/analytics">You can view the analytics for this session</a></p>
+                <p><a target="_blank" href="//www.onslyde.com/#!/analytics">You can view the analytics for this session</a></p>
                 <p>You can use other features (like Roulette) for random giveaways or to choose an audience member</p>
                 <a href="javascript:onslyde.slides.roulette();void(0)">Pick a winner</a>
             </section>
@@ -144,10 +144,10 @@
 
 </footer>
 
-<script src="http://onslyde.com/js/libs/bespoke/bespoke.js"></script>
-<script src="http://onslyde.com/js/libs/bespoke/demo.js"></script>
-<script src="http://code.jquery.com/jquery-1.8.3.min.js"></script>
-<script src="http://onslyde.com/deck/js/deck/dist/onslyde-deck-1.0.0.min.js"></script>
+<script src="//www.onslyde.com/js/libs/bespoke/bespoke.js"></script>
+<script src="//www.onslyde.com/js/libs/bespoke/demo.js"></script>
+<script src="https://code.jquery.com/jquery-1.8.3.min.js"></script>
+<script src="//www.onslyde.com/deck/js/deck/dist/onslyde-deck-1.0.0.min.js"></script>
 <script>
 
     onslyde({
@@ -155,6 +155,6 @@
     });
 </script>
 
-<script src="http://onslyde.com/js/libs/jquery.flot.js"></script>
+<script src="//www.onslyde.com/js/libs/jquery.flot.js"></script>
 </body>
 </html>
