@@ -22,10 +22,12 @@ package com.onslyde.rest;
 
 import com.onslyde.model.Mediator;
 import com.onslyde.model.SessionManager;
-import com.onslyde.service.JettyAttendeeService;
+import com.onslyde.service.*;
+import org.eclipse.jetty.websocket.api.Session;
 
 import javax.annotation.PostConstruct;
 import javax.enterprise.event.Event;
+import javax.enterprise.event.Observes;
 import javax.inject.Inject;
 import javax.ws.rs.ApplicationPath;
 import javax.ws.rs.core.Application;
@@ -41,15 +43,50 @@ import java.util.Set;
  * annotation.
  * </p>
  */
+
+@ApplicationPath("/go")
 public class JaxRsActivator extends Application {
-   /* class body intentionally left blank */
+
+  @Inject
+  private SessionManager sessionManager;
+
+  @Inject
+  private Event<SessionManager> slidFastEventSrc;
+
+  @Inject
+  private Mediator mediator;
+
+  @Inject Event<Mediator> mediatorEventSrc;
+
+  @Inject
+  AnalyticsService analyticsService;
+
+  @Inject
+  PresenterService presenterService;
+
+  @Inject
+  MemberService memberService;
+
+  @Inject
+  PanelRemoteService panelRemoteService;
+
+  @Inject
+  PerformanceService performanceService;
+
+  @Inject
+  PresentationCreator presentationCreator;
+
+  @Inject
+  RemoteService remoteService;
 
   private Set<Object> singletons = new HashSet<Object>();
   private Set<Class<?>> classes = new HashSet<Class<?>>();
 
-  public JaxRsActivator() {
-    singletons.add(new JettyAttendeeService());
-  }
+
+//  public JaxRsActivator() {
+////    System.out.println("-----constructor");
+////    singletons.add(new JettyAttendeeService());
+//  }
 
   @Override
   public Set<Class<?>> getClasses() {
@@ -62,21 +99,17 @@ public class JaxRsActivator extends Application {
   }
 
 
-    @Inject
-    private SessionManager sessionManager;
-
-    @Inject
-    private Event<SessionManager> slidFastEventSrc;
-
-    @Inject
-    private Mediator mediator;
-
-    @Inject Event<Mediator> mediatorEventSrc;
-
-   @PostConstruct
+  @PostConstruct
    public void initialize() {
-       slidFastEventSrc.fire(sessionManager);
-       mediatorEventSrc.fire(mediator);
-       System.out.println("_____________postconstruct slidfast and mediator in rest");
+    slidFastEventSrc.fire(sessionManager);
+    mediatorEventSrc.fire(mediator);
+    System.out.println("_____________postconstruct slidfast and mediator in rest");
+    singletons.add(analyticsService);
+    singletons.add(presenterService);
+    singletons.add(memberService);
+    singletons.add(panelRemoteService);
+    singletons.add(performanceService);
+    singletons.add(presentationCreator);
+    singletons.add(remoteService);
    }
 }

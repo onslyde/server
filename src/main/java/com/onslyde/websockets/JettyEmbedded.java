@@ -162,13 +162,13 @@ public class JettyEmbedded {
         movedHandler.setDiscardQuery(false);
         movedHandler.setVirtualHosts(new String[]{"onslyde.com"});
 
-//        MovedContextHandler goHandler = new MovedContextHandler();
-//        goHandler.setNewContextURL("https://www.onslyde.com:8443/go");
-//        goHandler.setContextPath("/go");
-//        goHandler.setPermanent(true);
-//        goHandler.setDiscardPathInfo(false);
-//        goHandler.setDiscardQuery(false);
-//        goHandler.setVirtualHosts(new String[]{"onslyde.com","www.onslyde.com"});
+        MovedContextHandler goHandler = new MovedContextHandler();
+        goHandler.setNewContextURL("https://www.onslyde.com:8443/go");
+        goHandler.setContextPath("/go");
+        goHandler.setPermanent(true);
+        goHandler.setDiscardPathInfo(false);
+        goHandler.setDiscardQuery(false);
+        goHandler.setVirtualHosts(new String[]{"onslyde.com","www.onslyde.com"});
 
 //        _security.setHandler(context);
         context.setSecurityHandler(_security);
@@ -179,7 +179,7 @@ public class JettyEmbedded {
         requestLogHandler.setHandler(contexts);
 
 
-//        contexts.addHandler(goHandler);
+        contexts.addHandler(goHandler);
         contexts.addHandler(movedHandler);
 
         contexts.addHandler(wscontext);
@@ -203,7 +203,7 @@ public class JettyEmbedded {
 
         restHolder.setName("resteasy");
         restHolder.setDisplayName("resteasy");
-        restHolder.setInitParameter("javax.ws.rs.Application", "com.onslyde.rest.JaxRsActivator");
+        restHolder.setInitParameter("javax.ws.rs.Application", "com.onslyde.rest.JettyActivator");
 //        servletHolder.setInitParameter("resteasy.scan","true");
 //        servletHolder.setInitParameter("resteasy.servlet.mapping.prefix","/go");
         restHolder.setInitParameter( "resteasy.providers", "org.jboss.resteasy.plugins.providers.jackson.JacksonJsonpInterceptor" );
@@ -215,7 +215,7 @@ public class JettyEmbedded {
         wscontext.setContextPath("/ws");
         wscontext.setHandler(wsHandler);
 
-        restEasyContext.setContextPath("/go");
+        restEasyContext.setContextPath("/poll");
         restEasyContext.addServlet(restHolder,"/*");
 
         server.start();
