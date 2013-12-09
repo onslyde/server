@@ -53,7 +53,7 @@
 </div>
 <div class="reveal">
     <div class="address">
-        <h4 style="text-transform: lowercase;">connect now <span style="color:#13daec;">//www.onslyde.com/go/<span id="sessionID"></span></span></h4>
+        <h4 style="text-transform: lowercase;">connect now <span style="color:#13daec;">onslyde.com/go/<span id="sessionID"></span></span></h4>
     </div>
     <!-- Any section element inside of this container is displayed as a slide -->
     <div class="slides">

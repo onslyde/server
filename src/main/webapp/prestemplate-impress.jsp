@@ -47,7 +47,7 @@
 </div>
 
 <div class="address">
-    <h4 style="text-transform: lowercase;">connect now <span style="color:#13daec;">//www.onslyde.com/go/<span id="sessionID"></span></span></h4>
+    <h4 style="text-transform: lowercase;">connect now <span style="color:#13daec;">onslyde.com/go/<span id="sessionID"></span></span></h4>
 </div>
 <!--
     For example this fallback message is only visible when there is `impress-not-supported` class on body.

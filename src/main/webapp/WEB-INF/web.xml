@@ -27,15 +27,38 @@
         <extension>appcache</extension>
         <mime-type>text/cache-manifest</mime-type>
     </mime-mapping>
-    <!--<context-param>-->
-        <!--<param-name>resteasy.providers</param-name>-->
-        <!--<param-value>org.jboss.resteasy.plugins.providers.jackson.JacksonJsonpInterceptor</param-value>-->
-    <!--</context-param>-->
 
-    <!--<context-param>-->
-        <!--<param-name>resteasy.scan</param-name>-->
-        <!--<param-value>false</param-value>-->
-    <!--</context-param>-->
+    <servlet>
+        <servlet-name>Resteasy</servlet-name>
+        <servlet-class>
+            org.jboss.resteasy.plugins.server.servlet.HttpServletDispatcher
+        </servlet-class>
+        <init-param>
+            <param-name>javax.ws.rs.Application</param-name>
+            <param-value>com.onslyde.rest.JaxRsActivator</param-value>
+        </init-param>
+    </servlet>
+
+    <servlet-mapping>
+        <servlet-name>Resteasy</servlet-name>
+        <url-pattern>/go/*</url-pattern>
+    </servlet-mapping>
+
+    <context-param>
+        <param-name>resteasy.servlet.mapping.prefix</param-name>
+        <param-value>/go</param-value>
+    </context-param>
+
+
+    <context-param>
+        <param-name>resteasy.providers</param-name>
+        <param-value>org.jboss.resteasy.plugins.providers.jackson.JacksonJsonpInterceptor</param-value>
+    </context-param>
+
+    <context-param>
+        <param-name>resteasy.scan</param-name>
+        <param-value>false</param-value>
+    </context-param>
     <!--<context-param>-->
         <!--<param-name>resteasy.scan.providers</param-name>-->
         <!--<param-value>false</param-value>-->
