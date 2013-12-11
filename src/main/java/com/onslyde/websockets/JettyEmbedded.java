@@ -266,7 +266,7 @@ public class JettyEmbedded {
 
   public void observeItemEvent(@Observes Mediator mediator) {
     this.mediator = mediator;
-    System.out.println("******************" + mediator + "*****" + this.mediator);
+//    System.out.println("******************" + mediator + "*****" + this.mediator);
   }
 
 }
