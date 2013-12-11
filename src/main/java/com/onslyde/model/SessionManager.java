@@ -89,6 +89,9 @@ public class SessionManager implements Serializable {
     @Inject
     private Event<SessionManager> slidFastEventSrc;
 
+    @Inject
+    private Event<Mediator> mediatorEventSrc;
+
 //    private Session currentSession;
 //    private SlideGroup currentSlideGroup;
     private boolean sessionStarted = false;
@@ -101,6 +104,7 @@ public class SessionManager implements Serializable {
 
     public boolean startSession(int sessionID){
         Session currentSession;
+//        mediatorEventSrc.fire(mediator);
         if(!sessionStarted){
             System.out.println("session started!!!!! sessionID:" + sessionID);
             //todo - catch session not found
@@ -123,24 +127,37 @@ public class SessionManager implements Serializable {
 //
 //            }
             slidFastEventSrc.fire(this);
+            mediatorEventSrc.fire(mediator);
             return true;
         }else{
             //todo - we need a session end trigger
             //for now always start session
+
             return true;
         }
+
+
 
     }
 
     public void broadcastMarkup(String markup, int sessionID){
+//      mediatorEventSrc.fire(mediator);
+
         if(mediator.getActiveOptions().containsKey(sessionID)){
-            Mediator.SessionTracker st = mediator.getActiveOptions().get(sessionID);
-            st.setActiveMarkup(markup);
+          mediator.getActiveOptions().get(sessionID).setActiveMarkup(markup);
+          mediatorEventSrc.fire(mediator);
+        }else{
+          mediator.getActiveOptions().put(sessionID,new Mediator.SessionTracker(new ArrayList<String>(),0,0));
+          mediator.getActiveOptions().get(sessionID).setActiveMarkup(markup);
         }
+
+      //do the sync now that restful endpoints are on jetty side and we need the new polling data there
+      mediatorEventSrc.fire(mediator);
     }
 
     public void addGroupOptions(List<String> options, int sessionID, byte[] screenshot){
-        Session currentSession;
+
+      Session currentSession;
         SlideGroup currentSlideGroup;
         Slide currentSlide;
         currentSession = sessionHome.findById(sessionID);
@@ -232,8 +249,12 @@ public class SessionManager implements Serializable {
             }else{
                 mediator.getActiveOptions().put(currentSession.getId(),new Mediator.SessionTracker(options,sgid,sid));
             }
-//        }
-        //sessionHome.persist(currentSession);
+
+      //do the sync now that restful endpoints are on jetty side and we need the new polling data there
+      mediatorEventSrc.fire(mediator);
+
+
+
     }
 
     public void updateGroupVote(String vote, String attendeeIP, String name, String email, int sessionID, Long voteTime){
@@ -316,6 +337,7 @@ public class SessionManager implements Serializable {
                 //currentSession.getSlideGroups().add(currentSlideGroup);
                 //sgHome.persist(currentSlideGroup);
                 sessionHome.merge(currentSession);
+
             }
 
 

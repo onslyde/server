@@ -52,6 +52,7 @@ public class OnslydeWebSocketHandler {
   @Inject
   private Logger log;
 
+
   //wss: http://amilamanoj.blogspot.com/2013/06/secure-websockets-with-jetty.html
 
   private Connection connection;
@@ -289,6 +290,7 @@ public class OnslydeWebSocketHandler {
       if (optionList.size() == 3) {
 
         data = ClientEvent.createEvent("updateOptions", optionList, sessionID);
+
         try {
           sendToAll(data, this.session, sessionID);
         } catch (IOException e) {
@@ -297,6 +299,7 @@ public class OnslydeWebSocketHandler {
 
         try {
           getSessionManager().addGroupOptions(optionList, sessionID, screenshot);
+
         } catch (Exception e) {
           System.out.println("----- couldn't find session: " + sessionID + " here's the option list: " + optionList);
           e.printStackTrace();
@@ -305,7 +308,7 @@ public class OnslydeWebSocketHandler {
 
       }
     } else if (data.contains("speak:")) {
-      System.out.println("Speak:" + data);
+
       String name = data.substring("speak:".length(), data.length());
 
       data = ClientEvent.speak(sessionID, attendeeIP, name, 0);
@@ -367,7 +370,6 @@ public class OnslydeWebSocketHandler {
 
     } else if (data.contains("::connect::")) {
       try {
-
         getSessionManager().startSession(sessionID);
         getSessionManager().setPollcount(0);
         Map<String, Session> presenterData = new HashMap<String, Session>();
@@ -474,7 +476,7 @@ public class OnslydeWebSocketHandler {
 
       if (mediator.getPsessions().containsKey(this.sessionID)) {
         if (mediator.getPsessions().get(this.sessionID).containsKey(this.attendeeIP)) {
-          System.out.println("-remove presenter socket--" + this.attendeeIP + "--------" + sessionID + " sesseion " + this.session);
+          System.out.println("-remove presenter socket--" + this.attendeeIP + "--------" + sessionID);
           mediator.getPsessions().get(this.sessionID).remove(this.attendeeIP);
         }
 

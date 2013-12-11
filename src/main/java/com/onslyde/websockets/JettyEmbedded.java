@@ -21,6 +21,7 @@ CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 package com.onslyde.websockets;
 
 
+import com.onslyde.model.Mediator;
 import org.eclipse.jetty.http.HttpParser;
 import org.eclipse.jetty.security.ConstraintMapping;
 import org.eclipse.jetty.security.ConstraintSecurityHandler;
@@ -42,7 +43,9 @@ import org.eclipse.jetty.websocket.servlet.WebSocketServletFactory;
 import org.jboss.resteasy.plugins.server.servlet.HttpServletDispatcher;
 
 import javax.enterprise.context.ApplicationScoped;
+import javax.enterprise.event.Event;
 import javax.enterprise.event.Observes;
+import javax.inject.Inject;
 import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
@@ -60,6 +63,12 @@ public class JettyEmbedded {
   ServletContextHandler restEasyContext = new ServletContextHandler();
   ServletContextHandler wscontext = new ServletContextHandler();
   private ConstraintSecurityHandler _security;
+
+  @Inject
+  Mediator mediator;
+
+  @Inject
+  private Event<Mediator> mediatorEventSrc;
 
   private static SessionHandler _session;
 
@@ -217,7 +226,8 @@ public class JettyEmbedded {
 
         restEasyContext.setContextPath("/poll");
         restEasyContext.addServlet(restHolder,"/*");
-
+        restEasyContext.getServletContext().setAttribute("mediator",mediator);
+        restEasyContext.getServletContext().setAttribute("mediatorEvent",mediatorEventSrc);
         server.start();
         server.dumpStdErr();
 
@@ -252,6 +262,11 @@ public class JettyEmbedded {
     public void configure(WebSocketServletFactory factory) {
       factory.setCreator(new OnslydeSocketCreator());
     }
+  }
+
+  public void observeItemEvent(@Observes Mediator mediator) {
+    this.mediator = mediator;
+    System.out.println("******************" + mediator + "*****" + this.mediator);
   }
 
 }
