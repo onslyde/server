@@ -199,6 +199,7 @@ public class JettyEmbedded {
 
         context.setContextPath("/");
         context.setResourceBase("standalone/deployments/onslyde-hosted.war");
+//        context.setResourceBase("/www/jboss-as-7.1.1.Final/standalone/deployments/onslyde-hosted.war");
 
         ServletHolder servletHolder = new ServletHolder(DefaultServlet.class);
         ServletHolder restHolder = new ServletHolder(new HttpServletDispatcher());
