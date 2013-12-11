@@ -89,20 +89,20 @@ public class AnalyticsService {
       return response.build();
     }
 
-//    @GET
-//    @Produces("application/json")
-//    @Path("/removeit/{session:[0-9][0-9]*}")
-//    public String removeSessionVotes(@PathParam("session") int session){
-//
-//        try {
-//            Session mySession = sessionHome.findById(session);
-//            sgHome.removeBySessionId(mySession);
-//            return "success!!!";
-//        } catch (Exception e) {
-//            e.printStackTrace();
-//            return "fail!!";
-//        }
-//    }
+    @GET
+    @Produces("application/json")
+    @Path("/removeit/{session:[0-9][0-9]*}")
+    public String removeSessionVotes(@PathParam("session") int session){
+
+        try {
+            Session mySession = sessionHome.findById(201);
+            sgHome.removeBySessionId(mySession);
+            return "success!!!";
+        } catch (Exception e) {
+            e.printStackTrace();
+            return "fail!!";
+        }
+    }
 
     private class AllSessions{
         List<SessionSummary> sessionSummaries;
