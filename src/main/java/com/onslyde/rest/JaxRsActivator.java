@@ -79,6 +79,9 @@ public class JaxRsActivator extends Application {
   @Inject
   RemoteService remoteService;
 
+  @Inject
+  AttendeeService attendeeService;
+
   private Set<Object> singletons = new HashSet<Object>();
   private Set<Class<?>> classes = new HashSet<Class<?>>();
 
@@ -105,6 +108,7 @@ public class JaxRsActivator extends Application {
     mediatorEventSrc.fire(mediator);
     System.out.println("_____________postconstruct slidfast and mediator in rest");
     singletons.add(analyticsService);
+    singletons.add(attendeeService);
     singletons.add(presenterService);
     singletons.add(memberService);
     singletons.add(panelRemoteService);

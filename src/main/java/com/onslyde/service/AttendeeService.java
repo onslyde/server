@@ -41,22 +41,21 @@ import java.util.*;
 import java.util.logging.Logger;
 
 @Path("/attendees")
-@RequestScoped
 public class AttendeeService {
     @Inject
     private Logger log;//
 
-    @Inject
-    private EntityManager em;
+//    @Inject
+//    private EntityManager em;
 
     @Inject
     private Event<Mediator> mediatorEventSrc;
 
-    @Inject
-    private Event<SessionManager> slidFastEventSrc;
+//    @Inject
+//    private Event<SessionManager> slidFastEventSrc;
 
-    @Inject
-    private Validator validator;
+//    @Inject
+//    private Validator validator;
 
     @Inject
     private SessionManager sessionManager;

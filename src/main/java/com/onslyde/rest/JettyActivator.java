@@ -12,6 +12,7 @@ import javax.enterprise.context.RequestScoped;
 import javax.enterprise.event.Event;
 import javax.enterprise.event.Observes;
 import javax.inject.Inject;
+import javax.servlet.ServletContext;
 import javax.ws.rs.ApplicationPath;
 import javax.ws.rs.core.Application;
 import java.util.HashSet;
@@ -24,12 +25,17 @@ import java.util.Set;
 public class JettyActivator extends Application {
    /* class body intentionally left blank */
 
+  @Inject
+  private AttendeeService attendeeService;
+
+  @javax.ws.rs.core.Context
+  ServletContext context;
+
   private Set<Object> singletons = new HashSet<Object>();
   private Set<Class<?>> classes = new HashSet<Class<?>>();
 
-
-
   public JettyActivator() {
+    System.out.println("--------------context " + context);
     singletons.add(new JettyAttendeeService());
   }
 
@@ -47,6 +53,8 @@ public class JettyActivator extends Application {
   public void initialize() {
     System.out.println("_____________jetty post construct");
   }
+
+
 
 
 

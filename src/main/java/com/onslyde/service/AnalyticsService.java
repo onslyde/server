@@ -58,17 +58,35 @@ public class AnalyticsService {
     @GET
     @Produces("application/json")
     @Path("/{session:[0-9][0-9]*}")
-    public Session getSessionData(@PathParam("session") int session){
+    public Response getSessionData(@PathParam("session") int session){
         Session mySession = sessionHome.findById(session);
-        return mySession;
+
+      Response.ResponseBuilder response = Response.ok(mySession, MediaType.APPLICATION_JSON);
+      response.header("Access-Control-Allow-Methods", "GET, POST, OPTIONS");
+      response.header("Access-Control-Allow-Origin", "*");
+      //response.header("Access-Control-Allow-Origin", request.getHeader("Origin"));
+      response.header("Access-Control-Allow-Headers", "accept, origin, ag-mobile-variant, content-type");
+//      response.header("Content-Type", "text/plain");
+
+      return response.build();
+
     }
 
     @GET
     @Produces("application/json")
     @Path("/list/{userId:[0-9][0-9]*}")
-    public List getSessionList(@PathParam("userId") int userId){
+    public Response getSessionList(@PathParam("userId") int userId){
         User user = repository.findById(userId);
-        return sessionHome.findByUser(user);
+        List sessions = sessionHome.findByUser(user);
+
+      Response.ResponseBuilder response = Response.ok(sessions, MediaType.APPLICATION_JSON);
+      response.header("Access-Control-Allow-Methods", "GET, POST, OPTIONS");
+      response.header("Access-Control-Allow-Origin", "*");
+      //response.header("Access-Control-Allow-Origin", request.getHeader("Origin"));
+      response.header("Access-Control-Allow-Headers", "accept, origin, ag-mobile-variant, content-type");
+//      response.header("Content-Type", "text/plain");
+
+      return response.build();
     }
 
 //    @GET
@@ -150,7 +168,18 @@ public class AnalyticsService {
         } catch (Exception e) {
             e.printStackTrace();
         }
-        return Response.ok(allSessions, MediaType.APPLICATION_JSON).build();
+
+      Response.ResponseBuilder response = Response.ok(allSessions, MediaType.APPLICATION_JSON);
+      response.header("Access-Control-Allow-Methods", "GET, POST, OPTIONS");
+      response.header("Access-Control-Allow-Origin", "*");
+      //response.header("Access-Control-Allow-Origin", request.getHeader("Origin"));
+      response.header("Access-Control-Allow-Headers", "accept, origin, ag-mobile-variant, content-type");
+//      response.header("Content-Type", "text/plain");
+
+      return response.build();
+
+
+
     }
 
 
