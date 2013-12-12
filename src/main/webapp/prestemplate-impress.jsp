@@ -147,7 +147,7 @@
 <script>impress().init();</script>
 
 <script src="https://code.jquery.com/jquery-1.8.3.min.js"></script>
-<script src="https://www.onslyde.com/deck/js/deck/dist/onslyde-deck-1.0.0.min.js"></script>
+<script src="https://www.onslyde.com/deck/js/deck/dist/onslyde-deck-1.0.0.min.js?v=5"></script>
 <script>
 
     onslyde({

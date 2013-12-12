@@ -105,23 +105,26 @@ onslyde.Controllers.controller('AnalyticsCtrl',
 
             angular.forEach($scope.sessionData.slideGroups, function(value, index){
 
-              var twooptions = [],
+              var twooptions,
                 voteData,
                 voteOptions,
-                allVotes = [],
-                chartPlotObject = {label:'',datapoints:[]};
+                allVotes;
 
               if(value.slideGroupOptionses.length > 2){
 
-                twooptions.push(chartPlotObject);
-                twooptions.push(chartPlotObject);
-                twooptions.push(chartPlotObject);
-                twooptions.push(chartPlotObject);
+                twooptions = [
+                  {label:'',datapoints:[]},
+                  {label:'',datapoints:[]},
+                  {label:'',datapoints:[]},
+                  {label:'',datapoints:[]}
+                ];
 
-                allVotes.push(chartPlotObject);
-                allVotes.push(chartPlotObject);
-                allVotes.push(chartPlotObject);
-                allVotes.push(chartPlotObject);
+                allVotes = [
+                  {label:'',datapoints:[]},
+                  {label:'',datapoints:[]},
+                  {label:'',datapoints:[]},
+                  {label:'',datapoints:[]}
+                ];
 
                 voteData = value.slideGroupVoteses;
                 voteOptions = value.slideGroupOptionses;
@@ -133,12 +136,15 @@ onslyde.Controllers.controller('AnalyticsCtrl',
                 }
               }else{
 
-                twooptions.push(chartPlotObject);
-                twooptions.push(chartPlotObject);
+                twooptions = [
+                  {label:'',datapoints:[]},
+                  {label:'',datapoints:[]}
+                ];
 
-                allVotes.push(chartPlotObject);
-                allVotes.push(chartPlotObject);
-
+                allVotes = [
+                  {label:'',datapoints:[]},
+                  {label:'',datapoints:[]}
+                ];
                 if(typeof value.slides[0] !== 'undefined'){
                   voteData = value.slides[0].slideVoteses;
                   voteOptions = value.slides[0].slideOptionses;
