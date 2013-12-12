@@ -10,13 +10,13 @@
     <meta name="description" content="impress.js is a presentation tool based on the power of CSS3 transforms and transitions in modern browsers and inspired by the idea behind prezi.com." />
     <meta name="author" content="Bartek Szopka" />
 
-    <link href="http://fonts.googleapis.com/css?family=Open+Sans:regular,semibold,italic,italicsemibold|PT+Sans:400,700,400italic,700italic|PT+Serif:400,700,400italic,700italic" rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css?family=Open+Sans:regular,semibold,italic,italicsemibold|PT+Sans:400,700,400italic,700italic|PT+Serif:400,700,400italic,700italic" rel="stylesheet" />
 
 
-    <link href="//www.onslyde.com/js/libs/impress/impress-demo.css" rel="stylesheet" />
+    <link href="https://www.onslyde.com/js/libs/impress/impress-demo.css" rel="stylesheet" />
 
     <link href="https://fonts.googleapis.com/css?family=Lato:300,400,700,900" rel="stylesheet" type="text/css">
-    <link href="//www.onslyde.com/css/deck.css" rel="stylesheet" />
+    <link href="https://www.onslyde.com/css/deck.css" rel="stylesheet" />
 
     <link rel="apple-touch-icon" href="apple-touch-icon.png" />
 </head>
@@ -109,7 +109,7 @@
     <section class="slide-group">
 
         <section class="slide step" data-x="5500" data-y="-300" data-rotate="50" data-scale="3">
-            <p><a target="_blank" href="//www.onslyde.com/#!/analytics">You can view the analytics for this session</a></p>
+            <p><a target="_blank" href="https://www.onslyde.com/#!/analytics">You can view the analytics for this session</a></p>
             <p>You can use other features (like Roulette) for random giveaways or to choose an audience member</p>
             <a href="javascript:onslyde.slides.roulette();void(0)">Pick a winner</a>
         </section>
@@ -143,11 +143,11 @@
 </script>
 
 
-<script src="//www.onslyde.com/js/libs/impress/impress.js"></script>
+<script src="https://www.onslyde.com/js/libs/impress/impress.js"></script>
 <script>impress().init();</script>
 
 <script src="https://code.jquery.com/jquery-1.8.3.min.js"></script>
-<script src="//www.onslyde.com/deck/js/deck/dist/onslyde-deck-1.0.0.min.js"></script>
+<script src="https://www.onslyde.com/deck/js/deck/dist/onslyde-deck-1.0.0.min.js"></script>
 <script>
 
     onslyde({
@@ -155,7 +155,7 @@
     });
 </script>
 
-<script src="//www.onslyde.com/js/libs/jquery.flot.js"></script>
+<script src="https://www.onslyde.com/js/libs/jquery.flot.js"></script>
 
 </body>
 </html>

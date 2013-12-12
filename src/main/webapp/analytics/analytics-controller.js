@@ -105,41 +105,40 @@ onslyde.Controllers.controller('AnalyticsCtrl',
 
             angular.forEach($scope.sessionData.slideGroups, function(value, index){
 
-              var twooptions,
+              var twooptions = [],
                 voteData,
                 voteOptions,
-                allVotes;
+                allVotes = [],
+                chartPlotObject = {label:'',datapoints:[]};
 
               if(value.slideGroupOptionses.length > 2){
 
-                twooptions = [
-                  {label:'',datapoints:[]},
-                  {label:'',datapoints:[]},
-                  {label:'',datapoints:[]},
-                  {label:'',datapoints:[]}
-                ];
+                twooptions.push(chartPlotObject);
+                twooptions.push(chartPlotObject);
+                twooptions.push(chartPlotObject);
+                twooptions.push(chartPlotObject);
 
-                allVotes = [
-                  {label:'',datapoints:[]},
-                  {label:'',datapoints:[]},
-                  {label:'',datapoints:[]},
-                  {label:'',datapoints:[]}
-                ];
+                allVotes.push(chartPlotObject);
+                allVotes.push(chartPlotObject);
+                allVotes.push(chartPlotObject);
+                allVotes.push(chartPlotObject);
 
                 voteData = value.slideGroupVoteses;
                 voteOptions = value.slideGroupOptionses;
                 twooptions.topicName = value.groupName;
+
+                try {
+                  twooptions.topicImage = value.slides[0].screenshot;
+                } catch (e) {
+                }
               }else{
 
-                twooptions = [
-                  {label:'',datapoints:[]},
-                  {label:'',datapoints:[]}
-                ];
+                twooptions.push(chartPlotObject);
+                twooptions.push(chartPlotObject);
 
-                allVotes = [
-                  {label:'',datapoints:[]},
-                  {label:'',datapoints:[]}
-                ];
+                allVotes.push(chartPlotObject);
+                allVotes.push(chartPlotObject);
+
                 if(typeof value.slides[0] !== 'undefined'){
                   voteData = value.slides[0].slideVoteses;
                   voteOptions = value.slides[0].slideOptionses;

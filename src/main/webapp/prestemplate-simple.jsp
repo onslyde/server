@@ -13,8 +13,8 @@
     <!-- controls the appearance of the status bar in full-screen mode -->
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
 
-    <link rel="stylesheet" media="all" href="//www.onslyde.com/css/slidfast.css" />
-    <link href="//www.onslyde.com/css/deck.css" rel="stylesheet" />
+    <link rel="stylesheet" media="all" href="https://www.onslyde.com/css/slidfast.css" />
+    <link href="https://www.onslyde.com/css/deck.css" rel="stylesheet" />
 
 
     <style>
@@ -106,7 +106,7 @@
     <section class="slide-group">
 
         <section>
-            <p><a target="_blank" href="//www.onslyde.com/#!/analytics">You can view the analytics for this session</a></p>
+            <p><a target="_blank" href="https://www.onslyde.com/#!/analytics">You can view the analytics for this session</a></p>
             <p>You can use other features (like Roulette) for random giveaways or to choose an audience member</p>
             <a href="javascript:onslyde.slides.roulette();void(0)">Pick a winner</a>
         </section>
@@ -127,7 +127,7 @@
 </div>
 
 <script src="https://code.jquery.com/jquery-1.8.3.min.js"></script>
-<script src="//www.onslyde.com/deck/js/deck/dist/onslyde-deck-1.0.0.min.js"></script>
+<script src="https://www.onslyde.com/deck/js/deck/dist/onslyde-deck-1.0.0.min.js"></script>
 <script>
 
     onslyde({
@@ -135,6 +135,6 @@
     });
 </script>
 
-<script src="//www.onslyde.com/js/libs/jquery.flot.js"></script>
+<script src="https://www.onslyde.com/js/libs/jquery.flot.js"></script>
 </body>
 </html>
