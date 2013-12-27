@@ -26,6 +26,7 @@ import com.onslyde.domain.User;
 import com.onslyde.domain.UserHome;
 import com.onslyde.model.Mediator;
 import com.onslyde.util.ClientEvent;
+import com.onslyde.util.PasswordHash;
 import org.eclipse.jetty.websocket.api.Session;
 import org.jboss.resteasy.spi.ResteasyProviderFactory;
 
@@ -48,6 +49,8 @@ import javax.ws.rs.*;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
+import java.security.NoSuchAlgorithmException;
+import java.security.spec.InvalidKeySpecException;
 import java.util.*;
 import java.util.logging.Logger;
 
@@ -266,7 +269,8 @@ public class MemberService {
     log.info("User login attempt: " + email);
     try {
       user = repository.findByEmail(email);
-      if (password.equals(user.getPassword())) {
+
+      if (PasswordHash.validatePassword(password, user.getSaltedPassword())) {
         userSummary.setName(user.getFullName());
         userSummary.setCreated(user.getCreated());
         userSummary.setEmail(user.getEmail());
@@ -276,6 +280,11 @@ public class MemberService {
     } catch (NoResultException e) {
       log.severe("Bad login: User does not exist");
       userSummary.setName("Not Found");
+    } catch (InvalidKeySpecException e) {
+      e.printStackTrace();
+    } catch (NoSuchAlgorithmException e) {
+      log.severe("Problem authenticating user");
+      e.printStackTrace();
     }
 //        HttpServletRequest request = ResteasyProviderFactory.getContextData(HttpServletRequest.class);
 //    HttpServletResponse response = ResteasyProviderFactory.getContextData(HttpServletResponse.class);

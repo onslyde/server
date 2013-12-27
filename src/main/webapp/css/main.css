@@ -573,3 +573,13 @@ h3.disagree {
   border: 2px solid #777;
   display: block;
 }
+
+.screen-votes {
+  position: relative;
+}
+
+.screenshot {
+  position: absolute;
+  z-index: 1;
+  opacity: .3;
+}

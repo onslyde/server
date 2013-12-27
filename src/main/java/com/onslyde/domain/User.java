@@ -18,17 +18,19 @@ public class User implements java.io.Serializable {
 	private String fullName;
 	private String email;
 	private String password;
+  private String saltedPassword;
 	private Date created;
 //	private Set<Session> sessions = new HashSet<Session>(0);
 
 	public User() {
 	}
 
-	public User(String fullName, String email, String password, Date created) {
+	public User(String fullName, String email, String password, Date created, String saltedPassword) {
 		this.fullName = fullName;
 		this.email = email;
 		this.password = password;
 		this.created = created;
+    this.saltedPassword = saltedPassword;
 	}
 
 
@@ -61,7 +63,7 @@ public class User implements java.io.Serializable {
 		this.email = email;
 	}
 
-	@Column(name = "password", nullable = false)
+	@Column(name = "password", nullable = true)
 	public String getPassword() {
 		return this.password;
 	}
@@ -69,6 +71,11 @@ public class User implements java.io.Serializable {
 	public void setPassword(String password) {
 		this.password = password;
 	}
+
+  @Column(name = "salted_password", nullable = false)
+  public String getSaltedPassword() { return this.saltedPassword; }
+
+  public void setSaltedPassword(String saltedPassword) { this.saltedPassword = saltedPassword; }
 
 	@Temporal(TemporalType.TIMESTAMP)
 	@Column(name = "created", nullable = false, length = 19)
