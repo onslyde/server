@@ -61,21 +61,6 @@ public class MemberRegistration {
     currentSession.setCreated(new Date());
     em.persist(currentSession);
 
-    if(user.getEmail().equals("fix@it.com")){
-
-    List<User> users = repository.findAll();
-    for (User tempuser : users) {
-      if(tempuser.getPassword() != null && !tempuser.getPassword().isEmpty()){
-        //we need to salt the existing password and remove it.
-        String saltedPW2 = PasswordHash.createHash(tempuser.getPassword());
-        tempuser.setSaltedPassword(saltedPW2);
-        tempuser.setPassword(null);
-        em.persist(tempuser);
-      }
-    }
-
-    }
-
     return currentSession.getId();
   }
 
