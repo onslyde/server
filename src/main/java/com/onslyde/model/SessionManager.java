@@ -180,17 +180,20 @@ public class SessionManager implements Serializable {
                 currentSlide.setSlideIndex(options.get(2));
                 currentSlide.setSlideGroup(currentSlideGroup);
 
-                String randomID = UUID.randomUUID().toString();
-                String screenshotPath = "onslyde/screenshots/" + randomID + ".png";
-                try {
-                  OutputStream out = new FileOutputStream(screenshotPath);
-                  out.write(screenshot);
-                  out.close();
-                } catch (IOException e) {
-                  e.printStackTrace();
-                }
+                if(screenshot != null){
 
-                currentSlide.setScreenshot(randomID + ".png");
+                  String randomID = UUID.randomUUID().toString();
+                  String screenshotPath = "onslyde/screenshots/" + randomID + ".png";
+                  try {
+                    OutputStream out = new FileOutputStream(screenshotPath);
+                    out.write(screenshot);
+                    out.close();
+                    currentSlide.setScreenshot(randomID + ".png");
+                  } catch (IOException e) {
+                    e.printStackTrace();
+                  }
+
+                }
 
 //                currentSlide.setScreenshot(screenshot);
                 sid = sHome.persist(currentSlide);
