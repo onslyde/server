@@ -278,6 +278,7 @@ public class SessionManager implements Serializable {
               //lookup attendee from DB
               attendee = attendeeHome.findByUUID(attendeeIP);
 
+              //this is definitely a new user/attendee
               if(attendee == null){
                 //add new if non existent
                 attendee = new Attendee();
@@ -290,8 +291,18 @@ public class SessionManager implements Serializable {
               //add them to in memory check
               ips.put(attendeeIP, attendee);
             }else{
-                attendee = ips.get(attendeeIP);
-                merge = true;
+              attendee = ips.get(attendeeIP);
+
+              //check to see if user has oauth'd since last anonymous vote
+              if(!email.isEmpty() && attendee.getEmail().isEmpty()){
+                //add the email to the record
+                attendee = attendeeHome.findByUUID(attendeeIP);
+                attendee.setName(name);
+                attendee.setEmail(email);
+                attendeeHome.merge(attendee);
+              }
+
+              merge = true;
             }
 //            System.out.println("'attendee.getId()''''''''''''''''" + attendee.getId());
 
