@@ -25,30 +25,36 @@ public class Session implements java.io.Serializable {
 	private Date start;
 	private Date end;
 	private Date created;
+  private String twitter;
+  private String extra;
 	private Set<SlideGroup> slideGroups = new HashSet<SlideGroup>(0);
 
 	public Session() {
 	}
 
 	public Session(User user, String sessionName, String sessionCode,
-			Date start, Date end, Date created) {
+			Date start, Date end, Date created, String twitter, String extra) {
 		this.user = user;
 		this.sessionName = sessionName;
 		this.sessionCode = sessionCode;
 		this.start = start;
 		this.end = end;
 		this.created = created;
+    this.twitter = twitter;
+    this.extra = extra;
 	}
 
 	public Session(User user, String sessionName, String sessionCode,
-			Date start, Date end, Date created, Set<SlideGroup> slideGroups) {
+			Date start, Date end, Date created, String twitter, String extra, Set<SlideGroup> slideGroups) {
 		this.user = user;
 		this.sessionName = sessionName;
 		this.sessionCode = sessionCode;
 		this.start = start;
 		this.end = end;
 		this.created = created;
+    this.twitter = twitter;
 		this.slideGroups = slideGroups;
+    this.extra = extra;
 	}
 
 	@Id
@@ -62,7 +68,7 @@ public class Session implements java.io.Serializable {
 		this.id = id;
 	}
 
-    @JsonIgnore
+  @JsonIgnore
 	@ManyToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name = "user_id", nullable = false)
 	public User getUser() {
@@ -120,6 +126,24 @@ public class Session implements java.io.Serializable {
 	public void setCreated(Date created) {
 		this.created = created;
 	}
+
+  @Column(name = "twitter", nullable = true)
+  public String getTwitter() {
+    return this.twitter;
+  }
+
+  public void setTwitter(String twitter) {
+    this.twitter = twitter;
+  }
+
+  @Column(name = "extra", nullable = true)
+  public String getExtra() {
+    return this.extra;
+  }
+
+  public void setExtra(String extra) {
+    this.extra = extra;
+  }
 
 	@OneToMany(fetch = FetchType.EAGER, mappedBy = "session")
 	public Set<SlideGroup> getSlideGroups() {

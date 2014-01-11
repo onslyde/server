@@ -43,10 +43,10 @@ public class OnslydeWebSocketHandler {
 
   protected Session session;
 
-  @Inject
+//  @Inject
   private static SessionManager sessionManager;
 
-  @Inject
+//  @Inject
   private static Mediator mediator;
 
   @Inject

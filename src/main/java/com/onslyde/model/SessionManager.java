@@ -275,13 +275,20 @@ public class SessionManager implements Serializable {
 //            System.out.println("'ips.containsKey(attendeeIP)''''''''''''''''" + ips.containsKey(attendeeIP));
 
             if(!ips.containsKey(attendeeIP)){
+              //lookup attendee from DB
+              attendee = attendeeHome.findByUUID(attendeeIP);
+
+              if(attendee == null){
+                //add new if non existent
                 attendee = new Attendee();
                 attendee.setName(name);
                 attendee.setEmail(email);
                 attendee.setIp(attendeeIP);
                 attendee.setCreated(new Date());
                 attendeeHome.persist(attendee);
-                ips.put(attendeeIP, attendee);
+              }
+              //add them to in memory check
+              ips.put(attendeeIP, attendee);
             }else{
                 attendee = ips.get(attendeeIP);
                 merge = true;
