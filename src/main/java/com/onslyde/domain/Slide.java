@@ -18,77 +18,78 @@ import static javax.persistence.GenerationType.IDENTITY;
 @Table(name = "slide", catalog = "onslyde")
 public class Slide implements java.io.Serializable {
 
-	private Integer id;
-	private SlideGroup slideGroup;
-	private String name;
-	private String slideIndex;
+  private Integer id;
+  private SlideGroup slideGroup;
+  private String name;
+  private String slideIndex;
   private String screenshot;
 
-    private Set<SlideVotes> slideVoteses = new HashSet<SlideVotes>(
-            0);
-    private Set<SlideOptions> slideOptionses = new HashSet<SlideOptions>(
-            0);
+  private Set<SlideVotes> slideVoteses = new HashSet<SlideVotes>(0);
+  private Set<SlideOptions> slideOptionses = new HashSet<SlideOptions>(0);
+  private Set<Questions> questions = new HashSet<Questions>(0);
 
-	public Slide() {
-	}
+  public Slide() {
+  }
 
-	public Slide(SlideGroup slideGroup, String slideIndex) {
-		this.slideGroup = slideGroup;
-		this.slideIndex = slideIndex;
-	}
+  public Slide(SlideGroup slideGroup, String slideIndex) {
+    this.slideGroup = slideGroup;
+    this.slideIndex = slideIndex;
+  }
 
-	public Slide(SlideGroup slideGroup, String name, String slideIndex,
-                 Set<SlideVotes> slideVoteses,
-                 Set<SlideOptions> slideOptionses, String screenshot) {
-        this.slideGroup = slideGroup;
-		this.name = name;
-		this.slideIndex = slideIndex;
-        this.slideVoteses = slideVoteses;
-        this.slideOptionses = slideOptionses;
+  public Slide(SlideGroup slideGroup, String name, String slideIndex,
+               Set<SlideVotes> slideVoteses,
+               Set<SlideOptions> slideOptionses,
+               Set<Questions> questions, String screenshot) {
+    this.slideGroup = slideGroup;
+    this.name = name;
+    this.slideIndex = slideIndex;
+    this.slideVoteses = slideVoteses;
+    this.slideOptionses = slideOptionses;
+    this.questions = questions;
     this.screenshot = screenshot;
-	}
+  }
 
-	@Id
-	@GeneratedValue(strategy = IDENTITY)
-	@Column(name = "id", unique = true, nullable = false)
-	public Integer getId() {
-		return this.id;
-	}
+  @Id
+  @GeneratedValue(strategy = IDENTITY)
+  @Column(name = "id", unique = true, nullable = false)
+  public Integer getId() {
+    return this.id;
+  }
 
-	public void setId(Integer id) {
-		this.id = id;
-	}
+  public void setId(Integer id) {
+    this.id = id;
+  }
 
-    @JsonIgnore
-	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "slide_group_id", nullable = false)
-	public SlideGroup getSlideGroup() {
-		return this.slideGroup;
-	}
+  @JsonIgnore
+  @ManyToOne(fetch = FetchType.LAZY)
+  @JoinColumn(name = "slide_group_id", nullable = false)
+  public SlideGroup getSlideGroup() {
+    return this.slideGroup;
+  }
 
-	public void setSlideGroup(SlideGroup slideGroup) {
-		this.slideGroup = slideGroup;
-	}
+  public void setSlideGroup(SlideGroup slideGroup) {
+    this.slideGroup = slideGroup;
+  }
 
-	@Column(name = "name")
-	public String getName() {
-		return this.name;
-	}
+  @Column(name = "name")
+  public String getName() {
+    return this.name;
+  }
 
-	public void setName(String name) {
-		this.name = name;
-	}
+  public void setName(String name) {
+    this.name = name;
+  }
 
-	@Column(name = "slide_index", nullable = false)
-	public String getSlideIndex() {
-		return this.slideIndex;
-	}
+  @Column(name = "slide_index", nullable = false)
+  public String getSlideIndex() {
+    return this.slideIndex;
+  }
 
   public void setSlideIndex(String slideIndex) {
-		this.slideIndex = slideIndex;
-	}
+    this.slideIndex = slideIndex;
+  }
 
-  @Column( name = "screenshot" )
+  @Column(name = "screenshot")
   public String getScreenshot() {
     return screenshot;
   }
@@ -98,23 +99,30 @@ public class Slide implements java.io.Serializable {
   }
 
   @OneToMany(fetch = FetchType.EAGER, mappedBy = "slide")
-    @OrderBy("voteTime ASC")
-    public Set<SlideVotes> getSlideVoteses() {
-        return this.slideVoteses;
-    }
+  @OrderBy("voteTime ASC")
+  public Set<SlideVotes> getSlideVoteses() {
+    return this.slideVoteses;
+  }
 
-    public void setSlideVoteses(Set<SlideVotes> slideVoteses) {
-        this.slideVoteses = slideVoteses;
-    }
+  public void setSlideVoteses(Set<SlideVotes> slideVoteses) {
+    this.slideVoteses = slideVoteses;
+  }
 
-    @OneToMany(fetch = FetchType.EAGER, mappedBy = "slide")
-    public Set<SlideOptions> getSlideOptionses() {
-        return this.slideOptionses;
-    }
+  @OneToMany(fetch = FetchType.EAGER, mappedBy = "slide")
+  public Set<SlideOptions> getSlideOptionses() {
+    return this.slideOptionses;
+  }
 
-    public void setSlideOptionses(
-            Set<SlideOptions> slideOptionses) {
-        this.slideOptionses = slideOptionses;
-    }
+  public void setSlideOptionses(Set<SlideOptions> slideOptionses) {
+    this.slideOptionses = slideOptionses;
+  }
 
+  @OneToMany(fetch = FetchType.EAGER, mappedBy = "slide")
+  public Set<Questions> getQuestions() {
+    return questions;
+  }
+
+  public void setQuestions(Set<Questions> questions) {
+    this.questions = questions;
+  }
 }

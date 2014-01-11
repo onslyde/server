@@ -51,7 +51,7 @@ public class SlideOptions implements java.io.Serializable {
 		this.id = id;
 	}
 
-    @JsonIgnore
+  @JsonIgnore
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "slide_id", nullable = false)
 	public Slide getSlide() {

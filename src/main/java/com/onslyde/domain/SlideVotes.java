@@ -56,7 +56,7 @@ public class SlideVotes implements java.io.Serializable {
 		this.slideOptions = slideOptions;
 	}
 
-    @JsonIgnore
+  @JsonIgnore
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "slide_id", nullable = false)
 	public Slide getSlide() {
