@@ -28,14 +28,21 @@ import org.eclipse.jetty.websocket.api.Session;
 import org.eclipse.jetty.websocket.api.annotations.*;
 import org.eclipse.jetty.websocket.server.WebSocketServerConnection;
 
+
 import javax.enterprise.event.Observes;
 import javax.inject.Inject;
 import java.io.FileReader;
 import java.io.IOException;
+import java.io.StringReader;
 import java.sql.Blob;
 import java.util.*;
 import java.util.concurrent.ConcurrentLinkedQueue;
 import java.util.logging.Logger;
+import javax.json.Json;
+import javax.json.JsonArray;
+import javax.json.JsonObject;
+import javax.json.JsonReader;
+import javax.json.JsonValue;
 
 //@WebSocket(maxMessageSize = 64 * 2048)
 @WebSocket
@@ -107,6 +114,13 @@ public class OnslydeWebSocketHandler {
       sessionID = Integer.parseInt((String)requestItem.get(0));
     }
 
+  }
+
+  private JsonObject readJSON(String data){
+    JsonReader reader = Json.createReader(new StringReader(data));
+    JsonObject myObject = reader.readObject();
+    reader.close();
+    return myObject;
   }
 
   @OnWebSocketConnect
@@ -189,7 +203,7 @@ public class OnslydeWebSocketHandler {
   @OnWebSocketMessage
   public void onWebSocketText(Session session, String data) {
 
-    Map request = this.session.getUpgradeRequest().getParameterMap();
+    //Map request = this.session.getUpgradeRequest().getParameterMap();
 
     getRequestParamData(session.getUpgradeRequest().getParameterMap());
 
@@ -309,6 +323,8 @@ public class OnslydeWebSocketHandler {
       }
     } else if (data.contains("speak:")) {
 
+      //the queueing of a speak event does not get written to the database here.
+      //the speaker gets handed off as an ACTIVE_OPTION when they go live and it gets recorded there
       String name = data.substring("speak:".length(), data.length());
 
       data = ClientEvent.speak(sessionID, attendeeIP, name, 0);
@@ -323,6 +339,17 @@ public class OnslydeWebSocketHandler {
         this.session.getRemote().sendStringByFuture(ClientEvent.speak(sessionID, attendeeIP, name, getSessionTracker(sessionID).getQueuedParticipants().size()));
       }
 
+
+    } else if (data.contains("topicQuestion")) {
+
+      JsonObject askObject = readJSON(data);
+
+      getSessionManager().addQuestionToTopic(askObject.getString("topicQuestion"),attendeeIP,sessionID);
+//      try {
+////        sendToPresenter(ClientEvent.remoteMarkup(data, "", sessionID), this.session, sessionID);
+//      } catch (Exception e) {
+//        e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
+//      }
 
     } else if (data.contains(REMOTE_MARKUP)) {
 
