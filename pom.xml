@@ -35,7 +35,7 @@
         <version.org.jboss.as.arquillian.container>7.1.1.Final</version.org.jboss.as.arquillian.container>
         <version.junit>4.10</version.junit>
 
-        <jettyVersion>9.1.0.v20131115</jettyVersion>
+        <jettyVersion>9.1.1.v20140108</jettyVersion>
     </properties>
 
     <repositories>
@@ -318,6 +318,18 @@
             <groupId>org.eclipse.jetty.spdy</groupId>
             <artifactId>spdy-http-server</artifactId>
             <version>${jettyVersion}</version>
+        </dependency>
+
+        <!--<dependency>-->
+            <!--<groupId>javax.json</groupId>-->
+            <!--<artifactId>javax.json-api</artifactId>-->
+            <!--<version>1.0</version>-->
+        <!--</dependency>-->
+
+        <dependency>
+            <groupId>org.glassfish</groupId>
+            <artifactId>javax.json</artifactId>
+            <version>1.0.4</version>
         </dependency>
 
         <dependency>
