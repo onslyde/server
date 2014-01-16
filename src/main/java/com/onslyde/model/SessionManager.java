@@ -376,6 +376,8 @@ public class SessionManager implements Serializable {
     if (!ips.containsKey(attendeeIP)) {
       //lookup attendee from DB
       attendee = attendeeHome.findByUUID(attendeeIP);
+    }else{
+      attendee = ips.get(attendeeIP);
     }
 
     if (attendee != null) {
