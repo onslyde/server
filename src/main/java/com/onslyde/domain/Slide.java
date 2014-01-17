@@ -119,7 +119,7 @@ public class Slide implements java.io.Serializable {
 
   @OneToMany(fetch = FetchType.EAGER, mappedBy = "slide")
   public Set<Questions> getQuestions() {
-    return questions;
+    return this.questions;
   }
 
   public void setQuestions(Set<Questions> questions) {

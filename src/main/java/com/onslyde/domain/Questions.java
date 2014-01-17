@@ -1,5 +1,7 @@
 package com.onslyde.domain;
 
+import org.codehaus.jackson.annotate.JsonIgnore;
+
 import javax.persistence.*;
 import java.util.Date;
 import java.util.Collection;
@@ -13,7 +15,7 @@ import static javax.persistence.GenerationType.IDENTITY;
  */
 @Entity
 @Table(name = "questions", catalog = "onslyde")
-public class Questions {
+public class Questions implements java.io.Serializable {
   private int id;
   private String question;
   private Date created;
@@ -22,6 +24,17 @@ public class Questions {
 
   private Set<Answers> answers = new HashSet<Answers>(0);
 
+  public Questions() {
+  }
+
+  public Questions(int id, String question, Date created, int attendeeId, Slide slide, Set<Answers> answers) {
+    this.id = id;
+    this.question = question;
+    this.created = created;
+    this.attendeeId = attendeeId;
+    this.slide = slide;
+    this.answers = answers;
+  }
 
   @Id
   @GeneratedValue(strategy = IDENTITY)
@@ -34,7 +47,6 @@ public class Questions {
     this.id = id;
   }
 
-  @Basic
   @Column(name = "question", nullable = false, insertable = true, updatable = true, length = 255, precision = 0)
   public String getQuestion() {
     return question;
@@ -44,6 +56,7 @@ public class Questions {
     this.question = question;
   }
 
+  @JsonIgnore
   @ManyToOne(fetch = FetchType.LAZY)
   @JoinColumn(name = "slide_id", nullable = false)
   public Slide getSlide() {
@@ -64,7 +77,6 @@ public class Questions {
     this.created = created;
   }
 
-  @Basic
   @Column(name = "attendee_id", nullable = true, insertable = true, updatable = true, length = 10, precision = 0)
   public Integer getAttendeeId() {
     return attendeeId;
@@ -74,7 +86,7 @@ public class Questions {
     this.attendeeId = attendeeId;
   }
 
-  @OneToMany(fetch = FetchType.LAZY, mappedBy = "question")
+  @OneToMany(fetch = FetchType.EAGER, mappedBy = "question")
   public Set<Answers> getAnswers() {
     return answers;
   }
