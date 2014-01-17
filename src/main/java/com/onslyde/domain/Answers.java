@@ -1,5 +1,7 @@
 package com.onslyde.domain;
 
+import org.codehaus.jackson.annotate.JsonIgnore;
+
 import javax.persistence.*;
 import java.util.Date;
 
@@ -8,13 +10,23 @@ import java.util.Date;
  */
 @Entity
 @Table(name = "answers", catalog = "onslyde")
-public class Answers {
+public class Answers implements java.io.Serializable {
   private int id;
   private Questions question;
   private String answer;
   private Integer attendeeId;
   private Date created;
 
+  public Answers() {
+  }
+
+  public Answers(int id, Questions question, String answer, Integer attendeeId, Date created) {
+    this.id = id;
+    this.question = question;
+    this.answer = answer;
+    this.attendeeId = attendeeId;
+    this.created = created;
+  }
 
   @Id
   @Column(name = "id", nullable = false, insertable = true, updatable = true, length = 10, precision = 0)
@@ -26,6 +38,7 @@ public class Answers {
     this.id = id;
   }
 
+  @JsonIgnore
   @ManyToOne(fetch = FetchType.LAZY)
   @JoinColumn(name = "question_id", nullable = false)
   public Questions getQuestion() {
@@ -36,7 +49,6 @@ public class Answers {
     this.question = question;
   }
 
-  @Basic
   @Column(name = "answer", nullable = true, insertable = true, updatable = true, length = 255, precision = 0)
   public String getAnswer() {
     return answer;
@@ -46,7 +58,6 @@ public class Answers {
     this.answer = answer;
   }
 
-  @Basic
   @Column(name = "attendee_id", nullable = true, insertable = true, updatable = true, length = 10, precision = 0)
   public Integer getAttendeeId() {
     return attendeeId;
