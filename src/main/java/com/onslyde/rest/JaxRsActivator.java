@@ -82,6 +82,9 @@ public class JaxRsActivator extends Application {
   @Inject
   AttendeeService attendeeService;
 
+  @Inject
+  QuestionService questionService;
+
   private Set<Object> singletons = new HashSet<Object>();
   private Set<Class<?>> classes = new HashSet<Class<?>>();
 
@@ -115,5 +118,6 @@ public class JaxRsActivator extends Application {
     singletons.add(performanceService);
     singletons.add(presentationCreator);
     singletons.add(remoteService);
+    singletons.add(questionService);
    }
 }

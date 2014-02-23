@@ -579,7 +579,8 @@ h3.disagree {
 }
 
 .screenshot {
-  position: absolute;
-  z-index: 1;
-  opacity: .3;
+  /*position: absolute;*/
+  /*z-index: 1;*/
+  /*opacity: .3;*/
+  width: 50%;
 }
