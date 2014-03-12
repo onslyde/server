@@ -11,6 +11,14 @@
     "grunt-contrib-uglify": "~0.2.2",
     "grunt-shell": "~0.3.1",
     "grunt-contrib-concat": "~0.3.0",
-    "grunt-contrib-watch": "~0.5.3"
+    "grunt-contrib-watch": "~0.5.3",
+    "gulp": "^3.5.5",
+    "jshint": "^2.4.4",
+    "gulp-concat": "^2.1.7",
+    "gulp-uglify": "^0.2.1",
+    "gulp-rename": "^1.2.0",
+    "gulp-ngmin": "^0.1.2",
+    "gulp-jshint": "^1.5.0",
+    "gulp-notify": "^1.1.1"
   }
 }
