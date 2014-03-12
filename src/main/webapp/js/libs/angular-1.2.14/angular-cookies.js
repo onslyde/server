@@ -1,21 +1,21 @@
 /**
- * @license AngularJS v1.2.0-rc.2
- * (c) 2010-2012 Google, Inc. http://angularjs.org
+ * @license AngularJS v1.2.14
+ * (c) 2010-2014 Google, Inc. http://angularjs.org
  * License: MIT
  */
 (function(window, angular, undefined) {'use strict';
 
 /**
- * @ngdoc overview
+ * @ngdoc module
  * @name ngCookies
  * @description
  *
  * # ngCookies
  *
- * Provides the {@link ngCookies.$cookies `$cookies`} and
- * {@link ngCookies.$cookieStore `$cookieStore`} services.
+ * The `ngCookies` module provides a convenient wrapper for reading and writing browser cookies.
  *
- * {@installModule cookies}
+ *
+ * <div doc-module-components="ngCookies"></div>
  *
  * See {@link ngCookies.$cookies `$cookies`} and
  * {@link ngCookies.$cookieStore `$cookieStore`} for usage.
@@ -24,9 +24,8 @@
 
 angular.module('ngCookies', ['ng']).
   /**
-   * @ngdoc object
-   * @name ngCookies.$cookies
-   * @requires $browser
+   * @ngdoc service
+   * @name $cookies
    *
    * @description
    * Provides read/write access to browser's cookies.
@@ -37,8 +36,8 @@ angular.module('ngCookies', ['ng']).
    * Requires the {@link ngCookies `ngCookies`} module to be installed.
    *
    * @example
-   <doc:example>
-     <doc:source>
+   <example>
+     <file name="index.html">
        <script>
          function ExampleController($cookies) {
            // Retrieving a cookie
@@ -47,8 +46,8 @@ angular.module('ngCookies', ['ng']).
            $cookies.myFavorite = 'oatmeal';
          }
        </script>
-     </doc:source>
-   </doc:example>
+     </file>
+   </example>
    */
    factory('$cookies', ['$rootScope', '$browser', function ($rootScope, $browser) {
       var cookies = {},
@@ -80,7 +79,8 @@ angular.module('ngCookies', ['ng']).
 
 
       /**
-       * Pushes all the cookies from the service to the browser and verifies if all cookies were stored.
+       * Pushes all the cookies from the service to the browser and verifies if all cookies were
+       * stored.
        */
       function push() {
         var name,
@@ -132,8 +132,8 @@ angular.module('ngCookies', ['ng']).
 
 
   /**
-   * @ngdoc object
-   * @name ngCookies.$cookieStore
+   * @ngdoc service
+   * @name $cookieStore
    * @requires $cookies
    *
    * @description
@@ -150,8 +150,7 @@ angular.module('ngCookies', ['ng']).
       return {
         /**
          * @ngdoc method
-         * @name ngCookies.$cookieStore#get
-         * @methodOf ngCookies.$cookieStore
+         * @name $cookieStore#get
          *
          * @description
          * Returns the value of given cookie key
@@ -166,8 +165,7 @@ angular.module('ngCookies', ['ng']).
 
         /**
          * @ngdoc method
-         * @name ngCookies.$cookieStore#put
-         * @methodOf ngCookies.$cookieStore
+         * @name $cookieStore#put
          *
          * @description
          * Sets a value for given cookie key
@@ -181,8 +179,7 @@ angular.module('ngCookies', ['ng']).
 
         /**
          * @ngdoc method
-         * @name ngCookies.$cookieStore#remove
-         * @methodOf ngCookies.$cookieStore
+         * @name $cookieStore#remove
          *
          * @description
          * Remove given cookie
