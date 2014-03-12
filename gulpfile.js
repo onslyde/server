@@ -27,10 +27,10 @@ var paths = {
 gulp.task('foundationscripts', function() {
     return gulp.src(paths.foundationscripts)
         .pipe(concat('foundation-all.js'))
-        .pipe(gulp.dest('js/libs'))
+        .pipe(gulp.dest(prefix + 'js/libs'))
         .pipe(rename({suffix: '.min'}))
         .pipe(uglify({mangle: false}))
-        .pipe(gulp.dest('js/libs'))
+        .pipe(gulp.dest(prefix + 'js/libs'))
 //    .pipe(livereload(server))
         .pipe(notify({ message: 'Scripts task complete' }));
 });
@@ -41,10 +41,10 @@ gulp.task('appscripts', function() {
         .pipe(jshint.reporter('default'))
         .pipe(concat('index.js'))
         .pipe(ngmin())
-        .pipe(gulp.dest('.'))
+        .pipe(gulp.dest(prefix))
         .pipe(rename({suffix: '.min'}))
         .pipe(uglify({mangle: false}))
-        .pipe(gulp.dest('.'))
+        .pipe(gulp.dest(prefix))
 //    .pipe(livereload(server))
         .pipe(notify({ message: 'Scripts task complete' }));
 });
