@@ -11,6 +11,7 @@
   <div class="large-12 columns">
     <h2>Your Sessions:</h2>
     <ul>
+      <li ng-if="!sessionList">Loading, please wait...</li>
       <li ng-repeat="session in sessionList">
         <a href="#!/analytics?sessionID={{session.id}}">{{session.sessionName}}</a>
       </li>
@@ -83,8 +84,7 @@
                 alt="permalink"><i data-tooltip title="Permalink for this topic."
                                    class="pictogram has-tip" style="font-size:1.5em">&#128279;</i></a>
 
-              <div ng-if="twooption.speakerData.twitter" class="twitter-sub"><i class="pictogram-social">
-                &#62217;</i> <a href="http://twitter.com/{{twooption.speakerData.twitter}}"
+              <div ng-if="twooption.speakerData.twitter" class="twitter-sub"><a href="http://twitter.com/{{twooption.speakerData.twitter}}"
                                 target="_blank">{{twooption.speakerData.twitter}}</a></div>
 
             </div>

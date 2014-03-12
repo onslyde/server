@@ -20,7 +20,8 @@ var paths = {
         prefix + 'foundation-4.3.1/js/foundation/foundation.js',
         prefix + 'foundation-4.3.1/js/foundation/foundation.abide.js',
         prefix + 'foundation-4.3.1/js/foundation/foundation.reveal.js',
-        prefix + 'foundation-4.3.1/js/foundation/foundation.orbit.js'],
+        prefix + 'foundation-4.3.1/js/foundation/foundation.orbit.js',
+        prefix + 'foundation-4.3.1/js/foundation/foundation.tooltips.js'],
     images: 'client/img/**/*'
 };
 

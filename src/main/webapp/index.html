@@ -75,9 +75,8 @@
       <div class="large-8 columns">
         &copy; Copyright <a href="http://wesleyhales.com" target="_blank">Wesley Hales</a> and contributors.
         <div class="right share-info">
-          <iframe id="gplus" src="https://plusone.google.com/_/+1/fastbutton?bsv&amp;size=medium&amp;hl=en-US&amp;url=https://www.onslyde.com" allowtransparency="true" frameborder="0" scrolling="no" title="+1"></iframe>
           <iframe id="twitter" allowtransparency="true" frameborder="0" scrolling="no"
-                  src="https://platform.twitter.com/widgets/tweet_button.html?via=onslyde&url=onslyde.com"
+                  src=""
                   style="width:90px; height:20px;"></iframe>
         </div>
       </div>
@@ -101,31 +100,13 @@
 <script src="js/libs/jquery-migrate-1.2.1.min.js"></script>
 <script src="js/libs/highcharts.js"></script>
 
-<script src="foundation-4.3.1/js/foundation/foundation.js"></script>
-<script src="foundation-4.3.1/js/foundation/foundation.reveal.js"></script>
-<script src="foundation-4.3.1/js/foundation/foundation.orbit.js"></script>
-<script src="foundation-4.3.1/js/foundation/foundation.tooltips.js"></script>
+<script src="js/libs/foundation-all.js"></script>
+<script src="js/libs/angular-1.2.14/angular.js"></script>
+<script src="js/libs/angular-1.2.14/angular-resource.js"></script>
+<script src="js/libs/angular-1.2.14/angular-cookies.js"></script>
+<script src="js/libs/angular-1.2.14/angular-route.js"></script>
+<script src="index.js"></script>
 
-<script src="js/libs/angular-1.2.0-rc.2/angular.js"></script>
-<script src="js/libs/angular-1.2.0-rc.2/angular-resource.js"></script>
-<script src="js/libs/angular-1.2.0-rc.2/angular-cookies.js"></script>
-<script src="js/libs/angular-1.2.0-rc.2/angular-route.js"></script>
-
-
-<script src="js/app.js?v=5"></script>
-<script src="global/localstorage-service.js?v=5"></script>
-<script src="global/page-controller.js?v=5"></script>
-<script src="global/page-service.js?v=5"></script>
-<script src="global/utility-service.js?v=5"></script>
-<script src="global/login-controller.js?v=5"></script>
-<script src="global/youtube-service.js?v=5"></script>
-<script src="global/youtube-directive.js?v=5"></script>
-<script src="analytics/analytics-controller.js?v=5"></script>
-<script src="charts/chart-directives.js?v=5"></script>
-<script src="charts/chart-service.js?v=5"></script>
-
-
-<script src="gettingstarted/gettingstarted-controller.js?v=5"></script>
 
 <script>
   var _gaq = _gaq || [];
@@ -138,6 +119,9 @@
     ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
     var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
   })();
+
+  //load twitter share button
+  document.getElementById('twitter').src = 'https://platform.twitter.com/widgets/tweet_button.html?via=onslyde&url=onslyde.com';
 </script>
 
 </body>
