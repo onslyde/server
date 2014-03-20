@@ -28,7 +28,7 @@ public class PanelRemoteService {
         }
 
         return Response.status(Response.Status.SEE_OTHER)
-                .header(HttpHeaders.LOCATION, "/panel/panel-remote.html?session=" + sessionID)
+                .header(HttpHeaders.LOCATION, "https://www.onslyde.com/panel/panel-remote.html?session=" + sessionID)
                 .build();
 
     }

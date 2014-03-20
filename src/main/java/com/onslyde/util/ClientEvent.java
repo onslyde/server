@@ -23,7 +23,7 @@ package com.onslyde.util;
 import java.util.List;
 
 /**
- * @author <a href="mailto:whales@redhat.com">Wesley Hales</a>
+ * @author <a href="mailto:wesleyhales@gmail.com">Wesley Hales</a>
  */
 public class ClientEvent {
 
@@ -103,6 +103,27 @@ public class ClientEvent {
                 "eventObji.ip = '" + attendeeIP + "';\n" +
                 "eventObji.position = '" + position + "';\n" +
                 "document.dispatchEvent(eventObji);" +
+                "}}}");
+    }
+
+    public static String questionToggle(int sessionID, String attendeeIP){
+      return ("{\"onslydeEvent\":{\"sessionID\":\"" + sessionID + "\"," +
+                "\"fire\":function(){" +
+                "window.eventObjj = document.createEvent('Event');" +
+                "eventObjj.initEvent(\'questionToggle\', true, true);" +
+                "eventObjj.ip = '" + attendeeIP + "';\n" +
+                "document.dispatchEvent(eventObjj);" +
+                "}}}");
+    }
+
+    public static String questionIndex(int sessionID, String attendeeIP, int index){
+      return ("{\"onslydeEvent\":{\"sessionID\":\"" + sessionID + "\"," +
+                "\"fire\":function(){" +
+                "window.eventObjk = document.createEvent('Event');" +
+                "eventObjk.initEvent(\'questionIndex\', true, true);" +
+                "eventObjk.ip = '" + attendeeIP + "';\n" +
+                "eventObjk.index = '" + index + "';\n" +
+                "document.dispatchEvent(eventObjk);" +
                 "}}}");
     }
 
