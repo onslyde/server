@@ -83,7 +83,6 @@ public class OnslydeWebSocketHandler {
     syncMediator(mediator);
     //this method serves as a sync between embedded Jetty and the CDI conttext (threads)
     //we fire this event from multiple locations in the CDI beans and this WebSocket is managed by that
-    //...sad but that's the hack
 
     if (mediator.getJsEvent() != null && mediator.getCurrentSessionID() != 0) {
       try {
@@ -211,10 +210,13 @@ public class OnslydeWebSocketHandler {
     Long currentTime = new Date().getTime();
     Long voteDiff = currentTime - lastVoteTime;
     lastVoteTime = currentTime;
+    boolean isValidVote = true;
 
     //diffing the last vote time against now time
     //if less than 1 second between votes, someone's writing a for loop
-    if(voteDiff > 1000) {
+    if(voteDiff < 1000){
+      isValidVote = false;
+    }
 
         //this whole if/else statement is ridonkulous and needs refactor
 
@@ -222,7 +224,7 @@ public class OnslydeWebSocketHandler {
 
           int substringLength = 0;
           boolean isProps = false;
-          boolean isValidVote = true;
+
 
           if (data.contains(PROPS)) {
             substringLength = PROPS.length();
@@ -341,20 +343,22 @@ public class OnslydeWebSocketHandler {
           }
         } else if (data.contains("speak:")) {
 
-          //the queueing of a speak event does not get written to the database here.
-          //the speaker gets handed off as an ACTIVE_OPTION when they go live and it gets recorded there
-          String name = data.substring("speak:".length(), data.length());
+          if(isValidVote){
+            //the queueing of a speak event does not get written to the database here.
+            //the speaker gets handed off as an ACTIVE_OPTION when they go live and it gets recorded there
+            String name = data.substring("speak:".length(), data.length());
 
-          data = ClientEvent.speak(sessionID, attendeeIP, name, 0);
+            data = ClientEvent.speak(sessionID, attendeeIP, name, 0);
 
-          sendToPresenter(data, this.session, sessionID);
-          //send notification to remote
-          Mediator.SessionTracker st = getSessionTracker(sessionID);
-          if (st != null) {
-            st.getQueuedParticipants().put(attendeeIP, this.session);
-            //use the same speak event and send back to remote... handle as confirm
-            //you are queued as #xx
-            this.session.getRemote().sendStringByFuture(ClientEvent.speak(sessionID, attendeeIP, name, getSessionTracker(sessionID).getQueuedParticipants().size()));
+            sendToPresenter(data, this.session, sessionID);
+            //send notification to remote
+            Mediator.SessionTracker st = getSessionTracker(sessionID);
+            if (st != null) {
+              st.getQueuedParticipants().put(attendeeIP, this.session);
+              //use the same speak event and send back to remote... handle as confirm
+              //you are queued as #xx
+              this.session.getRemote().sendStringByFuture(ClientEvent.speak(sessionID, attendeeIP, name, getSessionTracker(sessionID).getQueuedParticipants().size()));
+            }
           }
 
 
@@ -438,7 +442,7 @@ public class OnslydeWebSocketHandler {
             sendToPresenter(data, this.session, sessionID);
 
           } catch (Exception e) {
-            log.severe("========== problem with choosing question toggle");
+            System.out.println("========== problem with choosing question toggle");
             e.printStackTrace();
           }
         } else if (data.contains("questionIndex:")) {
@@ -450,12 +454,12 @@ public class OnslydeWebSocketHandler {
             sendToPresenter(data, this.session, sessionID);
 
           } catch (Exception e) {
-            log.severe("========== problem with choosing question index");
+            System.out.println("========== problem with choosing question index");
             e.printStackTrace();
           }
         }
 
-    }
+
 
   }
 
@@ -468,7 +472,7 @@ public class OnslydeWebSocketHandler {
         owsh.getRemote().sendStringByFuture(data);
       }
     } catch (Exception x) {
-      log.severe("--- problem sending to all");
+      System.out.println("--- problem sending to all");
       x.printStackTrace();
       //not sure if we want to diconnect yet
 //            try {
@@ -496,9 +500,12 @@ public class OnslydeWebSocketHandler {
 
   @OnWebSocketClose
   public void onWebSocketClose(int statusCode, String reason) {
+    cleanupSession();
+  }
 
+  private void cleanupSession(){
     if (mediator.getSessions().containsKey(sessionID)) {
-      log.info("-remove attendee socket--" + attendeeIP + "--------" + sessionID);
+      System.out.println("-remove attendee socket--" + attendeeIP + "--------" + sessionID);
       Map session = mediator.getSessions().get(sessionID);
 
       if (session.containsKey(attendeeIP)) {
@@ -509,7 +516,7 @@ public class OnslydeWebSocketHandler {
 
       if (mediator.getPsessions().containsKey(this.sessionID)) {
         if (mediator.getPsessions().get(this.sessionID).containsKey(this.attendeeIP)) {
-          log.info("-remove presenter socket--" + this.attendeeIP + "--------" + sessionID);
+          System.out.println("-remove presenter socket--" + this.attendeeIP + "--------" + sessionID);
           mediator.getPsessions().get(this.sessionID).remove(this.attendeeIP);
         }
 
@@ -520,7 +527,7 @@ public class OnslydeWebSocketHandler {
 
   @OnWebSocketError
   public void onWebSocketError(Throwable cause) {
-    log.severe("---WEBSOCKET error: " + cause);
+    System.out.println("---WEBSOCKET error: " + cause);
   }
 
 
