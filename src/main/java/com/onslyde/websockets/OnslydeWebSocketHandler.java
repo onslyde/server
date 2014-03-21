@@ -286,6 +286,7 @@ public class OnslydeWebSocketHandler {
             liveAttendee = optionList.get(3);
             //save the list as orginal 3 items
             optionList = optionList.subList(0, 3);
+            try{
             if (getSessionTracker(sessionID).getQueuedParticipants().containsKey(liveAttendee)) {
               Session thanks = getSessionTracker(sessionID).getQueuedParticipants().get(liveAttendee);
               //polling clients get a null session, so must check
@@ -318,6 +319,9 @@ public class OnslydeWebSocketHandler {
             } else {
               //he's already been removed and this is just reset for polling clients
               getSessionTracker(sessionID).setActiveData("{\"attendeeIP\":\"\",\"position\":\"\"}");
+            }
+          }catch(Exception e){
+              System.out.println("------yo" + e.getCause());
             }
           }
           //basic continue with normal 3 options
