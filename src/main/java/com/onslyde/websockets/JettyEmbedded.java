@@ -122,13 +122,15 @@ public class JettyEmbedded {
         https.setIdleTimeout(500000);
         https.setHost("0.0.0.0");
 
+
+
         // Spdy Connector - short version
 //        Map<Short,PushStrategy> pushMap = new HashMap<Short, PushStrategy>();
 //        pushMap.put(SPDY.V3,new ReferrerPushStrategy());
 //        HTTPSPDYServerConnector spdyConnector = new HTTPSPDYServerConnector(server,sslContextFactory,pushMap);
 //        spdyConnector.setPort(443);
 
-//        server.addConnector(spdyConnector);
+        server.addConnector(https);
         _security = new ConstraintSecurityHandler();
 
         RequestHandler _handler = new RequestHandler();
@@ -198,8 +200,8 @@ public class JettyEmbedded {
 
 
         context.setContextPath("/");
-        context.setResourceBase("standalone/deployments/onslyde-hosted.war");
-//        context.setResourceBase("/www/jboss-as-7.1.1.Final/standalone/deployments/onslyde-hosted.war");
+//        context.setResourceBase("standalone/deployments/onslyde-hosted.war");
+        context.setResourceBase("/www/jboss-as-7.1.1.Final/standalone/deployments/onslyde-hosted.war");
 
         ServletHolder servletHolder = new ServletHolder(DefaultServlet.class);
         ServletHolder restHolder = new ServletHolder(new HttpServletDispatcher());
