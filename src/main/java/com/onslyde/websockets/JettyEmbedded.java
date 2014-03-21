@@ -123,10 +123,10 @@ public class JettyEmbedded {
         https.setHost("0.0.0.0");
 
         // Spdy Connector - short version
-        Map<Short,PushStrategy> pushMap = new HashMap<Short, PushStrategy>();
-        pushMap.put(SPDY.V3,new ReferrerPushStrategy());
-        HTTPSPDYServerConnector spdyConnector = new HTTPSPDYServerConnector(server,sslContextFactory,pushMap);
-        spdyConnector.setPort(443);
+//        Map<Short,PushStrategy> pushMap = new HashMap<Short, PushStrategy>();
+//        pushMap.put(SPDY.V3,new ReferrerPushStrategy());
+//        HTTPSPDYServerConnector spdyConnector = new HTTPSPDYServerConnector(server,sslContextFactory,pushMap);
+//        spdyConnector.setPort(443);
 
 //        server.addConnector(spdyConnector);
         _security = new ConstraintSecurityHandler();
