@@ -128,7 +128,7 @@ public class JettyEmbedded {
         HTTPSPDYServerConnector spdyConnector = new HTTPSPDYServerConnector(server,sslContextFactory,pushMap);
         spdyConnector.setPort(443);
 
-        server.addConnector(spdyConnector);
+//        server.addConnector(spdyConnector);
         _security = new ConstraintSecurityHandler();
 
         RequestHandler _handler = new RequestHandler();
