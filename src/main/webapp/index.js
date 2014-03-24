@@ -39,7 +39,7 @@ angular.module('onslyde', [
     }).otherwise({ redirectTo: '/home' });
     $locationProvider.html5Mode(false).hashPrefix('!');
   }
-]).run(function ($rootScope) {
+]).run(function ($rootScope, $location) {
   $rootScope.$on('$viewContentLoaded', function () {
     angular.element(document).ready(function () {
       var tag = document.createElement('script');
@@ -67,6 +67,10 @@ angular.module('onslyde', [
           counter++;
         });
       });
+      //handle app wide bookmarking
+      if ($location.hash()) {
+        $anchorScroll($location.hash());
+      }
     });  //      $('#sign-up').on('invalid', function () {
          //        alert('np')
          //      })
@@ -85,9 +89,8 @@ onslyde.Controllers.controller('AnalyticsCtrl', [
   '$routeParams',
   '$timeout',
   'youtubeapi',
-  '$location',
-  '$anchorScroll',
-  function (pagedata, chartservice, $scope, $rootScope, $routeParams, $timeout, youtubeapi, $location, $anchorScroll) {
+  '$q',
+  function (pagedata, chartservice, $scope, $rootScope, $routeParams, $timeout, youtubeapi, $q) {
     $scope.sessionID = $routeParams.sessionID;
     $scope.presAnalyticsSetup = function () {
       pagedata.get(null, $rootScope.urls() + '/go/analytics/list/' + $rootScope.userInfo.id).then(function (success) {
@@ -194,6 +197,7 @@ onslyde.Controllers.controller('AnalyticsCtrl', [
           });
           createCharts();
           function createCharts() {
+            var overViewOptions = [];
             angular.forEach($scope.sessionData.slideGroups, function (value, index) {
               var twooptions, voteData, voteOptions, allVotes;
               if (value.slideGroupOptionses.length > 2) {
@@ -356,6 +360,10 @@ onslyde.Controllers.controller('AnalyticsCtrl', [
                   }
                   spearkerStat.sessions += 1;
                   $scope.dashBoard.speakerTotals.push(spearkerStat);
+                  if (twooptions) {
+                    overViewOptions.push(twooptions[0]);
+                    overViewOptions.push(twooptions[1]);
+                  }
                   var startTime = $rootScope.sessionData.end;
                   var tempLineChart = angular.copy($rootScope.chartTemplate.line);
                   var tempPieChart = angular.copy($rootScope.chartTemplate.pie);
@@ -377,7 +385,7 @@ onslyde.Controllers.controller('AnalyticsCtrl', [
                       }
                     };
                   };
-                  if ($rootScope.sessionData.sessionCode && $rootScope.sessionData.sessionCode !== 'beta') {
+                  if ($rootScope.sessionData.sessionCode && $rootScope.sessionData.extra === 'panel') {
                     createYoutubeClickable(twooptions.chartData.series[0]);
                     createYoutubeClickable(twooptions.chartData.series[1]);
                   }
@@ -385,12 +393,8 @@ onslyde.Controllers.controller('AnalyticsCtrl', [
                 }
               }
             });
-          }
-          //todo change timeout to after angular document loaded
-          if ($location.hash()) {
-            $timeout(function () {
-              $anchorScroll($location.hash());
-            }, 2000);
+            var tempOverViewChart = angular.copy($rootScope.chartTemplate.line);
+            $scope.overViewOptions = chartservice.convertLineChart(overViewOptions, tempOverViewChart, dataDescription.timeseries, '');
           }
         }, function (fail) {
           console.log('Problem getting chart datapoints', fail);
@@ -426,258 +430,26 @@ onslyde.Controllers.controller('AnalyticsCtrl', [
       } else {
         $scope.createCharts();
       }
+      var panelistjson;
       //todo - this is a temporary lookup for edge. need to add columns to attendee db for pic and twitter
       $scope.getPanelist = function (sessionID, name) {
-        var result;
-        var allpanels = [
-            {
-              name: 'Natasha Rooney',
-              org: 'GSMA',
-              pic: 'http://edgeconf.com/images/heads/natasha-rooney.jpg',
-              twitter: 'thisnatasha',
-              mod: true
-            },
-            {
-              name: 'Manu Sporny',
-              org: 'Digital Bazaar',
-              pic: 'http://edgeconf.com/images/heads/manu-sporny.jpg',
-              twitter: 'manusporny'
-            },
-            {
-              name: 'Rob Grimshaw',
-              org: 'FT.com',
-              pic: 'http://edgeconf.com/images/heads/rob-grimshaw.jpg',
-              twitter: 'r_g'
-            },
-            {
-              name: 'Cyndy Lobb',
-              org: 'Google',
-              pic: 'http://edgeconf.com/images/heads/cyndy-lobb.jpg',
-              twitter: ''
-            },
-            {
-              name: 'Ricardo Varela',
-              org: 'Telef\xf3nica',
-              pic: 'http://edgeconf.com/images/heads/ricardo-varela.jpg',
-              twitter: 'phobeo'
-            },
-            {
-              name: 'Kumar McMillan',
-              org: 'Mozilla',
-              pic: 'http://edgeconf.com/images/heads/kumar-mcmillan.jpg',
-              twitter: 'kumar303'
-            },
-            {
-              name: 'Marcos Caceres',
-              org: 'Mozilla',
-              pic: 'http://edgeconf.com/images/heads/marcos-caceres.jpg',
-              twitter: 'marcosc',
-              mod: true
-            },
-            {
-              name: 'Yoav Weiss',
-              org: 'WL Square',
-              pic: 'http://edgeconf.com/images/heads/yoav-weiss.jpg',
-              twitter: 'yoavweiss'
-            },
-            {
-              name: 'Ann Robson',
-              org: 'freelance',
-              pic: 'http://edgeconf.com/images/heads/ann-robson.jpg',
-              twitter: 'arobson'
-            },
-            {
-              name: 'Estelle Weyl',
-              org: 'freelance',
-              pic: 'http://edgeconf.com/images/heads/estelle-weyl.jpg',
-              twitter: 'estellevw'
-            },
-            {
-              name: 'Peter Miller',
-              org: 'Conde Nast',
-              pic: 'http://edgeconf.com/images/heads/peter-miller.jpg',
-              twitter: 'petemill'
-            },
-            {
-              name: 'John Mellor',
-              org: 'Google',
-              pic: 'http://edgeconf.com/images/heads/john-mellor.jpg',
-              twitter: ''
-            },
-            {
-              name: 'Andre Behrens',
-              org: 'The New York Times',
-              pic: 'http://edgeconf.com/images/heads/andre-behrens.jpg',
-              twitter: 'mrandre',
-              mod: true
-            },
-            {
-              name: 'Jonathan Klein',
-              org: 'Etsy',
-              pic: 'http://edgeconf.com/images/heads/jonathan-klein.jpg',
-              twitter: 'jonathanklein'
-            },
-            {
-              name: 'Paul Lewis',
-              org: 'Google',
-              pic: 'http://edgeconf.com/images/heads/paul-lewis.jpg',
-              twitter: 'aerotwist'
-            },
-            {
-              name: 'Ariya Hidayat',
-              org: 'Sencha',
-              pic: 'http://edgeconf.com/images/heads/ariya-hidayat.jpg',
-              twitter: 'ariyahidayat'
-            },
-            {
-              name: 'Joshua Peek',
-              org: 'Github',
-              pic: 'http://edgeconf.com/images/heads/joshua-peek.jpg',
-              twitter: 'joshpeek'
-            },
-            {
-              name: 'Eli Fidler',
-              org: 'BlackBerry',
-              pic: 'http://edgeconf.com/images/heads/eli-fidler.jpg',
-              twitter: 'efidler'
-            },
-            {
-              name: 'Scott Jenson',
-              org: 'Jenson Design',
-              pic: 'http://edgeconf.com/images/heads/scott-jenson.jpg',
-              twitter: 'scottjenson',
-              mod: true
-            },
-            {
-              name: 'Martyn Loughran',
-              org: 'Pusher',
-              pic: 'http://edgeconf.com/images/heads/martyn-loughran.jpg',
-              twitter: 'mloughran'
-            },
-            {
-              name: 'Wesley Hales',
-              org: 'Apigee',
-              pic: 'http://edgeconf.com/images/heads/wesley-hales.jpg',
-              twitter: 'wesleyhales'
-            },
-            {
-              name: 'Rob Hawkes',
-              org: 'freelance',
-              pic: 'http://edgeconf.com/images/heads/rob-hawkes.jpg',
-              twitter: 'robhawkes'
-            },
-            {
-              name: 'John Fallows',
-              org: 'Kaazing',
-              pic: 'http://edgeconf.com/images/heads/john-fallows.jpg',
-              twitter: ''
-            },
-            {
-              name: 'Henrik Joretag',
-              org: '&yet',
-              pic: 'http://edgeconf.com/images/heads/henrik-joretag.jpg',
-              twitter: 'HenrikJoreteg'
-            },
-            {
-              name: 'Paul Irish',
-              org: 'Google',
-              pic: 'http://edgeconf.com/images/heads/paul-irish.jpg',
-              twitter: 'paul_irish',
-              mod: true
-            },
-            {
-              name: 'Tom Maslen',
-              org: 'BBC',
-              pic: 'http://edgeconf.com/images/heads/tom-maslen.jpg',
-              twitter: 'tmaslen'
-            },
-            {
-              name: 'Tomomi Imura',
-              org: 'Nokia',
-              pic: 'http://edgeconf.com/images/heads/tomomi-imura.jpg',
-              twitter: 'girlie_mac'
-            },
-            {
-              name: 'Shwetank Dixit',
-              org: 'Opera',
-              pic: 'http://edgeconf.com/images/heads/shwetank-dixit.jpg',
-              twitter: 'shwetank'
-            },
-            {
-              name: 'Edd Sowden',
-              org: 'Government Digital Service',
-              pic: 'http://edgeconf.com/images/heads/edd-sowden.jpg',
-              twitter: 'edds'
-            },
-            {
-              name: 'Steve Thair',
-              org: 'Seriti Consulting',
-              pic: 'http://edgeconf.com/images/heads/steve-thair.jpg',
-              twitter: 'theopsmgr',
-              mod: true
-            },
-            {
-              name: 'Ben Vinegar',
-              org: 'Disqus',
-              pic: 'http://edgeconf.com/images/heads/ben-vinegar.jpg',
-              twitter: 'bentlegen'
-            },
-            {
-              name: 'Guy Podjarny',
-              org: 'Akamai',
-              pic: 'http://edgeconf.com/images/heads/guy-podjarny.jpg',
-              twitter: 'guypod'
-            },
-            {
-              name: 'Stoyan Stefanov',
-              org: 'Facebook',
-              pic: 'http://edgeconf.com/images/heads/stoyan-stefanov.jpg',
-              twitter: 'stoyanstefanov'
-            },
-            {
-              name: 'Barbara Bermes',
-              org: 'CBC',
-              pic: 'http://edgeconf.com/images/heads/barbara-bermes.jpg',
-              twitter: 'bbinto'
-            },
-            {
-              name: 'Jake Archibald',
-              org: 'Google',
-              pic: 'http://edgeconf.com/images/heads/jake-archibald.jpg',
-              twitter: 'jaffathecake',
-              mod: true
-            },
-            {
-              name: 'Alex Russell',
-              org: 'Google',
-              pic: 'http://edgeconf.com/images/heads/alex-russell.jpg',
-              twitter: 'slightlylate'
-            },
-            {
-              name: 'Matt Andrews',
-              org: 'FT Labs',
-              pic: 'http://edgeconf.com/images/heads/matt-andrews.jpg',
-              twitter: 'andrewsmatt'
-            },
-            {
-              name: 'Craig Cavalier',
-              org: 'LiquidFrameworks',
-              pic: 'http://edgeconf.com/images/heads/craig-cavalier.jpg',
-              twitter: 'CraigCav'
-            },
-            {
-              name: 'Calvin Spealman',
-              org: 'Caktus Consulting',
-              pic: 'http://edgeconf.com/images/heads/calvin-spealman.jpg',
-              twitter: 'ironfroggy'
+        var result, allpanels, deferred = $q.defer();
+        if (!panelistjson) {
+          pagedata.get(null, '/analytics/json/edge/edge1.json').then(function (success) {
+            panelistjson = success.panelists;
+            deferred.resolve(success.panelists);
+          }, function (fail) {
+            deferred.reject(fail);
+          });
+        }
+        deferred.promise.then(function () {
+          angular.forEach(allpanels, function (value, index) {
+            if (value.name === name) {
+              result = value;
             }
-          ];
-        angular.forEach(allpanels, function (value, index) {
-          if (value.name === name) {
-            result = value;
-          }
+          });
+          return result;
         });
-        return result;
       };
     };
   }
@@ -1460,7 +1232,7 @@ onslyde.Directives.directive('youtube', [
     };
   }
 ]);
-onslyde.Services.factory('youtubeapi', function ($window, $rootScope, $log) {
+onslyde.Services.factory('youtubeapi', function ($window, $rootScope, $log, $timeout) {
   var service = $rootScope;
   // Youtube callback when API is ready
   $window.onYouTubeIframeAPIReady = function () {
@@ -1488,19 +1260,22 @@ onslyde.Services.factory('youtubeapi', function ($window, $rootScope, $log) {
   };
   service.loadPlayer = function () {
     // API ready?
-    if (this.ready && this.playerId && this.videoId) {
-      if (this.player) {
-        this.player.destroy();
+    var that = this;
+    $timeout(function () {
+      if (that.ready && that.playerId && that.videoId) {
+        if (that.player) {
+          that.player.destroy();
+        }
+        that.player = that.createPlayer();  // fixed Unable to post message to https://www.youtube.com.
+                                            // ref: https://code.google.com/p/gdata-issues/issues/detail?id=4697
+                                            //      setTimeout(function(){
+                                            //        var url = $('#analytics-player').prop('src');
+                                            //        if (url.match('^http://')) {
+                                            //          $('#analytics-player').prop('src', url.replace(/^http:\/\//i, 'https://'));
+                                            //        }
+                                            //      }, 500);
       }
-      this.player = this.createPlayer();  // fixed Unable to post message to https://www.youtube.com.
-                                          // ref: https://code.google.com/p/gdata-issues/issues/detail?id=4697
-                                          //      setTimeout(function(){
-                                          //        var url = $('#analytics-player').prop('src');
-                                          //        if (url.match('^http://')) {
-                                          //          $('#analytics-player').prop('src', url.replace(/^http:\/\//i, 'https://'));
-                                          //        }
-                                          //      }, 500);
-    }
+    }, 2000);
   };
   return service;
 });

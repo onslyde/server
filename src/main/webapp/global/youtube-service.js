@@ -1,4 +1,4 @@
-onslyde.Services.factory('youtubeapi', function ($window, $rootScope, $log) {
+onslyde.Services.factory('youtubeapi', function ($window, $rootScope, $log, $timeout) {
 
   var service = $rootScope;
 
@@ -34,11 +34,13 @@ onslyde.Services.factory('youtubeapi', function ($window, $rootScope, $log) {
 
   service.loadPlayer = function () {
     // API ready?
-    if (this.ready && this.playerId && this.videoId) {
-      if(this.player) {
-        this.player.destroy();
+    var that = this;
+    $timeout(function(){
+    if (that.ready && that.playerId && that.videoId) {
+      if(that.player) {
+        that.player.destroy();
       }
-      this.player = this.createPlayer();
+      that.player = that.createPlayer();
 
       // fixed Unable to post message to https://www.youtube.com.
       // ref: https://code.google.com/p/gdata-issues/issues/detail?id=4697
@@ -49,6 +51,7 @@ onslyde.Services.factory('youtubeapi', function ($window, $rootScope, $log) {
 //        }
 //      }, 500);
     }
+    },2000);
   };
 
   return service;

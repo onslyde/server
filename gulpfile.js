@@ -52,9 +52,10 @@ gulp.task('appscripts', function() {
 
 // Rerun the task when a file changes
 gulp.task('watch', function() {
-    gulp.watch(paths.scripts, ['scripts']);
+    gulp.watch(paths.appscripts, ['appscripts']);
 //  gulp.watch(paths.images, ['images']);
 });
 
 // The default task (called when you run `gulp` from cli)
 gulp.task('default', ['appscripts', 'foundationscripts']);
+gulp.task('watch', ['appscripts', 'watch']);

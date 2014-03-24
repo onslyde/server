@@ -34,7 +34,7 @@ angular.module('onslyde',
 
 
   }])
-  .run(function ($rootScope) {
+  .run(function ($rootScope, $location) {
     $rootScope.$on('$viewContentLoaded', function () {
 
       angular.element(document).ready(function () {
@@ -74,6 +74,11 @@ angular.module('onslyde',
 
         });
 
+
+        //handle app wide bookmarking
+        if ($location.hash()) {
+          $anchorScroll($location.hash())
+        }
       });
 
 //      $('#sign-up').on('invalid', function () {
