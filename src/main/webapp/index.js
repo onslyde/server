@@ -42,35 +42,37 @@ angular.module('onslyde', [
 ]).run(function ($rootScope, $location) {
   $rootScope.$on('$viewContentLoaded', function () {
     angular.element(document).ready(function () {
-      var tag = document.createElement('script');
-      tag.src = '//www.youtube.com/iframe_api';
-      var firstScriptTag = document.getElementsByTagName('script')[0];
-      firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
       //very, very fugly
       window.runFoundation(window, document, undefined);
       window.runOrbit(window, document, undefined);
       window.runReveal(window, document, undefined);
       window.runTooltip(window, document, undefined);
       $(document).foundation();
-      $('#how-can-use').on('orbit:after-slide-change', function (event, orbit) {
-        //          console.info("after slide change");
-        //          console.info("slide ", document.querySelectorAll('.slide'));
-        var counter = 1;
-        angular.forEach(document.querySelectorAll('.slide'), function (value, key) {
-          if (orbit.slide_number + 1 === counter) {
-            value.classList.remove('hidden');
-            value.classList.add('slide' + counter);
-          } else {
-            value.classList.add('hidden');
-            value.classList.remove('slide' + counter);
-          }
-          counter++;
-        });
-      });
+      //        $("#how-can-use").on("orbit:after-slide-change", function (event, orbit) {
+      ////          console.info("after slide change");
+      ////          console.info("slide ", document.querySelectorAll('.slide'));
+      //          var counter = 1;
+      //          angular.forEach(document.querySelectorAll('.slide'), function (value, key) {
+      //
+      //            if ((orbit.slide_number + 1) === counter) {
+      //              value.classList.remove('hidden');
+      //              value.classList.add('slide' + counter);
+      //            } else {
+      //              value.classList.add('hidden');
+      //              value.classList.remove('slide' + counter);
+      //            }
+      //            counter++;
+      //          });
+      //
+      //        });
       //handle app wide bookmarking
       if ($location.hash()) {
         $anchorScroll($location.hash());
       }
+      var tag = document.createElement('script');
+      tag.src = '//www.youtube.com/iframe_api';
+      var firstScriptTag = document.getElementsByTagName('script')[0];
+      firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
     });  //      $('#sign-up').on('invalid', function () {
          //        alert('np')
          //      })
@@ -199,7 +201,7 @@ onslyde.Controllers.controller('AnalyticsCtrl', [
           function createCharts() {
             var overViewOptions = [];
             angular.forEach($scope.sessionData.slideGroups, function (value, index) {
-              var twooptions, voteData, voteOptions, allVotes;
+              var twooptions, voteData, voteOptions, allVotes, startTime = $rootScope.sessionData.start;
               if (value.slideGroupOptionses.length > 2) {
                 twooptions = [
                   {
@@ -296,75 +298,86 @@ onslyde.Controllers.controller('AnalyticsCtrl', [
                   //get the votes and attendee data for agree/disagree ONLY options
                   angular.forEach(voteData, function (vote, toindex) {
                     var voteTime = vote.voteTime, attendee = vote.attendee, thisSlideOptions;
-                    if (twooptions.length === 2) {
-                      thisSlideOptions = vote.slideOptions;
-                    } else {
-                      thisSlideOptions = vote.slideGroupOptions;
-                    }
-                    //loop through all options for compare... this is so we can display a growth chart and not just spikes when votes occur
-                    for (var i = 0; i < twooptions.length; i++) {
-                      var dataPoints = twooptions[i].datapoints, totalLength = dataPoints[dataPoints.length - 1], lastValue;
-                      //if we find a vote, fill it in to the approriate array
-                      //todo - cleanup repetitive code
-                      if (twooptions[i].label === thisSlideOptions.name) {
-                        if (optionTracker[twooptions[i].label] === 0 && totalLength.timestamp === 0) {
-                          twooptions[i].datapoints[0] = {
+                    //make sure vote time is after with start time
+                    if (startTime < voteTime) {
+                      twooptions.show = true;
+                      if (twooptions.length === 2) {
+                        thisSlideOptions = vote.slideOptions;
+                      } else {
+                        thisSlideOptions = vote.slideGroupOptions;
+                      }
+                      //loop through all options for compare... this is so we can display a growth chart and not just spikes when votes occur
+                      for (var i = 0; i < twooptions.length; i++) {
+                        var dataPoints = twooptions[i].datapoints, totalLength = dataPoints[dataPoints.length - 1], lastValue;
+                        //if we find a vote, fill it in to the approriate array
+                        //todo - cleanup repetitive code
+                        if (twooptions[i].label === thisSlideOptions.name) {
+                          if (optionTracker[twooptions[i].label] === 0 && totalLength.timestamp === 0) {
+                            twooptions[i].datapoints[0] = {
+                              'timestamp': voteTime,
+                              'count': 1
+                            };
+                            optionTracker[twooptions[i].label] = 1;
+                          } else {
+                            if (optionTracker[twooptions[i].label] === 0) {
+                              optionTracker[twooptions[i].label] = 1;
+                            }
+                            //increment the option tracker for this label by 1
+                            twooptions[i].datapoints.push({
+                              'timestamp': voteTime,
+                              'count': optionTracker[twooptions[i].label]++
+                            });
+                          }
+                          //increment total count for summary
+                          $scope.dashBoard.totals[twooptions[i].label] += 1;
+                          allVotes[i].datapoints.push({
                             'timestamp': voteTime,
                             'count': 1
-                          };
-                          optionTracker[twooptions[i].label] = 1;
+                          });  //otherwise populate with 0, or the last known count for the opposite label
                         } else {
-                          if (optionTracker[twooptions[i].label] === 0) {
-                            optionTracker[twooptions[i].label] = 1;
+                          if (optionTracker[twooptions[i].label] === 0 && totalLength.timestamp === 0) {
+                            twooptions[i].datapoints[0] = {
+                              'timestamp': voteTime,
+                              'count': optionTracker[twooptions[i].label]
+                            };
+                          } else {
+                            twooptions[i].datapoints.push({
+                              'timestamp': voteTime,
+                              'count': optionTracker[twooptions[i].label]
+                            });
                           }
-                          //increment the option tracker for this label by 1
-                          twooptions[i].datapoints.push({
+                          allVotes[i].datapoints.push({
                             'timestamp': voteTime,
-                            'count': optionTracker[twooptions[i].label]++
+                            'count': 0
                           });
                         }
-                        //increment total count for summary
-                        $scope.dashBoard.totals[twooptions[i].label] += 1;
-                        allVotes[i].datapoints.push({
-                          'timestamp': voteTime,
-                          'count': 1
-                        });  //otherwise populate with 0, or the last known count for the opposite label
-                      } else {
-                        if (optionTracker[twooptions[i].label] === 0 && totalLength.timestamp === 0) {
-                          twooptions[i].datapoints[0] = {
-                            'timestamp': voteTime,
-                            'count': optionTracker[twooptions[i].label]
-                          };
-                        } else {
-                          twooptions[i].datapoints.push({
-                            'timestamp': voteTime,
-                            'count': optionTracker[twooptions[i].label]
-                          });
-                        }
-                        allVotes[i].datapoints.push({
-                          'timestamp': voteTime,
-                          'count': 0
+                        //sort the datapoints based on timestamps
+                        twooptions[i].datapoints.sort(function (a, b) {
+                          a = a['timestamp'];
+                          b = b['timestamp'];
+                          return a > b ? 1 : a < b ? -1 : 0;
                         });
                       }
-                      //sort the datapoints based on timestamps
-                      twooptions[i].datapoints.sort(function (a, b) {
-                        a = a['timestamp'];
-                        b = b['timestamp'];
-                        return a > b ? 1 : a < b ? -1 : 0;
-                      });
+                    } else {
+                      //give ui something so it doesn't render irrelevant charts
+                      twooptions.show = false;
                     }
                   });
                   //increment total count for speaker
                   for (var i = 0; i < twooptions.length; i++) {
                     spearkerStat[twooptions[i].label] += twooptions[i].datapoints[twooptions[i].datapoints.length - 1].count;
+                    var goahead = false, speakerTotals = $scope.dashBoard.speakerTotals;
+                    spearkerStat.overview[twooptions[i].label].label = twooptions.topicName + ' ' + twooptions[i].label;
+                    spearkerStat.overview[twooptions[i].label].datapoints = twooptions[i].datapoints;
                   }
                   spearkerStat.sessions += 1;
                   $scope.dashBoard.speakerTotals.push(spearkerStat);
+                  console.log('spearkerStat.overview.agree', spearkerStat.overview.agree);
                   if (twooptions) {
-                    overViewOptions.push(twooptions[0]);
-                    overViewOptions.push(twooptions[1]);
+                    overViewOptions.push(spearkerStat.overview.agree);
+                    overViewOptions.push(spearkerStat.overview.disagree);
                   }
-                  var startTime = $rootScope.sessionData.end;
+                  var videoStartTime = $rootScope.sessionData.end;
                   var tempLineChart = angular.copy($rootScope.chartTemplate.line);
                   var tempPieChart = angular.copy($rootScope.chartTemplate.pie);
                   twooptions.chartData = chartservice.convertLineChart(twooptions, tempLineChart, dataDescription.timeseries, '');
@@ -373,13 +386,11 @@ onslyde.Controllers.controller('AnalyticsCtrl', [
                     series.point = {
                       events: {
                         click: function (event) {
-                          //                      var d = new Date(this.category - startTime);
                           $('#chart_movie').foundation('reveal', 'open');
                           $('#chart_movie').bind('close', function () {
                             youtubeapi.player.pauseVideo();
                           });
-                          //                      document.getElementById('chart-movie-frame').src = 'http://www.youtube.com/v/' + $rootScope.sessionData.sessionCode + '?version=3&autoplay=1&start=' + ((this.category - startTime) / 1000);
-                          youtubeapi.player.seekTo((this.category - startTime) / 1000);
+                          youtubeapi.player.seekTo((this.category - videoStartTime) / 1000);
                           youtubeapi.player.playVideo();
                         }
                       }
@@ -393,8 +404,41 @@ onslyde.Controllers.controller('AnalyticsCtrl', [
                 }
               }
             });
-            var tempOverViewChart = angular.copy($rootScope.chartTemplate.line);
-            $scope.overViewOptions = chartservice.convertLineChart(overViewOptions, tempOverViewChart, dataDescription.timeseries, '');
+            //              var tempOverViewChart = angular.copy($rootScope.chartTemplate.line);
+            //              $scope.overViewOptions = chartservice.convertLineChart(overViewOptions, tempOverViewChart, dataDescription.timeseries, '');
+            //todo this is temp - refactor to chart service
+            window.drawChart = function (speakerTotals) {
+              var container = document.getElementById('example1');
+              var chart = new google.visualization.Timeline(container);
+              var dataTable = new google.visualization.DataTable();
+              dataTable.addColumn({
+                type: 'string',
+                id: 'Speaker'
+              });
+              dataTable.addColumn({
+                type: 'date',
+                id: 'Start'
+              });
+              dataTable.addColumn({
+                type: 'date',
+                id: 'End'
+              });
+              var start, end, rows = [];
+              for (var i = 0; i < speakerTotals.length; i++) {
+                start = speakerTotals[i].overview.agree.datapoints[0].timestamp;
+                end = speakerTotals[i].overview.agree.datapoints[speakerTotals[i].overview.agree.datapoints.length - 1].timestamp;
+                if (start > 0) {
+                  rows.push([
+                    speakerTotals[i].topic,
+                    new Date(start),
+                    new Date(end)
+                  ]);
+                }
+              }
+              dataTable.addRows(rows);
+              chart.draw(dataTable);
+            };
+            google.setOnLoadCallback(window.drawChart($scope.dashBoard.speakerTotals));
           }
         }, function (fail) {
           console.log('Problem getting chart datapoints', fail);
@@ -408,6 +452,10 @@ onslyde.Controllers.controller('AnalyticsCtrl', [
             sessions: 0,
             speaker: twooptions.speakerData
           };
+        spearkerStat.overview = {
+          agree: { datapoints: [] },
+          disagree: { datapoints: [] }
+        };
         if (speakerTotals.length > 0) {
           for (var d = 0; d < speakerTotals.length; d++) {
             if (speakerTotals[d].topic === twooptions.topicName) {
@@ -572,18 +620,22 @@ onslyde.Services.factory('chartservice', function () {
       if (chartData.length > 1) {
         for (var l = 0; l < chartData.length; l++) {
           chartData.sort(function (a, b) {
-            a = a['label'].toLowerCase();
-            b = b['label'].toLowerCase();
-            if (a === 'agree') {
-              return -1;
-            } else if (b === 'agree') {
-              return 1;
-            } else if (a === 'disagree') {
-              return -1;
-            } else if (b === 'disagree') {
-              return 1;
-            } else {
-              return a > b ? 1 : a < b ? -1 : 0;
+            try {
+              a = a['label'].toLowerCase();
+              b = b['label'].toLowerCase();
+              if (a === 'agree') {
+                return -1;
+              } else if (b === 'agree') {
+                return 1;
+              } else if (a === 'disagree') {
+                return -1;
+              } else if (b === 'disagree') {
+                return 1;
+              } else {
+                return a > b ? 1 : a < b ? -1 : 0;
+              }
+            } catch (e) {
+              console.log('problem converting chart', e);
             }
           });
           var dataPoints = chartData[l].datapoints;
@@ -595,12 +647,14 @@ onslyde.Services.factory('chartservice', function () {
           lineChart.series[l].color = dataDescription.colors[l];
           lineChart.series[l].dashStyle = 'solid';
           //            lineChart.series[l].yAxis.title.text = dataDescription.yAxisLabels;
-          for (var i = 0; i < dataPoints.length; i++) {
-            if (typeof dataDescription.dataAttr[1] === 'object') {
-              lineChart.series[l].data.push([
-                dataPoints[i].timestamp,
-                dataPoints[i].count
-              ]);
+          if (dataPoints) {
+            for (var i = 0; i < dataPoints.length; i++) {
+              if (typeof dataDescription.dataAttr[1] === 'object') {
+                lineChart.series[l].data.push([
+                  dataPoints[i].timestamp,
+                  dataPoints[i].count
+                ]);
+              }
             }
           }
         }
@@ -1237,7 +1291,12 @@ onslyde.Services.factory('youtubeapi', function ($window, $rootScope, $log, $tim
   // Youtube callback when API is ready
   $window.onYouTubeIframeAPIReady = function () {
     $log.info('Youtube API is ready');
-    service.ready = true;
+    service.ready = true;  //    if (service.ready && service.playerId && service.videoId) {
+                           //      if(service.player) {
+                           //        service.player.destroy();
+                           //      }
+                           //      service.player = service.createPlayer();
+                           //    }
   };
   service.ready = false;
   service.playerId = null;
@@ -1246,11 +1305,11 @@ onslyde.Services.factory('youtubeapi', function ($window, $rootScope, $log, $tim
   service.playerHeight = '390';
   service.playerWidth = '640';
   service.bindVideoPlayer = function (elementId) {
-    //    $log.info('Binding to player ' + elementId);
+    $log.info('Binding to player ' + elementId);
     service.playerId = elementId;
   };
   service.createPlayer = function () {
-    //    $log.info('Creating a new Youtube player for DOM id ' + this.playerId + ' and video ' + this.videoId);
+    $log.info('Creating a new Youtube player for DOM id ' + this.playerId + ' and video ' + this.videoId);
     return new YT.Player(this.playerId, {
       height: this.playerHeight,
       width: this.playerWidth,
@@ -1260,6 +1319,7 @@ onslyde.Services.factory('youtubeapi', function ($window, $rootScope, $log, $tim
   };
   service.loadPlayer = function () {
     // API ready?
+    $log.info('Youtube loadPlayer');
     var that = this;
     $timeout(function () {
       if (that.ready && that.playerId && that.videoId) {
@@ -1275,7 +1335,7 @@ onslyde.Services.factory('youtubeapi', function ($window, $rootScope, $log, $tim
                                             //        }
                                             //      }, 500);
       }
-    }, 2000);
+    }, 3000);
   };
   return service;
 });

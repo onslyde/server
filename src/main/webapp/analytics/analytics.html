@@ -20,16 +20,12 @@
 </div>
 
 <div class="row" ng-if="sessionID" ng-init="panelAnalyticsSetup()">
-  <div ng-if="sessionData.sessionCode && sessionData.sessionCode == 'panel'" id="chart_movie"
+  <div ng-if="sessionData.extra && sessionData.extra == 'panel'" id="chart_movie"
        class="reveal-modal medium" style="text-align:center">
     <div youtube sessionid="{{sessionData.sessionCode}}" id="analytics-player"></div>
   </div>
 
-  <chart id="overview-totals"
-         chartdata="overViewOptions"
-         type="area"
-         xAxisLabel="return Highcharts.dateFormat('%H:%M:%S', this.value);"
-         xAxisStep="3"></chart>
+
 
   <div class="large-12 columns">
     <h2 class="loading-title bold" ng-if="!twoOptionsList">Loading your report <br/>
@@ -72,9 +68,11 @@
 
     </div>
 
+    <div id="example1" style="width: 100%; height: 280px;"></div>
+
     <!--<span class="label right" ng-if="twoOptionsList">Click on a point in the timeseries chart to see the video for each voting period.</span>-->
     <ul ng-repeat="twooption in twoOptionsList | orderBy:'created'" class="chart-list">
-      <li class="row">
+      <li class="row" ng-if="twooption.show">
         <div class="large-12 columns">
           <a name="{{twooption.topicID}}"></a>
 

@@ -108,7 +108,8 @@ onslyde.Controllers.controller('AnalyticsCtrl',
                 var twooptions,
                     voteData,
                     voteOptions,
-                    allVotes;
+                    allVotes,
+                    startTime = $rootScope.sessionData.start;
 
                 if (value.slideGroupOptionses.length > 2) {
 
@@ -184,9 +185,14 @@ onslyde.Controllers.controller('AnalyticsCtrl',
 
                     //get the votes and attendee data for agree/disagree ONLY options
                     angular.forEach(voteData, function (vote, toindex) {
+
                       var voteTime = vote.voteTime,
                           attendee = vote.attendee,
                           thisSlideOptions;
+
+                      //make sure vote time is after with start time
+                      if(startTime < voteTime){
+                        twooptions.show = true;
 
                       if (twooptions.length === 2) {
                         thisSlideOptions = vote.slideOptions;
@@ -242,6 +248,10 @@ onslyde.Controllers.controller('AnalyticsCtrl',
 
 
                       }
+                      }else{
+                        //give ui something so it doesn't render irrelevant charts
+                        twooptions.show = false;
+                      }
 
                     });
 
@@ -249,16 +259,26 @@ onslyde.Controllers.controller('AnalyticsCtrl',
                     //increment total count for speaker
                     for (var i = 0; i < twooptions.length; i++) {
                       spearkerStat[twooptions[i].label] += twooptions[i].datapoints[twooptions[i].datapoints.length - 1].count;
+                      var goahead = false,
+                          speakerTotals = $scope.dashBoard.speakerTotals;
+
+                      spearkerStat.overview[twooptions[i].label].label = twooptions.topicName + ' ' + twooptions[i].label;
+
+                      spearkerStat.overview[twooptions[i].label].datapoints = twooptions[i].datapoints;
+
                     }
+
+
                     spearkerStat.sessions += 1;
-                    $scope.dashBoard.speakerTotals.push(spearkerStat);
 
+                    $scope.dashBoard.speakerTotals.push(spearkerStat);
+                    console.log('spearkerStat.overview.agree',spearkerStat.overview.agree)
                     if(twooptions){
-                      overViewOptions.push(twooptions[0]);
-                      overViewOptions.push(twooptions[1]);
+                      overViewOptions.push(spearkerStat.overview.agree);
+                      overViewOptions.push(spearkerStat.overview.disagree);
                     }
 
-                    var startTime = $rootScope.sessionData.end;
+                    var videoStartTime = $rootScope.sessionData.end;
                     var tempLineChart = angular.copy($rootScope.chartTemplate.line);
                     var tempPieChart = angular.copy($rootScope.chartTemplate.pie);
 
@@ -271,13 +291,11 @@ onslyde.Controllers.controller('AnalyticsCtrl',
 
                       series.point = {events:{
                         click:function (event) {
-//                      var d = new Date(this.category - startTime);
                           $('#chart_movie').foundation('reveal', 'open');
                           $('#chart_movie').bind('close', function () {
                             youtubeapi.player.pauseVideo();
                           });
-//                      document.getElementById('chart-movie-frame').src = 'http://www.youtube.com/v/' + $rootScope.sessionData.sessionCode + '?version=3&autoplay=1&start=' + ((this.category - startTime) / 1000);
-                          youtubeapi.player.seekTo(((this.category - startTime) / 1000));
+                          youtubeapi.player.seekTo(((this.category - videoStartTime) / 1000));
                           youtubeapi.player.playVideo();
                         }
                       }
@@ -294,18 +312,49 @@ onslyde.Controllers.controller('AnalyticsCtrl',
                   }
                 }
               });
-              var tempOverViewChart = angular.copy($rootScope.chartTemplate.line);
-              $scope.overViewOptions = chartservice.convertLineChart(overViewOptions, tempOverViewChart, dataDescription.timeseries, '');
+//              var tempOverViewChart = angular.copy($rootScope.chartTemplate.line);
+//              $scope.overViewOptions = chartservice.convertLineChart(overViewOptions, tempOverViewChart, dataDescription.timeseries, '');
+
+              //todo this is temp - refactor to chart service
+              window.drawChart = function(speakerTotals) {
+                var container = document.getElementById('example1');
+
+                var chart = new google.visualization.Timeline(container);
+
+                var dataTable = new google.visualization.DataTable();
+
+                dataTable.addColumn({ type: 'string', id: 'Speaker' });
+                dataTable.addColumn({ type: 'date', id: 'Start' });
+                dataTable.addColumn({ type: 'date', id: 'End' });
+
+                var start, end, rows = [];
+
+                for (var i = 0; i < speakerTotals.length; i++) {
+                  start = speakerTotals[i].overview.agree.datapoints[0].timestamp;
+                  end = speakerTotals[i].overview.agree.datapoints[speakerTotals[i].overview.agree.datapoints.length - 1].timestamp;
+                  if(start > 0){
+                    rows.push([speakerTotals[i].topic,new Date(start),new Date(end)]);
+                  }
+
+                }
+
+                dataTable.addRows(rows);
+                chart.draw(dataTable);
+              }
+              google.setOnLoadCallback(window.drawChart($scope.dashBoard.speakerTotals));
             }
 
           }, function (fail) {
             console.log('Problem getting chart datapoints', fail)
           });
 
+
+
         };
 
         function getSpeakerSummaryData(speakerTotals, twooptions) {
           var spearkerStat = {topic:twooptions.topicName, agree:0, disagree:0, sessions:0, speaker:twooptions.speakerData};
+              spearkerStat.overview = {agree: {datapoints: []}, disagree: {datapoints: []}};
 
           if (speakerTotals.length > 0) {
             for (var d = 0; d < speakerTotals.length; d++) {

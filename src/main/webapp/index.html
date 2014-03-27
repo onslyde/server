@@ -49,7 +49,7 @@
 
 <div class="row">
   <div class="large-3 columns">
-    <h1 class="logo"><a href="#!/home">onslyde</a></h1>
+    <h1 class="logo"><a href="#!/home"></a></h1>
   </div>
   <div class="large-9 columns">
     <ul class="top-buttons button-group right" ng-controller="LoginCtrl">
@@ -102,11 +102,18 @@
 
 <script src="js/libs/foundation-all.min.js"></script>
 
+<script type="text/javascript" src="https://www.google.com/jsapi?autoload={'modules':[{'name':'visualization',
+       'version':'1','packages':['timeline']}]}"></script>
+
+
+
 <script src="js/libs/angular-1.2.14/angular.js"></script>
 <script src="js/libs/angular-1.2.14/angular-resource.js"></script>
 <script src="js/libs/angular-1.2.14/angular-cookies.js"></script>
 <script src="js/libs/angular-1.2.14/angular-route.js"></script>
 <script src="index.js"></script>
+
+
 
 <script>
   var _gaq = _gaq || [];
@@ -122,6 +129,8 @@
 
   //load twitter share button
   document.getElementById('twitter').src = 'https://platform.twitter.com/widgets/tweet_button.html?via=onslyde&url=onslyde.com';
+
+
 </script>
 
 </body>

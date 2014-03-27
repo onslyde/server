@@ -36,6 +36,7 @@ onslyde.Services.factory('chartservice', function () {
         for (var l = 0; l < chartData.length; l++){
 
           chartData.sort(function(a, b){
+            try{
             a = a['label'].toLowerCase();
             b = b['label'].toLowerCase();
             if(a === 'agree'){
@@ -49,7 +50,9 @@ onslyde.Services.factory('chartservice', function () {
             }else{
               return a > b ? 1 : a < b ? -1 : 0;
             }
-
+            }catch(e){
+              console.log('problem converting chart',e);
+            }
           });
 
             var dataPoints = chartData[l].datapoints;
@@ -65,13 +68,15 @@ onslyde.Services.factory('chartservice', function () {
 //            lineChart.series[l].yAxis.title.text = dataDescription.yAxisLabels;
 
 
-
-            for (var i = 0; i < dataPoints.length; i++) {
-              if(typeof dataDescription.dataAttr[1] === 'object'){
+            if(dataPoints){
+              for (var i = 0; i < dataPoints.length; i++) {
+                if(typeof dataDescription.dataAttr[1] === 'object'){
                   lineChart.series[l].data.push([dataPoints[i].timestamp,dataPoints[i].count]);
-              }
+                }
 
+              }
             }
+
 
           }
 

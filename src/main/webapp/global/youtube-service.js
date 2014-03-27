@@ -6,6 +6,13 @@ onslyde.Services.factory('youtubeapi', function ($window, $rootScope, $log, $tim
   $window.onYouTubeIframeAPIReady = function () {
     $log.info('Youtube API is ready');
     service.ready = true;
+//    if (service.ready && service.playerId && service.videoId) {
+//      if(service.player) {
+//        service.player.destroy();
+//      }
+//      service.player = service.createPlayer();
+//    }
+
   };
 
   service.ready = false;
@@ -16,12 +23,12 @@ onslyde.Services.factory('youtubeapi', function ($window, $rootScope, $log, $tim
   service.playerWidth = '640';
 
   service.bindVideoPlayer = function (elementId) {
-//    $log.info('Binding to player ' + elementId);
+    $log.info('Binding to player ' + elementId);
     service.playerId = elementId;
   };
 
   service.createPlayer = function () {
-//    $log.info('Creating a new Youtube player for DOM id ' + this.playerId + ' and video ' + this.videoId);
+    $log.info('Creating a new Youtube player for DOM id ' + this.playerId + ' and video ' + this.videoId);
     return new YT.Player(this.playerId, {
       height: this.playerHeight,
       width: this.playerWidth,
@@ -34,6 +41,7 @@ onslyde.Services.factory('youtubeapi', function ($window, $rootScope, $log, $tim
 
   service.loadPlayer = function () {
     // API ready?
+    $log.info('Youtube loadPlayer');
     var that = this;
     $timeout(function(){
     if (that.ready && that.playerId && that.videoId) {
@@ -51,7 +59,7 @@ onslyde.Services.factory('youtubeapi', function ($window, $rootScope, $log, $tim
 //        }
 //      }, 500);
     }
-    },2000);
+    },3000);
   };
 
   return service;

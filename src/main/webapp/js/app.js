@@ -39,10 +39,7 @@ angular.module('onslyde',
 
       angular.element(document).ready(function () {
 
-        var tag = document.createElement('script');
-        tag.src = "//www.youtube.com/iframe_api";
-        var firstScriptTag = document.getElementsByTagName('script')[0];
-        firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
+
 
 
 
@@ -56,29 +53,35 @@ angular.module('onslyde',
         $(document)
           .foundation();
 
-        $("#how-can-use").on("orbit:after-slide-change", function (event, orbit) {
-//          console.info("after slide change");
-//          console.info("slide ", document.querySelectorAll('.slide'));
-          var counter = 1;
-          angular.forEach(document.querySelectorAll('.slide'), function (value, key) {
-
-            if ((orbit.slide_number + 1) === counter) {
-              value.classList.remove('hidden');
-              value.classList.add('slide' + counter);
-            } else {
-              value.classList.add('hidden');
-              value.classList.remove('slide' + counter);
-            }
-            counter++;
-          });
-
-        });
+//        $("#how-can-use").on("orbit:after-slide-change", function (event, orbit) {
+////          console.info("after slide change");
+////          console.info("slide ", document.querySelectorAll('.slide'));
+//          var counter = 1;
+//          angular.forEach(document.querySelectorAll('.slide'), function (value, key) {
+//
+//            if ((orbit.slide_number + 1) === counter) {
+//              value.classList.remove('hidden');
+//              value.classList.add('slide' + counter);
+//            } else {
+//              value.classList.add('hidden');
+//              value.classList.remove('slide' + counter);
+//            }
+//            counter++;
+//          });
+//
+//        });
 
 
         //handle app wide bookmarking
         if ($location.hash()) {
           $anchorScroll($location.hash())
         }
+
+        var tag = document.createElement('script');
+        tag.src = "//www.youtube.com/iframe_api";
+        var firstScriptTag = document.getElementsByTagName('script')[0];
+        firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
+
       });
 
 //      $('#sign-up').on('invalid', function () {
