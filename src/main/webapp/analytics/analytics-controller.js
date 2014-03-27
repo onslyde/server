@@ -261,10 +261,14 @@ onslyde.Controllers.controller('AnalyticsCtrl',
                       spearkerStat[twooptions[i].label] += twooptions[i].datapoints[twooptions[i].datapoints.length - 1].count;
                       var goahead = false,
                           speakerTotals = $scope.dashBoard.speakerTotals;
+                      var overviewobj = {};
+                      if(!overviewobj[twooptions[i].label]){
+                        overviewobj[twooptions[i].label] = {};
+                      }
+                      overviewobj[twooptions[i].label].label = twooptions.topicName + ' ' + twooptions[i].label;
+                      overviewobj[twooptions[i].label].datapoints = twooptions[i].datapoints;
 
-                      spearkerStat.overview[twooptions[i].label].label = twooptions.topicName + ' ' + twooptions[i].label;
-
-                      spearkerStat.overview[twooptions[i].label].datapoints = twooptions[i].datapoints;
+                      spearkerStat.overview.push(overviewobj);
 
                     }
 
@@ -273,10 +277,10 @@ onslyde.Controllers.controller('AnalyticsCtrl',
 
                     $scope.dashBoard.speakerTotals.push(spearkerStat);
                     console.log('spearkerStat.overview.agree',spearkerStat.overview.agree)
-                    if(twooptions){
-                      overViewOptions.push(spearkerStat.overview.agree);
-                      overViewOptions.push(spearkerStat.overview.disagree);
-                    }
+//                    if(twooptions){
+//                      overViewOptions.push(spearkerStat.overview.agree);
+//                      overViewOptions.push(spearkerStat.overview.disagree);
+//                    }
 
                     var videoStartTime = $rootScope.sessionData.end;
                     var tempLineChart = angular.copy($rootScope.chartTemplate.line);
@@ -327,13 +331,25 @@ onslyde.Controllers.controller('AnalyticsCtrl',
                 dataTable.addColumn({ type: 'date', id: 'Start' });
                 dataTable.addColumn({ type: 'date', id: 'End' });
 
-                var start, end, rows = [];
+                var start, end, rows = [], category;
+
+
 
                 for (var i = 0; i < speakerTotals.length; i++) {
-                  start = speakerTotals[i].overview.agree.datapoints[0].timestamp;
-                  end = speakerTotals[i].overview.agree.datapoints[speakerTotals[i].overview.agree.datapoints.length - 1].timestamp;
-                  if(start > 0){
-                    rows.push([speakerTotals[i].topic,new Date(start),new Date(end)]);
+                  category = speakerTotals[i].topic === '0:0' ? 'Discussion' : speakerTotals[i].topic;
+                  //loop through array of unique speakers
+                  for (var j = 0; j < speakerTotals[i].overview.length; j++) {
+                    //loop through array of all the ranges for agree
+                    //currently, timeseries is based off of agree votes but should be based on actual time from topic name
+                    try {
+                      start = speakerTotals[i].overview[j].agree.datapoints[0].timestamp;
+                      end = speakerTotals[i].overview[j].agree.datapoints[speakerTotals[i].overview[j].agree.datapoints.length - 1].timestamp;
+                      if (start > 0) {
+                        rows.push([category, new Date(start), new Date(end)]);
+                      }
+                    } catch (e) {
+                      console.log('---',e);
+                    }
                   }
 
                 }
@@ -354,7 +370,7 @@ onslyde.Controllers.controller('AnalyticsCtrl',
 
         function getSpeakerSummaryData(speakerTotals, twooptions) {
           var spearkerStat = {topic:twooptions.topicName, agree:0, disagree:0, sessions:0, speaker:twooptions.speakerData};
-              spearkerStat.overview = {agree: {datapoints: []}, disagree: {datapoints: []}};
+              spearkerStat.overview = [];
 
           if (speakerTotals.length > 0) {
             for (var d = 0; d < speakerTotals.length; d++) {
