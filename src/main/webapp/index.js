@@ -201,7 +201,7 @@ onslyde.Controllers.controller('AnalyticsCtrl', [
           function createCharts() {
             var overViewOptions = [];
             angular.forEach($scope.sessionData.slideGroups, function (value, index) {
-              var twooptions, voteData, voteOptions, allVotes, startTime = $rootScope.sessionData.start;
+              var twooptions, voteData, voteOptions, allVotes, startTime = $rootScope.sessionData.start, sessionType = $rootScope.sessionData.extra;
               if (value.slideGroupOptionses.length > 2) {
                 twooptions = [
                   {
@@ -301,68 +301,73 @@ onslyde.Controllers.controller('AnalyticsCtrl', [
                     //make sure vote time is after with start time
                     if (startTime < voteTime) {
                       twooptions.show = true;
-                      if (twooptions.length === 2) {
-                        thisSlideOptions = vote.slideOptions;
-                      } else {
-                        thisSlideOptions = vote.slideGroupOptions;
-                      }
-                      //loop through all options for compare... this is so we can display a growth chart and not just spikes when votes occur
-                      for (var i = 0; i < twooptions.length; i++) {
-                        var dataPoints = twooptions[i].datapoints, totalLength = dataPoints[dataPoints.length - 1], lastValue;
-                        //if we find a vote, fill it in to the approriate array
-                        //todo - cleanup repetitive code
-                        if (twooptions[i].label === thisSlideOptions.name) {
-                          if (optionTracker[twooptions[i].label] === 0 && totalLength.timestamp === 0) {
-                            twooptions[i].datapoints[0] = {
-                              'timestamp': voteTime,
-                              'count': 1
-                            };
-                            optionTracker[twooptions[i].label] = 1;
-                          } else {
-                            if (optionTracker[twooptions[i].label] === 0) {
-                              optionTracker[twooptions[i].label] = 1;
-                            }
-                            //increment the option tracker for this label by 1
-                            twooptions[i].datapoints.push({
-                              'timestamp': voteTime,
-                              'count': optionTracker[twooptions[i].label]++
-                            });
-                          }
-                          //increment total count for summary
-                          $scope.dashBoard.totals[twooptions[i].label] += 1;
-                          allVotes[i].datapoints.push({
-                            'timestamp': voteTime,
-                            'count': 1
-                          });  //otherwise populate with 0, or the last known count for the opposite label
-                        } else {
-                          if (optionTracker[twooptions[i].label] === 0 && totalLength.timestamp === 0) {
-                            twooptions[i].datapoints[0] = {
-                              'timestamp': voteTime,
-                              'count': optionTracker[twooptions[i].label]
-                            };
-                          } else {
-                            twooptions[i].datapoints.push({
-                              'timestamp': voteTime,
-                              'count': optionTracker[twooptions[i].label]
-                            });
-                          }
-                          allVotes[i].datapoints.push({
-                            'timestamp': voteTime,
-                            'count': 0
-                          });
-                        }
-                        //sort the datapoints based on timestamps
-                        twooptions[i].datapoints.sort(function (a, b) {
-                          a = a['timestamp'];
-                          b = b['timestamp'];
-                          return a > b ? 1 : a < b ? -1 : 0;
-                        });
-                      }
                     } else {
                       //give ui something so it doesn't render irrelevant charts
                       twooptions.show = false;
                     }
+                    if (twooptions.length === 2) {
+                      thisSlideOptions = vote.slideOptions;
+                    } else {
+                      thisSlideOptions = vote.slideGroupOptions;
+                    }
+                    //loop through all options for compare... this is so we can display a growth chart and not just spikes when votes occur
+                    for (var i = 0; i < twooptions.length; i++) {
+                      var dataPoints = twooptions[i].datapoints, totalLength = dataPoints[dataPoints.length - 1], lastValue;
+                      //if we find a vote, fill it in to the approriate array
+                      //todo - cleanup repetitive code
+                      if (twooptions[i].label === thisSlideOptions.name) {
+                        if (optionTracker[twooptions[i].label] === 0 && totalLength.timestamp === 0) {
+                          twooptions[i].datapoints[0] = {
+                            'timestamp': voteTime,
+                            'count': 1
+                          };
+                          optionTracker[twooptions[i].label] = 1;
+                        } else {
+                          if (optionTracker[twooptions[i].label] === 0) {
+                            optionTracker[twooptions[i].label] = 1;
+                          }
+                          //increment the option tracker for this label by 1
+                          twooptions[i].datapoints.push({
+                            'timestamp': voteTime,
+                            'count': optionTracker[twooptions[i].label]++
+                          });
+                        }
+                        //increment total count for summary
+                        $scope.dashBoard.totals[twooptions[i].label] += 1;
+                        allVotes[i].datapoints.push({
+                          'timestamp': voteTime,
+                          'count': 1
+                        });  //otherwise populate with 0, or the last known count for the opposite label
+                      } else {
+                        if (optionTracker[twooptions[i].label] === 0 && totalLength.timestamp === 0) {
+                          twooptions[i].datapoints[0] = {
+                            'timestamp': voteTime,
+                            'count': optionTracker[twooptions[i].label]
+                          };
+                        } else {
+                          twooptions[i].datapoints.push({
+                            'timestamp': voteTime,
+                            'count': optionTracker[twooptions[i].label]
+                          });
+                        }
+                        allVotes[i].datapoints.push({
+                          'timestamp': voteTime,
+                          'count': 0
+                        });
+                      }
+                      //sort the datapoints based on timestamps
+                      twooptions[i].datapoints.sort(function (a, b) {
+                        a = a['timestamp'];
+                        b = b['timestamp'];
+                        return a > b ? 1 : a < b ? -1 : 0;
+                      });
+                    }
                   });
+                  //todo fix this - quick hack/reset for sessions that are not panels
+                  //this is an effort to set a start time so proper charts show
+                  if (sessionType !== 'panel') {
+                    twooptions.show = true;
+                  }
                   //increment total count for speaker
                   for (var i = 0; i < twooptions.length; i++) {
                     spearkerStat[twooptions[i].label] += twooptions[i].datapoints[twooptions[i].datapoints.length - 1].count;
@@ -436,22 +441,26 @@ onslyde.Controllers.controller('AnalyticsCtrl', [
                   //loop through array of all the ranges for agree
                   //currently, timeseries is based off of agree votes but should be based on actual time from topic name
                   try {
-                    start = speakerTotals[i].overview[j].agree.datapoints[0].timestamp;
-                    end = speakerTotals[i].overview[j].agree.datapoints[speakerTotals[i].overview[j].agree.datapoints.length - 1].timestamp;
-                    if (start > 0) {
-                      rows.push([
-                        category,
-                        new Date(start),
-                        new Date(end)
-                      ]);
+                    if (speakerTotals[i].overview[j].agree) {
+                      start = speakerTotals[i].overview[j].agree.datapoints[0].timestamp;
+                      end = speakerTotals[i].overview[j].agree.datapoints[speakerTotals[i].overview[j].agree.datapoints.length - 1].timestamp;
+                      if (start > 0) {
+                        rows.push([
+                          category,
+                          new Date(start),
+                          new Date(end)
+                        ]);
+                      }
                     }
                   } catch (e) {
                     console.log('---', e);
                   }
                 }
               }
-              dataTable.addRows(rows);
-              chart.draw(dataTable);
+              if (rows.length > 0) {
+                dataTable.addRows(rows);
+                chart.draw(dataTable);
+              }
             };
             google.setOnLoadCallback(window.drawChart($scope.dashBoard.speakerTotals));
           }

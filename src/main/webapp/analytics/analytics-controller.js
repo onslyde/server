@@ -109,7 +109,8 @@ onslyde.Controllers.controller('AnalyticsCtrl',
                     voteData,
                     voteOptions,
                     allVotes,
-                    startTime = $rootScope.sessionData.start;
+                    startTime = $rootScope.sessionData.start,
+                    sessionType = $rootScope.sessionData.extra;
 
                 if (value.slideGroupOptionses.length > 2) {
 
@@ -193,6 +194,10 @@ onslyde.Controllers.controller('AnalyticsCtrl',
                       //make sure vote time is after with start time
                       if(startTime < voteTime){
                         twooptions.show = true;
+                      }else{
+                        //give ui something so it doesn't render irrelevant charts
+                        twooptions.show = false;
+                      }
 
                       if (twooptions.length === 2) {
                         thisSlideOptions = vote.slideOptions;
@@ -248,12 +253,15 @@ onslyde.Controllers.controller('AnalyticsCtrl',
 
 
                       }
-                      }else{
-                        //give ui something so it doesn't render irrelevant charts
-                        twooptions.show = false;
-                      }
+
 
                     });
+
+                    //todo fix this - quick hack/reset for sessions that are not panels
+                    //this is an effort to set a start time so proper charts show
+                    if(sessionType !== 'panel'){
+                      twooptions.show = true;
+                    }
 
 
                     //increment total count for speaker
@@ -342,11 +350,14 @@ onslyde.Controllers.controller('AnalyticsCtrl',
                     //loop through array of all the ranges for agree
                     //currently, timeseries is based off of agree votes but should be based on actual time from topic name
                     try {
-                      start = speakerTotals[i].overview[j].agree.datapoints[0].timestamp;
-                      end = speakerTotals[i].overview[j].agree.datapoints[speakerTotals[i].overview[j].agree.datapoints.length - 1].timestamp;
-                      if (start > 0) {
-                        rows.push([category, new Date(start), new Date(end)]);
+                      if(speakerTotals[i].overview[j].agree){
+                        start = speakerTotals[i].overview[j].agree.datapoints[0].timestamp;
+                        end = speakerTotals[i].overview[j].agree.datapoints[speakerTotals[i].overview[j].agree.datapoints.length - 1].timestamp;
+                        if (start > 0) {
+                          rows.push([category, new Date(start), new Date(end)]);
+                        }
                       }
+
                     } catch (e) {
                       console.log('---',e);
                     }
@@ -354,8 +365,11 @@ onslyde.Controllers.controller('AnalyticsCtrl',
 
                 }
 
-                dataTable.addRows(rows);
-                chart.draw(dataTable);
+                if(rows.length > 0){
+                  dataTable.addRows(rows);
+                  chart.draw(dataTable);
+                }
+
               }
               google.setOnLoadCallback(window.drawChart($scope.dashBoard.speakerTotals));
             }
