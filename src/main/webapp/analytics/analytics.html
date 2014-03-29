@@ -68,7 +68,7 @@
 
     </div>
 
-    <div id="example1" style="width: 100%; height: 280px;"></div>
+    <div id="example1" style="width: 100%; height: 280px;" ng-if="sessionData.extra == 'panel'"></div>
 
     <!--<span class="label right" ng-if="twoOptionsList">Click on a point in the timeseries chart to see the video for each voting period.</span>-->
     <ul ng-repeat="twooption in twoOptionsList | orderBy:'created'" class="chart-list">
