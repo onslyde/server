@@ -110,7 +110,7 @@ onslyde.Controllers.controller('AnalyticsCtrl',
                     voteData,
                     voteOptions,
                     allVotes,
-                    startTime = $rootScope.sessionData.end,
+                    startTime = $rootScope.sessionData.start,
                     sessionType = $rootScope.sessionData.extra;
 
                 if (value.slideGroupOptionses.length > 2) {
