@@ -94,6 +94,7 @@ onslyde.Controllers.controller('AnalyticsCtrl', [
   '$q',
   function (pagedata, chartservice, $scope, $rootScope, $routeParams, $timeout, youtubeapi, $q) {
     $scope.sessionID = $routeParams.sessionID;
+    var panelists = [];
     $scope.presAnalyticsSetup = function () {
       pagedata.get(null, $rootScope.urls() + '/go/analytics/list/' + $rootScope.userInfo.id).then(function (success) {
         $scope.sessionList = success;
@@ -201,7 +202,7 @@ onslyde.Controllers.controller('AnalyticsCtrl', [
           function createCharts() {
             var overViewOptions = [];
             angular.forEach($scope.sessionData.slideGroups, function (value, index) {
-              var twooptions, voteData, voteOptions, allVotes, startTime = $rootScope.sessionData.start, sessionType = $rootScope.sessionData.extra;
+              var twooptions, voteData, voteOptions, allVotes, startTime = $rootScope.sessionData.end, sessionType = $rootScope.sessionData.extra;
               if (value.slideGroupOptionses.length > 2) {
                 twooptions = [
                   {
@@ -298,76 +299,74 @@ onslyde.Controllers.controller('AnalyticsCtrl', [
                   //get the votes and attendee data for agree/disagree ONLY options
                   angular.forEach(voteData, function (vote, toindex) {
                     var voteTime = vote.voteTime, attendee = vote.attendee, thisSlideOptions;
-                    //make sure vote time is after with start time
-                    if (startTime < voteTime) {
+                    //todo fix this - quick hack/reset for sessions that are not panels
+                    //this is an effort to set a start time so proper charts show
+                    if (sessionType !== 'panel') {
                       twooptions.show = true;
                     } else {
-                      //give ui something so it doesn't render irrelevant charts
-                      twooptions.show = false;
+                      //make sure vote time is after with start time
+                      twooptions.show = startTime < voteTime;
                     }
-                    if (twooptions.length === 2) {
-                      thisSlideOptions = vote.slideOptions;
-                    } else {
-                      thisSlideOptions = vote.slideGroupOptions;
-                    }
-                    //loop through all options for compare... this is so we can display a growth chart and not just spikes when votes occur
-                    for (var i = 0; i < twooptions.length; i++) {
-                      var dataPoints = twooptions[i].datapoints, totalLength = dataPoints[dataPoints.length - 1], lastValue;
-                      //if we find a vote, fill it in to the approriate array
-                      //todo - cleanup repetitive code
-                      if (twooptions[i].label === thisSlideOptions.name) {
-                        if (optionTracker[twooptions[i].label] === 0 && totalLength.timestamp === 0) {
-                          twooptions[i].datapoints[0] = {
+                    if (twooptions.show) {
+                      if (twooptions.length === 2) {
+                        thisSlideOptions = vote.slideOptions;
+                      } else {
+                        thisSlideOptions = vote.slideGroupOptions;
+                      }
+                      //loop through all options for compare... this is so we can display a growth chart and not just spikes when votes occur
+                      for (var i = 0; i < twooptions.length; i++) {
+                        var dataPoints = twooptions[i].datapoints, totalLength = dataPoints[dataPoints.length - 1], lastValue;
+                        //if we find a vote, fill it in to the approriate array
+                        //todo - cleanup repetitive code
+                        if (twooptions[i].label === thisSlideOptions.name) {
+                          if (optionTracker[twooptions[i].label] === 0 && totalLength.timestamp === 0) {
+                            twooptions[i].datapoints[0] = {
+                              'timestamp': voteTime,
+                              'count': 1
+                            };
+                            optionTracker[twooptions[i].label] = 1;
+                          } else {
+                            if (optionTracker[twooptions[i].label] === 0) {
+                              optionTracker[twooptions[i].label] = 1;
+                            }
+                            //increment the option tracker for this label by 1
+                            twooptions[i].datapoints.push({
+                              'timestamp': voteTime,
+                              'count': optionTracker[twooptions[i].label]++
+                            });
+                          }
+                          //increment total count for summary
+                          $scope.dashBoard.totals[twooptions[i].label] += 1;
+                          allVotes[i].datapoints.push({
                             'timestamp': voteTime,
                             'count': 1
-                          };
-                          optionTracker[twooptions[i].label] = 1;
+                          });  //otherwise populate with 0, or the last known count for the opposite label
                         } else {
-                          if (optionTracker[twooptions[i].label] === 0) {
-                            optionTracker[twooptions[i].label] = 1;
+                          if (optionTracker[twooptions[i].label] === 0 && totalLength.timestamp === 0) {
+                            twooptions[i].datapoints[0] = {
+                              'timestamp': voteTime,
+                              'count': optionTracker[twooptions[i].label]
+                            };
+                          } else {
+                            twooptions[i].datapoints.push({
+                              'timestamp': voteTime,
+                              'count': optionTracker[twooptions[i].label]
+                            });
                           }
-                          //increment the option tracker for this label by 1
-                          twooptions[i].datapoints.push({
+                          allVotes[i].datapoints.push({
                             'timestamp': voteTime,
-                            'count': optionTracker[twooptions[i].label]++
+                            'count': 0
                           });
                         }
-                        //increment total count for summary
-                        $scope.dashBoard.totals[twooptions[i].label] += 1;
-                        allVotes[i].datapoints.push({
-                          'timestamp': voteTime,
-                          'count': 1
-                        });  //otherwise populate with 0, or the last known count for the opposite label
-                      } else {
-                        if (optionTracker[twooptions[i].label] === 0 && totalLength.timestamp === 0) {
-                          twooptions[i].datapoints[0] = {
-                            'timestamp': voteTime,
-                            'count': optionTracker[twooptions[i].label]
-                          };
-                        } else {
-                          twooptions[i].datapoints.push({
-                            'timestamp': voteTime,
-                            'count': optionTracker[twooptions[i].label]
-                          });
-                        }
-                        allVotes[i].datapoints.push({
-                          'timestamp': voteTime,
-                          'count': 0
+                        //sort the datapoints based on timestamps
+                        twooptions[i].datapoints.sort(function (a, b) {
+                          a = a['timestamp'];
+                          b = b['timestamp'];
+                          return a > b ? 1 : a < b ? -1 : 0;
                         });
                       }
-                      //sort the datapoints based on timestamps
-                      twooptions[i].datapoints.sort(function (a, b) {
-                        a = a['timestamp'];
-                        b = b['timestamp'];
-                        return a > b ? 1 : a < b ? -1 : 0;
-                      });
                     }
                   });
-                  //todo fix this - quick hack/reset for sessions that are not panels
-                  //this is an effort to set a start time so proper charts show
-                  if (sessionType !== 'panel') {
-                    twooptions.show = true;
-                  }
                   //increment total count for speaker
                   for (var i = 0; i < twooptions.length; i++) {
                     spearkerStat[twooptions[i].label] += twooptions[i].datapoints[twooptions[i].datapoints.length - 1].count;
@@ -499,26 +498,26 @@ onslyde.Controllers.controller('AnalyticsCtrl', [
       } else {
         $scope.createCharts();
       }
-      var panelistjson;
+      if (panelists.length === 0) {
+        pagedata.get(null, '/analytics/json/edge/edge1.json').then(function (success) {
+          panelists = panelists.concat(success.panelists);
+        }, function (fail) {
+        });
+        pagedata.get(null, '/analytics/json/edge/edge2.json').then(function (success) {
+          panelists = panelists.concat(success.panelists);
+        }, function (fail) {
+        });
+      }
       //todo - this is a temporary lookup for edge. need to add columns to attendee db for pic and twitter
       $scope.getPanelist = function (sessionID, name) {
-        var result, allpanels, deferred = $q.defer();
-        if (!panelistjson) {
-          pagedata.get(null, '/analytics/json/edge/edge1.json').then(function (success) {
-            panelistjson = success.panelists;
-            deferred.resolve(success.panelists);
-          }, function (fail) {
-            deferred.reject(fail);
-          });
-        }
-        deferred.promise.then(function () {
-          angular.forEach(allpanels, function (value, index) {
-            if (value.name === name) {
-              result = value;
-            }
-          });
-          return result;
+        var result, wholename;
+        angular.forEach(panelists, function (value, index) {
+          wholename = value.Surname ? value.FirstName + ' ' + value.Surname : value.name;
+          if (wholename === name) {
+            result = value;
+          }
         });
+        return result;
       };
     };
   }

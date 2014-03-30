@@ -584,3 +584,12 @@ h3.disagree {
   /*opacity: .3;*/
   width: 50%;
 }
+
+.hide {
+    display:none;
+}
+
+.note {
+    color: #0C9608;
+    padding: 5px;
+}
