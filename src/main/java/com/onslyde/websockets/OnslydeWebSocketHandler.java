@@ -214,9 +214,10 @@ public class OnslydeWebSocketHandler {
 
     //diffing the last vote time against now time
     //if less than 1 second between votes, someone's writing a for loop
-    if(voteDiff < 1000){
-      isValidVote = false;
-    }
+    //TODO - Disable for demo - need to find a better way of auth
+//    if(voteDiff < 1000){
+//      isValidVote = false;
+//    }
 
         //this whole if/else statement is ridonkulous and needs refactor
 
