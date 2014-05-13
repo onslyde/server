@@ -56,8 +56,8 @@ public class OnslydeWebSocketHandler {
 //  @Inject
   private static Mediator mediator;
 
-  @Inject
-  private Logger log;
+//  @Inject
+//  private Logger log;
 
 
   //wss: http://amilamanoj.blogspot.com/2013/06/secure-websockets-with-jetty.html
@@ -78,6 +78,8 @@ public class OnslydeWebSocketHandler {
   private String email = "";
   private Long voteTime = 0L;
   private Long lastVoteTime = 0L;
+
+  private int maliciousVoteCount = 0;
 
   public void observeItemEvent(@Observes Mediator mediator) {
     syncMediator(mediator);
@@ -209,15 +211,21 @@ public class OnslydeWebSocketHandler {
     getRequestParamData(session.getUpgradeRequest().getParameterMap());
     Long currentTime = new Date().getTime();
     Long voteDiff = currentTime - lastVoteTime;
+
     lastVoteTime = currentTime;
     boolean isValidVote = true;
 
     //diffing the last vote time against now time
-    //if less than 1 second between votes, someone's writing a for loop
-    //TODO - Disable for demo - need to find a better way of auth
-//    if(voteDiff < 1000){
-//      isValidVote = false;
-//    }
+    //if less than 1 second between votes and it happens 5 times, someone's trying to hack
+    if(voteDiff < 1000){
+      maliciousVoteCount++;
+      if(maliciousVoteCount > 4){
+        isValidVote = false;
+      }
+    }else {
+      //reset
+      maliciousVoteCount = 0;
+    }
 
         //this whole if/else statement is ridonkulous and needs refactor
 
@@ -240,11 +248,11 @@ public class OnslydeWebSocketHandler {
           //check to see if we're appending name and email
           try {
             optionList = Arrays.asList(vote.split("\\s*,\\s*"));
+            vote = optionList.get(0);
           } catch (Exception e) {
+            System.out.println("----Can't split the array on vote options");
             e.printStackTrace();
           }
-
-          vote = optionList.get(0);
 
           if (optionList != null && optionList.size() > 1) {
             //parse name and email
@@ -253,6 +261,7 @@ public class OnslydeWebSocketHandler {
               email = optionList.get(2);
               voteTime = Long.valueOf(optionList.get(3));
             } catch (NumberFormatException e) {
+              System.out.println("----Problem with getting vote input parameters");
               e.printStackTrace();
             }
           }else{

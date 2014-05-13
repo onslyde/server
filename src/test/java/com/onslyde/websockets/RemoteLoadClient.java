@@ -18,7 +18,7 @@ public class RemoteLoadClient {
     public static void main(String[] args)
     {
 
-        String destUri = "ws://192.168.1.8:8081/?session=175";
+        String destUri = "wss://www.onslyde.com/ws/?session=175";
 
     final long startTime = System.currentTimeMillis();
     final long endTime;
@@ -31,7 +31,7 @@ public class RemoteLoadClient {
     {
         client.start();
 
-        URI echoUri = new URI("ws://192.168.1.8:8081/?session=1" + i);
+        URI echoUri = new URI("wss://www.onslyde.com/ws/?session=1" + i + "&attendeeIP=111.111.111.111");
         ClientUpgradeRequest request = new ClientUpgradeRequest();
 
         client.connect(socket,echoUri,request);

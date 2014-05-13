@@ -31,14 +31,14 @@ public class SessionLoadClient {
     {
         client.start();
 
-        URI echoUri = new URI("ws://192.168.1.8:8081/?session=1" + i);
+        URI echoUri = new URI("wss://www.onslyde.com/ws?session=1" + i);
         ClientUpgradeRequest request = new ClientUpgradeRequest();
 
         client.connect(socket,echoUri,request);
         System.out.printf("Connecting to : %s%n",echoUri);
 
         // wait for closed socket connection.
-        socket.awaitClose(2, TimeUnit.SECONDS);
+        socket.awaitClose(20, TimeUnit.SECONDS);
     }
     catch (Throwable t)
     {
