@@ -202,7 +202,7 @@ onslyde.Controllers.controller('AnalyticsCtrl', [
           function createCharts() {
             var overViewOptions = [];
             angular.forEach($scope.sessionData.slideGroups, function (value, index) {
-              var twooptions, voteData, voteOptions, allVotes, startTime = $rootScope.sessionData.end, sessionType = $rootScope.sessionData.extra;
+              var twooptions, voteData, voteOptions, allVotes, startTime = $rootScope.sessionData.start, sessionType = $rootScope.sessionData.extra;
               if (value.slideGroupOptionses.length > 2) {
                 twooptions = [
                   {

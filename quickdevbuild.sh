@@ -1,5 +1,5 @@
-hardlink -u ~/dev/onslyde/server/target/onslyde-hosted/panel &&
-hardlink -u ~/dev/onslyde/server/target/onslyde-hosted/deck &&
+#hardlink -u ~/dev/onslyde/server/target/onslyde-hosted/panel &&
+#hardlink -u ~/dev/onslyde/server/target/onslyde-hosted/deck &&
 
 #hardlink ~/dev/onslyde/onslyde ~/dev/onslyde/server/src/main/webapp/deck &&
 mvn clean install &&

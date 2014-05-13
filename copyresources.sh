@@ -9,4 +9,5 @@ src/main/webapp/gettingstarted \
 src/main/webapp/charts \
 src/main/webapp/admin \
 src/main/webapp/index.js \
+src/main/webapp/index-test.html \
 target/onslyde-hosted/
