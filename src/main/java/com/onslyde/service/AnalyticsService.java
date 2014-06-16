@@ -98,7 +98,7 @@ public class AnalyticsService {
   public String removeSessionVotes(@PathParam("session") int session) {
 
     try {
-      Session mySession = sessionHome.findById(201);
+      Session mySession = sessionHome.findById(619);
       sgHome.removeBySessionId(mySession);
       return "success!!!";
     } catch (Exception e) {

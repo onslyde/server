@@ -1376,7 +1376,7 @@ onslyde.Controllers.controller('GetStartedCtrl', [
       if (demo) {
         $rootScope.userInfo = {};
         $rootScope.userInfo.email = 'someemail@nowhere.com';
-        sessionID = 201;
+        sessionID = 619;
         $scope.getstarted.twitter = 'wesleyhales';
         $scope.getstarted.presName = 'My awesome presentation';
         $scope.getstarted.poll1 = 'Do you like my party hat?';
