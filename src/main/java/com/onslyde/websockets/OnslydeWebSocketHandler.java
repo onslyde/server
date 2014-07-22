@@ -70,6 +70,7 @@ public class OnslydeWebSocketHandler {
   private String PROPS = "props:";
   private String SEPARATOR = ":";
 
+  //TODO - needs to be tracked better
   String attendeeIP = "111.111.111.111";
   int sessionID = 0;
 
@@ -96,6 +97,7 @@ public class OnslydeWebSocketHandler {
         }
 
       } catch (Exception x) {
+        //TODO - can't do logger within this class. Need to add to jetty
         System.out.println("------need better solution for socket management!!!-");
         x.printStackTrace();
 
@@ -136,7 +138,7 @@ public class OnslydeWebSocketHandler {
     this.session.setIdleTimeout(3600000);
 
     getRequestParamData(session.getUpgradeRequest().getParameterMap());
-
+    System.out.println("---connection made: attendeeIP=" + attendeeIP + "sessionID=" + sessionID);
     //when a user connects, we add his ws connection to a sessionID map
     if (mediator.getSessions().containsKey(sessionID)) {
       //session in progress
@@ -215,11 +217,14 @@ public class OnslydeWebSocketHandler {
     lastVoteTime = currentTime;
     boolean isValidVote = true;
 
-    //diffing the last vote time against now time
-    //if less than 1 second between votes and it happens 5 times, someone's trying to hack
+    //TODO - currently disabled because could be n messages sent,
+    //TODO - you are being penalized for the counts on the presenter screen as well. it's too generic
+    // /diffing the last vote time against now time
+    //if less than 1 second between votes and it happens 5 times (btw it )
     if(voteDiff < 1000){
       maliciousVoteCount++;
-      if(maliciousVoteCount > 4){
+      //bumping to 7 just to be safe
+      if(maliciousVoteCount > 7){
         isValidVote = false;
       }
     }else {

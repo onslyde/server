@@ -86,7 +86,7 @@ public class AttendeeHome {
       return entityManager.createQuery(criteria).setMaxResults(1).getSingleResult();
 
     } catch (Exception nre){
-      log.severe("get failed" + nre);
+      log.severe("get failed (normal attendee lookup)" + nre);
     }
 
     return null;

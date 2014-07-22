@@ -412,56 +412,51 @@ onslyde.Controllers.controller('AnalyticsCtrl', [
                   $scope.twoOptionsList.push(twooptions);
                 }
               }
-            });
-            //              var tempOverViewChart = angular.copy($rootScope.chartTemplate.line);
-            //              $scope.overViewOptions = chartservice.convertLineChart(overViewOptions, tempOverViewChart, dataDescription.timeseries, '');
-            //todo this is temp - refactor to chart service
-            window.drawChart = function (speakerTotals) {
-              var container = document.getElementById('example1');
-              var chart = new google.visualization.Timeline(container);
-              var dataTable = new google.visualization.DataTable();
-              dataTable.addColumn({
-                type: 'string',
-                id: 'Speaker'
-              });
-              dataTable.addColumn({
-                type: 'date',
-                id: 'Start'
-              });
-              dataTable.addColumn({
-                type: 'date',
-                id: 'End'
-              });
-              var start, end, rows = [], category;
-              for (var i = 0; i < speakerTotals.length; i++) {
-                category = speakerTotals[i].topic === '0:0' ? 'Discussion' : speakerTotals[i].topic;
-                //loop through array of unique speakers
-                for (var j = 0; j < speakerTotals[i].overview.length; j++) {
-                  //loop through array of all the ranges for agree
-                  //currently, timeseries is based off of agree votes but should be based on actual time from topic name
-                  try {
-                    if (speakerTotals[i].overview[j].agree) {
-                      start = speakerTotals[i].overview[j].agree.datapoints[0].timestamp;
-                      end = speakerTotals[i].overview[j].agree.datapoints[speakerTotals[i].overview[j].agree.datapoints.length - 1].timestamp;
-                      if (start > 0) {
-                        rows.push([
-                          category,
-                          new Date(start),
-                          new Date(end)
-                        ]);
-                      }
-                    }
-                  } catch (e) {
-                    console.log('---', e);
-                  }
-                }
-              }
-              if (rows.length > 0) {
-                dataTable.addRows(rows);
-                chart.draw(dataTable);
-              }
-            };
-            google.setOnLoadCallback(window.drawChart($scope.dashBoard.speakerTotals));
+            });  //              var tempOverViewChart = angular.copy($rootScope.chartTemplate.line);
+                 //              $scope.overViewOptions = chartservice.convertLineChart(overViewOptions, tempOverViewChart, dataDescription.timeseries, '');
+                 //todo this is temp - refactor to chart service
+                 //              window.drawChart = function(speakerTotals) {
+                 //                var container = document.getElementById('example1');
+                 //
+                 //                var chart = new google.visualization.Timeline(container);
+                 //
+                 //                var dataTable = new google.visualization.DataTable();
+                 //
+                 //                dataTable.addColumn({ type: 'string', id: 'Speaker' });
+                 //                dataTable.addColumn({ type: 'date', id: 'Start' });
+                 //                dataTable.addColumn({ type: 'date', id: 'End' });
+                 //
+                 //                var start, end, rows = [], category;
+                 //
+                 //                for (var i = 0; i < speakerTotals.length; i++) {
+                 //                  category = speakerTotals[i].topic === '0:0' ? 'Discussion' : speakerTotals[i].topic;
+                 //                  //loop through array of unique speakers
+                 //                  for (var j = 0; j < speakerTotals[i].overview.length; j++) {
+                 //                    //loop through array of all the ranges for agree
+                 //                    //currently, timeseries is based off of agree votes but should be based on actual time from topic name
+                 //                    try {
+                 //                      if(speakerTotals[i].overview[j].agree){
+                 //                        start = speakerTotals[i].overview[j].agree.datapoints[0].timestamp;
+                 //                        end = speakerTotals[i].overview[j].agree.datapoints[speakerTotals[i].overview[j].agree.datapoints.length - 1].timestamp;
+                 //                        if (start > 0) {
+                 //                          rows.push([category, new Date(start), new Date(end)]);
+                 //                        }
+                 //                      }
+                 //
+                 //                    } catch (e) {
+                 //                      console.log('---',e);
+                 //                    }
+                 //                  }
+                 //
+                 //                }
+                 //
+                 //                if(rows.length > 0){
+                 //                  dataTable.addRows(rows);
+                 //                  chart.draw(dataTable);
+                 //                }
+                 //
+                 //              }
+                 //              google.setOnLoadCallback(window.drawChart($scope.dashBoard.speakerTotals));
           }
         }, function (fail) {
           console.log('Problem getting chart datapoints', fail);
