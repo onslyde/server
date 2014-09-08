@@ -108,8 +108,6 @@ public class JettyEmbedded {
         http_config.setSendDateHeader(true);
         http_config.setSendXPoweredBy(true);
 
-        System.out.println("-------------");
-
         ServerConnector http = new ServerConnector(server,new HttpConnectionFactory(http_config));
         http.setPort(80);
         http.setIdleTimeout(30000);

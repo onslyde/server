@@ -328,7 +328,6 @@ public class SessionManager implements Serializable {
                 sv.setSlide(currentSlide);
                 sv.setSlideOptions(option);
                 sv.setVoteTimeMs(System.currentTimeMillis());
-                System.out.println("**********" + voteTime);
                 sv.setVoteClickTimeMs(voteTime);
                 slideVotesHome.persist(sv);
               }
