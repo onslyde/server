@@ -21,7 +21,9 @@ public class SlideGroupVotes implements java.io.Serializable {
 	private SlideGroup slideGroup;
 	private Attendee attendee;
 	private Date voteTime;
-    private Date voteClickTime;
+  private Date voteClickTime;
+  private Long voteTimeMs;
+  private Long voteClickTimeMs;
 
 	public SlideGroupVotes() {
 	}
@@ -32,7 +34,9 @@ public class SlideGroupVotes implements java.io.Serializable {
 		this.slideGroup = slideGroup;
 		this.attendee = attendee;
 		this.voteTime = voteTime;
-        this.voteClickTime = voteClickTime;
+    this.voteClickTime = voteClickTime;
+    this.voteTimeMs = voteTimeMs;
+    this.voteClickTimeMs = voteClickTimeMs;
 	}
 
 	@Id
@@ -87,14 +91,32 @@ public class SlideGroupVotes implements java.io.Serializable {
 		this.voteTime = voteTime;
 	}
 
-    @Temporal(TemporalType.TIMESTAMP)
-    @Column(name = "vote_click_time", nullable = false, length = 19)
-    public Date getVoteClickTime() {
-        return this.voteClickTime;
-    }
+  @Temporal(TemporalType.TIMESTAMP)
+  @Column(name = "vote_click_time", nullable = false, length = 19)
+  public Date getVoteClickTime() {
+      return this.voteClickTime;
+  }
 
-    public void setVoteClickTime(Date voteClickTime) {
+  public void setVoteClickTime(Date voteClickTime) {
         this.voteClickTime = voteClickTime;
     }
+
+  @Column(name = "vote_time_ms", nullable = false, length = 30)
+  public Long getVoteTimeMs() {
+    return voteTimeMs;
+  }
+
+  public void setVoteTimeMs(Long voteTimeMs) {
+    this.voteTimeMs = voteTimeMs;
+  }
+
+  @Column(name = "vote_click_time_ms", nullable = false, length = 30)
+  public Long getVoteClickTimeMs() {
+    return voteClickTimeMs;
+  }
+
+  public void setVoteClickTimeMs(Long voteClickTimeMs) {
+    this.voteClickTimeMs = voteClickTimeMs;
+  }
 
 }

@@ -327,8 +327,9 @@ public class SessionManager implements Serializable {
                 sv.setAttendee(attendee);
                 sv.setSlide(currentSlide);
                 sv.setSlideOptions(option);
-                sv.setVoteTime(new Date());
-                sv.setVoteClickTime(new Date(voteTime));
+                sv.setVoteTimeMs(System.currentTimeMillis());
+                System.out.println("**********" + voteTime);
+                sv.setVoteClickTimeMs(voteTime);
                 slideVotesHome.persist(sv);
               }
             }
@@ -341,8 +342,8 @@ public class SessionManager implements Serializable {
                 sgv.setSlideGroup(currentSlideGroup);
                 sgv.setSlideGroupOptions(option);
                 //                        System.out.println("set vote time:" + new Date());
-                sgv.setVoteTime(new Date());
-                sgv.setVoteClickTime(new Date(voteTime));
+                sgv.setVoteTimeMs(System.currentTimeMillis());
+                sgv.setVoteClickTimeMs(voteTime);
                 //currentSlideGroup.getSlideGroupVoteses().add(sgv);
                 //                        if(merge){
                 //                            attendeeHome.merge(attendee);
