@@ -104,7 +104,11 @@ public class JettyEmbedded {
         http_config.setSecureScheme("https");
         http_config.setSecurePort(443);
         http_config.addCustomizer(new SecureRequestCustomizer());
-        http_config.setSendServerVersion(true);
+        http_config.setSendServerVersion(false);
+        http_config.setSendDateHeader(true);
+        http_config.setSendXPoweredBy(true);
+
+        System.out.println("-------------");
 
         ServerConnector http = new ServerConnector(server,new HttpConnectionFactory(http_config));
         http.setPort(80);
@@ -114,6 +118,9 @@ public class JettyEmbedded {
 
         HttpConfiguration https_config = new HttpConfiguration(http_config);
         https_config.addCustomizer(new SecureRequestCustomizer());
+        https_config.setSendServerVersion(false);
+        https_config.setSendDateHeader(true);
+        https_config.setSendXPoweredBy(true);
 
         ServerConnector https = new ServerConnector(server,
             new SslConnectionFactory(sslContextFactory,"http/1.1"),
@@ -121,8 +128,6 @@ public class JettyEmbedded {
         https.setPort(443);
         https.setIdleTimeout(500000);
         https.setHost("0.0.0.0");
-
-
 
         // Spdy Connector - short version
         Map<Short,PushStrategy> pushMap = new HashMap<Short, PushStrategy>();
@@ -232,6 +237,7 @@ public class JettyEmbedded {
         restEasyContext.addServlet(restHolder,"/*");
         restEasyContext.getServletContext().setAttribute("mediator",mediator);
         restEasyContext.getServletContext().setAttribute("mediatorEvent",mediatorEventSrc);
+
         server.start();
         server.dumpStdErr();
 

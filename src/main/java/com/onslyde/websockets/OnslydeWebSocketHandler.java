@@ -217,7 +217,7 @@ public class OnslydeWebSocketHandler {
     lastVoteTime = currentTime;
     boolean isValidVote = true;
 
-    //TODO - currently disabled because could be n messages sent,
+    //TODO - fix...
     //TODO - you are being penalized for the counts on the presenter screen as well. it's too generic
     // /diffing the last vote time against now time
     //if less than 1 second between votes and it happens 5 times (btw it )

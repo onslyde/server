@@ -35,7 +35,7 @@
         <version.org.jboss.as.arquillian.container>7.1.1.Final</version.org.jboss.as.arquillian.container>
         <version.junit>4.10</version.junit>
 
-        <jettyVersion>9.1.5.v20140505</jettyVersion>
+        <jettyVersion>9.2.2.v20140723</jettyVersion>
     </properties>
 
     <repositories>
