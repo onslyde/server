@@ -50,10 +50,10 @@ public class OnslydeWebSocketHandler {
 
   protected Session session;
 
-//  @Inject
+  //  @Inject
   private static SessionManager sessionManager;
 
-//  @Inject
+  //  @Inject
   private static Mediator mediator;
 
 //  @Inject
@@ -105,23 +105,23 @@ public class OnslydeWebSocketHandler {
     }
   }
 
-  private void getRequestParamData(Map requestMap){
+  private void getRequestParamData(Map requestMap) {
 
     List requestItem;
 
-    if (requestMap.get("attendeeIP") != null)     {
+    if (requestMap.get("attendeeIP") != null) {
       requestItem = (List) requestMap.get("attendeeIP");
-      attendeeIP = (String)requestItem.get(0);
+      attendeeIP = (String) requestItem.get(0);
     }
 
-    if (requestMap.get("session") != null){
+    if (requestMap.get("session") != null) {
       requestItem = (List) requestMap.get("session");
-      sessionID = Integer.parseInt((String)requestItem.get(0));
+      sessionID = Integer.parseInt((String) requestItem.get(0));
     }
 
   }
 
-  private JsonObject readJSON(String data){
+  private JsonObject readJSON(String data) {
     JsonReader reader = Json.createReader(new StringReader(data));
     JsonObject myObject = reader.readObject();
     reader.close();
@@ -221,263 +221,262 @@ public class OnslydeWebSocketHandler {
     //TODO - you are being penalized for the counts on the presenter screen as well. it's too generic
     // /diffing the last vote time against now time
     //if less than 1 second between votes and it happens 5 times (btw it )
-    if(voteDiff < 1000){
+    if (voteDiff < 1000) {
       maliciousVoteCount++;
       //bumping to 7 just to be safe
-      if(maliciousVoteCount > 7){
+      if (maliciousVoteCount > 7) {
         isValidVote = false;
       }
-    }else {
+    } else {
       //reset
       maliciousVoteCount = 0;
     }
 
-        //this whole if/else statement is ridonkulous and needs refactor
+    //this whole if/else statement is ridonkulous and needs refactor
 
-        if (data.contains(PROPS) || data.contains(VOTE)) {
+    if (data.contains(PROPS) || data.contains(VOTE)) {
 
-          int substringLength = 0;
-          boolean isProps = false;
+      int substringLength = 0;
+      boolean isProps = false;
 
 
-          if (data.contains(PROPS)) {
-            substringLength = PROPS.length();
-            isProps = true;
-          } else {
-            substringLength = VOTE.length();
-          }
+      if (data.contains(PROPS)) {
+        substringLength = PROPS.length();
+        isProps = true;
+      } else {
+        substringLength = VOTE.length();
+      }
 
-          String vote = data.substring(substringLength, data.length());
-          List<String> optionList = null;
+      String vote = data.substring(substringLength, data.length());
+      List<String> optionList = null;
 
-          //check to see if we're appending name and email
-          try {
-            optionList = Arrays.asList(vote.split("\\s*,\\s*"));
-            vote = optionList.get(0);
-          } catch (Exception e) {
-            System.out.println("----Can't split the array on vote options");
-            e.printStackTrace();
-          }
+      //check to see if we're appending name and email
+      try {
+        optionList = Arrays.asList(vote.split("\\s*,\\s*"));
+        vote = optionList.get(0);
+      } catch (Exception e) {
+        System.out.println("----Can't split the array on vote options");
+        e.printStackTrace();
+      }
 
-          if (optionList != null && optionList.size() > 1) {
-            //parse name and email
-            try {
-              name = optionList.get(1);
-              email = optionList.get(2);
-              voteTime = Long.valueOf(optionList.get(3));
-            } catch (NumberFormatException e) {
-              System.out.println("----Problem with getting vote input parameters");
-              e.printStackTrace();
+      if (optionList != null && optionList.size() > 1) {
+        //parse name and email
+        try {
+          name = optionList.get(1);
+          email = optionList.get(2);
+          voteTime = Long.valueOf(optionList.get(3));
+        } catch (NumberFormatException e) {
+          System.out.println("----Problem with getting vote input parameters");
+          e.printStackTrace();
+        }
+      } else {
+        //vote doesn't meet all params, possibly a hack
+        isValidVote = false;
+      }
+
+      //just determining whether this is sentiment or actual vote
+      if (isProps) {
+        data = ClientEvent.clientProps(vote, sessionID);
+      } else {
+        data = ClientEvent.clientVote(vote, sessionID);
+      }
+
+      if (isValidVote) {
+        try {
+          getSessionManager().updateGroupVote(vote, attendeeIP, name, email, sessionID, voteTime);
+        } catch (Exception e) {
+          e.printStackTrace();
+        }
+        sendToPresenter(data, this.session, sessionID);
+      }
+
+
+    } else if (data.contains(ACTIVE_OPTIONS)) {
+      String options = data.substring(ACTIVE_OPTIONS.length(), data.length());
+      List<String> optionList = Arrays.asList(options.split("\\s*,\\s*"));
+      String liveAttendee = "";
+      if (optionList.size() == 4) {
+        //hack for the panels, notify those that want to speak their position, etc...
+        // :P  get the attendee IP who is going live
+        liveAttendee = optionList.get(3);
+        //save the list as orginal 3 items
+        optionList = optionList.subList(0, 3);
+        try {
+          if (getSessionTracker(sessionID).getQueuedParticipants().containsKey(liveAttendee)) {
+            Session thanks = getSessionTracker(sessionID).getQueuedParticipants().get(liveAttendee);
+            //polling clients get a null session, so must check
+            //using 777 as a stopgap for start/end of talk
+            if (thanks != null) {
+
+              try {
+                thanks.getRemote().sendStringByFuture(ClientEvent.speak(sessionID, attendeeIP, "", 777));
+              } catch (Exception e) {
+                e.printStackTrace();
+              }
             }
-          }else{
-            //vote doesn't meet all params, possibly a hack
-            isValidVote = false;
-          }
 
-          //just determining whether this is sentiment or actual vote
-          if (isProps) {
-            data = ClientEvent.clientProps(vote, sessionID);
-          } else {
-            data = ClientEvent.clientVote(vote, sessionID);
-          }
+            //populate for polling clients to let them know who is speaking
+            getSessionTracker(sessionID).setActiveData("{\"attendeeIP\":\"" + liveAttendee + "\",\"position\":\"777\"}");
 
-          if(isValidVote){
-            try {
-              getSessionManager().updateGroupVote(vote, attendeeIP, name, email, sessionID, voteTime);
-            } catch (Exception e) {
-              e.printStackTrace();
-            }
-            sendToPresenter(data, this.session, sessionID);
-          }
-
-
-        } else if (data.contains(ACTIVE_OPTIONS)) {
-          String options = data.substring(ACTIVE_OPTIONS.length(), data.length());
-          List<String> optionList = Arrays.asList(options.split("\\s*,\\s*"));
-          String liveAttendee = "";
-          if (optionList.size() == 4) {
-            //hack for the panels, notify those that want to speak their position, etc...
-            // :P  get the attendee IP who is going live
-            liveAttendee = optionList.get(3);
-            //save the list as orginal 3 items
-            optionList = optionList.subList(0, 3);
-            try{
-            if (getSessionTracker(sessionID).getQueuedParticipants().containsKey(liveAttendee)) {
-              Session thanks = getSessionTracker(sessionID).getQueuedParticipants().get(liveAttendee);
-              //polling clients get a null session, so must check
-              //using 777 as a stopgap for start/end of talk
-              if (thanks != null) {
-
+            //todo make this part of the api so remotes can call it when cancelling speak event
+            getSessionTracker(sessionID).getQueuedParticipants().remove(liveAttendee);
+            Collection<Session> participantSessions = getSessionTracker(sessionID).getQueuedParticipants().values();
+            int count = 0;
+            for (Session sessions : participantSessions) {
+              if (sessions != null) {
                 try {
-                  thanks.getRemote().sendStringByFuture(ClientEvent.speak(sessionID, attendeeIP, "", 777));
+                  sessions.getRemote().sendStringByFuture(ClientEvent.speak(sessionID, attendeeIP, "", count++));
                 } catch (Exception e) {
-                  e.printStackTrace();
+                  System.err.println("-- Problem sending speak complete confirm to remote.");
                 }
               }
-
-              //populate for polling clients to let them know who is speaking
-              getSessionTracker(sessionID).setActiveData("{\"attendeeIP\":\"" + liveAttendee + "\",\"position\":\"777\"}");
-
-              //todo make this part of the api so remotes can call it when cancelling speak event
-              getSessionTracker(sessionID).getQueuedParticipants().remove(liveAttendee);
-              Collection<Session> participantSessions = getSessionTracker(sessionID).getQueuedParticipants().values();
-              int count = 0;
-              for (Session sessions : participantSessions) {
-                if (sessions != null) {
-                  try {
-                    sessions.getRemote().sendStringByFuture(ClientEvent.speak(sessionID, attendeeIP, "", count++));
-                  } catch (Exception e) {
-                    System.err.println("-- Problem sending speak complete confirm to remote.");
-                  }
-                }
-              }
-            } else {
-              //he's already been removed and this is just reset for polling clients
-              getSessionTracker(sessionID).setActiveData("{\"attendeeIP\":\"\",\"position\":\"\"}");
             }
-          }catch(Exception e){
-              System.out.println("------yo" + e.getCause());
-            }
+          } else {
+            //he's already been removed and this is just reset for polling clients
+            getSessionTracker(sessionID).setActiveData("{\"attendeeIP\":\"\",\"position\":\"\"}");
           }
-          //basic continue with normal 3 options
-          if (optionList.size() == 3) {
+        } catch (Exception e) {
+          System.out.println("------yo" + e.getCause());
+        }
+      }
+      //basic continue with normal 3 options
+      if (optionList.size() == 3) {
 
-            data = ClientEvent.createEvent("updateOptions", optionList, sessionID);
+        data = ClientEvent.createEvent("updateOptions", optionList, sessionID);
 
-            try {
-              sendToAll(data, this.session, sessionID);
-            } catch (IOException e) {
-              e.printStackTrace();
-            }
-
-            try {
-              getSessionManager().addGroupOptions(optionList, sessionID, screenshot);
-
-            } catch (Exception e) {
-              System.out.println("----- couldn't find session: " + sessionID + " here's the option list: " + optionList);
-              e.printStackTrace();
-            }
-
-
-          }
-        } else if (data.contains("speak:")) {
-
-          if(isValidVote){
-            //the queueing of a speak event does not get written to the database here.
-            //the speaker gets handed off as an ACTIVE_OPTION when they go live and it gets recorded there
-            String name = data.substring("speak:".length(), data.length());
-
-            data = ClientEvent.speak(sessionID, attendeeIP, name, 0);
-
-            sendToPresenter(data, this.session, sessionID);
-            //send notification to remote
-            Mediator.SessionTracker st = getSessionTracker(sessionID);
-            if (st != null) {
-              st.getQueuedParticipants().put(attendeeIP, this.session);
-              //use the same speak event and send back to remote... handle as confirm
-              //you are queued as #xx
-              this.session.getRemote().sendStringByFuture(ClientEvent.speak(sessionID, attendeeIP, name, getSessionTracker(sessionID).getQueuedParticipants().size()));
-            }
-          }
-
-
-        } else if (data.contains("topicQuestion")) {
-
-            JsonObject askObject = readJSON(data);
-            getSessionManager().addQuestionToTopic(askObject.getString("topicQuestion"),attendeeIP,sessionID);
-
-        } else if (data.contains(REMOTE_MARKUP)) {
-
-          try {
-            //not formatting data here for polling clients
-            //need to add one more thing for status in AttendeeService
-            getSessionManager().broadcastMarkup(data, sessionID);
-          } catch (Exception e) {
-            e.printStackTrace();
-          }
-          try {
-            sendToAll(ClientEvent.remoteMarkup(data, "", sessionID), this.session, sessionID);
-          } catch (IOException e) {
-            e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
-          }
-    //                //System.out.println("-----------" + data);
-        } else if (data.contains(ROULETTE)) {
-
-          data = ClientEvent.roulette(sessionID, false);
-
-          try {
-            sendToAll(data, this.session, sessionID);
-          } catch (IOException e) {
-            e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
-          }
-
-          List<Session> channelSessions = new ArrayList<Session>();
-          //we don't want the presenter socket
-          for (String key : mediator.getSessions().get(sessionID).keySet()) {
-            System.out.println("=====cws" + key + "=====" + mediator.getPsessions().get(sessionID).containsKey(key));
-            if (!key.equals(attendeeIP)) {
-              channelSessions.add(mediator.getSessions().get(sessionID).get(key));
-            }
-          }
-
-          Random random = new Random();
-          System.out.println("=====random" + channelSessions.size() + " " + sessionID + " " + random.nextInt());
-          Session winner = channelSessions.get(random.nextInt(channelSessions.size()));
-
-          try {
-            winner.getRemote().sendStringByFuture(ClientEvent.roulette(sessionID, true));
-          } catch (Exception e) {
-            e.printStackTrace();
-          }
-
-        } else if (data.contains("::connect::")) {
-          try {
-            getSessionManager().startSession(sessionID);
-            getSessionManager().setPollcount(0);
-            Map<String, Session> presenterData = new HashMap<String, Session>();
-            presenterData.put(attendeeIP, this.session);
-            //todo - prevent session takeover
-            //needs auth
-            if (mediator.getPsessions().containsKey(sessionID)) {
-              //simple fix to allow mirroring
-              mediator.getPsessions().get(sessionID).put(attendeeIP, this.session);
-            } else {
-              mediator.getPsessions().put(sessionID, presenterData);
-            }
-
-          } catch (Exception e) {
-            e.printStackTrace();
-          }
-        } else if (data.contains("::disconnect::")) {
-          try {
-            //todo - cleanup disconnect
-
-          } catch (Exception e) {
-            e.printStackTrace();
-          }
-        } else if (data.contains("questionToggle:")) {
-          try {
-            data = ClientEvent.questionToggle(sessionID, attendeeIP);
-            sendToPresenter(data, this.session, sessionID);
-
-          } catch (Exception e) {
-            System.out.println("========== problem with choosing question toggle");
-            e.printStackTrace();
-          }
-        } else if (data.contains("questionIndex:")) {
-          try {
-            String options = data.substring("questionIndex:".length(), data.length());
-            List<String> optionList = Arrays.asList(options.split("\\s*,\\s*"));
-            int index = Integer.parseInt(optionList.get(0));
-            data = ClientEvent.questionIndex(sessionID,attendeeIP,index);
-            sendToPresenter(data, this.session, sessionID);
-
-          } catch (Exception e) {
-            System.out.println("========== problem with choosing question index");
-            e.printStackTrace();
-          }
+        try {
+          sendToAll(data, this.session, sessionID);
+        } catch (IOException e) {
+          e.printStackTrace();
         }
 
+        try {
+          getSessionManager().addGroupOptions(optionList, sessionID, screenshot);
+
+        } catch (Exception e) {
+          System.out.println("----- couldn't find session: " + sessionID + " here's the option list: " + optionList);
+          e.printStackTrace();
+        }
+
+
+      }
+    } else if (data.contains("speak:")) {
+
+      if (isValidVote) {
+        //the queueing of a speak event does not get written to the database here.
+        //the speaker gets handed off as an ACTIVE_OPTION when they go live and it gets recorded there
+        String name = data.substring("speak:".length(), data.length());
+
+        data = ClientEvent.speak(sessionID, attendeeIP, name, 0);
+
+        sendToPresenter(data, this.session, sessionID);
+        //send notification to remote
+        Mediator.SessionTracker st = getSessionTracker(sessionID);
+        if (st != null) {
+          st.getQueuedParticipants().put(attendeeIP, this.session);
+          //use the same speak event and send back to remote... handle as confirm
+          //you are queued as #xx
+          this.session.getRemote().sendStringByFuture(ClientEvent.speak(sessionID, attendeeIP, name, getSessionTracker(sessionID).getQueuedParticipants().size()));
+        }
+      }
+
+
+    } else if (data.contains("topicQuestion")) {
+
+      JsonObject askObject = readJSON(data);
+      getSessionManager().addQuestionToTopic(askObject.getString("topicQuestion"), attendeeIP, sessionID);
+
+    } else if (data.contains(REMOTE_MARKUP)) {
+
+      try {
+        //not formatting data here for polling clients
+        //need to add one more thing for status in AttendeeService
+        getSessionManager().broadcastMarkup(data, sessionID);
+      } catch (Exception e) {
+        e.printStackTrace();
+      }
+      try {
+        sendToAll(ClientEvent.remoteMarkup(data, "", sessionID), this.session, sessionID);
+      } catch (IOException e) {
+        e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
+      }
+      //                //System.out.println("-----------" + data);
+    } else if (data.contains(ROULETTE)) {
+
+      data = ClientEvent.roulette(sessionID, false);
+
+      try {
+        sendToAll(data, this.session, sessionID);
+      } catch (IOException e) {
+        e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
+      }
+
+      List<Session> channelSessions = new ArrayList<Session>();
+      //we don't want the presenter socket
+      for (String key : mediator.getSessions().get(sessionID).keySet()) {
+        System.out.println("=====cws" + key + "=====" + mediator.getPsessions().get(sessionID).containsKey(key));
+        if (!key.equals(attendeeIP)) {
+          channelSessions.add(mediator.getSessions().get(sessionID).get(key));
+        }
+      }
+
+      Random random = new Random();
+      System.out.println("=====random" + channelSessions.size() + " " + sessionID + " " + random.nextInt());
+      Session winner = channelSessions.get(random.nextInt(channelSessions.size()));
+
+      try {
+        winner.getRemote().sendStringByFuture(ClientEvent.roulette(sessionID, true));
+      } catch (Exception e) {
+        e.printStackTrace();
+      }
+
+    } else if (data.contains("::connect::")) {
+      try {
+        getSessionManager().startSession(sessionID);
+        getSessionManager().setPollcount(0);
+        Map<String, Session> presenterData = new HashMap<String, Session>();
+        presenterData.put(attendeeIP, this.session);
+        //todo - prevent session takeover
+        //needs auth
+        if (mediator.getPsessions().containsKey(sessionID)) {
+          //simple fix to allow mirroring
+          mediator.getPsessions().get(sessionID).put(attendeeIP, this.session);
+        } else {
+          mediator.getPsessions().put(sessionID, presenterData);
+        }
+
+      } catch (Exception e) {
+        e.printStackTrace();
+      }
+    } else if (data.contains("::disconnect::")) {
+      try {
+        //todo - cleanup disconnect
+
+      } catch (Exception e) {
+        e.printStackTrace();
+      }
+    } else if (data.contains("questionToggle:")) {
+      try {
+        data = ClientEvent.questionToggle(sessionID, attendeeIP);
+        sendToPresenter(data, this.session, sessionID);
+
+      } catch (Exception e) {
+        System.out.println("========== problem with choosing question toggle");
+        e.printStackTrace();
+      }
+    } else if (data.contains("questionIndex:")) {
+      try {
+        String options = data.substring("questionIndex:".length(), data.length());
+        List<String> optionList = Arrays.asList(options.split("\\s*,\\s*"));
+        int index = Integer.parseInt(optionList.get(0));
+        data = ClientEvent.questionIndex(sessionID, attendeeIP, index);
+        sendToPresenter(data, this.session, sessionID);
+
+      } catch (Exception e) {
+        System.out.println("========== problem with choosing question index");
+        e.printStackTrace();
+      }
+    }
 
 
   }
@@ -522,7 +521,7 @@ public class OnslydeWebSocketHandler {
     cleanupSession();
   }
 
-  private void cleanupSession(){
+  private void cleanupSession() {
     if (mediator.getSessions().containsKey(sessionID)) {
       System.out.println("-remove attendee socket--" + attendeeIP + "--------" + sessionID);
       Map session = mediator.getSessions().get(sessionID);

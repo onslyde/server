@@ -262,6 +262,8 @@ public class SessionManager implements Serializable {
   }
 
   public void updateGroupVote(String vote, String attendeeIP, String name, String email, int sessionID, Long voteTime) {
+
+//    Long voteStart =  System.currentTimeMillis();
     Session currentSession;
     currentSession = sessionHome.findById(sessionID);
     SlideGroup currentSlideGroup = null;

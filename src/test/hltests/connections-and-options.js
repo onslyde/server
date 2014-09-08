@@ -16,12 +16,10 @@ var createRandom = function () {
 
     var index = i;
 
-    conn1[index] = new WebSocket('wss://www.onslyde.com/ws/?session=619&attendeeIP=' + createRandom());
+    conn1[index] = new WebSocket('wss://www.onslyde.com/ws/?session=167&attendeeIP=' + createRandom());
 
     conn1[index].addEventListener('open', function(e){
       //have this connection send out votes randomly for x minutes/seconds
-      this.send('vote:Yep,,,' + new Date().getTime());
-      this.send('{"topicQuestion":"hello"}');
       this.send('props:agree,,,' + new Date().getTime());
       this.send('props:disagree,,,' + new Date().getTime());
     });
