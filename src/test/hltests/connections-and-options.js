@@ -11,19 +11,28 @@ var createRandom = function () {
   return base() + '.' + base() + '.' + base() + '.' + base();
 };
 
-  var conn1 = {}, conn1thread;
-  for(var i=0;i<20;i++){
+  var conn1 = {}, conn1thread, counter = 0;
 
-    var index = i;
+  for(var i=0;i<5;i++){
 
-    conn1[index] = new WebSocket('wss://www.onslyde.com/ws/?session=167&attendeeIP=' + createRandom());
 
-    conn1[index].addEventListener('open', function(e){
-      //have this connection send out votes randomly for x minutes/seconds
-      this.send('props:agree,,,' + new Date().getTime());
-      this.send('props:disagree,,,' + new Date().getTime());
-    });
+    //setInterval(function(){
 
+      conn1[counter] = new WebSocket('wss://www.onslyde.com/ws/?session=640&attendeeIP=' + createRandom());
+
+     // conn1[counter].addEventListener('open', function(e){
+        //have this connection send out votes randomly every x minutes/seconds
+        //this.send('props:' + (Math.floor(Math.random()*2) === 0 ? 'agree':'disagree') +',,,' + new Date().getTime());
+
+
+       // conn1[counter].close();
+      //});
+
+
+
+    //},1500);
+
+    counter++;
   }
 
 })(window);

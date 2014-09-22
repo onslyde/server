@@ -10,4 +10,5 @@ src/main/webapp/charts \
 src/main/webapp/admin \
 src/main/webapp/index.js \
 src/main/webapp/index-test.html \
+src/main/webapp/index.html \
 target/onslyde-hosted/

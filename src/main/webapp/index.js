@@ -296,23 +296,29 @@ onslyde.Controllers.controller('AnalyticsCtrl', [
                       'count': 0
                     });
                   }
+                  //sort the datapoints based on NEW timestamps
+                  //TODO - this needs to come back sorted from endpoint
+                  if (voteData[0].voteTimeMs) {
+                    voteData.sort(function (a, b) {
+                      a = a['voteTimeMs'];
+                      b = b['voteTimeMs'];
+                      return a > b ? 1 : a < b ? -1 : 0;
+                    });
+                  }
                   //get the votes and attendee data for agree/disagree ONLY options
                   angular.forEach(voteData, function (vote, toindex) {
-                    var voteTime = vote.voteTime, attendee = vote.attendee, thisSlideOptions;
+                    var voteTime = vote.voteTime || vote.voteTimeMs, attendee = vote.attendee, thisSlideOptions;
                     //todo fix this - quick hack/reset for sessions that are not panels
                     //this is an effort to set a start time so proper charts show
                     if (sessionType !== 'panel') {
                       twooptions.show = true;
                     } else {
-                      //make sure vote time is after with start time
+                      //make sure vote time is after start time
                       twooptions.show = startTime < voteTime;
                     }
                     if (twooptions.show) {
-                      if (twooptions.length === 2) {
-                        thisSlideOptions = vote.slideOptions;
-                      } else {
-                        thisSlideOptions = vote.slideGroupOptions;
-                      }
+                      //if only 2 options then we know it's just a slide with agree/disagree options
+                      thisSlideOptions = twooptions.length === 2 ? vote.slideOptions : vote.slideGroupOptions;
                       //loop through all options for compare... this is so we can display a growth chart and not just spikes when votes occur
                       for (var i = 0; i < twooptions.length; i++) {
                         var dataPoints = twooptions[i].datapoints, totalLength = dataPoints[dataPoints.length - 1], lastValue;
@@ -369,6 +375,10 @@ onslyde.Controllers.controller('AnalyticsCtrl', [
                   });
                   //increment total count for speaker
                   for (var i = 0; i < twooptions.length; i++) {
+                    //
+                    //                      if(twooptions.topicName === 'Brian LeRoux'){
+                    //                        console.log(2,twooptions.topicName,twooptions[i].datapoints);
+                    //                      }
                     spearkerStat[twooptions[i].label] += twooptions[i].datapoints[twooptions[i].datapoints.length - 1].count;
                     var goahead = false, speakerTotals = $scope.dashBoard.speakerTotals;
                     var overviewobj = {};
@@ -381,7 +391,7 @@ onslyde.Controllers.controller('AnalyticsCtrl', [
                   }
                   spearkerStat.sessions += 1;
                   $scope.dashBoard.speakerTotals.push(spearkerStat);
-                  console.log('spearkerStat.overview.agree', spearkerStat.overview.agree);
+                  //                    console.log('spearkerStat.overview.agree',spearkerStat.overview.agree)
                   //                    if(twooptions){
                   //                      overViewOptions.push(spearkerStat.overview.agree);
                   //                      overViewOptions.push(spearkerStat.overview.disagree);
@@ -499,6 +509,10 @@ onslyde.Controllers.controller('AnalyticsCtrl', [
         }, function (fail) {
         });
         pagedata.get(null, '/analytics/json/edge/edge2.json').then(function (success) {
+          panelists = panelists.concat(success.panelists);
+        }, function (fail) {
+        });
+        pagedata.get(null, '/analytics/json/edge/edge4.json').then(function (success) {
           panelists = panelists.concat(success.panelists);
         }, function (fail) {
         });
