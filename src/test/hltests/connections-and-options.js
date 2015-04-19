@@ -13,26 +13,26 @@ var createRandom = function () {
 
   var conn1 = {}, conn1thread, counter = 0;
 
-  for(var i=0;i<5;i++){
+  for(var i=0;i<50;i++){
 
+    conn1[counter] = new WebSocket('wss://www.onslyde.com/ws/?session=619&attendeeIP=' + createRandom());
 
-    //setInterval(function(){
-
-      conn1[counter] = new WebSocket('wss://www.onslyde.com/ws/?session=640&attendeeIP=' + createRandom());
-
-     // conn1[counter].addEventListener('open', function(e){
-        //have this connection send out votes randomly every x minutes/seconds
-        //this.send('props:' + (Math.floor(Math.random()*2) === 0 ? 'agree':'disagree') +',,,' + new Date().getTime());
-
-
-       // conn1[counter].close();
-      //});
-
-
-
-    //},1500);
+    conn1[counter].addEventListener('open', function(e){
+      //send 1 vote on open
+      this.send('vote:' + (Math.floor(Math.random()*2) === 0 ? 'option1':'option2') +',,,' + new Date().getTime());
+      startSession(this);
+      //this.close();
+    });
 
     counter++;
+  }
+
+  //simulate each connection sending random bursts of data
+  function startSession(conn){
+    setInterval(function(){
+      console.log(conn);
+      conn.send('vote:' + (Math.floor(Math.random()*2) === 0 ? 'option1':'option2') +',,,' + new Date().getTime());
+    },(Math.floor(Math.random()*2) === 0 ? 15000:10000)); //randomly submit vote at 10 or 15 seconds
   }
 
 })(window);
